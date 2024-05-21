@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">EventMuziki</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
+    <string name="musician">Musician</string>
+    <string name="corporate">Corporate</string>
+    <string name="welcome">Welcome</string>
+    <string name="user_name">User Name</string>
+    <string name="events">Events</string>
+    <string name="message">Message</string>
+    <string name="advertising">Advertising</string>
+    <string name="rating">Rating</string>
+    <string name="costumes">Costumes</string>
+    <string name="adverts">Advertisements</string>
+</resources>
