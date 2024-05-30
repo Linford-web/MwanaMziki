@@ -16,4 +16,10 @@
     <string name="rating">Rating</string>
     <string name="costumes">Costumes</string>
     <string name="adverts">Advertisements</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="search_events">Search Events</string>
+    <string name="add_events">Add Events</string>
+    <string name="select_date">Select Date</string>
+    <string name="event_date">Event Date</string>
+    <string name="corporate_name">Corporate Name</string>
 </resources>

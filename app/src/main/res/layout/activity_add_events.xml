@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".addEvents">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@drawable/view_background">
+    </View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:id="@+id/top_bar_nav"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:clickable="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="start"
+                android:src="@drawable/back_arrow"
+                app:tint="@color/red"
+                android:focusable="true" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:letterSpacing="0.1"
+                android:textColor="@color/blue"
+                android:text="@string/add_events"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_view"
+            android:elevation="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <ImageView
+                    android:id="@+id/dash_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:elevation="10dp"
+                    android:src="@drawable/poster1">
+                </ImageView>
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Corporate Name"
+                android:letterSpacing="0.1"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:text="@string/corporate_name"/>
+
+        <EditText
+            android:id="@+id/inputTaskName"
+            android:hint="@string/corporate_name"
+            android:background="@drawable/edit_text_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="5dp"
+            android:padding="15dp"/>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/datePickerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/event_small_icon"
+                android:backgroundTint="@color/orange"
+                android:drawableTint="@color/white"
+                android:text="@string/select_date"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:id="@+id/datePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_date"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:padding="7dp"
+                android:letterSpacing="0.1"
+                android:textSize="15sp"
+                android:visibility="visible" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="5dp"
+                android:background="#B0B0B0" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

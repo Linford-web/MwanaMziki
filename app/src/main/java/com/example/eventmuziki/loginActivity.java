@@ -1,9 +1,13 @@
 package com.example.eventmuziki;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,9 +19,26 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
+
 public class loginActivity extends AppCompatActivity {
 
+    EditText email, password;
+    Button loginBtn;
+    ProgressBar progressbar;
+    boolean valid = true;
     TextView fPassword;
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +47,40 @@ public class loginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         fPassword = findViewById(R.id.forgot_password);
+        fAuth = FirebaseAuth.getInstance();
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        loginBtn = findViewById(R.id.loginBtn);
+        progressbar = findViewById(R.id.progressbar);
+        fStore = FirebaseFirestore.getInstance();
 
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                progressbar.setVisibility(View.VISIBLE);
+                checkField(email);
+                checkField(password);
+                if (valid){
+                    fAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
 
+                                    checkUserAccessLevel(Objects.requireNonNull(authResult.getUser()).getUid());
+                                    progressbar.setVisibility(View.GONE);
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(loginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressbar.setVisibility(View.GONE);
+                                }
+                            });
+                }
+            }
+        });
 
         // Deals with the reset password logic
         fPassword.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +96,6 @@ public class loginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        /*
                         // extract the email and send reset link
                         String mail = resetMail.getText().toString();
                         fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -58,7 +109,7 @@ public class loginActivity extends AppCompatActivity {
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(loginActivity.this, "Error! Resent Link Not Sent."+e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        });*/
+                        });
                     }
                 });
                 passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -71,4 +122,49 @@ public class loginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void checkUserAccessLevel(String uid) {
+
+        DocumentReference df = fStore.collection("Users").document(uid);
+
+        // Extract the data from the document
+        df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d("TAG", "onSuccess: " + documentSnapshot.getData());
+                // Identify User Access Level
+                String userType = documentSnapshot.getString("userType");
+                if (userType != null) {
+                    if (userType.equals("Corporate") || userType.equals("Musician")) {
+                        // User is Corporate or Musician
+                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
+                        finish();
+                        Toast.makeText(loginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Handle other user types if needed
+                        Log.d("TAG", "User is neither Corporate nor Musician");
+                    }
+                } else {
+                    // Handle the case where userType is null if needed
+                    Log.d("TAG", "userType is null");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG", "Failed to get document: " + e.getMessage());
+            }
+        });
+    }
+
+    private void checkField(EditText textField) {
+        if (textField.getText().toString().isEmpty()){
+            textField.setError("Error");
+            valid = false;
+        } else {
+            valid = true;
+    }
+
+    }
+
 }

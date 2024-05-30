@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "217723356727",
+    "project_id": "mwanamziki-9306c",
+    "storage_bucket": "mwanamziki-9306c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217723356727:android:2686c9688a5220317021b2",
+        "android_client_info": {
+          "package_name": "com.example.eventmuziki"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUD0mmfQEyWOhyFY8AH15rEiB9bH4O6HU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
