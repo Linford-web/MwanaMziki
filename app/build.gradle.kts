@@ -1,3 +1,5 @@
+import org.apache.tools.ant.util.JavaEnvUtils.VERSION_1_8
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -41,6 +43,14 @@ dependencies {
     implementation(libs.circleimageview)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation (libs.firebase.storage.v2021)
+    implementation (libs.glide)
+    implementation(libs.play.services.cast.framework)
+    annotationProcessor (libs.compiler)
+    implementation(libs.firebase.storage)
+    implementation(libs.circleimageview)
+    implementation (libs.material.v180)
+    implementation(libs.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

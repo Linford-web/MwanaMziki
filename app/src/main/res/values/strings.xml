@@ -22,4 +22,36 @@
     <string name="select_date">Select Date</string>
     <string name="event_date">Event Date</string>
     <string name="corporate_name">Corporate Name</string>
+    <string name="organizer_name">Organizer Name</string>
+    <string name="organizers">Organizers</string>
+    <string name="location">Location</string>
+    <string name="select_time">Select Time</string>
+    <string name="amount">Amount</string>
+    <string name="ksh">Ksh.</string>
+    <string name="event_details">Event Details</string>
+    <string name="add_event">Add Event</string>
+    <string name="event_name">Event Name</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="bidders">Bidders</string>
+    <string name="bid_on_event">Bid on Event</string>
+    <string name="place_bid">Place Bid</string>
+    <string name="category">Category</string>
+    <string name="booked_events">Booked Events</string>
+    <string name="eventmziki">EventMziki</string>
+    <string-array name="event_Category">
+        <item>Jazz Music</item>
+        <item>Hip Hop</item>
+        <item>K-Pop</item>
+        <item>Rock</item>
+        <item>Country Music</item>
+        <item>Folk Music</item>
+        <item>Electronic</item>
+        <item>Classical Music</item>
+        <item>Latin Music</item>
+        <item>Mugithi</item>
+    </string-array>
+
 </resources>

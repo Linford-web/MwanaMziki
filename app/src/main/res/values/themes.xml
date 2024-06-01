@@ -3,6 +3,7 @@
     <style name="Base.Theme.EventMuziki" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="fontFamily">ubuntu_mono_regular</item>
     </style>
 
     <style name="Theme.EventMuziki" parent="Base.Theme.EventMuziki" />

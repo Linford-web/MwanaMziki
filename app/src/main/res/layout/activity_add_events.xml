@@ -52,7 +52,7 @@
             android:background="@drawable/card_view"
             android:elevation="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:backgroundTint="@color/white"
             android:gravity="center"
             android:orientation="vertical">
@@ -63,78 +63,286 @@
                 android:orientation="vertical"
                 android:padding="10dp">
                 <ImageView
-                    android:id="@+id/dash_image"
+                    android:id="@+id/poster_image"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="150dp"
                     android:elevation="10dp"
                     android:src="@drawable/poster1">
                 </ImageView>
 
             </LinearLayout>
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Corporate Name"
-                android:letterSpacing="0.1"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="normal" />
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/organizer_name"
+                    android:letterSpacing="0.1"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/addPosterBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Poster"
+                    android:drawableEnd="@drawable/add_poster"
+                    android:drawableTint="@color/white"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
-        <TextView
-            android:layout_margin="5dp"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.1"
-            android:text="@string/corporate_name"/>
-
-        <EditText
-            android:id="@+id/inputTaskName"
-            android:hint="@string/corporate_name"
-            android:background="@drawable/edit_text_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:elevation="5dp"
-            android:padding="15dp"/>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <Button
-                android:id="@+id/datePickerBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/event_small_icon"
-                android:backgroundTint="@color/orange"
-                android:drawableTint="@color/white"
-                android:text="@string/select_date"
-                android:layout_margin="5dp" />
-
-            <TextView
-                android:id="@+id/datePicker"
+            android:layout_margin="5dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/event_date"
-                android:textStyle="bold"
-                android:layout_margin="5dp"
-                android:padding="7dp"
-                android:letterSpacing="0.1"
-                android:textSize="15sp"
-                android:visibility="visible" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="5dp"
-                android:background="#B0B0B0" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"
+                    android:text="@string/event_name"/>
+
+                <EditText
+                    android:id="@+id/inputTaskName"
+                    android:hint="@string/event_name"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"
+                    android:text="@string/event_details"/>
+
+                <EditText
+                    android:id="@+id/eventDetails"
+                    android:hint="@string/event_details"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:padding="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/datePickerBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/event_small_icon"
+                        android:backgroundTint="@color/orange"
+                        android:drawableTint="@color/white"
+                        android:text="@string/select_date"
+                        android:layout_margin="5dp" />
+
+                    <TextView
+                        android:id="@+id/datePicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_date"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:letterSpacing="0.1"
+                        android:textSize="15sp"
+                        android:visibility="visible" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#B0B0B0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/timePickerBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/clock_small_icon"
+                        android:drawableTint="@color/white"
+                        android:backgroundTint="@color/blue"
+                        android:layout_margin="5dp"
+                        android:text="@string/select_time" />
+
+                    <TextView
+                        android:id="@+id/timePicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Event Time"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:letterSpacing="0.1"
+                        android:textSize="15sp"
+                        android:visibility="visible" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#B0B0B0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:src="@drawable/location_icon"/>
+                        <TextView
+                            android:id="@+id/LocationBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/location"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:padding="7dp"
+                            android:letterSpacing="0.1"
+                            android:textSize="15sp"
+                            android:visibility="visible" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#B0B0B0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/select_purpose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:elevation="3dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/category"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinner_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="10dp"
+                        android:elevation="5dp"
+                        android:entries="@array/event_Category"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:src="@drawable/money_icon"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ksh"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:padding="7dp"
+                            android:letterSpacing="0.1"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/amountTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:hint="@string/amount"
+                            android:textStyle="bold"
+                            android:inputType="number"
+                            android:elevation="5dp"
+                            android:layout_margin="5dp"
+                            android:padding="7dp"
+                            android:letterSpacing="0.1"
+                            android:textSize="15sp"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#B0B0B0" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/add_event"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    android:text="@string/add_event"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
 
     </LinearLayout>
 

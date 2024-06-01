@@ -9,4 +9,5 @@
     <color name="sky_blue">#BDF6FE</color>
     <color name="dark_blue">#585F97</color>
     <color name="orange">#FF9800</color>
+    <color name="gray">#f3f3f3</color>
 </resources>

@@ -15,6 +15,15 @@
         android:theme="@style/Theme.EventMuziki"
         tools:targetApi="31">
         <activity
+            android:name=".bookedEvents"
+            android:exported="false" />
+        <activity
+            android:name=".eventBooking"
+            android:exported="false" />
+        <activity
+            android:name=".profileActivity"
+            android:exported="false" />
+        <activity
             android:name=".addEvents"
             android:exported="false" />
         <activity
