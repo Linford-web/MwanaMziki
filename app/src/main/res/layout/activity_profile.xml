@@ -114,22 +114,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:background="@drawable/edit_text_bg"
                 android:elevation="20dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:letterSpacing="0.1"
-                    android:text="@string/name"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+
 
                 <TextView
                     android:id="@+id/user_name"
@@ -137,7 +126,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:elevation="20dp"
-                    android:gravity="center"
                     android:hint="@string/name"
                     android:letterSpacing="0.1"
                     android:padding="10dp"
@@ -146,46 +134,57 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phone_number"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="5dp"
-                    android:letterSpacing="0.1"/>
-                <TextView
                     android:id="@+id/phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="20dp"
-                    android:layout_marginBottom="15dp"
                     android:hint="@string/phone_number"
                     android:letterSpacing="0.1"
                     android:padding="10dp"
-                    android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1"/>
+
                 <TextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
                     android:hint="@string/email"
                     android:letterSpacing="0.1"
-                    android:gravity="center"
+                    android:elevation="20dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/category"
+                    android:letterSpacing="0.1"
+                    android:elevation="20dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="About"
+                    android:letterSpacing="0.1"
+                    android:elevation="20dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/socials"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:hint="Socials"
+                    android:letterSpacing="0.1"
                     android:elevation="20dp"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -201,13 +200,29 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:focusable="true"
-                android:padding="15dp"
+                android:padding="10dp"
                 android:layout_gravity="center"
                 android:elevation="30dp"
                 android:clickable="true"
                 android:text="@string/logout"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
+            <Button
+                android:id="@+id/editProfileBtn"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:elevation="30dp"
+                android:clickable="true"
+                android:text="Edit Profile"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+
         </LinearLayout>
 
     </LinearLayout>

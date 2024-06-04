@@ -41,6 +41,7 @@
     <string name="category">Category</string>
     <string name="booked_events">Booked Events</string>
     <string name="eventmziki">EventMziki</string>
+    <string name="bid_amount">Bid Amount</string>
     <string-array name="event_Category">
         <item>Jazz Music</item>
         <item>Hip Hop</item>
@@ -53,5 +54,9 @@
         <item>Latin Music</item>
         <item>Mugithi</item>
     </string-array>
+    <string name="title_activity_main_dash">MainActivityDash</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>

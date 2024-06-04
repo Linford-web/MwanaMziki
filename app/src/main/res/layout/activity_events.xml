@@ -8,7 +8,7 @@
     tools:context=".EventsActivity">
     <View
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="225dp"
         android:background="@drawable/view_background"
         android:backgroundTint="@color/black">
     </View>
@@ -63,10 +63,35 @@
             android:background="@drawable/search_bar"
             android:backgroundTint="@color/white"
             android:hint="@string/search_events"/>
+
+        <Button
+            android:id="@+id/bookedEventsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="10dp"
+            android:text="Booked Events"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Popular Events"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:id="@+id/eventRecyclerView"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All Events"
             android:textSize="18sp"
             android:textStyle="bold"
             android:letterSpacing="0.1"
@@ -76,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/gray"
-            android:id="@+id/eventRecyclerView"
+            android:id="@+id/allRecyclerView"
             android:layout_marginTop="10dp"/>
 
     </LinearLayout>

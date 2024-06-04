@@ -6,11 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".addEvents">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:background="@drawable/view_background">
-    </View>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,47 +41,33 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_view"
-            android:elevation="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp"
-            android:backgroundTint="@color/white"
-            android:gravity="center"
-            android:orientation="vertical">
+            >
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/eventPoster"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-                <ImageView
-                    android:id="@+id/poster_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:elevation="10dp"
-                    android:src="@drawable/poster1">
-                </ImageView>
+                android:layout_height="200dp"
+                android:src="@drawable/cover" />
 
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="10dp"
+                android:layout_marginTop="140dp"
                 android:padding="5dp">
                 <TextView
+                    android:id="@+id/organizerNameTv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/organizer_name"
                     android:letterSpacing="0.1"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
+                    android:textColor="@color/orange"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/addPosterBtn"
@@ -97,8 +78,7 @@
                     android:drawableTint="@color/white"/>
             </LinearLayout>
 
-
-        </LinearLayout>
+        </RelativeLayout>
 
         <ScrollView
             android:layout_width="match_parent"

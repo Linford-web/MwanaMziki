@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +19,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.eventAdapter;
+import com.example.eventmuziki.Adapters.eventAdapter2;
 import com.example.eventmuziki.Models.eventModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,12 +36,12 @@ import java.util.ArrayList;
 
 public class MainDashboard extends AppCompatActivity {
 
-    CardView chats, eventsBtn, ratings, adverts, clothes;
+    ImageView chats, eventsBtn, adverts, clothes, home;
     ImageView profile, allAdverts, upcomingEvents;
     TextView userNameTv;
     RecyclerView recyclerView;
     ArrayList<eventModel> events;
-    eventAdapter eventadapter;
+    eventAdapter2 eventadapter;
     FirebaseFirestore fStore;
 
     @Override
@@ -47,12 +50,11 @@ public class MainDashboard extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main_dashboard);
 
-
-        chats = findViewById(R.id.chats);
-        eventsBtn = findViewById(R.id.events);
-        ratings = findViewById(R.id.ratings);
-        adverts = findViewById(R.id.adverts);
-        clothes = findViewById(R.id.clothes);
+        chats = findViewById(R.id.messageIcon);
+        eventsBtn = findViewById(R.id.eventIcon);
+        adverts = findViewById(R.id.advertIcon);
+        clothes = findViewById(R.id.costumeIcon);
+        home = findViewById(R.id.homeIcon);
         profile = findViewById(R.id.userProfileTv);
         userNameTv = findViewById(R.id.get_name);
         recyclerView = findViewById(R.id.eventsRecyclerView);
@@ -61,15 +63,44 @@ public class MainDashboard extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
 
         events = new ArrayList<>();
-        eventadapter = new eventAdapter(events);
+        eventadapter = new eventAdapter2(events);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(eventadapter);
 
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId != null){
+            // Fetch user details from FireStore "Users" collection
+            fStore.collection("Users")
+                    .document(userId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                // Retrieve profile photo URL from FireStore
+                                String profileImageUrl = document.getString("profilePicture");
+                                if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                                    // Load profile photo into otherImageView using Glide or any other image loading library
+                                    Glide.with(this).load(profileImageUrl).into(profile);
+                                } else {
+                                    // Handle the case when no profile photo is available
+                                    Toast.makeText(this, "Click Profile photo to upload Photo", Toast.LENGTH_SHORT).show();
+                                    Log.d("TAG", "No profile photo found");
+                                }
+                            } else {
+                                Log.d("TAG", "No such document");
+                                //Toast.makeText(this, "User document not found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "Error fetching user details", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
         // Fetch events from Firestore
         fetchEvents();
-
         // get user name and display it
         fetchUserName();
 
@@ -84,8 +115,17 @@ public class MainDashboard extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), profileActivity.class));
+                startActivity(new Intent(getApplicationContext(), editProfile.class));
 
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainDashboard.this, profileActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

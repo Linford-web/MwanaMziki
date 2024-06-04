@@ -22,6 +22,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="casual"
                 android:letterSpacing="0.1"
                 android:text="@string/eventmziki"
                 android:textAlignment="center"
@@ -45,13 +46,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="15dp"
-        android:fontFamily="monospace"
         android:text="Product of Mwana Muziki"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold">
-
-    </TextView>
+        android:textColor="@color/blue"
+        android:textSize="16sp"/>
 
 </RelativeLayout>

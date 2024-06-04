@@ -32,6 +32,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -45,11 +48,17 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation (libs.firebase.storage.v2021)
     implementation (libs.glide)
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation(libs.play.services.cast.framework)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     annotationProcessor (libs.compiler)
     implementation(libs.firebase.storage)
     implementation(libs.circleimageview)
     implementation (libs.material.v180)
+    implementation (libs.material.v130)
     implementation(libs.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmuziki.Adapters.eventAdapter;
+import com.example.eventmuziki.Adapters.eventAdapter2;
 import com.example.eventmuziki.Models.eventModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,10 +36,13 @@ public class EventsActivity extends AppCompatActivity {
 
     ImageView backArrow;
     FloatingActionButton addTask;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, eventRecyclerView;
     ArrayList<eventModel> events;
     eventAdapter eventadapter;
+    ArrayList<eventModel> events2;
+    eventAdapter2 eventAdapters;
     FirebaseFirestore fStore;
+    Button bookedEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +52,26 @@ public class EventsActivity extends AppCompatActivity {
 
         backArrow = findViewById(R.id.back_arrow);
         addTask = findViewById(R.id.add_taskFBtn);
-        recyclerView = findViewById(R.id.eventRecyclerView);
+        recyclerView = findViewById(R.id.allRecyclerView);
+        eventRecyclerView = findViewById(R.id.eventRecyclerView);
+        bookedEvents = findViewById(R.id.bookedEventsBtn);
         fStore = FirebaseFirestore.getInstance();
 
         events = new ArrayList<>();
         eventadapter = new eventAdapter(events);
+        events2 = new ArrayList<>();
+        eventAdapters = new eventAdapter2(events2);
 
+        // Set up RecyclerView
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        eventRecyclerView.setLayoutManager(layoutManager2);
+        eventRecyclerView.setAdapter(eventAdapters);
+
+        // Set up RecyclerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(eventadapter);
+
         // Fetch events from Firestore
         fetchEvents();
 
@@ -62,6 +79,12 @@ public class EventsActivity extends AppCompatActivity {
             finish();
         });
 
+        bookedEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), bookedEvents.class));
+            }
+        });
 
         checkUserAccessLevel();
 
@@ -86,13 +109,16 @@ public class EventsActivity extends AppCompatActivity {
                             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 eventModel event = documentSnapshot.toObject(eventModel.class);
                                 events.add(event);
+                                events2.add(event);
+
                             }
                             eventadapter.notifyDataSetChanged();
+                            eventAdapters.notifyDataSetChanged();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
+                            Toast.makeText(EventsActivity.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
                         }
                     });
     }
