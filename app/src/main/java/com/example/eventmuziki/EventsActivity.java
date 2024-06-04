@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +38,7 @@ public class EventsActivity extends AppCompatActivity {
     ArrayList<eventModel> events2;
     eventAdapter2 eventAdapters;
     FirebaseFirestore fStore;
-    Button bookedEvents;
+    Button bookedEvents, viewBooked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +51,7 @@ public class EventsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.allRecyclerView);
         eventRecyclerView = findViewById(R.id.eventRecyclerView);
         bookedEvents = findViewById(R.id.bookedEventsBtn);
+        viewBooked = findViewById(R.id.booked);
         fStore = FirebaseFirestore.getInstance();
 
         events = new ArrayList<>();
@@ -82,11 +79,16 @@ public class EventsActivity extends AppCompatActivity {
         bookedEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), bookedEvents.class));
+                startActivity(new Intent(getApplicationContext(), bidEvents.class));
             }
         });
 
-        checkUserAccessLevel();
+        viewBooked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), bookedEvents.class));
+            }
+        });
 
         // Add Task Button
         addTask.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +98,9 @@ public class EventsActivity extends AppCompatActivity {
             }
         });
 
+
+
+        checkUserAccessLevel();
 
     }
 

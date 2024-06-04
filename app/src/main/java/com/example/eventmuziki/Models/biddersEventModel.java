@@ -5,15 +5,15 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class bookedEventModel implements Parcelable {
+public class biddersEventModel implements Parcelable {
 
-    String eventName, eventDetails, date, time, location, bidAmount, eventId, creatorID, bidId, category, biddersId;
+    String eventName, eventDetails, date, time, location, bidAmount, eventId, creatorID, bidId, category, biddersId, organizerName, biddersName;
 
-    public bookedEventModel() {
+    public biddersEventModel() {
         // Default constructor required for Firestore
     }
 
-    public bookedEventModel(String eventName, String eventDetails, String date, String time, String location, String bidAmount, String eventId, String creatorID, String bidId, String category, String biddersId) {
+    public biddersEventModel(String eventName, String eventDetails, String date, String time, String location, String bidAmount, String eventId, String creatorID, String bidId, String category, String biddersId, String organizerName, String biddersName) {
         this.eventName = eventName;
         this.eventDetails = eventDetails;
         this.date = date;
@@ -25,6 +25,8 @@ public class bookedEventModel implements Parcelable {
         this.bidId = bidId;
         this.category = category;
         this.biddersId = biddersId;
+        this.organizerName = organizerName;
+        this.biddersName = biddersName;
 
     }
 
@@ -116,7 +118,23 @@ public class bookedEventModel implements Parcelable {
         this.biddersId = biddersId;
     }
 
-    protected bookedEventModel(Parcel in) {
+    public String getOrganizerName() {
+        return organizerName;
+    }
+
+    public void setOrganizerName(String organizerName) {
+        this.organizerName = organizerName;
+    }
+
+    public String getBiddersName() {
+        return biddersName;
+    }
+
+    public void setBiddersName(String biddersName) {
+        this.biddersName = biddersName;
+    }
+
+    protected biddersEventModel(Parcel in) {
         eventName = in.readString();
         eventDetails = in.readString();
         date = in.readString();
@@ -128,17 +146,19 @@ public class bookedEventModel implements Parcelable {
         bidId = in.readString();
         category = in.readString();
         biddersId = in.readString();
+        organizerName = in.readString();
+        biddersName = in.readString();
     }
 
-    public static final Creator<bookedEventModel> CREATOR = new Creator<bookedEventModel>() {
+    public static final Creator<biddersEventModel> CREATOR = new Creator<biddersEventModel>() {
         @Override
-        public bookedEventModel createFromParcel(Parcel in) {
-            return new bookedEventModel(in);
+        public biddersEventModel createFromParcel(Parcel in) {
+            return new biddersEventModel(in);
         }
 
         @Override
-        public bookedEventModel[] newArray(int size) {
-            return new bookedEventModel[size];
+        public biddersEventModel[] newArray(int size) {
+            return new biddersEventModel[size];
         }
     };
 
@@ -160,5 +180,7 @@ public class bookedEventModel implements Parcelable {
         dest.writeString(bidId);
         dest.writeString(category);
         dest.writeString(biddersId);
+        dest.writeString(organizerName);
+        dest.writeString(biddersName);
     }
 }

@@ -10,13 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.R;
-import com.example.eventmuziki.eventBooking;
+import com.example.eventmuziki.eventBidding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -75,7 +74,7 @@ public class eventAdapter2 extends RecyclerView.Adapter<eventAdapter2.ViewHolder
             @Override
             public void onClick(View v) {
                 // Handle the click event here
-                Intent intent = new Intent(v.getContext(), eventBooking.class);
+                Intent intent = new Intent(v.getContext(), eventBidding.class);
                 intent.putExtra("eventModel", event);
                 v.getContext().startActivity(intent);
             }

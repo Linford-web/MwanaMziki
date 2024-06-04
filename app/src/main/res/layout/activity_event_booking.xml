@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".eventBooking">
+    tools:context=".eventBidding">
 
     <ImageView
         android:id="@+id/eventPoster"
@@ -268,7 +268,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/card_view"
-                    android:visibility="gone"
                     android:elevation="3dp"
                     android:orientation="vertical"
                     android:layout_margin="7dp">

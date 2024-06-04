@@ -68,6 +68,10 @@ public class editProfile extends AppCompatActivity {
             }
         });
 
+        name.setText(getIntent().getStringExtra("name"));
+        phoneNumber.setText(getIntent().getStringExtra("number"));
+        email.setText(getIntent().getStringExtra("email"));
+
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +98,7 @@ public class editProfile extends AppCompatActivity {
                             .document(userId)
                             .update(
                                     "name", user_name,
-                                    "phone", user_phone,
+                                    "number", user_phone,
                                     "email", user_email,
                                     "about", user_about,
                                     "socials", user_socials,

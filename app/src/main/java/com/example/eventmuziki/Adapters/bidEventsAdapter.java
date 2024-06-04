@@ -1,6 +1,5 @@
 package com.example.eventmuziki.Adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Models.bookedEventModel;
+import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,11 +21,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class bookedEventAdapter extends RecyclerView.Adapter<bookedEventAdapter.ViewHolder> {
+public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.ViewHolder> {
 
-    ArrayList<bookedEventModel> bookedEvents;
+    ArrayList<biddersEventModel> bookedEvents;
 
-    public bookedEventAdapter(ArrayList<bookedEventModel> bookedEvents) {
+    public bidEventsAdapter(ArrayList<biddersEventModel> bookedEvents) {
         this.bookedEvents = bookedEvents;
     }
 
@@ -48,14 +47,14 @@ public class bookedEventAdapter extends RecyclerView.Adapter<bookedEventAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_booked_events, parent, false);
+                .inflate(R.layout.item_bid_events, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull bookedEventAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull bidEventsAdapter.ViewHolder holder, int position) {
 
-        bookedEventModel bookedEvent = bookedEvents.get(position);
+        biddersEventModel bookedEvent = bookedEvents.get(position);
 
         holder.eventName.setText(bookedEvent.getEventName());
         holder.bidAmount.setText(bookedEvent.getBidAmount());

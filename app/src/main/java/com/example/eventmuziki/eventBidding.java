@@ -15,15 +15,12 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.biddersAdapter;
-import com.example.eventmuziki.Models.bookedEventModel;
+import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.eventModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,7 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class eventBooking extends AppCompatActivity {
+public class eventBidding extends AppCompatActivity {
 
     TextView eventName, eventDate, eventTime, eventLocation, organizerName, eventDetails, amountTv, category, id, id2, biddersName;
     EditText bidAmountTv;
@@ -44,7 +41,7 @@ public class eventBooking extends AppCompatActivity {
     LinearLayout biddersView;
     FirebaseFirestore fStore;
 
-    ArrayList<bookedEventModel> bidEvents;
+    ArrayList<biddersEventModel> bidEvents;
     RecyclerView recyclerView;
     biddersAdapter bidAdapter;
 
@@ -105,8 +102,11 @@ public class eventBooking extends AppCompatActivity {
             id.setText(event.getCreatorID());
             id2.setText(event.getEventId());
 
-        }
+            String eventId = event.getEventId();
+            // Fetch bidders from Firestore
+            fetchBidders(eventId);
 
+        }
 
         placeBid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,12 +116,13 @@ public class eventBooking extends AppCompatActivity {
             }
         });
 
-        String eventId = event.getEventId();
+        String event_Id = event.getEventId();
+
         if (event != null) {
 
             FirebaseFirestore.getInstance()
                     .collection("Events")
-                    .document(eventId)
+                    .document(event_Id)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -131,7 +132,7 @@ public class eventBooking extends AppCompatActivity {
                                 String eventPoster = documentSnapshot.getString("eventPoster");
 
                                 if (eventPoster != null && !eventPoster.isEmpty()) {
-                                    Glide.with(eventBooking.this)
+                                    Glide.with(eventBidding.this)
                                             .load(eventPoster)
                                             .into(eventPosterTv);
                                 }
@@ -140,17 +141,20 @@ public class eventBooking extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(eventBooking.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
+
+
+
         }else {
+
             Toast.makeText(this, "No event found", Toast.LENGTH_SHORT).show();
         }
 
         // fetch bidders user name
         fetchUserName();
-        // Fetch bidders from Firestore
-        fetchBidders();
+
         // check user access level
         checkUserAccessLevel();
 
@@ -191,18 +195,29 @@ public class eventBooking extends AppCompatActivity {
 
     }
 
-    private void fetchBidders() {
+    private void fetchBidders(String eventId) {
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
         fStore.collection("BidEvents")
+                .whereEqualTo("eventId", eventId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            bookedEventModel bookedEvent = documentSnapshot.toObject(bookedEventModel.class);
-                            bidEvents.add(bookedEvent);
+                    public void onSuccess(QuerySnapshot querySnapshot) {
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            bidEvents.clear();
+                            for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                                biddersEventModel bidEvent = documentSnapshot.toObject(biddersEventModel.class);
+                                bidEvents.add(bidEvent);
+                            }
+                            bidAdapter.notifyDataSetChanged();
                         }
-                        bidAdapter.notifyDataSetChanged();
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -219,13 +234,13 @@ public class eventBooking extends AppCompatActivity {
                     String name = documentSnapshot.getString("name");
                     biddersName.setText(name);
                 } else {
-                    Toast.makeText(eventBooking.this, "User not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(eventBidding.this, "User not found", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@androidx.annotation.NonNull Exception e) {
-                Toast.makeText(eventBooking.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(eventBidding.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -251,7 +266,7 @@ public class eventBooking extends AppCompatActivity {
         }
         else {
             // Add the bid to Firestore
-            bookedEventModel bookedEvent = new bookedEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", eventCategory,"");
+            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", eventCategory,"", "", "");
 
             fStore.collection("BidEvents")
                     .add(bookedEvent)
@@ -265,12 +280,12 @@ public class eventBooking extends AppCompatActivity {
                             documentReference.update("biddersId", userId);
 
                             documentReference.update("bidId", documentReference.getId());
-                            Toast.makeText(eventBooking.this, "Bid placed successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(eventBidding.this, "Bid placed successfully", Toast.LENGTH_SHORT).show();
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    startActivity(new Intent(eventBooking.this, bookedEvents.class));
+                                    startActivity(new Intent(eventBidding.this, com.example.eventmuziki.bidEvents.class));
                                     finish();
                                 }
                             }, 2000);
@@ -280,7 +295,7 @@ public class eventBooking extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(eventBooking.this, "Failed to place bid", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(eventBidding.this, "Failed to place bid", Toast.LENGTH_SHORT).show();
                         }
                     });
 

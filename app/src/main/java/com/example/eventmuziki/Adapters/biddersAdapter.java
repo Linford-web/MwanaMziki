@@ -1,11 +1,11 @@
 package com.example.eventmuziki.Adapters;
 
-import android.media.Image;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,8 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Models.bookedEventModel;
+import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.R;
+import com.example.eventmuziki.bookMusicianActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,14 +28,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHolder> {
 
-    ArrayList<bookedEventModel> bidders;
+    ArrayList<biddersEventModel> bidders;
 
-    public biddersAdapter(ArrayList<bookedEventModel> bidders) {
+    public biddersAdapter(ArrayList<biddersEventModel> bidders) {
         this.bidders = bidders;
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView bidderImage;
         TextView bidAmount, bidderName;
+        LinearLayout bidderLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -42,6 +44,7 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
             bidderImage = itemView.findViewById(R.id.bidderImage);
             bidAmount = itemView.findViewById(R.id.bidAmount);
             bidderName = itemView.findViewById(R.id.bidderName);
+            bidderLayout = itemView.findViewById(R.id.biddersLayout);
         }
     }
 
@@ -56,7 +59,7 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull biddersAdapter.ViewHolder holder, int position) {
 
-        bookedEventModel bidder = bidders.get(position);
+        biddersEventModel bidder = bidders.get(position);
 
         holder.bidAmount.setText(bidder.getBidAmount());
 
@@ -103,6 +106,16 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
                         Toast.makeText(holder.itemView.getContext(), "Failed To fetch Students", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        holder.bidderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event here
+                Intent intent = new Intent(v.getContext(), bookMusicianActivity.class);
+                intent.putExtra("biddersEventModel", bidder);
+                v.getContext().startActivity(intent);
+            }
+        });
 
 
     }

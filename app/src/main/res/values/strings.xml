@@ -58,5 +58,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="ratings">Ratings</string>
+    <string name="about">About</string>
+    <string name="socials">Socials</string>
+    <string name="book_now">Book Now</string>
 
 </resources>

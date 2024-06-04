@@ -71,7 +71,8 @@ public class profileActivity extends AppCompatActivity {
         category = findViewById(R.id.category);
 
         // Back Button
-        back.setOnClickListener(v -> finish());
+        back.setOnClickListener(v ->
+                finish());
 
         // Logic For Logout Button
         logout.setOnClickListener(new View.OnClickListener() {

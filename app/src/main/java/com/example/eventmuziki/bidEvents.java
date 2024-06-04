@@ -1,63 +1,63 @@
 package com.example.eventmuziki;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventmuziki.Adapters.bookedEventsAdapter;
-import com.example.eventmuziki.Models.bookedEventsModel;
+import com.example.eventmuziki.Adapters.bidEventsAdapter;
+import com.example.eventmuziki.Models.biddersEventModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class bookedEvents extends AppCompatActivity {
+public class bidEvents extends AppCompatActivity {
 
-    ImageView back;
-    RecyclerView bookedRv;
-
-    ArrayList<bookedEventsModel> booked;
-    bookedEventsAdapter bookedAdapter;
+    ImageView backArrow;
+    RecyclerView bookedEventRv;
+    ArrayList<biddersEventModel> booked;
+    bidEventsAdapter bookedAdapter;
+    FirebaseFirestore fStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_booked_events);
+        setContentView(R.layout.activity_bid_events);
 
-        back = findViewById(R.id.back_arrow);
-        bookedRv = findViewById(R.id.bookedEventsRv);
+        backArrow = findViewById(R.id.back_arrow);
+        bookedEventRv = findViewById(R.id.bookedEventsRv);
+        fStore = FirebaseFirestore.getInstance();
 
-
-        back.setOnClickListener(v -> {
-            finish();
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
         });
 
         booked = new ArrayList<>();
-        bookedAdapter = new bookedEventsAdapter(booked);
+        bookedAdapter = new bidEventsAdapter(booked);
 
+        // Set up RecyclerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        bookedRv.setLayoutManager(layoutManager);
-        bookedRv.setAdapter(bookedAdapter);
+        bookedEventRv.setLayoutManager(layoutManager);
+        bookedEventRv.setAdapter(bookedAdapter);
 
-        // fetch booked events
-        fetchBookedEvents();
-
+        // Fetch booked events from Firestore
+        fetchBidEvents();
 
     }
 
-    private void fetchBookedEvents() {
+    private void fetchBidEvents() {
 
-        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getUid();
 
         if (userId == null) {
@@ -65,29 +65,28 @@ public class bookedEvents extends AppCompatActivity {
             return;
         }
 
-        fStore.collection("BookedEvents")
+        fStore.collection("BidEvents")
                 .whereEqualTo("creatorID", userId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
+                        biddersEventModel event = documentSnapshot.toObject(biddersEventModel.class);
                         booked.add(event);
                     }
                     bookedAdapter.notifyDataSetChanged();
                 });
 
-        fStore.collection("BookedEvents")
+        fStore.collection("BidEvents")
                 .whereEqualTo("biddersId", userId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
+                        biddersEventModel event = documentSnapshot.toObject(biddersEventModel.class);
                         if (!booked.contains(event)) {
                             booked.add(event);
                         }
                     }
                     bookedAdapter.notifyDataSetChanged();
-                }).addOnFailureListener(e -> Toast.makeText(bookedEvents.this, e.getMessage(), Toast.LENGTH_SHORT).show());
-
+                }).addOnFailureListener(e -> Toast.makeText(bidEvents.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
