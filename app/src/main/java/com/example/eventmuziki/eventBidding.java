@@ -280,11 +280,10 @@ public class eventBidding extends AppCompatActivity {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    startActivity(new Intent(eventBidding.this, com.example.eventmuziki.bidEvents.class));
+                                    startActivity(new Intent(eventBidding.this, bidEvents.class));
                                     finish();
                                 }
                             }, 2000);
-
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {

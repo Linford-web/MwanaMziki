@@ -23,8 +23,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -82,6 +85,13 @@ public class MainDashboard extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
+
+                                String userName = document.getString("name");
+                                String email = document.getString("email");
+                                // Set the user name in the TextView
+                                userNameTv.setText(userName);
+                                emailTv.setText(email);
+
                                 // Retrieve profile photo URL from FireStore
                                 String profileImageUrl = document.getString("profilePicture");
                                 if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
@@ -102,8 +112,6 @@ public class MainDashboard extends AppCompatActivity {
                     });
         }
 
-        // get user name and display it
-        fetchUserName();
         // check user access level
         checkUserAccessLevel();
 
@@ -127,21 +135,40 @@ public class MainDashboard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-                String chatRoomId = UUID.randomUUID().toString();
                 String userId = FirebaseAuth.getInstance().getUid();
-                String email = emailTv.getText().toString();
-                String name = userNameTv.getText().toString();
+                if (userId == null) {
+                    Toast.makeText(MainDashboard.this, "User not logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                chatUserModel chatRoom = new chatUserModel("NotSet", chatRoomId, userId, name, email);
-                dbReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).setValue(chatRoom);
+                dbReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            // Retrieve user details
+                            String chatRoomId = snapshot.child("chatRoomId").getValue(String.class);
+                            String email = snapshot.child("email").getValue(String.class);
+                            String name = snapshot.child("userName").getValue(String.class);
+                            String eventID = snapshot.child("eventID").getValue(String.class);
 
-                Intent intent = new Intent(MainDashboard.this, chatActivity.class);
-                intent.putExtra("roomId", chatRoomId);
-                intent.putExtra("userId", userId);
-                intent.putExtra("email", email);
-                intent.putExtra("userName", name);
-                startActivity(intent);
+                            // Start chatActivity with fetched details
+                            Intent intent = new Intent(MainDashboard.this, chatActivity.class);
+                            intent.putExtra("roomId", chatRoomId);
+                            intent.putExtra("userId", userId);
+                            intent.putExtra("email", email);
+                            intent.putExtra("userName", name);
+                            intent.putExtra("eventId", eventID);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(MainDashboard.this, "User details not found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
             }
         });
@@ -223,33 +250,4 @@ public class MainDashboard extends AppCompatActivity {
                 });
     }
 
-    private void fetchUserName() {
-        String userId = FirebaseAuth.getInstance().getUid();
-
-        if (userId != null) {
-            fStore.collection("Users")
-                    .document(userId)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document != null && document.exists()) {
-                                    String userName = document.getString("name");
-                                    // Set the user name in the TextView
-                                    userNameTv.setText(userName);
-                                    emailTv.setText(document.getString("email"));
-
-                                } else {
-                                    Log.d("TAG", "No such document");
-                                }
-                            } else {
-                                Log.d("TAG", "get failed with ", task.getException());
-                                Toast.makeText(MainDashboard.this, "Error fetching user name", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-    }
 }

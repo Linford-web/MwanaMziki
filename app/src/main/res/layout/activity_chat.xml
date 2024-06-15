@@ -20,22 +20,11 @@
             android:title="@string/chats"
             android:id="@+id/toolbar" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chats To make Agreements and communications"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:gravity="center" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray"
-            android:id="@+id/chatRecyclerView"
-            android:padding="6dp"
-            android:layout_margin="5dp"/>
+            android:layout_marginTop="5dp"
+            android:id="@+id/chatRecyclerView"/>
 
 
     </LinearLayout>

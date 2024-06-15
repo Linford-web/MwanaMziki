@@ -11,4 +11,5 @@
     <color name="orange">#FF9800</color>
     <color name="gray">#f3f3f3</color>
     <color name="light_gray">#ECECEC</color>
+    <color name="chat_bg">#ece5dd</color>
 </resources>

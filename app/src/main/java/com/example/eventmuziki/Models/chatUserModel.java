@@ -7,10 +7,11 @@ import androidx.annotation.NonNull;
 
 public class chatUserModel implements Parcelable {
 
-    String  profilePicture, chatRoomId, userId, userName, email;
+    String  profilePicture, eventID, chatRoomId, userId, userName, email;
 
-    public chatUserModel(String profilePicture, String chatRoomId, String userId, String userName, String email) {
+    public chatUserModel(String profilePicture, String eventID, String chatRoomId, String userId, String userName, String email) {
         this.profilePicture = profilePicture;
+        this.eventID = eventID;
         this.chatRoomId = chatRoomId;
         this.userId = userId;
         this.userName = userName;
@@ -27,6 +28,14 @@ public class chatUserModel implements Parcelable {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 
     public String getChatRoomId() {
@@ -63,6 +72,7 @@ public class chatUserModel implements Parcelable {
 
     protected chatUserModel(Parcel in) {
         profilePicture = in.readString();
+        eventID = in.readString();
         chatRoomId = in.readString();
         userId = in.readString();
         userName = in.readString();
@@ -89,6 +99,7 @@ public class chatUserModel implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(profilePicture);
+        dest.writeString(eventID);
         dest.writeString(chatRoomId);
         dest.writeString(userId);
         dest.writeString(userName);

@@ -43,7 +43,7 @@ public class chatActivity extends AppCompatActivity {
     chatAdapter chatsAdapters;
     ArrayList<chatUserModel> messageList;
     DatabaseReference databaseReference;
-    String userId, chatRoomId, name, email;
+    String userId, chatRoomId, name, email, eventID;
 
 
     @Override
@@ -58,8 +58,10 @@ public class chatActivity extends AppCompatActivity {
         chatRoomId = getIntent().getStringExtra("roomId");
         name = getIntent().getStringExtra("userName");
         email = getIntent().getStringExtra("email");
+        eventID = getIntent().getStringExtra("eventId");
 
-        if (userId == null || chatRoomId == null || name == null || email == null) {
+
+        if (userId == null || chatRoomId == null || name == null || email == null || eventID == null) {
             Toast.makeText(this, "Missing chat data", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -67,7 +69,7 @@ public class chatActivity extends AppCompatActivity {
         // Initialize the chat room here
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        String toolbarTitle = getIntent().getStringExtra("userName");
+        String toolbarTitle = "Chat Rooms";
         getSupportActionBar().setTitle(toolbarTitle);
 
         chatsAdapters = new chatAdapter(this, new ArrayList<>());
@@ -75,17 +77,23 @@ public class chatActivity extends AppCompatActivity {
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.orderByChild("eventID").equalTo(eventID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Clear the existing chat messages
                 chatsAdapters.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String uId = dataSnapshot.getKey();
-                    chatUserModel chatUser = dataSnapshot.getValue(chatUserModel.class);
-                    if (chatUser != null && chatUser.getUserId() !=null && !chatUser.getUserId().equals(FirebaseAuth.getInstance().getUid())) {
-                        chatsAdapters.add(chatUser);
-                    }
+                String currentUserId = FirebaseAuth.getInstance().getUid();
+                if (currentUserId == null) {
+                    Toast.makeText(chatActivity.this, "User Not Logged In" + currentUserId, Toast.LENGTH_SHORT).show();
+                }
 
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    chatUserModel chatUser = dataSnapshot.getValue(chatUserModel.class);
+                    if (chatUser != null && chatUser.getUserId() != null && !chatUser.getUserId().equals(currentUserId)) {
+                        if (eventID.equals(chatUser.getEventID())) {  // Filter by eventID
+                            chatsAdapters.add(chatUser);
+                        }
+                    }
                 }
                 chatsAdapters.notifyDataSetChanged();
             }
@@ -97,12 +105,7 @@ public class chatActivity extends AppCompatActivity {
         });
 
 
-
-
-
     }
-
-
 
 
 }

@@ -38,7 +38,7 @@ public class chatRoom extends AppCompatActivity {
     messageAdapter messageAdapters;
     RecyclerView messageRecyclerView;
     String senderId, receiverId, senderName, receiverName, senderRoom, receiverRoom;
-    ImageView back, sendBtn;
+    ImageView sendBtn;
     EditText messageText;
 
 
@@ -49,14 +49,6 @@ public class chatRoom extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_room);
 
-        back = findViewById(R.id.back_arrow);
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,8 +74,8 @@ public class chatRoom extends AppCompatActivity {
         messageRecyclerView.setAdapter(messageAdapters);
         messageRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        dbReferenceSender = FirebaseDatabase.getInstance().getReference("Chats").child(senderId).child(senderRoom);
-        dbReferenceReceiver = FirebaseDatabase.getInstance().getReference("Chats").child(receiverId).child(receiverRoom);
+        dbReferenceSender = FirebaseDatabase.getInstance().getReference("Chats").child(senderRoom);
+        dbReferenceReceiver = FirebaseDatabase.getInstance().getReference("Chats").child(receiverRoom);
 
         dbReferenceSender.addValueEventListener(new ValueEventListener() {
             @Override
@@ -124,7 +116,7 @@ public class chatRoom extends AppCompatActivity {
     private void SendMessage(String message) {
 
         String messageId = UUID.randomUUID().toString();
-        messageModel model = new messageModel(message, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), "", messageId, System.currentTimeMillis());
+        messageModel model = new messageModel(message, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), "", messageId);
         messageAdapters.add(model);
 
         dbReferenceSender.child(messageId).setValue(model)

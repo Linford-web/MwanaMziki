@@ -79,8 +79,8 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
         holder.category.setText(bookedEvent.getCategory());
 
         String bidderId = bookedEvent.getBiddersId();
-        String creatorId = bookedEvent.getCreatorID();
-        String eventId = bookedEvent.getEventId();
+        String categories = bookedEvent.getCategory();
+
 
         FirebaseFirestore.getInstance()
                 .collection("Users")
@@ -133,20 +133,13 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                         if (!queryDocumentSnapshots.isEmpty()) {
 
                             DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
-                            // Retrieve profile photo URL from FireStore
-                            String profileUrl = document.getString("profilePicture");
 
-                            if (profileUrl != null && !profileUrl.isEmpty()) {
-                                // Load profile photo into otherImageView using Glide or any other image loading library
-                                Glide.with(holder.itemView.getContext())
-                                        .load(profileUrl)
-                                        .placeholder(R.drawable.cover)
-                                        .error(R.drawable.poster1)
-                                        .into(holder.profile);
+                            if (document.exists()) {
+                                user_name = document.getString("name");
+                                user_email = document.getString("email");
 
-                            } else {
-                                // Handle the case when no profile photo is available
-                                Log.e("musicianNameAdapter", "Profile Photo Not Uploaded");
+                            }else {
+                                Toast.makeText(holder.itemView.getContext(), "User documents not found", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {
@@ -161,51 +154,42 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                     }
                 });
 
+
         holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String chatId = UUID.randomUUID().toString();
-                chatUserModel userModel = new chatUserModel("NotSet", chatId,FirebaseAuth.getInstance().getUid(), user_name, user_email);
+                String userId = bookedEvent.getBiddersId();
+                String chatRoomId = UUID.randomUUID().toString();
+                String name = bookedEvent.getBiddersName();
+                String email = user_email;
+                String eventID = bookedEvent.getEventId();
 
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-                databaseReference.orderByChild("musicianId").equalTo(bidderId).addListenerForSingleValueEvent(new ValueEventListener() {
+                if (userId == null || name == null || email == null) {
+                    Toast.makeText(holder.itemView.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                chatUserModel bidderChatRoom = new chatUserModel("NotSet", eventID, chatRoomId, userId, name, email);
+                DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference("Users");
+                dbReference.child(userId).setValue(bidderChatRoom)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
-                                    intent.putExtra("roomId", chatId);
-                                    intent.putExtra("userId", bidderId);
-                                    intent.putExtra("email", creatorId);
-                                    intent.putExtra("userName", eventId);
-
-                                    Toast.makeText(holder.itemView.getContext(), "User with Chat Room already exists", Toast.LENGTH_SHORT).show();
-
-                                } else {
-                                    databaseReference.child(chatId).child("Users").setValue(userModel)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-
-                                                    Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
-                                                    intent.putExtra("roomId", chatId);
-                                                    intent.putExtra("userId", bidderId);
-                                                    intent.putExtra("email", creatorId);
-                                                    intent.putExtra("userName", eventId);
-                                                    holder.itemView.getContext().startActivity(intent);
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(holder.itemView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
+                            public void onSuccess(Void unused) {
+                                // Start chatRoom activity with necessary data
+                                Intent intent = new Intent(holder.itemView.getContext(), chatActivity.class);
+                                intent.putExtra("roomId", chatRoomId);
+                                intent.putExtra("userId", userId);
+                                intent.putExtra("email", email);
+                                intent.putExtra("userName", name);
+                                intent.putExtra("eventId", eventID);
+                                intent.putExtra("category", categories);
+                                holder.itemView.getContext().startActivity(intent);
                             }
-
+                        }).addOnFailureListener(new OnFailureListener() {
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(holder.itemView.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(holder.itemView.getContext(), "Failed to Create Chat User", Toast.LENGTH_SHORT).show();
                             }
                         });
 

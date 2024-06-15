@@ -84,6 +84,8 @@ public class viewBookedEvents extends AppCompatActivity {
                                 if (eventPoster != null && !eventPoster.isEmpty()) {
                                     Glide.with(viewBookedEvents.this)
                                             .load(eventPoster)
+                                            .placeholder(R.drawable.cover)
+                                            .error(R.drawable.poster1)
                                             .into(profileTv);
                                 }
                             }

@@ -38,7 +38,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.user_name);
-            event = itemView.findViewById(R.id.event_name);
+            event = itemView.findViewById(R.id.user_email);
             profile = itemView.findViewById(R.id.profileTv);
             chatRoom = itemView.findViewById(R.id.container);
         }
@@ -79,37 +79,6 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
         holder.name.setText(message.getUserName());
         holder.event.setText(message.getEmail());
 
-        FirebaseAuth fAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-
-        //get user type
-        String userId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-
-        fStore.collection("Users")
-                .document(userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-
-                        if (document != null && document.exists()) {
-                            String userType = document.getString("userType");
-                            if ("Corporate".equals(userType)) {
-                                holder.name.setText(message.getUserName());
-                                holder.event.setText(message.getEmail());
-                            } else if ("Musician".equalsIgnoreCase(userType)) {
-                                holder.name.setText(message.getUserName());
-                                holder.event.setText(message.getEmail());
-                            } else {
-                                // Handle other user types if needed
-                                Log.d("TAG", "User is neither Corporate nor Musician");
-                            }
-
-                        }
-                    } else {
-                        Log.e("chatAdapter", "Error getting document", task.getException());
-                    }
-                });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +90,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
                 intent.putExtra("name", message.getUserName());
                 intent.putExtra("email", message.getEmail());
                 intent.putExtra("roomId", message.getChatRoomId());
+                intent.putExtra("eventId", message.getEventID());
                 context.startActivity(intent);
 
             }

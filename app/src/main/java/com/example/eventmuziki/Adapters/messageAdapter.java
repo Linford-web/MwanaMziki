@@ -27,7 +27,7 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.ViewHold
 
     public messageAdapter(Context context, ArrayList<messageModel> messages) {
         this.context = context;
-        this.messages = messages;
+        this.messages = new ArrayList<>();
     }
 
     public messageAdapter() {
@@ -61,7 +61,7 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.ViewHold
     @Override
     public messageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == VIEW_TYPE_SENDER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_row_sent, parent, false);
             return new ViewHolder(view);

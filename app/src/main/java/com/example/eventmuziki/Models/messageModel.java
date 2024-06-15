@@ -5,14 +5,12 @@ public class messageModel {
     public String senderId;
     public String receiverId;
     public String messageId;
-    public String messageTime;
 
-    public messageModel(String message, String senderId, String receiverId, String messageId, long l) {
+    public messageModel(String message, String senderId, String receiverId, String messageId) {
         this.message = message;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.messageId = messageId;
-        this.messageTime = String.valueOf(l);
     }
     public messageModel() {
     }
@@ -50,11 +48,4 @@ public class messageModel {
         this.messageId = messageId;
     }
 
-    public String getMessageTime() {
-        return messageTime;
-    }
-
-    public void setMessageTime(String messageTime) {
-        this.messageTime = messageTime;
-    }
 }
