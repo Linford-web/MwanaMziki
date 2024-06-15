@@ -11,11 +11,14 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventmuziki.Adapters.bookedEventsAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
+import com.example.eventmuziki.Models.bookedEventsModel;
 import com.example.eventmuziki.Models.eventModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,13 +35,14 @@ public class EventsActivity extends AppCompatActivity {
 
     ImageView backArrow;
     FloatingActionButton addTask;
-    RecyclerView recyclerView, eventRecyclerView;
-    ArrayList<eventModel> events;
+    RecyclerView recyclerView, eventRecyclerView, doneRecyclerView;
+    ArrayList<eventModel> events, events2;
+    ArrayList<bookedEventsModel> booked;
     eventAdapter eventadapter;
-    ArrayList<eventModel> events2;
     eventAdapter2 eventAdapters;
+    bookedEventsAdapter bookedAdapter;
     FirebaseFirestore fStore;
-    Button bookedEvents, viewBooked;
+    CardView bidEvents, viewBooked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,33 +54,44 @@ public class EventsActivity extends AppCompatActivity {
         addTask = findViewById(R.id.add_taskFBtn);
         recyclerView = findViewById(R.id.allRecyclerView);
         eventRecyclerView = findViewById(R.id.eventRecyclerView);
-        bookedEvents = findViewById(R.id.bookedEventsBtn);
-        viewBooked = findViewById(R.id.booked);
+        doneRecyclerView = findViewById(R.id.doneRecyclerView);
+        bidEvents = findViewById(R.id.bidEvents);
+        viewBooked = findViewById(R.id.bookedEvents);
         fStore = FirebaseFirestore.getInstance();
 
         events = new ArrayList<>();
         eventadapter = new eventAdapter(events);
         events2 = new ArrayList<>();
         eventAdapters = new eventAdapter2(events2);
-
-        // Set up RecyclerView
-        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        eventRecyclerView.setLayoutManager(layoutManager2);
-        eventRecyclerView.setAdapter(eventAdapters);
+        booked = new ArrayList<>();
+        bookedAdapter = new bookedEventsAdapter(booked);
 
         // Set up RecyclerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(eventadapter);
 
+        // Set up RecyclerView
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        eventRecyclerView.setLayoutManager(layoutManager2);
+        eventRecyclerView.setAdapter(eventAdapters);
+
+        RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        doneRecyclerView.setLayoutManager(layoutManager3);
+        doneRecyclerView.setAdapter(bookedAdapter);
+
         // Fetch events from Firestore
         fetchEvents();
+        // Check user access level
+        checkUserAccessLevel();
+        // fetch booked events from Firestore
+        fetchBookedEvents();
 
         backArrow.setOnClickListener(v -> {
             finish();
         });
 
-        bookedEvents.setOnClickListener(new View.OnClickListener() {
+        bidEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), bidEvents.class));
@@ -98,9 +113,44 @@ public class EventsActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    private void fetchBookedEvents() {
 
-        checkUserAccessLevel();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getUid();
+
+        if (userId == null) {
+            Toast.makeText(this, "User ID is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        fStore.collection("BookedEvents")
+                .whereEqualTo("creatorID", userId)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
+                        if (!booked.contains(event)) {
+                            booked.add(event);
+                        }
+                    }
+                    bookedAdapter.notifyDataSetChanged();
+                });
+
+        fStore.collection("BookedEvents")
+                .whereEqualTo("biddersId", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
+                        if (!booked.contains(event)) {
+                            booked.add(event);
+                        }
+                    }
+                    bookedAdapter.notifyDataSetChanged();
+                }).addOnFailureListener(e -> Toast.makeText(EventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
     }
 

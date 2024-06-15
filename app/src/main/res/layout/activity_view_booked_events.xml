@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context=".viewBookedEvents">
 
     <LinearLayout
@@ -184,5 +185,17 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/advertiseBtn"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:text="Advertise Event"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"/>
 
 </RelativeLayout>

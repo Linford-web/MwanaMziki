@@ -49,7 +49,7 @@ public class eventBidding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_event_booking);
+        setContentView(R.layout.activity_event_bidding);
 
         eventName = findViewById(R.id.eventNameTv);
         eventDate = findViewById(R.id.dateTv);
@@ -147,14 +147,9 @@ public class eventBidding extends AppCompatActivity {
 
 
 
-        }else {
-
-            Toast.makeText(this, "No event found", Toast.LENGTH_SHORT).show();
         }
-
         // fetch bidders user name
         fetchUserName();
-
         // check user access level
         checkUserAccessLevel();
 

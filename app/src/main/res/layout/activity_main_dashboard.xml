@@ -84,6 +84,7 @@
                 android:src="@drawable/music_icon"
                 app:tint="@color/dark_blue" />
             <TextView
+                android:id="@+id/emailTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All Adverts Paid For"
@@ -173,6 +174,35 @@
                             android:layout_marginTop="7dp"
                             android:id="@+id/eventsRecyclerView"/>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:padding="5dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.1"
+                                android:textSize="16sp"
+                                android:text="@string/costumes"/>
+                            <ImageView
+                                android:id="@+id/allCostume"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/view_list_icon"
+                                app:tint="@color/blue" />
+                        </LinearLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/gray"
+                            android:layout_marginTop="7dp"
+                            android:id="@+id/costumeRecyclerView"/>
+
                     </LinearLayout>
 
 
@@ -200,7 +230,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_margin="10dp">
+            android:layout_margin="15dp">
 
             <ImageView
                 android:id="@+id/messageIcon"

@@ -42,7 +42,7 @@ public class profileActivity extends AppCompatActivity {
 
     TextView name, phone, email, aboutMe, socials, category;
     ImageView back, imageView, select, delete;
-    Button logout;
+    Button logout, edit;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -67,13 +67,19 @@ public class profileActivity extends AppCompatActivity {
         delete = findViewById(R.id.deleteProfileBtn);
         logout = findViewById(R.id.logoutBtn);
         aboutMe = findViewById(R.id.about);
+        edit = findViewById(R.id.editProfileBtn);
         socials = findViewById(R.id.socials);
         category = findViewById(R.id.category);
 
-        // Back Button
-        back.setOnClickListener(v ->
-                finish());
+        // check user access level
+        checkUserAccessLevel();
 
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), editProfile.class));
+            }
+        });
         // Logic For Logout Button
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,6 +189,62 @@ public class profileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkUserAccessLevel() {
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        //get user type
+        String userId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+
+        fStore.collection("Users")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+
+                        if (document != null && document.exists()) {
+                            String userType = document.getString("userType");
+                            if ("Corporate".equals(userType)) {
+                                // Back Button
+                                back.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
+                                        finish();
+                                    }
+                                });
+                                category.setVisibility(View.GONE);
+                                aboutMe.setVisibility(View.GONE);
+                                socials.setVisibility(View.GONE);
+                                edit.setVisibility(View.GONE);
+
+                            } else if ("Musician".equalsIgnoreCase(userType)) {
+                                // Back Button
+                                back.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
+                                        finish();
+                                    }
+                                });
+                                category.setVisibility(View.VISIBLE);
+                                aboutMe.setVisibility(View.VISIBLE);
+                                socials.setVisibility(View.VISIBLE);
+                                edit.setVisibility(View.VISIBLE);
+
+                            } else {
+                                // Handle other user types if needed
+                                Log.d("TAG", "User is neither Corporate nor Musician");
+                            }
+
+                        }
+                    } else {
+                        Log.e("TaskListAdapter", "Error getting document", task.getException());
+                    }
+                });
     }
 
     private void deleteProfileImage() {

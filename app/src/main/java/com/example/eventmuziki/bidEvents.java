@@ -82,9 +82,7 @@ public class bidEvents extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         biddersEventModel event = documentSnapshot.toObject(biddersEventModel.class);
-                        if (!booked.contains(event)) {
-                            booked.add(event);
-                        }
+                        booked.add(event);
                     }
                     bookedAdapter.notifyDataSetChanged();
                 }).addOnFailureListener(e -> Toast.makeText(bidEvents.this, e.getMessage(), Toast.LENGTH_SHORT).show());

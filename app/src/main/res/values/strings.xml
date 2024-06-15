@@ -62,5 +62,8 @@
     <string name="about">About</string>
     <string name="socials">Socials</string>
     <string name="book_now">Book Now</string>
+    <string name="booked">Booked</string>
+    <string name="chats">Chats</string>
+    <string name="write_message">Write Message</string>
 
 </resources>

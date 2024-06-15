@@ -17,8 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.bookedEventsModel;
+import com.example.eventmuziki.Models.chatUserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,7 +35,7 @@ public class bookMusicianActivity extends AppCompatActivity {
     TextView eventName, eventLocation, eventDate, eventTime, get_name, bidAmountTxt, categoryTxt, aboutTxt, socialTxt, biddersName, organizerName, event, creator, bidder;
     Button bookNow;
     CircleImageView bidderProfile;
-    ImageView back;
+    ImageView back, poster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class bookMusicianActivity extends AppCompatActivity {
         creator = findViewById(R.id.creatorId);
         bidder = findViewById(R.id.biddersId);
         back = findViewById(R.id.back_arrow);
+        poster = findViewById(R.id.posterTv);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +85,35 @@ public class bookMusicianActivity extends AppCompatActivity {
 
             String biddersId = bookEvent.getBiddersId();
 
+            // fetch details
             fetchDetails(biddersId);
+
+            String eventId = bookEvent.getEventId();
+
+            FirebaseFirestore.getInstance()
+                    .collection("Events")
+                    .document(eventId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+
+                                String eventPoster = documentSnapshot.getString("eventPoster");
+
+                                if (eventPoster != null && !eventPoster.isEmpty()) {
+                                    Glide.with(bookMusicianActivity.this)
+                                            .load(eventPoster)
+                                            .into(poster);
+                                }
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(bookMusicianActivity.this, "Failed To get Event Poster", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
 
         bookNow.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +143,10 @@ public class bookMusicianActivity extends AppCompatActivity {
         String bidderName = this.biddersName.getText().toString();
         String organizerName = this.organizerName.getText().toString();
 
+
+        String eventId = bookMusicianActivity.this.getIntent().getStringExtra("eventId");
+
+        // Create a new event object with the provided data
         bookedEventsModel bookEvent = new bookedEventsModel(name, "", date, time, location, id, creatorId, "", category, bidderId, organizerName, bidderName, about, socials);
 
         fStore.collection("BookedEvents")

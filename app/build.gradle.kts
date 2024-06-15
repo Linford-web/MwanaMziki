@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.firebase.database)
     annotationProcessor (libs.compiler)
     implementation(libs.firebase.storage)
     implementation(libs.circleimageview)

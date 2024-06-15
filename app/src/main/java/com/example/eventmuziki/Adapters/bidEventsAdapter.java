@@ -59,7 +59,7 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
         holder.eventName.setText(bookedEvent.getEventName());
         holder.bidAmount.setText(bookedEvent.getBidAmount());
 
-        String bidderId = bookedEvent.getBiddersId();
+        String bidderId = bookedEvent.getCreatorID();
 
         FirebaseFirestore.getInstance()
                 .collection("Users")

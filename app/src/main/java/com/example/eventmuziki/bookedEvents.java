@@ -19,6 +19,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class bookedEvents extends AppCompatActivity {
 
@@ -36,7 +38,6 @@ public class bookedEvents extends AppCompatActivity {
 
         back = findViewById(R.id.back_arrow);
         bookedRv = findViewById(R.id.bookedEventsRv);
-
 
         back.setOnClickListener(v -> {
             finish();
@@ -64,14 +65,21 @@ public class bookedEvents extends AppCompatActivity {
             Toast.makeText(this, "User ID is null", Toast.LENGTH_SHORT).show();
             return;
         }
-
         fStore.collection("BookedEvents")
                 .whereEqualTo("creatorID", userId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    booked.clear();
+                    HashSet<String> events = new HashSet<>();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
-                        booked.add(event);
+                        if (userId != null){
+                            if (!events.contains(event.getEventId())) {
+                                booked.add(event);
+                                events.add(event.getEventId());
+                            }
+                        }
+
                     }
                     bookedAdapter.notifyDataSetChanged();
                 });
@@ -82,9 +90,7 @@ public class bookedEvents extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
-                        if (!booked.contains(event)) {
-                            booked.add(event);
-                        }
+                        booked.add(event);
                     }
                     bookedAdapter.notifyDataSetChanged();
                 }).addOnFailureListener(e -> Toast.makeText(bookedEvents.this, e.getMessage(), Toast.LENGTH_SHORT).show());
