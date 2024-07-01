@@ -306,37 +306,6 @@
                 android:padding="3dp"
                 android:textSize="19sp"
                 android:hint="@string/socials"/>
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/eventId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/creatorId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/biddersId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/user_name"
-                android:visibility="gone"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/user_email"
-                android:visibility="gone"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/bids_Id"
-                android:visibility="gone"/>
-
 
         </LinearLayout>
 

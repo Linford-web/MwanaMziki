@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAFAFA"
     tools:context=".MainDashboard">
     <View
         android:id="@+id/view"
@@ -15,6 +16,7 @@
     </View>
 
     <LinearLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -84,7 +86,6 @@
                 android:src="@drawable/music_icon"
                 app:tint="@color/dark_blue" />
             <TextView
-                android:id="@+id/emailTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All Adverts Paid For"
@@ -141,7 +142,6 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/gray"
                             android:layout_marginTop="7dp"
                             android:id="@+id/recyclerView"/>
 
@@ -170,7 +170,6 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/gray"
                             android:layout_marginTop="7dp"
                             android:id="@+id/eventsRecyclerView"/>
 
@@ -199,7 +198,6 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/gray"
                             android:layout_marginTop="7dp"
                             android:id="@+id/costumeRecyclerView"/>
 
@@ -218,13 +216,16 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="3dp"
         app:cardCornerRadius="15dp"
         android:backgroundTint="@color/white"
         android:background="@drawable/card_view"
         android:layout_alignParentBottom="true"
         android:elevation="5dp">
-
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -278,7 +279,6 @@
                 android:focusable="true"
                 android:src="@drawable/costume_icon"
                 app:tint="@color/dark_blue" />
-
 
         </LinearLayout>
 

@@ -1,16 +1,18 @@
 package com.example.eventmuziki.Models;
 
-public class messageModel {
-    public String message;
-    public String senderId;
-    public String receiverId;
-    public String messageId;
+import com.google.firebase.Timestamp;
 
-    public messageModel(String message, String senderId, String receiverId, String messageId) {
+public class messageModel {
+
+    String message, senderId;
+    Timestamp timestamp;
+
+
+    public messageModel(String message, String senderId, Timestamp timestamp) {
         this.message = message;
         this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.messageId = messageId;
+        this.timestamp = timestamp;
+
     }
     public messageModel() {
     }
@@ -32,20 +34,11 @@ public class messageModel {
         this.senderId = senderId;
     }
 
-    public String getReceiverId() {
-        return receiverId;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
-
 }

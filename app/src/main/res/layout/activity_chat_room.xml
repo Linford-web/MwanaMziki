@@ -13,16 +13,46 @@
         android:orientation="vertical"
         >
 
-        <androidx.appcompat.widget.Toolbar
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:background="@color/orange"
-            app:titleTextColor="@color/white"
-            android:id="@+id/toolbar" />
+            android:layout_margin="5dp">
+            <ImageButton
+                android:id="@+id/back_arrow"
+                android:layout_width="50dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/back_arrow"
+                app:tint="@color/red"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileTv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/profile_image"
+                app:tint="@color/white"/>
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:textColor="@color/white"
+                android:text="@string/user_name"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/chat_bg"
             android:id="@+id/chatRecyclerView"
             android:padding="6dp"
@@ -30,6 +60,7 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/messageContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,19 +73,19 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:padding="2dp"
-            android:elevation="7dp"
+            android:padding="5dp"
+            android:elevation="5dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:background="@drawable/edit_text_bg"
-            android:backgroundTint="@color/white"
             android:hint="@string/write_message"/>
-        <ImageView
+        <ImageButton
             android:id="@+id/sendMessageBtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_marginStart="3dp"
             android:src="@drawable/send_icon"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/blue"
             android:padding="3dp"/>
     </LinearLayout>

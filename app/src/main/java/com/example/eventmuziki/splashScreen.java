@@ -52,8 +52,6 @@ public class splashScreen extends AppCompatActivity {
                 }
             }
         },2000);
-
-
     }
 
     private void startDashboardActivity() {

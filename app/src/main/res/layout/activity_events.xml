@@ -229,7 +229,7 @@
                     android:layout_marginTop="40dp" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:background="@color/gray"
                     android:id="@+id/allRecyclerView"
                     android:layout_marginTop="10dp"/>

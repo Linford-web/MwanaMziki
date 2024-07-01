@@ -3,10 +3,12 @@ package com.example.eventmuziki;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,10 +36,12 @@ public class loginActivity extends AppCompatActivity {
     EditText email, password;
     Button loginBtn;
     ProgressBar progressbar;
+    ImageView passwordIcon;
     boolean valid = true;
     TextView fPassword;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    boolean passwordShowing = false;
 
 
     @Override
@@ -52,7 +56,27 @@ public class loginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         loginBtn = findViewById(R.id.loginBtn);
         progressbar = findViewById(R.id.progressbar);
+        passwordIcon = findViewById(R.id.passwordIcon);
         fStore = FirebaseFirestore.getInstance();
+
+        passwordIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (passwordShowing){
+                    password.setTransformationMethod(null);
+                    passwordIcon.setImageResource(R.drawable.visibility_icon);
+                    passwordShowing = false;
+                }
+                else {
+                    password.setTransformationMethod(new PasswordTransformationMethod());
+                    passwordIcon.setImageResource(R.drawable.visibility_off_icon);
+                    passwordShowing = true;
+                }
+                // move cursor to the end of the password field
+                password.setSelection(password.getText().length());
+            }
+        });
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

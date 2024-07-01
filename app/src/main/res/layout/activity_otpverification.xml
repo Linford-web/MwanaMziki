@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".OTPVerification">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/home_icon"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter Code Sent To You"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:letterSpacing="0.09"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Email"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:letterSpacing="0.09"/>
+
+    <TextView
+        android:id="@+id/emailTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:letterSpacing="0.09"
+        android:hint="user@gmail.com"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Phone Number"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:letterSpacing="0.09"/>
+    <TextView
+        android:id="@+id/phoneTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="+254789012345"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:letterSpacing="0.09"/>
+    <EditText
+        android:visibility="visible"
+        android:id="@+id/otpEditTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="30sp"
+        android:maxLines="1"
+        android:maxLength="6"
+        android:inputType="number"
+        android:background="@drawable/card_view"
+        android:textStyle="bold"
+        android:letterSpacing="1"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/verifyBtn"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:padding="15dp"
+        android:text="Send OTP"
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Didn't Receive Code?"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/resendBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resend"
+            android:textColor="@color/blue"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:id="@+id/progressbar"
+        android:visibility="invisible"/>
+
+</LinearLayout>

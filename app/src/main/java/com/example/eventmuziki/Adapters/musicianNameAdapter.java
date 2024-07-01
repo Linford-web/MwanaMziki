@@ -19,8 +19,10 @@ import com.example.eventmuziki.Models.chatUserModel;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.chatActivity;
 import com.example.eventmuziki.chatRoom;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +40,7 @@ import java.util.UUID;
 public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapter.ViewHolder> {
 
     ArrayList<bookedEventsModel> bookedEvents;
-    String user_name, user_email;
+    String bidderEmail, profileImageUrl, phone;
 
     public musicianNameAdapter(ArrayList<bookedEventsModel> bookedEvents) {
         this.bookedEvents = bookedEvents;
@@ -57,7 +59,7 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
             name = itemView.findViewById(R.id.name);
             category = itemView.findViewById(R.id.category);
             chat = itemView.findViewById(R.id.container);
-            databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+            databaseReference = FirebaseDatabase.getInstance().getReference("ChatRooms");
 
         }
     }
@@ -76,12 +78,11 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
         bookedEventsModel bookedEvent = bookedEvents.get(position);
 
         holder.name.setText(bookedEvent.getBiddersName());
-        holder.category.setText(bookedEvent.getCategory());
 
         String bidderId = bookedEvent.getBiddersId();
-        String categories = bookedEvent.getCategory();
+        String bidId = bookedEvent.getBidId();
 
-
+        // Retrieve profile photo URL,email and phone from FireStore for the bidder
         FirebaseFirestore.getInstance()
                 .collection("Users")
                 .whereEqualTo("userid", bidderId)
@@ -93,7 +94,11 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
 
                             DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
                             // Retrieve profile photo URL from FireStore
-                            String profileImageUrl = document.getString("profilePicture");
+                            profileImageUrl = document.getString("profilePicture");
+                            bidderEmail = document.getString("email");
+                            phone = document.getString("number");
+
+                            holder.category.setText(bidderEmail);
 
                             if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
                                 // Load profile photo into otherImageView using Glide or any other image loading library
@@ -122,80 +127,63 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                 });
 
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-
-        FirebaseFirestore.getInstance()
-                .collection("Users")
-                .whereEqualTo("userid", userId)
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        fStore.collection("Users")
+                .document(userId)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            String userType = document.getString("userType");
+                            if ("Corporate".equals(userType)) {
 
-                            DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
+                                fStore.collection("BookedEvents")
+                                        .whereEqualTo("bidId", bidId)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    holder.chat.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
 
-                            if (document.exists()) {
-                                user_name = document.getString("name");
-                                user_email = document.getString("email");
+                                                            Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
+                                                            intent.putExtra("userId", bookedEvent.getBiddersId());
+                                                            intent.putExtra("userName", bookedEvent.getBiddersName());
+                                                            intent.putExtra("userEmail", bidderEmail);
+                                                            intent.putExtra("userImage", profileImageUrl);
+                                                            intent.putExtra("userPhone", phone);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                            holder.itemView.getContext().startActivity(intent);
 
-                            }else {
-                                Toast.makeText(holder.itemView.getContext(), "User documents not found", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }else {
+                                                    Toast.makeText(holder.itemView.getContext(), "Failed To create chat room with bidder", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(holder.itemView.getContext(), "Failed To fetch Bid ID", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+
+                            } else if ("Musician".equalsIgnoreCase(userType)) {
+                                Toast.makeText(holder.itemView.getContext(), "Musicians Cannot Start Chats", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Handle other user types if needed
+                                Log.d("TAG", "User is neither Corporate nor Musician");
                             }
 
-                        } else {
-                            Toast.makeText(holder.itemView.getContext(), "User document not found", Toast.LENGTH_SHORT).show();
                         }
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(holder.itemView.getContext(), "Failed To fetch Students", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("musicianNameAdapter", "Error getting document", task.getException());
                     }
                 });
-
-
-        holder.chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String userId = bookedEvent.getBiddersId();
-                String chatRoomId = UUID.randomUUID().toString();
-                String name = bookedEvent.getBiddersName();
-                String email = user_email;
-                String eventID = bookedEvent.getEventId();
-
-                if (userId == null || name == null || email == null) {
-                    Toast.makeText(holder.itemView.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                chatUserModel bidderChatRoom = new chatUserModel("NotSet", eventID, chatRoomId, userId, name, email);
-                DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference("Users");
-                dbReference.child(userId).setValue(bidderChatRoom)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                // Start chatRoom activity with necessary data
-                                Intent intent = new Intent(holder.itemView.getContext(), chatActivity.class);
-                                intent.putExtra("roomId", chatRoomId);
-                                intent.putExtra("userId", userId);
-                                intent.putExtra("email", email);
-                                intent.putExtra("userName", name);
-                                intent.putExtra("eventId", eventID);
-                                intent.putExtra("category", categories);
-                                holder.itemView.getContext().startActivity(intent);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(holder.itemView.getContext(), "Failed to Create Chat User", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-            }
-        });
 
     }
 
@@ -206,3 +194,5 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
 
 
 }
+
+

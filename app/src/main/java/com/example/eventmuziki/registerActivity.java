@@ -2,11 +2,14 @@ package com.example.eventmuziki;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.eventmuziki.Models.chatUserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -24,20 +28,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hbb20.CountryCodePicker;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
 public class registerActivity extends AppCompatActivity {
 
-    EditText name, email, password, number;;
+    EditText name, email, password, number, conPassword;
     Button registerBtn;
     CheckBox bossCheck, musicianCheck;
     ProgressBar progressbar;
-    boolean valid = true;
+    ImageView passwordIcon, conPasswordIcon;
+    CountryCodePicker countryCodePicker;
+
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 
+    boolean valid = true;
+    boolean passwordShowing = false;
+    boolean conPasswordShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +60,20 @@ public class registerActivity extends AppCompatActivity {
         name = findViewById(R.id.user_name);
         email = findViewById(R.id.user_email);
         password = findViewById(R.id.user_password);
+        conPassword = findViewById(R.id.confirmPassword);
         registerBtn = findViewById(R.id.registerBtn);
         bossCheck = findViewById(R.id.bossCheck);
         musicianCheck = findViewById(R.id.musicianCheck);
         number = findViewById(R.id.phone);
         progressbar = findViewById(R.id.progressbar);
+        passwordIcon = findViewById(R.id.passwordIcon);
+        conPasswordIcon = findViewById(R.id.conPasswordIcon);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+        countryCodePicker = findViewById(R.id.countryCodePicker);
+
+        // country code picker
+        countryCodePicker.registerCarrierNumberEditText(number);
 
         // check boxes logic
         musicianCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -75,6 +94,41 @@ public class registerActivity extends AppCompatActivity {
             }
         });
 
+        passwordIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (passwordShowing){
+                    password.setTransformationMethod(null);
+                    passwordIcon.setImageResource(R.drawable.visibility_icon);
+                    passwordShowing = false;
+                }
+                else {
+                    password.setTransformationMethod(new PasswordTransformationMethod());
+                    passwordIcon.setImageResource(R.drawable.visibility_off_icon);
+                    passwordShowing = true;
+                }
+                // move cursor to the end of the password field
+                password.setSelection(password.getText().length());
+            }
+        });
+        conPasswordIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (conPasswordShowing){
+                    conPassword.setTransformationMethod(null);
+                    conPasswordIcon.setImageResource(R.drawable.visibility_icon);
+                    conPasswordShowing = false;
+                }
+                else {
+                    conPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    conPasswordIcon.setImageResource(R.drawable.visibility_off_icon);
+                    conPasswordShowing = true;
+                }
+                // move cursor to the end of the password field
+                conPassword.setSelection(password.getText().length());
+            }
+        });
+
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,13 +136,24 @@ public class registerActivity extends AppCompatActivity {
                 checkField(email);
                 checkField(number);
                 checkField(password);
+                checkField(conPassword);
 
                 //checkbox validation
                 if (!(bossCheck.isChecked() || musicianCheck.isChecked())){
                     Toast.makeText(registerActivity.this, "Select User Type", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                // check if password and confirm password is the same
+                if (!(password.getText().toString().equals(conPassword.getText().toString()))){
+                    Toast.makeText(registerActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    valid = true;
+                }
+                if (!countryCodePicker.isValidFullNumber()){
+                    number.setError("Invalid Phone Number");
+                    return;
+                }
 
                 if (valid){
 
@@ -120,9 +185,16 @@ public class registerActivity extends AppCompatActivity {
                                         User.put("userType", "Musician");
                                     }
                                     df.set(User);
-                                    startActivity(new Intent(getApplicationContext(), loginActivity.class));
-                                    finish();
+                                    Intent intent = new Intent(registerActivity.this, loginActivity.class);
+                                    intent.putExtra("mobile", countryCodePicker.getFullNumberWithPlus());
+                                    intent.putExtra("email", email.getText().toString());
+                                    intent.putExtra("password", password.getText().toString());
+                                    intent.putExtra("name", name.getText().toString());
+                                    intent.putExtra("userId", user.getUid());
+                                    intent.putExtra("userType", getIntent().getStringExtra("userType"));
+                                    startActivity(intent);
                                     progressbar.setVisibility(View.GONE);
+
                                 }
 
                             }).addOnFailureListener(new OnFailureListener() {

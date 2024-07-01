@@ -22,8 +22,10 @@ import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.biddersAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.eventModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class eventBidding extends AppCompatActivity {
 

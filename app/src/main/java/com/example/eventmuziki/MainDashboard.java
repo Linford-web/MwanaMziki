@@ -3,6 +3,7 @@ package com.example.eventmuziki;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,13 +43,15 @@ public class MainDashboard extends AppCompatActivity {
 
     ImageView chats, eventsBtn, adverts, clothes, home;
     ImageView profile, allAdverts, upcomingEvents;
-    TextView userNameTv, emailTv;
+    TextView userNameTv;
     RecyclerView recyclerView;
     ArrayList<eventModel> events;
-    eventAdapter2 eventadapter;
+    eventAdapter2 adapter;
     FirebaseFirestore fStore;
 
-    DatabaseReference dbReference;
+    String name, email;
+
+    // BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +69,15 @@ public class MainDashboard extends AppCompatActivity {
         recyclerView = findViewById(R.id.eventsRecyclerView);
         allAdverts = findViewById(R.id.allAdvertsBtn);
         upcomingEvents = findViewById(R.id.allEventsBtn);
-        emailTv = findViewById(R.id.emailTv);
         fStore = FirebaseFirestore.getInstance();
-        dbReference = FirebaseDatabase.getInstance().getReference("Users");
+        // bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         events = new ArrayList<>();
-        eventadapter = new eventAdapter2(events);
+        adapter = new eventAdapter2(events);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(eventadapter);
+        recyclerView.setAdapter(adapter);
 
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId != null){
@@ -85,13 +89,10 @@ public class MainDashboard extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
-
-                                String userName = document.getString("name");
-                                String email = document.getString("email");
+                                name = document.getString("name");
+                                email = document.getString("email");
                                 // Set the user name in the TextView
-                                userNameTv.setText(userName);
-                                emailTv.setText(email);
-
+                                userNameTv.setText(name);
                                 // Retrieve profile photo URL from FireStore
                                 String profileImageUrl = document.getString("profilePicture");
                                 if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
@@ -122,7 +123,6 @@ public class MainDashboard extends AppCompatActivity {
 
             }
         });
-
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,41 +134,8 @@ public class MainDashboard extends AppCompatActivity {
         chats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String userId = FirebaseAuth.getInstance().getUid();
-                if (userId == null) {
-                    Toast.makeText(MainDashboard.this, "User not logged in", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                dbReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            // Retrieve user details
-                            String chatRoomId = snapshot.child("chatRoomId").getValue(String.class);
-                            String email = snapshot.child("email").getValue(String.class);
-                            String name = snapshot.child("userName").getValue(String.class);
-                            String eventID = snapshot.child("eventID").getValue(String.class);
-
-                            // Start chatActivity with fetched details
-                            Intent intent = new Intent(MainDashboard.this, chatActivity.class);
-                            intent.putExtra("roomId", chatRoomId);
-                            intent.putExtra("userId", userId);
-                            intent.putExtra("email", email);
-                            intent.putExtra("userName", name);
-                            intent.putExtra("eventId", eventID);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(MainDashboard.this, "User details not found", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(), chatActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -220,7 +187,7 @@ public class MainDashboard extends AppCompatActivity {
                             eventModel event = documentSnapshot.toObject(eventModel.class);
                             events.add(event);
                         }
-                        eventadapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -240,7 +207,7 @@ public class MainDashboard extends AppCompatActivity {
                             eventModel event = documentSnapshot.toObject(eventModel.class);
                             events.add(event);
                         }
-                        eventadapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

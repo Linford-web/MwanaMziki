@@ -79,7 +79,6 @@ public class EventsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         doneRecyclerView.setLayoutManager(layoutManager3);
         doneRecyclerView.setAdapter(bookedAdapter);
-
         // Fetch events from Firestore
         fetchEvents();
         // Check user access level
@@ -88,7 +87,7 @@ public class EventsActivity extends AppCompatActivity {
         fetchBookedEvents();
 
         backArrow.setOnClickListener(v -> {
-            finish();
+            onBackPressed();
         });
 
         bidEvents.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +112,47 @@ public class EventsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void fetchEvents() {
+
+            fStore.collection("Events")
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                eventModel event = documentSnapshot.toObject(eventModel.class);
+                                events.add(event);
+                            }
+                            eventadapter.notifyDataSetChanged();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(EventsActivity.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+    }
+    private void fetchEventsS(String userId) {
+        fStore.collection("Events")
+                .whereEqualTo("creatorID", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            eventModel event = documentSnapshot.toObject(eventModel.class);
+                            events2.add(event);
+                        }
+                        eventAdapters.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(EventsActivity.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void fetchBookedEvents() {
@@ -154,30 +194,6 @@ public class EventsActivity extends AppCompatActivity {
 
     }
 
-    private void fetchEvents() {
-
-            fStore.collection("Events")
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                eventModel event = documentSnapshot.toObject(eventModel.class);
-                                events.add(event);
-                                events2.add(event);
-
-                            }
-                            eventadapter.notifyDataSetChanged();
-                            eventAdapters.notifyDataSetChanged();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(EventsActivity.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-    }
-
     private void checkUserAccessLevel() {
 
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -197,8 +213,11 @@ public class EventsActivity extends AppCompatActivity {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
                                addTask.setVisibility(View.VISIBLE);
+                               fetchEventsS(userId);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 addTask.setVisibility(View.GONE);
+                                // Fetch events from Firestore
+                                fetchEvents();
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");
@@ -210,5 +229,7 @@ public class EventsActivity extends AppCompatActivity {
                     }
                 });
         }
+
+
 
 }

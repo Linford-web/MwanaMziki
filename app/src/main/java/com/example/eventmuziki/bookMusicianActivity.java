@@ -38,13 +38,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class bookMusicianActivity extends AppCompatActivity {
 
     TextView eventName, eventLocation, eventDate, eventTime, get_name, bidAmountTxt, categoryTxt, aboutTxt,
-            socialTxt, biddersName, organizerName, event, creator, bidder;
-    TextView userNameTv, userEmailTv, bidID, details;
+            socialTxt, biddersName, organizerName;
+    TextView details;
     Button bookNow;
     CircleImageView bidderProfile;
     ImageView back, poster;
 
-    DatabaseReference dbReference;
+    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(), userName, userEmail, userPhoneNumber, profilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +65,10 @@ public class bookMusicianActivity extends AppCompatActivity {
         biddersName = findViewById(R.id.biddersNameTv);
         bidderProfile = findViewById(R.id.userProfileTv);
         organizerName = findViewById(R.id.organizerNameTv);
-        event = findViewById(R.id.eventId);
-        creator = findViewById(R.id.creatorId);
-        bidder = findViewById(R.id.biddersId);
         back = findViewById(R.id.back_arrow);
         poster = findViewById(R.id.posterTv);
-        userNameTv = findViewById(R.id.user_name);
-        bidID = findViewById(R.id.bids_Id);
         details = findViewById(R.id.eventDescription);
-        userEmailTv = findViewById(R.id.user_email);
 
-        dbReference = FirebaseDatabase.getInstance().getReference("Users");
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +76,6 @@ public class bookMusicianActivity extends AppCompatActivity {
                 finish();
             }
         });
-
 
         biddersEventModel bookEvent = getIntent().getParcelableExtra("biddersEventModel");
         if (bookEvent !=null){
@@ -94,10 +86,6 @@ public class bookMusicianActivity extends AppCompatActivity {
             bidAmountTxt.setText(bookEvent.getBidAmount());
             biddersName.setText(bookEvent.getBiddersName());
             organizerName.setText(bookEvent.getOrganizerName());
-            event.setText(bookEvent.getEventId());
-            creator.setText(bookEvent.getCreatorID());
-            bidder.setText(bookEvent.getBiddersId());
-            bidID.setText(bookEvent.getBidId());
             details.setText(bookEvent.getEventDetails());
 
             String biddersId = bookEvent.getBiddersId();
@@ -140,9 +128,6 @@ public class bookMusicianActivity extends AppCompatActivity {
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
-        //get user type
-        String userId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-
         fStore.collection("Users")
                 .document(userId)
                 .get()
@@ -150,11 +135,10 @@ public class bookMusicianActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
-                            String userName = document.getString("name");
-                            String userEmail = document.getString("email");
-
-                            userNameTv.setText(userName);
-                            userEmailTv.setText(userEmail);
+                            userName = document.getString("name");
+                            userEmail = document.getString("email");
+                            profilePicture = document.getString("profilePicture");
+                            userPhoneNumber = document.getString("number");
 
                             String userType = document.getString("userType");
                             if (userType != null) {
@@ -179,43 +163,18 @@ public class bookMusicianActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle the click event here
-                bookMusicians();
-                // create chat User
-                createChatUser();
+                bookMusicians(Objects.requireNonNull(bookEvent).getBidId(), bookEvent.getBiddersId(), bookEvent.getOrganizerName(), bookEvent.getEventId(), bookEvent.getBiddersName(), bookEvent.getCreatorID());
+
             }
         });
 
     }
 
-    private void createChatUser() {
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId == null) {
-            Toast.makeText(bookMusicianActivity.this, "User not logged in", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void bookMusicians( String bidId, String biddersId, String organizerName, String eventId, String biddersName, String creatorId) {
+        if (biddersId == null || biddersName == null || organizerName == null || eventId == null || creatorId == null){
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+        } else {
 
-        String chatRoomId = UUID.randomUUID().toString();
-        String name = userNameTv.getText().toString();
-        String email = userEmailTv.getText().toString();
-        String events = event.getText().toString();
-
-        chatUserModel chatRoom = new chatUserModel("NotSet", events, chatRoomId, userId, name, email);
-        dbReference.child(userId).setValue(chatRoom)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(bookMusicianActivity.this, "Chat User Created Successfully", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(bookMusicianActivity.this, "Failed to Create Chat User", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-    }
-
-    private void bookMusicians() {
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
         String name = this.eventName.getText().toString();
@@ -225,16 +184,10 @@ public class bookMusicianActivity extends AppCompatActivity {
         String category = this.categoryTxt.getText().toString();
         String about = this.aboutTxt.getText().toString();
         String socials = this.socialTxt.getText().toString();
-        String id = this.event.getText().toString();
-        String creatorId = this.creator.getText().toString();
-        String bidderId = this.bidder.getText().toString();
-        String bidderName = this.biddersName.getText().toString();
-        String organizerName = this.organizerName.getText().toString();
-        String bidId = this.bidID.getText().toString();
         String details = this.details.getText().toString();
 
         // Create a new event object with the provided data
-        bookedEventsModel bookEvent = new bookedEventsModel(name, details, date, time, location, id, creatorId, bidId, category, bidderId, organizerName, bidderName, about, socials);
+        bookedEventsModel bookEvent = new bookedEventsModel(name, details, date, time, location, eventId, creatorId, bidId, category, biddersId, organizerName, biddersName, about, socials);
 
         fStore.collection("BookedEvents")
                 .whereEqualTo("bidId", bidId)
@@ -251,7 +204,7 @@ public class bookMusicianActivity extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
-                                                documentReference.update("bookedEventsId", documentReference.getId());
+                                                documentReference.update("bookedEventId", documentReference.getId());
 
                                                 new Handler().postDelayed(new Runnable() {
 
@@ -274,6 +227,9 @@ public class bookMusicianActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
+        }
 
 
     }

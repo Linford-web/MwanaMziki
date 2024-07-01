@@ -11,5 +11,10 @@
     <color name="orange">#FF9800</color>
     <color name="gray">#f3f3f3</color>
     <color name="light_gray">#ECECEC</color>
-    <color name="chat_bg">#ece5dd</color>
+    <color name="chat_bg">#FFF4C5</color>
+    <color name="dark_gray">#808080</color>
+    <color name="purple">#800080</color>
+    <color name="off_white">#FAFAFA</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="light_pink">#FFB6C1</color>
 </resources>

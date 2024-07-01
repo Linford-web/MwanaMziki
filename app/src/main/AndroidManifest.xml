@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,10 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EventMuziki"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".chatRoom"
+            android:name=".searchUsersActivity"
             android:exported="false" />
+        <activity
+            android:name=".OTPVerification"
+            android:exported="false" />
+        <activity
+            android:name=".chatRoom"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".chatActivity"
             android:exported="false" />
@@ -49,7 +58,7 @@
             android:exported="false" />
         <activity
             android:name=".startActivity"
-            android:exported="false" />
+            android:exported="false"></activity>
         <activity
             android:name=".MainDashboard"
             android:exported="false" />

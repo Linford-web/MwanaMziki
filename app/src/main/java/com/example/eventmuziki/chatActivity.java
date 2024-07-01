@@ -1,7 +1,11 @@
 package com.example.eventmuziki;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,13 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmuziki.Adapters.chatAdapter;
 import com.example.eventmuziki.Adapters.messageAdapter;
+import com.example.eventmuziki.Adapters.searchAdapter;
 import com.example.eventmuziki.Models.bookedEventsModel;
+import com.example.eventmuziki.Models.chatRoomModel;
 import com.example.eventmuziki.Models.chatUserModel;
 import com.example.eventmuziki.Models.messageModel;
+import com.example.eventmuziki.utils.FirebaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,11 +49,12 @@ import java.util.Objects;
 
 public class chatActivity extends AppCompatActivity {
 
-    RecyclerView chatRecyclerView;
-    chatAdapter chatsAdapters;
-    ArrayList<chatUserModel> messageList;
-    DatabaseReference databaseReference;
-    String userId, chatRoomId, name, email, eventID;
+    ImageButton searchBtn;
+    ImageView back;
+    RecyclerView recyclerView;
+    chatAdapter adapter;
+
+    String userId, name, email;
 
 
     @Override
@@ -51,61 +62,66 @@ public class chatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        recyclerView = findViewById(R.id.chatRecyclerView);
+        searchBtn = findViewById(R.id.searchBtn);
+        back = findViewById(R.id.back_arrow);
+        FirebaseApp.initializeApp(this);
 
-        // Retrieve the data passed from the adapter
-        userId = getIntent().getStringExtra("userId");
-        chatRoomId = getIntent().getStringExtra("roomId");
-        name = getIntent().getStringExtra("userName");
-        email = getIntent().getStringExtra("email");
-        eventID = getIntent().getStringExtra("eventId");
-
-
-        if (userId == null || chatRoomId == null || name == null || email == null || eventID == null) {
-            Toast.makeText(this, "Missing chat data", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-        // Initialize the chat room here
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        String toolbarTitle = "Chat Rooms";
-        getSupportActionBar().setTitle(toolbarTitle);
-
-        chatsAdapters = new chatAdapter(this, new ArrayList<>());
-        chatRecyclerView.setAdapter(chatsAdapters);
-        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.orderByChild("eventID").equalTo(eventID).addValueEventListener(new ValueEventListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Clear the existing chat messages
-                chatsAdapters.clear();
-                String currentUserId = FirebaseAuth.getInstance().getUid();
-                if (currentUserId == null) {
-                    Toast.makeText(chatActivity.this, "User Not Logged In" + currentUserId, Toast.LENGTH_SHORT).show();
-                }
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    chatUserModel chatUser = dataSnapshot.getValue(chatUserModel.class);
-                    if (chatUser != null && chatUser.getUserId() != null && !chatUser.getUserId().equals(currentUserId)) {
-                        if (eventID.equals(chatUser.getEventID())) {  // Filter by eventID
-                            chatsAdapters.add(chatUser);
-                        }
-                    }
-                }
-                chatsAdapters.notifyDataSetChanged();
+            public void onClick(View v) {
+                finish();
             }
-
+        });
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                startActivity(new Intent(chatActivity.this, searchUsersActivity.class));
             }
         });
 
+        setupRecyclerView();
 
     }
 
+    private void setupRecyclerView() {
+
+        Query query = FirebaseUtil.allChatRoomCollections()
+                .whereArrayContains("userIds", FirebaseUtil.currentUserId())
+                .orderBy("lastMessageTime", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<chatRoomModel> options = new FirestoreRecyclerOptions.Builder<chatRoomModel>()
+                .setQuery(query, chatRoomModel.class).build();
+
+        adapter = new chatAdapter(options,getApplicationContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (adapter!=null){
+            adapter.startListening();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (adapter!=null){
+            adapter.stopListening();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter!=null){
+            adapter.notifyDataSetChanged();
+        }
+    }
 
 }
