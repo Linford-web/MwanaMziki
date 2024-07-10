@@ -296,7 +296,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/socials"
+                android:text="Stage Name"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
             <TextView
@@ -305,7 +305,7 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:textSize="19sp"
-                android:hint="@string/socials"/>
+                android:hint="Stage Name"/>
 
         </LinearLayout>
 

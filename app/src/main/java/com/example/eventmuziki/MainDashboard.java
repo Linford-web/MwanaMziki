@@ -3,7 +3,6 @@ package com.example.eventmuziki;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,42 +15,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eventmuziki.Adapters.advertAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
-import com.example.eventmuziki.Models.chatUserModel;
+import com.example.eventmuziki.Models.advertisementModel;
 import com.example.eventmuziki.Models.eventModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 public class MainDashboard extends AppCompatActivity {
 
     ImageView chats, eventsBtn, adverts, clothes, home;
     ImageView profile, allAdverts, upcomingEvents;
     TextView userNameTv;
-    RecyclerView recyclerView;
+    RecyclerView eventRv, advertsRv;
     ArrayList<eventModel> events;
+    ArrayList<advertisementModel> advert;
     eventAdapter2 adapter;
+    advertAdapter adapter2;
     FirebaseFirestore fStore;
 
     String name, email;
-
-    // BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +56,26 @@ public class MainDashboard extends AppCompatActivity {
         home = findViewById(R.id.homeIcon);
         profile = findViewById(R.id.userProfileTv);
         userNameTv = findViewById(R.id.get_name);
-        recyclerView = findViewById(R.id.eventsRecyclerView);
+        eventRv = findViewById(R.id.eventsRecyclerView);
         allAdverts = findViewById(R.id.allAdvertsBtn);
         upcomingEvents = findViewById(R.id.allEventsBtn);
         fStore = FirebaseFirestore.getInstance();
+        advertsRv = findViewById(R.id.advertRv);
         // bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+        // Initialize Event RecyclerView
         events = new ArrayList<>();
         adapter = new eventAdapter2(events);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        eventRv.setLayoutManager(layoutManager);
+        eventRv.setAdapter(adapter);
+
+        // Initialize Advertisement RecyclerView
+        advert = new ArrayList<>();
+        adapter2 = new advertAdapter(advert);
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        advertsRv.setLayoutManager(layoutManager2);
+        advertsRv.setAdapter(adapter2);
 
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId != null){
@@ -100,12 +98,10 @@ public class MainDashboard extends AppCompatActivity {
                                     Glide.with(this).load(profileImageUrl).into(profile);
                                 } else {
                                     // Handle the case when no profile photo is available
-                                    Toast.makeText(this, "Click Profile photo to upload Photo", Toast.LENGTH_SHORT).show();
                                     Log.d("TAG", "No profile photo found");
                                 }
                             } else {
                                 Log.d("TAG", "No such document");
-                                //Toast.makeText(this, "User document not found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(this, "Error fetching user details", Toast.LENGTH_SHORT).show();
@@ -119,7 +115,7 @@ public class MainDashboard extends AppCompatActivity {
         eventsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), EventsActivity.class));
+                startActivity(new Intent(getApplicationContext(), eventsActivity.class));
 
             }
         });
@@ -137,6 +133,20 @@ public class MainDashboard extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), chatActivity.class);
                 startActivity(intent);
 
+            }
+        });
+        adverts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), advertActivity.class);
+                startActivity(intent);
+            }
+        });
+        clothes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), costumeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -161,9 +171,11 @@ public class MainDashboard extends AppCompatActivity {
                             if ("Corporate".equals(userType)) {
                                 // Fetch events from Firestore
                                 fetchEventSs(userId);
+                                fetchAdverts(userId);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 // Fetch events from Firestore
                                 fetchEvents();
+                                fetchAllAdverts();
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");
@@ -172,6 +184,36 @@ public class MainDashboard extends AppCompatActivity {
                         }
                     } else {
                         Log.e("TaskListAdapter", "Error getting document", task.getException());
+                    }
+                });
+    }
+
+    private void fetchAllAdverts() {
+        fStore.collection("Advertisements")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        advertisementModel advertTv = documentSnapshot.toObject(advertisementModel.class);
+                        advert.add(advertTv);
+                    }
+                    adapter2.notifyDataSetChanged();
+                }).addOnFailureListener(e -> Toast.makeText(MainDashboard.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void fetchAdverts(String userId) {
+        fStore.collection("Advertisements")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        advertisementModel advertTv = documentSnapshot.toObject(advertisementModel.class);
+                        advert.add(advertTv);
+                    }
+                    adapter2.notifyDataSetChanged();
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainDashboard.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

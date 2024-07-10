@@ -15,27 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.bookedEventsModel;
-import com.example.eventmuziki.Models.chatUserModel;
 import com.example.eventmuziki.R;
-import com.example.eventmuziki.chatActivity;
 import com.example.eventmuziki.chatRoom;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapter.ViewHolder> {
 
@@ -91,7 +85,6 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
-
                             DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
                             // Retrieve profile photo URL from FireStore
                             profileImageUrl = document.getString("profilePicture");
@@ -112,8 +105,6 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                                 // Handle the case when no profile photo is available
                                 Log.e("musicianNameAdapter", "Profile Photo Not Uploaded");
                             }
-
-
                         } else {
                             Toast.makeText(holder.itemView.getContext(), "User document not found", Toast.LENGTH_SHORT).show();
                         }
@@ -174,6 +165,15 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
 
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 Toast.makeText(holder.itemView.getContext(), "Musicians Cannot Start Chats", Toast.LENGTH_SHORT).show();
+                                // Handle musician user type here
+                                Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
+                                intent.putExtra("userId", bookedEvent.getCreatorID());
+                                intent.putExtra("userName", bookedEvent.getOrganizerName());
+                                intent.putExtra("userEmail", bidderEmail);
+                                intent.putExtra("userImage", profileImageUrl);
+                                intent.putExtra("userPhone", phone);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                holder.itemView.getContext().startActivity(intent);
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");

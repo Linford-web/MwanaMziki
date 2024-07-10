@@ -7,32 +7,112 @@
     android:layout_height="match_parent"
     tools:context=".editProfile">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@color/yellow"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/backArrow"
+        <LinearLayout
+            android:id="@+id/top_bar_nav"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <ImageButton
+                android:id="@+id/back_arrow"
+                android:clickable="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="start"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/back_arrow"
+                app:tint="@color/red"
+                android:focusable="true" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:letterSpacing="0.1"
+                android:textColor="@color/blue"
+                android:text="Edit Profile"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back_arrow" />
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit Profile"
-            android:textColor="@color/blue"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:elevation="5dp"
+                android:src="@drawable/profile_image"
+                android:tint="@color/blue"/>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/card_view"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/updateProfileBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textSize="18sp"
+                    app:tint="@color/blue"
+                    android:src="@drawable/camera_icon"
+                    android:elevation="20dp"
+                    android:focusable="true"/>
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageButton
+                    android:id="@+id/deleteProfileBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textSize="18sp"
+                    android:src="@drawable/delete_icon"
+                    app:tint="@color/red"
+                    android:elevation="20dp"
+                    android:focusable="true"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/nameTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:hint="@string/name"
             android:inputType="textMultiLine"
             android:padding="10dp" />
@@ -73,12 +153,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Github Name"
+                android:hint="Stage Name"
                 android:inputType="textMultiLine"
                 android:padding="10dp" />
         </LinearLayout>
 
         <TextView
+            android:id="@+id/categoryTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/category"
@@ -94,8 +175,7 @@
             android:layout_margin="10dp"
             android:padding="10dp"
             android:elevation="5dp"
-            android:entries="@array/event_Category"/>
-
+            android:entries="@array/User_Category"/>
 
         <Button
             android:id="@+id/saveBtn"
@@ -104,7 +184,6 @@
             android:layout_gravity="center"
             android:text="Save Changes"
             android:layout_margin="10dp" />
-
 
     </LinearLayout>
 

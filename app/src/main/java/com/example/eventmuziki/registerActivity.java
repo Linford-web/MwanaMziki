@@ -2,7 +2,6 @@ package com.example.eventmuziki;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +15,8 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.eventmuziki.Models.chatUserModel;
+import com.example.eventmuziki.Models.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -32,8 +28,6 @@ import com.hbb20.CountryCodePicker;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 
 public class registerActivity extends AppCompatActivity {
 
@@ -184,13 +178,17 @@ public class registerActivity extends AppCompatActivity {
                                     if (musicianCheck.isChecked()){
                                         User.put("userType", "Musician");
                                     }
-                                    df.set(User);
+                                    // df.set(User);
+
+                                    UserModel userModel = new UserModel("", user.getUid(), name.getText().toString(), email.getText().toString(), number.getText().toString());
+                                    fStore.collection("Users").document(user.getUid()).set(userModel);
+
                                     Intent intent = new Intent(registerActivity.this, loginActivity.class);
                                     intent.putExtra("mobile", countryCodePicker.getFullNumberWithPlus());
                                     intent.putExtra("email", email.getText().toString());
                                     intent.putExtra("password", password.getText().toString());
                                     intent.putExtra("name", name.getText().toString());
-                                    intent.putExtra("userId", user.getUid());
+                                    intent.putExtra("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
                                     intent.putExtra("userType", getIntent().getStringExtra("userType"));
                                     startActivity(intent);
                                     progressbar.setVisibility(View.GONE);

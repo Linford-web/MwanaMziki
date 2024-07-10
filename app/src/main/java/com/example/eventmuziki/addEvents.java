@@ -3,6 +3,8 @@ package com.example.eventmuziki;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -23,37 +29,40 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.eventModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+
 import java.util.Calendar;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
-public class addEvents extends AppCompatActivity {
+public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageView backArrow;
-    Button addPoster, addTime, addDate, addEvent;
-    ImageView imageView;
+    ImageButton backArrow, cancel;
+    Button addPoster, addEvent;
+    ImageView imageView,locationBtn;
     EditText inputTaskName, eventDetails;
-    TextView datePicker, timePicker, locationBtn, organizerName;
-    EditText amountTxt;
+    TextView datePicker, timePicker, organizerName, titleTxt;
+    EditText amountTxt, location;
     FirebaseFirestore fStore;
     String dueTime;
     private Spinner spinnerCategory;
@@ -62,6 +71,22 @@ public class addEvents extends AppCompatActivity {
     Uri imageUri = null;
     String eventId;
 
+    GoogleMap mMap;
+    LatLng selectedLocation;
+    ScrollView scrollView;
+    RelativeLayout searchMap, locationMap;
+
+    LinearLayout carRental, photography, catering, costumes, paSystem,
+            carRentalDetails, photographyDetails, cateringDetails,
+            costumesDetails, paSystemDetails;
+
+    TextView carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt;
+    ImageView carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon;
+
+    EditText pickUpLocation, dropOffLocation, pickUpDate, dropOffDate,
+            event_location, event_date, duration, price, costumeType, costumeSize, costumeQuantity,
+            cateringLocation, cateringDate, guestNumber, cuisineType,
+            djLocation, djDate, djDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +101,6 @@ public class addEvents extends AppCompatActivity {
         imageView = findViewById(R.id.eventPoster);
         inputTaskName = findViewById(R.id.inputTaskName);
         eventDetails = findViewById(R.id.eventDetails);
-        addTime = findViewById(R.id.timePickerBtn);
-        addDate = findViewById(R.id.datePickerBtn);
         datePicker = findViewById(R.id.datePicker);
         timePicker = findViewById(R.id.timePicker);
         locationBtn = findViewById(R.id.LocationBtn);
@@ -85,11 +108,93 @@ public class addEvents extends AppCompatActivity {
         addEvent = findViewById(R.id.add_event);
         organizerName = findViewById(R.id.organizerNameTv);
         spinnerCategory = findViewById(R.id.spinner_category);
+        cancel = findViewById(R.id.cancel_search_location);
+        titleTxt = findViewById(R.id.titleTv);
+        scrollView = findViewById(R.id.scroll_view);
+        locationMap = findViewById(R.id.location_map);
+        location = findViewById(R.id.locationTxt);
+
+        carRental = findViewById(R.id.carRental);
+        photography = findViewById(R.id.photography);
+        catering = findViewById(R.id.catering);
+        costumes = findViewById(R.id.costumes);
+        paSystem = findViewById(R.id.paSystem);
+        carRentalDetails = findViewById(R.id.carRentalDetails);
+        photographyDetails = findViewById(R.id.photographyDetails);
+        cateringDetails = findViewById(R.id.cateringDetails);
+        costumesDetails = findViewById(R.id.costumesDetails);
+        paSystemDetails = findViewById(R.id.paSystemDetails);
+
+        carTxt = findViewById(R.id.carTxt);
+        photographyTxt = findViewById(R.id.photographyTxt);
+        cateringTxt = findViewById(R.id.cateringTxt);
+        costumesTxt = findViewById(R.id.costumeTxt);
+        paSystemTxt = findViewById(R.id.paSystemTxt);
+        carIcon = findViewById(R.id.carIcon);
+        photographyIcon = findViewById(R.id.photographyIcon);
+        cateringIcon = findViewById(R.id.cateringIcon);
+        costumesIcon = findViewById(R.id.costumeIcon);
+        paSystemIcon = findViewById(R.id.paSystemIcon);
+
+        pickUpLocation = findViewById(R.id.pickUpLocation);
+        dropOffLocation = findViewById(R.id.dropOffLocation);
+        pickUpDate = findViewById(R.id.pickUpDate);
+        dropOffDate = findViewById(R.id.dropOffDate);
+
+        event_location = findViewById(R.id.photography_location);
+        event_date = findViewById(R.id.photography_date);
+        duration = findViewById(R.id.photography_duration);
+        price = findViewById(R.id.price);
+
+        cateringLocation = findViewById(R.id.catering_location);
+        cateringDate = findViewById(R.id.catering_date);
+        guestNumber = findViewById(R.id.number_of_guests);
+        cuisineType = findViewById(R.id.cuisine_type);
+
+        costumeType = findViewById(R.id.costume_type);
+        costumeSize = findViewById(R.id.size);
+        costumeQuantity = findViewById(R.id.quantity);
+
+        djLocation = findViewById(R.id.dj_location);
+        djDate = findViewById(R.id.dj_date);
+        djDuration = findViewById(R.id.dj_duration);
 
         fStore = FirebaseFirestore.getInstance();
         fStorage = FirebaseStorage.getInstance();
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel.setVisibility(View.VISIBLE);
+                backArrow.setVisibility(View.GONE);
+                titleTxt.setText("Select Location");
+                searchMap.setVisibility(View.GONE);
+                scrollView.setVisibility(View.GONE);
+                locationMap.setVisibility(View.VISIBLE);
+
+                if (selectedLocation != null) {
+                    String locations = getLocationName(selectedLocation);
+                    location.setText(locations);
+                } else {
+                    Toast.makeText(addEvents.this, "Please select a location", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel.setVisibility(View.GONE);
+                backArrow.setVisibility(View.VISIBLE);
+                titleTxt.setText("Add Events");
+                searchMap.setVisibility(View.VISIBLE);
+                scrollView.setVisibility(View.VISIBLE);
+                locationMap.setVisibility(View.GONE);
+            }
+        });
 
     // Initialize ArrayAdapter and set it to the Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -114,19 +219,18 @@ public class addEvents extends AppCompatActivity {
             }
         });
 
-        addTime.setOnClickListener(new View.OnClickListener() {
+        timePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openTimeDialog();
             }
         });
-        addDate.setOnClickListener(new View.OnClickListener() {
+        datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDateDialog();
             }
         });
-
 
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +243,7 @@ public class addEvents extends AppCompatActivity {
                 String eventDetail = eventDetails.getText().toString();
                 String date = datePicker.getText().toString();
                 String time = timePicker.getText().toString();
-                String location = locationBtn.getText().toString();
+                String locations = location.getText().toString();
                 String amount = amountTxt.getText().toString();
                 String category = spinnerCategory.getSelectedItem().toString();
                 String organizer = organizerName.getText().toString();
@@ -151,7 +255,7 @@ public class addEvents extends AppCompatActivity {
                 } else {
 
                     // Add the event to Firestore
-                    eventModel event = new eventModel("",eventName, eventDetail, date, time, location, amount, category, "" , organizer);
+                    eventModel event = new eventModel("",eventName, eventDetail, date, time, locations, amount, category, "" , organizer);
                     // Add the event to Firestore
                     fStore.collection("Events")
                             .add(event)
@@ -167,18 +271,20 @@ public class addEvents extends AppCompatActivity {
                                     uploadEventPoster(documentReference);
                                 } else {
 
-
                                     // Ensures that the success_layout disappears after 1 seconds
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Intent intent = new Intent(addEvents.this, EventsActivity.class);
+                                            Intent intent = new Intent(addEvents.this, eventsActivity.class);
                                             startActivity(intent);
                                             finish();
                                         }
                                     }, 2000);
                                     Toast.makeText(addEvents.this, "Event Added", Toast.LENGTH_SHORT).show();
                                 }
+                                // Add subcollections for other services if details are provided
+                                addSubCollections(documentReference);
+
                             }).addOnFailureListener(e -> {
                                 Toast.makeText(addEvents.this, "Failed to add event", Toast.LENGTH_SHORT).show();
 
@@ -188,11 +294,6 @@ public class addEvents extends AppCompatActivity {
             }
 
         });
-
-        // fetch and display organizer name
-        fetchOrganizerName();
-
-
         addPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,6 +304,205 @@ public class addEvents extends AppCompatActivity {
                         .start();
             }
         });
+
+        carRental.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // set text and icon color to white
+                carTxt.setTextColor(getResources().getColor(R.color.orange));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+
+                carIcon.setColorFilter(getResources().getColor(R.color.orange));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                carRentalDetails.setVisibility(View.VISIBLE);
+
+            }
+        });
+        photography.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.orange));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.orange));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                carRentalDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.VISIBLE);
+            }
+        });
+        catering.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.orange));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.orange));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.VISIBLE);
+            }
+        });
+        costumes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.orange));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.orange));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.VISIBLE);
+                }
+        });
+        paSystem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.orange));
+
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.orange));
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // fetch and display organizer name
+        fetchOrganizerName();
+
+    }
+
+    private void addSubCollections(DocumentReference documentReference) {
+        // Add Car Rental subcollection
+        String pickUpLocationText = pickUpLocation.getText().toString();
+        String dropOffLocationText = dropOffLocation.getText().toString();
+        String pickUpDateText = pickUpDate.getText().toString();
+        String dropOffDateText = dropOffDate.getText().toString();
+        if (!pickUpLocationText.isEmpty() && !dropOffLocationText.isEmpty() && !pickUpDateText.isEmpty() && !dropOffDateText.isEmpty()) {
+            HashMap<String, Object> carRentalDetails = new HashMap<>();
+            carRentalDetails.put("pickUpLocation", pickUpLocationText);
+            carRentalDetails.put("dropOffLocation", dropOffLocationText);
+            carRentalDetails.put("pickUpDate", pickUpDateText);
+            carRentalDetails.put("dropOffDate", dropOffDateText);
+
+            documentReference.collection("CarRental").add(carRentalDetails)
+                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Car rental details added"))
+                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add car rental details"));
+        }
+
+        // Add Photography subcollection
+        String priceText = price.getText().toString();
+        String eventLocationText = event_location.getText().toString();
+        String eventDateText = event_date.getText().toString();
+        String durationText = duration.getText().toString();
+        if (!priceText.isEmpty() && !eventLocationText.isEmpty() && !eventDateText.isEmpty() && !durationText.isEmpty()) {
+            HashMap<String, Object> photographyDetails = new HashMap<>();
+            photographyDetails.put("price", priceText);
+            photographyDetails.put("photography_location", eventLocationText);
+            photographyDetails.put("photography_date", eventDateText);
+            photographyDetails.put("duration", durationText);
+
+            documentReference.collection("Photography").add(photographyDetails)
+                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Photography details added"))
+                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add photography details"));
+        }
+
+        // Add Catering subcollection
+        String cateringLocationText = cateringLocation.getText().toString();
+        String cateringDateText = cateringDate.getText().toString();
+        String guestNumberText = guestNumber.getText().toString();
+        if (!cateringLocationText.isEmpty() && !cateringDateText.isEmpty() && !guestNumberText.isEmpty()) {
+            HashMap<String, Object> cateringDetails = new HashMap<>();
+            cateringDetails.put("cateringLocation", cateringLocationText);
+            cateringDetails.put("cateringDate", cateringDateText);
+            cateringDetails.put("guestNumber", guestNumberText);
+            cateringDetails.put("cuisineType", cuisineType.getText().toString());
+
+            documentReference.collection("Catering").add(cateringDetails)
+                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Catering details added"))
+                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add catering details"));
+        }
+
+        // Add Costumes subcollection
+        String costumeTypeText = costumeType.getText().toString();
+        String costumeSizeText = costumeSize.getText().toString();
+        String costumeQuantityText = costumeQuantity.getText().toString();
+        if (!costumeTypeText.isEmpty() && !costumeSizeText.isEmpty() && !costumeQuantityText.isEmpty()) {
+            HashMap<String, Object> costumesDetails = new HashMap<>();
+            costumesDetails.put("costumeType", costumeTypeText);
+            costumesDetails.put("costumeSize", costumeSizeText);
+            costumesDetails.put("costumeQuantity", costumeQuantityText);
+
+            documentReference.collection("Costumes").add(costumesDetails)
+                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Costumes details added"))
+                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add costumes details"));
+        }
+
+        // Add PA System subcollection
+        String djLocationText = djLocation.getText().toString();
+        String djDateText = djDate.getText().toString();
+        String djDurationText = djDuration.getText().toString();
+        if (!djLocationText.isEmpty() && !djDateText.isEmpty() && !djDurationText.isEmpty()) {
+            HashMap<String, Object> paSystemDetails = new HashMap<>();
+            paSystemDetails.put("djLocation", djLocationText);
+            paSystemDetails.put("djDate", djDateText);
+            paSystemDetails.put("djDuration", djDurationText);
+
+            documentReference.collection("DjSystem").add(paSystemDetails)
+                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "PA system details added"))
+                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add PA system details"));
+        }
 
 
     }
@@ -232,9 +532,9 @@ public class addEvents extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 eventId = documentReference.getId();
-                                DocumentReference eventRef = fStore.collection("Events").document(eventId);
+                                DocumentReference documentReference = fStore.collection("Events").document(eventId);
                                 String imageUrl = uri.toString();
-                                eventRef.update("eventPoster", imageUrl)
+                                documentReference.update("eventPoster", imageUrl)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
@@ -245,7 +545,7 @@ public class addEvents extends AppCompatActivity {
                                                 new Handler().postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Intent intent = new Intent(addEvents.this, EventsActivity.class);
+                                                        Intent intent = new Intent(addEvents.this, eventsActivity.class);
                                                         startActivity(intent);
                                                         finish();
                                                     }
@@ -325,4 +625,33 @@ public class addEvents extends AppCompatActivity {
         endTimeDialog.show();
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        LatLng initialLocation = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(initialLocation).title("Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(initialLocation));
+
+        mMap.setOnMapClickListener(latLng -> {
+            mMap.clear();
+            selectedLocation = latLng;
+            mMap.addMarker(new MarkerOptions().position(latLng).title(location.getText().toString()));
+        });
+    }
+
+    private String getLocationName(LatLng latLng) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                location.setText((CharSequence) addresses);
+                Address address = addresses.get(0);
+                return address.getAddressLine(0); // You can format this as needed
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Unknown Location";
+    }
 }

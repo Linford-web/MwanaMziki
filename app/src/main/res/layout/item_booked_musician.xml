@@ -41,17 +41,17 @@
                     android:text="@string/name"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:layout_margin="3dp"
                     android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/orange"
-                    android:text="@string/category"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/dark_blue"
+                    android:text="@string/email"
+                    android:textStyle="normal"
+                    android:textSize="15sp" />
 
 
 

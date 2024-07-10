@@ -43,7 +43,7 @@ import java.util.UUID;
 public class profileActivity extends AppCompatActivity {
 
     TextView name, phone, email, aboutMe, socials, category;
-    ImageView back, imageView, select, delete;
+    ImageView back, imageView;
     Button logout, edit;
     SwitchCompat themeSwitch;
 
@@ -65,16 +65,15 @@ public class profileActivity extends AppCompatActivity {
         phone = findViewById(R.id.phone_number);
         email = findViewById(R.id.email);
         back = findViewById(R.id.back_arrow);
+
         imageView = findViewById(R.id.imageView);
-        select = findViewById(R.id.updateProfileBtn);
-        delete = findViewById(R.id.deleteProfileBtn);
+
         logout = findViewById(R.id.logoutBtn);
         aboutMe = findViewById(R.id.about);
         edit = findViewById(R.id.editProfileBtn);
         socials = findViewById(R.id.socials);
         category = findViewById(R.id.category);
         themeSwitch = findViewById(R.id.switch_theme);
-
 
         // check user access level
         checkUserAccessLevel();
@@ -132,7 +131,7 @@ public class profileActivity extends AppCompatActivity {
                                     Glide.with(this).load(profileImageUrl).into(imageView);
                                 } else {
                                     // Handle the case when no profile photo is available
-                                    Toast.makeText(profileActivity.this, "No profile photo found", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(profileActivity.this, "Update Profile Photo", Toast.LENGTH_SHORT).show();
                                     Log.d("Profile", "No profile photo found");
                                 }
 
@@ -144,54 +143,6 @@ public class profileActivity extends AppCompatActivity {
                         }
                     });
         }
-
-        if (userId != null) {
-            // Fetch user
-            fStore.collection("Users")
-                    .document(userId)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document != null && document.exists()) {
-                                    String profileImageUrl = document.getString("profilePicture");
-                                    if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                                        Glide.with(profileActivity.this).load(profileImageUrl).into(imageView);
-                                    } else {
-                                        Toast.makeText(profileActivity.this, "No profile photo found", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                } else {
-                                    Toast.makeText(profileActivity.this, "User document not found", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                    });
-
-
-        }
-
-
-        select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.with(profileActivity.this)
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
-            }
-        });
-
-        // Logic for Delete Button
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteProfileImage();
-            }
-        });
 
     }
 
@@ -223,7 +174,6 @@ public class profileActivity extends AppCompatActivity {
                                 category.setVisibility(View.GONE);
                                 aboutMe.setVisibility(View.GONE);
                                 socials.setVisibility(View.GONE);
-                                edit.setVisibility(View.GONE);
 
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 // Back Button
@@ -249,43 +199,6 @@ public class profileActivity extends AppCompatActivity {
                         Log.e("TaskListAdapter", "Error getting document", task.getException());
                     }
                 });
-    }
-
-    private void deleteProfileImage() {
-        // Get a reference to the Firebase Storage
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-
-        // Create a reference to 'profile_pictures/<FILENAME>.jpg'
-        final StorageReference profileRef = storageRef.child("profile_pictures/" + FirebaseAuth.getInstance().getUid() + ".jpg");
-
-        // Delete the file from Firebase Storage
-        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // Remove the profile picture URL from FireStore
-                fStore.collection("Users")
-                        .document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
-                        .update("profilePicture", null)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Set default image in ImageView
-                                imageView.setImageResource(R.drawable.profile_image); // Replace with your default image resource
-                                Toast.makeText(profileActivity.this, "Profile photo deleted", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(profileActivity.this, "Failed to remove profile picture URL", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(profileActivity.this, "Failed to delete profile photo", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

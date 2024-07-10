@@ -16,17 +16,37 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:padding="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="casual"
+                android:fontFamily="sans-serif"
                 android:letterSpacing="0.1"
-                android:text="@string/eventmziki"
+                android:text="M"
                 android:textAlignment="center"
                 android:textColor="@color/yellow"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="casual"
+                android:letterSpacing="0.1"
+                android:text="M"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textSize="50sp"
+                android:textStyle="italic" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="monospace"
+                android:letterSpacing="0.1"
+                android:text="z"
+                android:textAlignment="center"
+                android:textColor="@color/orange"
                 android:textSize="50sp"
                 android:textStyle="italic" />
 

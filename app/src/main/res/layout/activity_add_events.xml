@@ -20,16 +20,30 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp">
-            <ImageView
+
+            <ImageButton
+                android:visibility="gone"
+                android:id="@+id/cancel_search_location"
+                android:clickable="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_gravity="start"
+                android:src="@drawable/close_icon"
+                app:tint="@color/red"
+                android:focusable="true" />
+            <ImageButton
                 android:id="@+id/back_arrow"
                 android:clickable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="start"
                 android:src="@drawable/back_arrow"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/red"
                 android:focusable="true" />
             <TextView
+                android:id="@+id/titleTv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -42,9 +56,10 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/poster_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/eventPoster"
@@ -52,213 +67,45 @@
                 android:layout_height="200dp"
                 android:src="@drawable/cover" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="140dp"
-                android:padding="5dp">
-                <TextView
-                    android:id="@+id/organizerNameTv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/organizer_name"
-                    android:letterSpacing="0.1"
-                    android:textColor="@color/orange"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/addPosterBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add Poster"
-                    android:drawableEnd="@drawable/add_poster"
-                    android:drawableTint="@color/white"/>
-            </LinearLayout>
 
         </RelativeLayout>
 
         <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:scrollbars="none">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1"
-                    android:text="@string/event_name"/>
-
-                <EditText
-                    android:id="@+id/inputTaskName"
-                    android:hint="@string/event_name"
-                    android:background="@drawable/edit_text_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:elevation="5dp"
-                    android:padding="10dp"/>
-
-                <TextView
-                    android:layout_margin="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1"
-                    android:text="@string/event_details"/>
-
-                <EditText
-                    android:id="@+id/eventDetails"
-                    android:hint="@string/event_details"
-                    android:background="@drawable/edit_text_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:elevation="5dp"
-                    android:padding="10dp"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <Button
-                        android:id="@+id/datePickerBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/event_small_icon"
-                        android:backgroundTint="@color/orange"
-                        android:drawableTint="@color/white"
-                        android:text="@string/select_date"
-                        android:layout_margin="5dp" />
-
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp">
                     <TextView
-                        android:id="@+id/datePicker"
-                        android:layout_width="match_parent"
+                        android:id="@+id/organizerNameTv"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/event_date"
-                        android:textStyle="bold"
-                        android:layout_margin="5dp"
-                        android:padding="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/organizer_name"
                         android:letterSpacing="0.1"
-                        android:textSize="15sp"
-                        android:visibility="visible" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
-                        android:background="#B0B0B0" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/timePickerBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/clock_small_icon"
-                        android:drawableTint="@color/white"
-                        android:backgroundTint="@color/blue"
-                        android:layout_margin="5dp"
-                        android:text="@string/select_time" />
-
-                    <TextView
-                        android:id="@+id/timePicker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Event Time"
-                        android:textStyle="bold"
-                        android:layout_margin="5dp"
-                        android:padding="5dp"
-                        android:letterSpacing="0.1"
-                        android:textSize="15sp"
-                        android:visibility="visible" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
-                        android:background="#B0B0B0" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="5dp"
-                            android:src="@drawable/location_icon"/>
-                        <TextView
-                            android:id="@+id/LocationBtn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/location"
-                            android:textStyle="bold"
-                            android:layout_margin="5dp"
-                            android:padding="7dp"
-                            android:letterSpacing="0.1"
-                            android:textSize="15sp"
-                            android:visibility="visible" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
-                        android:background="#B0B0B0" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/select_purpose"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/edit_text_bg"
-                    android:elevation="3dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:text="@string/category"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <Spinner
-                        android:id="@+id/spinner_category"
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/addPosterBtn"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="10dp"
-                        android:padding="10dp"
-                        android:elevation="5dp"
-                        android:entries="@array/event_Category"/>
-
+                        android:text="Add Poster"
+                        android:drawableEnd="@drawable/add_poster"
+                        android:drawableTint="@color/white"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -266,46 +113,683 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:layout_margin="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:text="@string/event_name"/>
+
+                    <EditText
+                        android:id="@+id/inputTaskName"
+                        android:hint="@string/event_name"
+                        android:background="@drawable/edit_text_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:elevation="1dp"
+                        android:padding="10dp"/>
+
+                    <TextView
+                        android:layout_margin="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:text="@string/event_details"/>
+
+                    <EditText
+                        android:id="@+id/eventDetails"
+                        android:hint="@string/event_details"
+                        android:background="@drawable/edit_text_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:elevation="1dp"
+                        android:padding="10dp"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="5dp"
-                            android:src="@drawable/money_icon"/>
-                        <TextView
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/ksh"
-                            android:textStyle="bold"
                             android:layout_margin="5dp"
-                            android:padding="7dp"
-                            android:letterSpacing="0.1"
-                            android:textSize="15sp"/>
+                            android:padding="3dp"
+                            android:src="@drawable/calender_small_icon" />
 
-                        <EditText
-                            android:id="@+id/amountTxt"
+                        <TextView
+                            android:id="@+id/datePicker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:hint="@string/amount"
+                            android:hint="Select date"
                             android:textStyle="bold"
-                            android:inputType="number"
-                            android:elevation="5dp"
                             android:layout_margin="5dp"
-                            android:padding="7dp"
-                            android:letterSpacing="0.1"
-                            android:textSize="15sp"/>
-                    </LinearLayout>
+                            android:padding="5dp"
+                            android:letterSpacing="0.09"
+                            android:textSize="15sp"
+                            android:visibility="visible" />
 
+                    </LinearLayout>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_margin="5dp"
                         android:background="#B0B0B0" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="3dp"
+                            android:src="@drawable/clock_small_icon" />
+                        <TextView
+                            android:id="@+id/timePicker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Select event time"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:padding="5dp"
+                            android:letterSpacing="0.09"
+                            android:textSize="15sp"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#B0B0B0" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/LocationBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                android:src="@drawable/location_icon"/>
+                            <EditText
+                                android:id="@+id/locationTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/location"
+                                android:textStyle="bold"
+                                android:layout_margin="5dp"
+                                android:padding="7dp"
+                                android:letterSpacing="0.1"
+                                android:background="@drawable/edit_text_bg"
+                                android:textSize="15sp"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="5dp"
+                            android:background="#B0B0B0" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/select_purpose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/bg_views">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/category"
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="10dp"
+                            android:padding="10dp"
+                            android:elevation="5dp"
+                            android:entries="@array/event_Category"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:padding="5dp"
+                            android:hint="Other category..."
+                            android:background="@drawable/edit_text_bg"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                android:src="@drawable/money_icon"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="3dp"
+                                android:letterSpacing="0.1"
+                                android:padding="7dp"
+                                android:text="@string/ksh"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/amountTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="@string/amount"
+                                android:textStyle="bold"
+                                android:inputType="number"
+
+                                android:layout_margin="5dp"
+                                android:padding="10dp"
+                                android:letterSpacing="0.1"
+                                android:textSize="15sp"/>
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Other services"
+                        android:letterSpacing="0.1"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <LinearLayout
+                                android:id="@+id/carRental"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/carIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    app:tint="@color/orange"
+                                    android:src="@drawable/car_icon" />
+
+                                <TextView
+                                    android:id="@+id/carTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Car rental"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/orange"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/photography"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/photographyIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/camera_icon" />
+                                <TextView
+                                    android:id="@+id/photographyTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Photography"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/catering"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/cateringIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/fastfood_icon" />
+                                <TextView
+                                    android:id="@+id/cateringTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Catering"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/costumes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/costumeIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/costume_icon" />
+                                <TextView
+                                    android:id="@+id/costumeTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Costumes"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/paSystem"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/paSystemIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/dj_icon" />
+                                <TextView
+                                    android:id="@+id/paSystemTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Dj and system"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <!-- Car Rental Service Details -->
+                    <LinearLayout
+                        android:visibility="visible"
+                        android:id="@+id/carRentalDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Car Rental Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/pickUpLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Pickup Location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/dropOffLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Drop-off Location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/pickUpDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Pickup Date"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/dropOffDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Drop-off Date"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Book Car" />
+                    </LinearLayout>
+
+                    <!-- Photography Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/photographyDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Photography Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/photography_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/photography_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Date"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/photography_duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of Hours"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+                        <EditText
+                            android:id="@+id/price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Price per hour"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Book Photography" />
+                    </LinearLayout>
+
+                    <!-- Catering Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/cateringDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Catering Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/catering_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/catering_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Date"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/number_of_guests"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of Guests"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/cuisine_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Cuisine Type"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Book Catering" />
+                    </LinearLayout>
+
+                    <!-- Costumes Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/costumesDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Costumes Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/costume_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Costume Type"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/size"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Size"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/quantity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Quantity"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Book Costumes" />
+                    </LinearLayout>
+
+                    <!-- PA System and DJ Hire Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/paSystemDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PA System and DJ Hire Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/dj_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/dj_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Date"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/dj_duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Duration (Hours)"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Book PA System and DJ" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -323,7 +807,30 @@
 
         </ScrollView>
 
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/location_map"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:background="@drawable/card_view"
+            android:layout_height="match_parent">
+
+            <SearchView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:queryHint="Search..."
+                android:background="@drawable/edit_text_bg"
+                android:elevation="3dp"/>
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MapsActivity" />
+        </RelativeLayout>
 
     </LinearLayout>
 
 </RelativeLayout>
+

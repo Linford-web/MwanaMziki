@@ -1,23 +1,20 @@
 package com.example.eventmuziki.Models;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
+public class UserModel {
 
-public class chatUserModel {
+    String  profilePicture, userID, name, email, phone;
 
-    String  profilePicture, userId, name, email, phone;
-
-    public chatUserModel(String profilePicture, String userId, String name, String email, String phone) {
+    public UserModel(String profilePicture, String userID, String name, String email, String phone) {
         this.profilePicture = profilePicture;
-        this.userId = userId;
+        this.userID = userID;
         this.name = name;
         this.email = email;
         this.phone = phone;
     }
 
-    public chatUserModel() {
+    public UserModel() {
     }
 
     public String getProfilePicture() {
@@ -29,11 +26,11 @@ public class chatUserModel {
     }
 
     public String getUserID() {
-        return userId;
+        return userID;
     }
 
     public void setUserID(String userID) {
-        this.userId = userID;
+        this.userID = userID;
     }
 
     public String getName() {
@@ -60,13 +57,6 @@ public class chatUserModel {
         this.phone = phone;
     }
 
-    protected chatUserModel(Parcel in) {
-        profilePicture = in.readString();
-        userId = in.readString();
-        name = in.readString();
-        email = in.readString();
-        phone = in.readString();
-    }
 
 }
 

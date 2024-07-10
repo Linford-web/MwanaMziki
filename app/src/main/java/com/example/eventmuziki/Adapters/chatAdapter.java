@@ -6,28 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.chatRoomModel;
-import com.example.eventmuziki.Models.chatUserModel;
+import com.example.eventmuziki.Models.UserModel;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.chatRoom;
 import com.example.eventmuziki.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -63,8 +54,7 @@ public class chatAdapter extends FirestoreRecyclerAdapter<chatRoomModel, chatAda
 
                     if(task.isSuccessful()){
                         boolean lastMessageSentByMe = model.getLastMessageSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-                        chatUserModel otherUser = task.getResult().toObject(chatUserModel.class);
+                        UserModel otherUser = task.getResult().toObject(UserModel.class);
                         holder.name.setText(otherUser.getName());
                         if (lastMessageSentByMe)
                             holder.lastMessage.setText("You: " + model.getLastMessage());
@@ -82,6 +72,7 @@ public class chatAdapter extends FirestoreRecyclerAdapter<chatRoomModel, chatAda
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(context, chatRoom.class);
+                                intent.putExtra("userId", otherUser.getUserID());
                                 intent.putExtra("userName", otherUser.getName());
                                 intent.putExtra("userEmail", otherUser.getEmail());
                                 intent.putExtra("userImage", otherUser.getProfilePicture());

@@ -1,7 +1,9 @@
 package com.example.eventmuziki;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -40,6 +42,10 @@ public class bookedEvents extends AppCompatActivity {
         bookedRv = findViewById(R.id.bookedEventsRv);
 
         back.setOnClickListener(v -> {
+            // clear the back stack and start a new activity
+            Intent intent = new Intent(bookedEvents.this, MainDashboard.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
         });
 
@@ -52,7 +58,6 @@ public class bookedEvents extends AppCompatActivity {
 
         // fetch booked events
         fetchBookedEvents();
-
 
     }
 

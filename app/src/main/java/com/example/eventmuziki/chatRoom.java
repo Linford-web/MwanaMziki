@@ -1,7 +1,5 @@
 package com.example.eventmuziki;
 
-import static java.security.Timestamp.*;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,51 +7,32 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Adapters.chatAdapter;
 import com.example.eventmuziki.Adapters.messageAdapter;
-import com.example.eventmuziki.Adapters.searchAdapter;
 import com.example.eventmuziki.Models.chatRoomModel;
-import com.example.eventmuziki.Models.chatUserModel;
+import com.example.eventmuziki.Models.UserModel;
 import com.example.eventmuziki.Models.messageModel;
 import com.example.eventmuziki.utils.AndroidUtil;
 import com.example.eventmuziki.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,14 +41,14 @@ public class chatRoom extends AppCompatActivity {
     RecyclerView chatRecyclerView;
     ImageButton sendBtn;
     ImageButton back;
-    TextView otherName;
+    TextView otherName, phone;
     CircleImageView profile;
     EditText messageText;
-    LinearLayout writeAndSend;
 
     String chatRoomId;
     chatRoomModel chatRoom;
-    chatUserModel otherUser;
+    // Other user data
+    UserModel otherUser;
     messageAdapter adapter;
 
 
@@ -79,26 +58,26 @@ public class chatRoom extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_room);
 
+        sendBtn = findViewById(R.id.sendMessageBtn);
+        chatRecyclerView = findViewById(R.id.chatRecyclerView);
+        messageText = findViewById(R.id.messageEditText);
+        back = findViewById(R.id.back_arrow);
+        otherName = findViewById(R.id.user_name);
+        profile = findViewById(R.id.profileTv);
+        phone = findViewById(R.id.user_phone);
+
+
         FirebaseApp.initializeApp(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         otherUser = AndroidUtil.getUserModelAsIntent(getIntent());
 
-        chatRoomId = FirebaseUtil.getChatRoomId(FirebaseUtil.currentUserId(), otherUser.getUserID());
-
-        // chatRoomId = UUID.randomUUID().toString();
-        if (otherUser == null) {
-            Toast.makeText(this, "Missing user details", Toast.LENGTH_SHORT).show();
+        if (otherUser.getUserID() == null) {
+            Toast.makeText(this, "Missing user Id", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
-        sendBtn = findViewById(R.id.sendMessageBtn);
-        writeAndSend = findViewById(R.id.messageContainer);
-        chatRecyclerView = findViewById(R.id.chatRecyclerView);
-        messageText = findViewById(R.id.messageEditText);
-
-        back = findViewById(R.id.back_arrow);
-        otherName = findViewById(R.id.user_name);
-        profile = findViewById(R.id.profileTv);
+        chatRoomId = FirebaseUtil.getChatRoomId(FirebaseUtil.currentUserId(), otherUser.getUserID());
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,12 +89,8 @@ public class chatRoom extends AppCompatActivity {
         });
 
         // Retrieve the data passed from the adapter
-        if (otherUser == null) {
-            Toast.makeText(this, "Missing user details", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         otherName.setText(otherUser.getName());
+        phone.setText(otherUser.getPhone());
         // Load profile image using Glide loading library
         Glide.with(this)
                 .load(otherUser.getProfilePicture())
@@ -141,7 +116,7 @@ public class chatRoom extends AppCompatActivity {
 
     private void setRecyclerView() {
         Query query = FirebaseUtil.getChatRoomMessageReference(chatRoomId)
-                .orderBy("timestamp", Query.Direction.ASCENDING);
+                .orderBy("timestamp", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<messageModel> options = new FirestoreRecyclerOptions.Builder<messageModel>()
                 .setQuery(query, messageModel.class).build();
@@ -192,7 +167,7 @@ public class chatRoom extends AppCompatActivity {
                         chatRoom = new chatRoomModel(chatRoomId, Arrays.asList(FirebaseUtil.currentUserId(), otherUser.getUserID()), Timestamp.now(), "","");
                         FirebaseUtil.getChatRoomReference(chatRoomId).set(chatRoom);
                     } else {
-                        Toast.makeText(chatRoom.this, "Chat room already exists", Toast.LENGTH_SHORT).show();
+                        Log.d("chatRoom", "Chat room already exists");
                     }
                 }
             }

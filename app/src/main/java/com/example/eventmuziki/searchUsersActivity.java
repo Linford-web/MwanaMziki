@@ -4,30 +4,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmuziki.Adapters.searchAdapter;
-import com.example.eventmuziki.Models.chatUserModel;
-import com.example.eventmuziki.utils.FirebaseUtil;
+import com.example.eventmuziki.Models.UserModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import java.util.ArrayList;
 
 public class searchUsersActivity extends AppCompatActivity {
 
     EditText searchTxt;
     RecyclerView recyclerView;
-    ImageView back;
+    ImageButton back;
     ImageButton searchBtn;
     searchAdapter adapter;
 
@@ -41,7 +34,6 @@ public class searchUsersActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.searchRv);
         back = findViewById(R.id.back_arrow);
         searchBtn = findViewById(R.id.search_icon);
-
         searchTxt.requestFocus();
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +61,8 @@ public class searchUsersActivity extends AppCompatActivity {
 
         Query query = FirebaseFirestore.getInstance().collection("Users")
                 .whereGreaterThanOrEqualTo("name", searchTerm);
-        FirestoreRecyclerOptions<chatUserModel> options = new FirestoreRecyclerOptions.Builder<chatUserModel>()
-                .setQuery(query, chatUserModel.class).build();
+        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
+                .setQuery(query, UserModel.class).build();
 
         adapter = new searchAdapter(options,getApplicationContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

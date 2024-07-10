@@ -12,25 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Models.chatUserModel;
+import com.example.eventmuziki.Models.UserModel;
+import com.example.eventmuziki.Models.UserModel;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.chatRoom;
-import com.example.eventmuziki.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class searchAdapter extends FirestoreRecyclerAdapter<chatUserModel, searchAdapter.ViewHolder> {
+public class searchAdapter extends FirestoreRecyclerAdapter<UserModel, searchAdapter.ViewHolder> {
 
     Context context;
 
@@ -47,16 +38,16 @@ public class searchAdapter extends FirestoreRecyclerAdapter<chatUserModel, searc
 
         }
     }
-    public searchAdapter(@NonNull FirestoreRecyclerOptions<chatUserModel> options, Context context) {
+    public searchAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options, Context context) {
         super(options);
         this.context = context;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, int i, @NonNull chatUserModel model) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int i, @NonNull UserModel model) {
 
         holder.name.setText(model.getName());
-        holder.email.setText(model.getUserID());
+        // holder.email.setText(model.getEmail());
 
         Glide.with(holder.profile.getContext())
                 .load(model.getProfilePicture())
@@ -64,22 +55,26 @@ public class searchAdapter extends FirestoreRecyclerAdapter<chatUserModel, searc
                 .error(R.drawable.poster1)
                 .into(holder.profile);
 
-/*
-        if (model.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        /*
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        if (model.getUserID().equals(fAuth.getCurrentUser().getUid())){
             holder.name.setText(model.getName() + "(Me)");
             holder.name.setTextColor(context.getResources().getColor(R.color.dark_blue));
         }
         else {
             Toast.makeText(context, "Not Me", Toast.LENGTH_SHORT).show();
         }
-
- */
+        */
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, chatRoom.class);
                 intent.putExtra("userId", model.getUserID());
+                intent.putExtra("userName", model.getName());
+                intent.putExtra("userEmail", model.getEmail());
+                intent.putExtra("userImage", model.getProfilePicture());
+                intent.putExtra("userPhone", model.getPhone());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
@@ -94,7 +89,5 @@ public class searchAdapter extends FirestoreRecyclerAdapter<chatUserModel, searc
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_view, parent, false);
         return new ViewHolder(view);
     }
-
-
 
 }
