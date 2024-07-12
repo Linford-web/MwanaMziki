@@ -42,7 +42,7 @@ public class bidEvents extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // clear the back stack and start a new activity
-                Intent intent = new Intent(bidEvents.this, MainDashboard.class);
+                Intent intent = new Intent(bidEvents.this, eventsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();

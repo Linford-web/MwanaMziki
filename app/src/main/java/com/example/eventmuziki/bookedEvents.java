@@ -43,7 +43,7 @@ public class bookedEvents extends AppCompatActivity {
 
         back.setOnClickListener(v -> {
             // clear the back stack and start a new activity
-            Intent intent = new Intent(bookedEvents.this, MainDashboard.class);
+            Intent intent = new Intent(bookedEvents.this, eventsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
@@ -78,11 +78,9 @@ public class bookedEvents extends AppCompatActivity {
                     HashSet<String> events = new HashSet<>();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
-                        if (userId != null){
-                            if (!events.contains(event.getEventId())) {
-                                booked.add(event);
-                                events.add(event.getEventId());
-                            }
+                        if (!events.contains(event.getEventId())) {
+                            booked.add(event);
+                            events.add(event.getEventId());
                         }
 
                     }

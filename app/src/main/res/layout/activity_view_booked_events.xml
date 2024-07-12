@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -13,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_margin="5dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal"
         android:padding="5dp">
         <ImageButton
@@ -52,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/top_bar_nav"
-        android:layout_above="@+id/advertiseNow"
+        android:layout_above="@+id/advertiseBtnLayout"
         android:layout_margin="5dp"
         android:id="@+id/scroll_view">
         <LinearLayout
@@ -318,29 +320,35 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/advertiseBtn"
+    <LinearLayout
+        android:id="@id/advertiseBtnLayout"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Advertisement Plan"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:textStyle="normal"
-        android:letterSpacing="0.1"/>
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/advertiseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Advertisement Plan"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:textStyle="normal"
+            android:letterSpacing="0.1"/>
 
-    <Button
-        android:visibility="gone"
-        android:id="@+id/advertiseNow"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Advertise"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-        android:textStyle="normal"
-        android:letterSpacing="0.1"/>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/advertiseNow"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Advertise"
+            android:gravity="center"
+            android:layout_margin="20dp"
+            android:textStyle="normal"
+            android:letterSpacing="0.1"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

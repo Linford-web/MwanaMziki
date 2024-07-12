@@ -21,52 +21,60 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/cardTv"
-                android:layout_width="80dp"
+                android:layout_width="81dp"
                 android:layout_height="match_parent"
                 android:padding="4dp"
-                android:src="@drawable/profile_image"/>
+                android:src="@drawable/profile_image" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="3dp"
-                android:padding="5dp"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/name"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/name"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="20sp"/>
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="3dp"
+                    android:layout_marginStart="215dp"
+                    android:layout_marginEnd="215dp"
+                    android:layout_toStartOf="@+id/messageBtn"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="@color/dark_blue"
-                    android:text="@string/email"
-                    android:textStyle="normal"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/email"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
 
+                </LinearLayout>
 
-            </LinearLayout>
-            <ImageView
-                android:visibility="gone"
-                android:id="@+id/messageBtn"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:src="@drawable/chat_icon"
-                app:tint="@color/black" />
+                <ImageView
+                    android:id="@+id/ratingBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="3dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/rating_icon"
+                    app:tint="@color/black" />
+
+            </RelativeLayout>
+
         </LinearLayout>
-
-
 
     </androidx.cardview.widget.CardView>
 

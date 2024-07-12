@@ -276,6 +276,7 @@
                             android:elevation="5dp"
                             android:entries="@array/event_Category"/>
                         <EditText
+                            android:id="@+id/other_category"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="3dp"
@@ -533,27 +534,41 @@
                             android:background="@drawable/edit_text_bg"
                             android:layout_marginBottom="10dp" />
 
-                        <EditText
-                            android:id="@+id/pickUpDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Pickup Date"
-                            android:padding="10dp"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_marginBottom="10dp" />
-
-                        <EditText
-                            android:id="@+id/dropOffDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Drop-off Date"
-                            android:padding="10dp"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_marginBottom="10dp" />
-
-                        <Button
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <EditText
+                                android:id="@+id/pickUpDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Pickup Date"
+                                android:padding="10dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:layout_margin="5dp" />
+
+                            <EditText
+                                android:id="@+id/dropOffDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Drop-off Date"
+                                android:padding="10dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:layout_margin="5dp" />
+
+                        </LinearLayout>
+                        <Spinner
+                            android:id="@+id/car_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/Car_Rental"/>
+                        <Button
+                            android:id="@+id/bookCar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
                             android:text="Book Car" />
                     </LinearLayout>
 
@@ -614,6 +629,7 @@
                             android:layout_marginBottom="10dp" />
 
                         <Button
+                            android:id="@+id/bookPhotography"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Book Photography" />
@@ -677,6 +693,7 @@
                             android:layout_marginBottom="10dp" />
 
                         <Button
+                            android:id="@+id/bookCatering"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Book Catering" />
@@ -731,6 +748,7 @@
                             android:layout_marginBottom="10dp" />
 
                         <Button
+                            android:id="@+id/bookCostumes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Book Costumes" />
@@ -785,11 +803,11 @@
                             android:layout_marginBottom="10dp" />
 
                         <Button
+                            android:id="@+id/bookDj"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Book PA System and DJ" />
                     </LinearLayout>
-
 
                 </LinearLayout>
 

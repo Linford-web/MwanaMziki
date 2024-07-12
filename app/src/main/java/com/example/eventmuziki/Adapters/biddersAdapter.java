@@ -125,3 +125,24 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
         return bidders.size();
     }
 }
+
+/*
+ fStore.collection("BidEvents")
+                    .whereEqualTo("biddersId", FirebaseAuth.getInstance().getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+
+                            }
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(eventBidding.this, "You have already made a bid on this", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+ */

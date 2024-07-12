@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eventmuziki.Adapters.bidEventsAdapter;
 import com.example.eventmuziki.Adapters.biddersAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.eventModel;
@@ -37,16 +38,18 @@ import java.util.Objects;
 
 public class eventBidding extends AppCompatActivity {
 
-    TextView eventName, eventDate, eventTime, eventLocation, organizerName, eventDetails, amountTv, category, id, id2, biddersName;
+    TextView eventName, eventDate, eventTime, eventLocation, categoryNme, organizerName, eventDetails, amountTv, category, biddersName, categoryTv;
     EditText bidAmountTv;
     Button placeBid;
     ImageView eventPosterTv, backArrow;
-    LinearLayout biddersView;
+    LinearLayout biddersView, allBiddersLayout, categoryLayout;
     FirebaseFirestore fStore;
 
-    ArrayList<biddersEventModel> bidEvents;
-    RecyclerView recyclerView;
-    biddersAdapter bidAdapter;
+    ArrayList<biddersEventModel> bidEvents, bidders;
+    RecyclerView recyclerView, allBiddersRv;
+    biddersAdapter bidAdapter, bidAdapter1;
+
+    String eventId, categoryTxt, creatorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,20 +71,26 @@ public class eventBidding extends AppCompatActivity {
         backArrow = findViewById(R.id.back_arrow);
         biddersName = findViewById(R.id.bidNameTv);
         biddersView = findViewById(R.id.biddersLayout);
-        id = findViewById(R.id.creatorIdTV);
-        id2 = findViewById(R.id.eventIdTv);
         fStore = FirebaseFirestore.getInstance();
         recyclerView = findViewById(R.id.biddersRv);
-
+        categoryTv = findViewById(R.id.category_bidderTv);
+        categoryNme = findViewById(R.id.category_Tv);
+        allBiddersLayout = findViewById(R.id.allBiddersLayout);
+        categoryLayout = findViewById(R.id.categoryLayout);
+        allBiddersRv = findViewById(R.id.allBiddersRv);
 
         bidEvents = new ArrayList<>();
-        bidAdapter = new biddersAdapter(bidEvents);
-
-
+        bidAdapter1 = new biddersAdapter(bidEvents);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(bidAdapter);
+        recyclerView.setAdapter(bidAdapter1);
 
+        // Update RecyclerView with bidders from the selected event and category
+        bidders = new ArrayList<>();
+        bidAdapter = new biddersAdapter(bidders);
+        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        allBiddersRv.setLayoutManager(layoutManager1);
+        allBiddersRv.setAdapter(bidAdapter);
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,12 +111,10 @@ public class eventBidding extends AppCompatActivity {
             amountTv.setText(event.getAmount());
             category.setText(event.getCategory());
             organizerName.setText(event.getOrganizerName());
-            id.setText(event.getCreatorID());
-            id2.setText(event.getEventId());
-
-            String eventId = event.getEventId();
-            // Fetch bidders from Firestore
-            fetchBidders(eventId);
+            // Get the event ID
+            eventId = event.getEventId();
+            categoryTxt = event.getCategory();
+            creatorId = event.getCreatorID();
 
         }
 
@@ -115,50 +122,44 @@ public class eventBidding extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Get the bid amount from the EditText
-                confirmAndPlaceBid();
+                confirmAndPlaceBid(eventId, creatorId);
             }
         });
 
-        String event_Id = event.getEventId();
+        FirebaseFirestore.getInstance()
+                .collection("Events")
+                .document(eventId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
 
-        if (event != null) {
+                            String eventPoster = documentSnapshot.getString("eventPoster");
 
-            FirebaseFirestore.getInstance()
-                    .collection("Events")
-                    .document(event_Id)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-
-                                String eventPoster = documentSnapshot.getString("eventPoster");
-
-                                if (eventPoster != null && !eventPoster.isEmpty()) {
-                                    Glide.with(eventBidding.this)
-                                            .load(eventPoster)
-                                            .into(eventPosterTv);
-                                }
+                            if (eventPoster != null && !eventPoster.isEmpty()) {
+                                Glide.with(eventBidding.this)
+                                        .load(eventPoster)
+                                        .centerCrop()
+                                        .into(eventPosterTv);
                             }
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-
-
-        }
         // fetch bidders user name
         fetchUserName();
         // check user access level
-        checkUserAccessLevel();
+        checkUserAccessLevel(eventId, categoryTxt);
 
     }
 
-    private void checkUserAccessLevel() {
+    private void checkUserAccessLevel(String events, String categories) {
         String userId = FirebaseAuth.getInstance().getUid();
 
         DocumentReference df = fStore.collection("Users").document(userId);
@@ -173,8 +174,16 @@ public class eventBidding extends AppCompatActivity {
                 if (userType != null) {
                     if (userType.equals("Corporate") ){
                         biddersView.setVisibility(View.GONE);
+                        allBiddersLayout.setVisibility(View.VISIBLE);
+                        categoryLayout.setVisibility(View.GONE);
+                        fetchBidders(events);
                     } if (userType.equals("Musician")) {
                         biddersView.setVisibility(View.VISIBLE);
+                        categoryTv.setText(categories);
+                        categoryNme.setText(categories);
+                        allBiddersLayout.setVisibility(View.GONE);
+                        categoryLayout.setVisibility(View.VISIBLE);
+                        fetchCategoryBidders(eventId, categories);
                     } else {
                         // Handle other user types if needed
                         Log.d("TAG", "User is neither Corporate nor Musician");
@@ -193,6 +202,22 @@ public class eventBidding extends AppCompatActivity {
 
     }
 
+    private void fetchCategoryBidders(String eventId, String category) {
+        fStore.collection("BidEvents")
+                .whereEqualTo("eventId", eventId)
+                .whereEqualTo("category", category)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    bidders.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        biddersEventModel bidder = documentSnapshot.toObject(biddersEventModel.class);
+                        bidders.add(bidder);
+                    }
+                    bidAdapter.notifyDataSetChanged();
+
+                }).addOnFailureListener(e -> Toast.makeText(eventBidding.this, "Failed to fetch category bidders", Toast.LENGTH_SHORT).show());
+    }
+
     private void fetchBidders(String eventId) {
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
@@ -208,7 +233,7 @@ public class eventBidding extends AppCompatActivity {
                                 biddersEventModel bidEvent = documentSnapshot.toObject(biddersEventModel.class);
                                 bidEvents.add(bidEvent);
                             }
-                            bidAdapter.notifyDataSetChanged();
+                            bidAdapter1.notifyDataSetChanged();
                         }
                     }
 
@@ -243,19 +268,18 @@ public class eventBidding extends AppCompatActivity {
         });
     }
 
-    private void confirmAndPlaceBid() {
+    private void confirmAndPlaceBid(String eventId, String creatorId) {
 
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         String bidAmount = bidAmountTv.getText().toString().trim();
-        String eventId = id2.getText().toString().trim();
         String name = eventName.getText().toString().trim();
         String date = eventDate.getText().toString().trim();
         String time = eventTime.getText().toString().trim();
         String location = eventLocation.getText().toString().trim();
         String details = eventDetails.getText().toString().trim();
         String eventCategory = category.getText().toString().trim();
-        String creatorId = id.getText().toString().trim();
         String bidder = biddersName.getText().toString().trim();
 
         // Validate the bid amount
@@ -264,36 +288,49 @@ public class eventBidding extends AppCompatActivity {
         }
         else {
             // Add the bid to Firestore
-            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", eventCategory,"", "", "");
+            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", eventCategory,currentUserId, "", "");
 
+            // Check if the current user has already placed a bid for this event
             fStore.collection("BidEvents")
-                    .add(bookedEvent)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            String o_name = organizerName.getText().toString();
-                            documentReference.update("organizerName", o_name);
-                            documentReference.update("biddersName", bidder);
-                            documentReference.update("biddersId", userId);
+                    .whereEqualTo("eventId", eventId)
+                    .whereEqualTo("biddersId", currentUserId)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            fStore.collection("BidEvents")
+                                    .add(bookedEvent)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
 
-                            documentReference.update("bidId", documentReference.getId());
-                            Toast.makeText(eventBidding.this, "Bid placed successfully", Toast.LENGTH_SHORT).show();
+                                            String o_name = organizerName.getText().toString();
+                                            documentReference.update("organizerName", o_name);
+                                            documentReference.update("biddersName", bidder);
+                                            documentReference.update("bidId", documentReference.getId());
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(eventBidding.this, bidEvents.class));
-                                    finish();
-                                }
-                            }, 2000);
+                                            Toast.makeText(eventBidding.this, "Bid placed successfully", Toast.LENGTH_SHORT).show();
 
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    startActivity(new Intent(eventBidding.this, bidEvents.class));
+                                                    finish();
+                                                }
+                                            }, 2000);
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(eventBidding.this, "Failed to place bid", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(eventBidding.this, "Failed to place bid", Toast.LENGTH_SHORT).show();
+                        else {
+                            Toast.makeText(eventBidding.this, "You have already made a bid on this", Toast.LENGTH_SHORT).show();
                         }
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(eventBidding.this, "Failed to check bid", Toast.LENGTH_SHORT).show();
                     });
 
         }

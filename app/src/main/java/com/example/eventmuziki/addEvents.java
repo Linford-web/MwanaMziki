@@ -58,14 +58,14 @@ import java.util.Locale;
 public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageButton backArrow, cancel;
-    Button addPoster, addEvent;
+    Button addPoster, addEvent, bookCar, bookPhotography, bookCatering, bookCostumes, bookPaSystem;
     ImageView imageView,locationBtn;
-    EditText inputTaskName, eventDetails;
+    EditText inputTaskName, eventDetails, otherCategory;
     TextView datePicker, timePicker, organizerName, titleTxt;
     EditText amountTxt, location;
     FirebaseFirestore fStore;
     String dueTime;
-    private Spinner spinnerCategory;
+    Spinner spinnerCategory, carSpinner;
     FirebaseStorage fStorage;
 
     Uri imageUri = null;
@@ -113,6 +113,8 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         scrollView = findViewById(R.id.scroll_view);
         locationMap = findViewById(R.id.location_map);
         location = findViewById(R.id.locationTxt);
+        otherCategory = findViewById(R.id.other_category);
+        carSpinner = findViewById(R.id.car_spinner);
 
         carRental = findViewById(R.id.carRental);
         photography = findViewById(R.id.photography);
@@ -159,11 +161,33 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         djDate = findViewById(R.id.dj_date);
         djDuration = findViewById(R.id.dj_duration);
 
+        bookCar = findViewById(R.id.bookCar);
+        bookPhotography = findViewById(R.id.bookPhotography);
+        bookCatering = findViewById(R.id.bookCatering);
+        bookCostumes = findViewById(R.id.bookCostumes);
+        bookPaSystem = findViewById(R.id.bookDj);
+
         fStore = FirebaseFirestore.getInstance();
         fStorage = FirebaseStorage.getInstance();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        bookCar.setOnClickListener(v -> {
+            startActivity(new Intent(addEvents.this, categoryOptions.class));
+        });
+        bookPhotography.setOnClickListener(v -> {
+            startActivity(new Intent(addEvents.this, categoryOptions.class));
+        });
+        bookCatering.setOnClickListener(v -> {
+            startActivity(new Intent(addEvents.this, categoryOptions.class));
+        });
+        bookCostumes.setOnClickListener(v -> {
+            startActivity(new Intent(addEvents.this, categoryOptions.class));
+            });
+        bookPaSystem.setOnClickListener(v -> {
+            startActivity(new Intent(addEvents.this, categoryOptions.class));
+        });
 
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,6 +240,26 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 // Do nothing if nothing is selected
                 Toast.makeText(addEvents.this, "Please select a category", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.Car_Rental, android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        carSpinner.setAdapter(adapter1);
+
+        carSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = parent.getItemAtPosition(position).toString();
+                // Do something with the selected category
+                Log.d("Selected Category", selectedCategory);
+                carRental.performClick();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing if nothing is selected
+                Toast.makeText(addEvents.this, "Please select a category", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -504,6 +548,8 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                     .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add PA system details"));
         }
 
+        // Add other services subcollection
+        String otherServices = inputTaskName.getText().toString();
 
     }
 
