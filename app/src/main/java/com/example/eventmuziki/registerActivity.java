@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,7 +39,7 @@ public class registerActivity extends AppCompatActivity {
     ProgressBar progressbar;
     ImageView passwordIcon, conPasswordIcon;
     CountryCodePicker countryCodePicker;
-
+    TextView loginTxt;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 
@@ -50,6 +52,9 @@ public class registerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
+
+        // Hide keyboard when the activity starts
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         name = findViewById(R.id.user_name);
         email = findViewById(R.id.user_email);
@@ -65,6 +70,15 @@ public class registerActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         countryCodePicker = findViewById(R.id.countryCodePicker);
+        loginTxt = findViewById(R.id.loginTxt);
+
+        loginTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(registerActivity.this, loginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // country code picker
         countryCodePicker.registerCarrierNumberEditText(number);
@@ -93,12 +107,12 @@ public class registerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (passwordShowing){
                     password.setTransformationMethod(null);
-                    passwordIcon.setImageResource(R.drawable.visibility_icon);
+                    passwordIcon.setImageResource(R.drawable.visibility_off_icon);
                     passwordShowing = false;
                 }
                 else {
                     password.setTransformationMethod(new PasswordTransformationMethod());
-                    passwordIcon.setImageResource(R.drawable.visibility_off_icon);
+                    passwordIcon.setImageResource(R.drawable.visibility_icon);
                     passwordShowing = true;
                 }
                 // move cursor to the end of the password field
@@ -110,12 +124,12 @@ public class registerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (conPasswordShowing){
                     conPassword.setTransformationMethod(null);
-                    conPasswordIcon.setImageResource(R.drawable.visibility_icon);
+                    conPasswordIcon.setImageResource(R.drawable.visibility_off_icon);
                     conPasswordShowing = false;
                 }
                 else {
                     conPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    conPasswordIcon.setImageResource(R.drawable.visibility_off_icon);
+                    conPasswordIcon.setImageResource(R.drawable.visibility_icon);
                     conPasswordShowing = true;
                 }
                 // move cursor to the end of the password field
@@ -183,15 +197,10 @@ public class registerActivity extends AppCompatActivity {
                                     UserModel userModel = new UserModel("", user.getUid(), name.getText().toString(), email.getText().toString(), number.getText().toString());
                                     fStore.collection("Users").document(user.getUid()).set(userModel);
 
-                                    Intent intent = new Intent(registerActivity.this, loginActivity.class);
-                                    intent.putExtra("mobile", countryCodePicker.getFullNumberWithPlus());
-                                    intent.putExtra("email", email.getText().toString());
-                                    intent.putExtra("password", password.getText().toString());
-                                    intent.putExtra("name", name.getText().toString());
-                                    intent.putExtra("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                    intent.putExtra("userType", getIntent().getStringExtra("userType"));
+                                    Intent intent = new Intent(registerActivity.this, MainDashboard.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
-                                    progressbar.setVisibility(View.GONE);
+                                    progressbar.setVisibility(View.INVISIBLE);
 
                                 }
 
@@ -200,7 +209,7 @@ public class registerActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
 
                                     Toast.makeText(registerActivity.this, "Failed to Create Account!", Toast.LENGTH_SHORT).show();
-                                    progressbar.setVisibility(View.GONE);
+                                    progressbar.setVisibility(View.INVISIBLE);
                                 }
                             });
 

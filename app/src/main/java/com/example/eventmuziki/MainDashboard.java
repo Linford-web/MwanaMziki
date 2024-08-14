@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,14 +12,17 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.advertAdapter;
+import com.example.eventmuziki.Adapters.dashAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
 import com.example.eventmuziki.Models.advertisementModel;
 import com.example.eventmuziki.Models.eventModel;
+import com.example.eventmuziki.Models.serviceNameModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,14 +35,15 @@ import java.util.Objects;
 
 public class MainDashboard extends AppCompatActivity {
 
-    ImageView chats, eventsBtn, adverts, clothes, home;
+    Button adverts;
     ImageView profile, allAdverts, upcomingEvents;
     TextView userNameTv;
-    RecyclerView eventRv, advertsRv;
+    RecyclerView eventRv, advertsRv, menuRv;
     ArrayList<eventModel> events;
     ArrayList<advertisementModel> advert;
     eventAdapter2 adapter;
     advertAdapter adapter2;
+    dashAdapter adapter3;
     FirebaseFirestore fStore;
 
     String name, email;
@@ -49,11 +54,7 @@ public class MainDashboard extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main_dashboard);
 
-        chats = findViewById(R.id.messageIcon);
-        eventsBtn = findViewById(R.id.eventIcon);
-        adverts = findViewById(R.id.advertIcon);
-        clothes = findViewById(R.id.costumeIcon);
-        home = findViewById(R.id.homeIcon);
+        adverts = findViewById(R.id.addAdvertBtn);
         profile = findViewById(R.id.userProfileTv);
         userNameTv = findViewById(R.id.get_name);
         eventRv = findViewById(R.id.eventsRecyclerView);
@@ -61,7 +62,7 @@ public class MainDashboard extends AppCompatActivity {
         upcomingEvents = findViewById(R.id.allEventsBtn);
         fStore = FirebaseFirestore.getInstance();
         advertsRv = findViewById(R.id.advertRv);
-        // bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        menuRv = findViewById(R.id.menuRv);
 
         // Initialize Event RecyclerView
         events = new ArrayList<>();
@@ -112,44 +113,23 @@ public class MainDashboard extends AppCompatActivity {
         // check user access level
         checkUserAccessLevel();
 
-        eventsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), eventsActivity.class));
+        setUpRecyclerView();
 
-            }
-        });
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainDashboard.this, profileActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        chats.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), chatActivity.class);
-                startActivity(intent);
 
-            }
-        });
-        adverts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), advertActivity.class);
-                startActivity(intent);
-            }
-        });
-        clothes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), costumeActivity.class);
-                startActivity(intent);
-            }
-        });
+    }
 
+    private void setUpRecyclerView() {
+        ArrayList<serviceNameModel> menuItems = new ArrayList<>();
+
+        menuItems.add(new serviceNameModel("Events", R.drawable.garland, eventsActivity.class));
+        menuItems.add(new serviceNameModel("Adverts", R.drawable.ads, advertActivity.class));
+        menuItems.add(new serviceNameModel("Chats", R.drawable.chat, chatActivity.class));
+        menuItems.add(new serviceNameModel("Profile", R.drawable.user, profileActivity.class));
+        menuItems.add(new serviceNameModel("Services", R.drawable.service_icon, categoryOptions.class));
+
+        adapter3 = new dashAdapter(MainDashboard.this, menuItems);
+        menuRv.setLayoutManager(new GridLayoutManager(this, 5));
+        menuRv.setAdapter(adapter3);
     }
 
     private void checkUserAccessLevel() {
@@ -172,6 +152,7 @@ public class MainDashboard extends AppCompatActivity {
                                 // Fetch events from Firestore
                                 fetchEventSs(userId);
                                 fetchAdverts(userId);
+
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 // Fetch events from Firestore
                                 fetchEvents();

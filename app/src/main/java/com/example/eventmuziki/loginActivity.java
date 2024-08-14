@@ -38,7 +38,7 @@ public class loginActivity extends AppCompatActivity {
     ProgressBar progressbar;
     ImageView passwordIcon;
     boolean valid = true;
-    TextView fPassword;
+    TextView fPassword, registerTxt;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     boolean passwordShowing = false;
@@ -58,6 +58,7 @@ public class loginActivity extends AppCompatActivity {
         progressbar = findViewById(R.id.progressbar);
         passwordIcon = findViewById(R.id.passwordIcon);
         fStore = FirebaseFirestore.getInstance();
+        registerTxt = findViewById(R.id.registerTxt);
 
         passwordIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,16 +66,24 @@ public class loginActivity extends AppCompatActivity {
 
                 if (passwordShowing){
                     password.setTransformationMethod(null);
-                    passwordIcon.setImageResource(R.drawable.visibility_icon);
+                    passwordIcon.setImageResource(R.drawable.visibility_off_icon);
                     passwordShowing = false;
                 }
                 else {
                     password.setTransformationMethod(new PasswordTransformationMethod());
-                    passwordIcon.setImageResource(R.drawable.visibility_off_icon);
+                    passwordIcon.setImageResource(R.drawable.visibility_icon);
                     passwordShowing = true;
                 }
                 // move cursor to the end of the password field
                 password.setSelection(password.getText().length());
+            }
+        });
+
+        registerTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(loginActivity.this, registerActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -92,14 +101,14 @@ public class loginActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) {
 
                                     checkUserAccessLevel(Objects.requireNonNull(authResult.getUser()).getUid());
-                                    progressbar.setVisibility(View.GONE);
+                                    progressbar.setVisibility(View.INVISIBLE);
 
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(loginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    progressbar.setVisibility(View.GONE);
+                                    progressbar.setVisibility(View.INVISIBLE);
                                 }
                             });
                 }
@@ -163,10 +172,11 @@ public class loginActivity extends AppCompatActivity {
                         // User is Corporate or Musician
                         startActivity(new Intent(getApplicationContext(), MainDashboard.class));
                         finish();
-                        Toast.makeText(loginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "Welcome " + userType );
                     } else {
                         // Handle other user types if needed
                         Log.d("TAG", "User is neither Corporate nor Musician");
+                        progressbar.setVisibility(View.INVISIBLE);
                     }
                 } else {
                     // Handle the case where userType is null if needed
@@ -177,6 +187,7 @@ public class loginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("TAG", "Failed to get document: " + e.getMessage());
+                progressbar.setVisibility(View.INVISIBLE);
             }
         });
     }

@@ -93,6 +93,7 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> 
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.itemView.getContext())
                                         .load(eventPoster)
+                                        //.centerCrop()
                                         .into(holder.posterTv);
                             }
                         }

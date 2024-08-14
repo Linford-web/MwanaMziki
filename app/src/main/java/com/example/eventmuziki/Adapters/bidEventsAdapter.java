@@ -105,6 +105,7 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.itemView.getContext())
                                         .load(eventPoster)
+                                        .centerCrop()
                                         .into(holder.eventPoster);
                             }
                         }

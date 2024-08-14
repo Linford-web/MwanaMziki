@@ -60,6 +60,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/search_layout"
             android:layout_width="match_parent"
@@ -101,6 +102,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/card_view"
+                android:elevation="1dp"
+                android:layout_margin="3dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -110,14 +114,10 @@
                     android:layout_height="wrap_content"
                     android:text="All Events"
                     android:textStyle="normal"
-                    android:padding="5dp"
-                    android:textSize="18sp"
+                    android:padding="7dp"
+                    android:textSize="15sp"
+                    android:letterSpacing="0.09"
                     android:textColor="@color/orange"/>
-                <View
-                    android:id="@+id/allEventsView"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/orange" />
 
             </LinearLayout>
 
@@ -125,6 +125,9 @@
                 android:id="@+id/bidEventsPg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:background="@drawable/card_view"
+                android:elevation="1dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -135,20 +138,19 @@
                     android:layout_height="wrap_content"
                     android:text="Bid Events"
                     android:textStyle="normal"
-                    android:padding="5dp"
-                    android:textSize="18sp"
+                    android:letterSpacing="0.09"
+                    android:padding="7dp"
+                    android:textSize="15sp"
                     android:textColor="@color/black"/>
-                <View
-                    android:id="@+id/bidEventsView"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/gray" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/bookedEventsPg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:background="@drawable/card_view"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -157,16 +159,14 @@
                     android:id="@+id/bookEventTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Booked Events"
+                    android:text="Booked"
                     android:textStyle="normal"
-                    android:padding="5dp"
-                    android:textSize="18sp"
+                    android:padding="7dp"
+                    android:letterSpacing="0.09"
+
+                    android:textSize="15sp"
                     android:textColor="@color/black"/>
-                <View
-                    android:id="@+id/bookedEventsView"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/gray" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -183,10 +183,9 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/categoryLayoutOptions"
+                    android:id="@+id/menuCategoryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -198,7 +197,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:text="Category"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:letterSpacing="0.1"
                             android:textColor="@color/black" />
                         <ImageButton
@@ -213,175 +212,11 @@
                             android:background="?attr/selectableItemBackgroundBorderless"
                             app:tint="@color/red" />
                     </LinearLayout>
-
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:id="@+id/sportsCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/sportsIcon"
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:padding="2dp"
-                                android:src="@drawable/sport_icon"/>
-                            <TextView
-                                android:id="@+id/sportsTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Sport"
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/churchCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/churchIcon"
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:padding="2dp"
-                                android:src="@drawable/church_icon"/>
-                            <TextView
-                                android:id="@+id/churchTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Church"
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/weddingCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/weddingIcon"
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:padding="2dp"
-                                android:src="@drawable/flower_icon"/>
-                            <TextView
-                                android:id="@+id/weddingTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Wedding"
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/musicCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/musicIcon"
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:padding="2dp"
-                                android:src="@drawable/music_icon"/>
-                            <TextView
-                                android:id="@+id/musicTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Music"
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:orientation="horizontal">
-                        <LinearLayout
-                            android:id="@+id/graduationCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/graduationIcon"
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:padding="2dp"
-                                android:src="@drawable/grad_icon"/>
-                            <TextView
-                                android:id="@+id/graduationTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Graduation"
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/photographyCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:id="@+id/photographyIcon"
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:padding="2dp"
-                                android:src="@drawable/camera_icon"/>
-                            <TextView
-                                android:id="@+id/photographyTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Cinematography"
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:id="@+id/otherCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/otherTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Other..."
-                                android:padding="5dp"
-                                android:letterSpacing="0.1"
-                                android:textColor="@color/black" />
-
-                        </LinearLayout>
-                    </LinearLayout>
+                        android:id="@+id/categoriesRv"
+                        android:layout_marginTop="10dp"/>
 
                 </LinearLayout>
 
@@ -430,7 +265,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Popular Events"
+                        android:text="My Events"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
@@ -463,21 +298,10 @@
                             android:id="@+id/allRecyclerView"
                             android:layout_marginTop="10dp"/>
 
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sort By"
-                            android:letterSpacing="0.1"
-                            android:drawableEnd="@drawable/sort_icon"
-                            android:layout_alignParentBottom="true"
-                            android:layout_margin="7dp"
-                            android:layout_centerHorizontal="true"
-                            android:drawableTint="@color/white"
-                            android:textColor="@color/white"/>
-
                     </RelativeLayout>
 
                 </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>
@@ -651,4 +475,6 @@
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </RelativeLayout>
+
+
 

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="390dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardCornerRadius="15dp"
@@ -31,6 +31,7 @@
                     android:id="@+id/bigCardTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/cover" />
 
             </androidx.cardview.widget.CardView>

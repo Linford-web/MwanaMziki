@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
 
     <application
         android:allowBackup="true"
@@ -17,8 +20,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".categoryOptions"
+            android:name=".addServices"
             android:exported="false" />
+        <activity
+            android:name=".categoryOptions"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".viewAdvert"
             android:exported="false" />
@@ -61,7 +68,8 @@
             android:exported="false" />
         <activity
             android:name=".eventBidding"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".profileActivity"
             android:exported="false" />
@@ -70,16 +78,15 @@
             android:exported="false" />
         <activity
             android:name=".eventsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".startActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".MainDashboard"
             android:exported="false" />
         <activity
             android:name=".registerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".loginActivity"
             android:exported="false" />

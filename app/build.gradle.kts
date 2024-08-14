@@ -70,5 +70,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.firebase.ui.firestore)
+    implementation (libs.material)
 
 }

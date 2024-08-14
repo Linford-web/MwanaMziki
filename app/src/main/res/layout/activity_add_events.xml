@@ -13,59 +13,115 @@
         android:orientation="vertical"
         android:layout_margin="8dp">
 
-        <LinearLayout
-            android:id="@+id/top_bar_nav"
-            android:layout_width="match_parent"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <ImageButton
-                android:visibility="gone"
-                android:id="@+id/cancel_search_location"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_gravity="start"
-                android:src="@drawable/close_icon"
-                app:tint="@color/red"
-                android:focusable="true" />
-            <ImageButton
-                android:id="@+id/back_arrow"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="start"
-                android:src="@drawable/back_arrow"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/red"
-                android:focusable="true" />
-            <TextView
-                android:id="@+id/titleTv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:letterSpacing="0.1"
-                android:textColor="@color/blue"
-                android:text="@string/add_events"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
         <RelativeLayout
             android:id="@+id/poster_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="205dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/eventPoster"
                 android:layout_width="match_parent"
+                android:scaleType="centerCrop"
                 android:layout_height="200dp"
                 android:src="@drawable/cover" />
+
+            <LinearLayout
+                android:id="@+id/top_bar_nav"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageButton
+                    android:visibility="gone"
+                    android:id="@+id/cancel_search_location"
+                    android:clickable="true"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_gravity="start"
+                    android:src="@drawable/close_icon"
+                    app:tint="@color/red"
+                    android:focusable="true" />
+                <ImageButton
+                    android:id="@+id/back_arrow"
+                    android:clickable="true"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:src="@drawable/back_arrow"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="@color/red"
+                    android:focusable="true" />
+                <TextView
+                    android:id="@+id/titleTv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/white"
+                    android:text="@string/add_events"
+                    android:textAlignment="center"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/edit_poster"
+                android:visibility="visible"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                app:tint="@color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:src="@drawable/edit_icon" />
+            <ImageButton
+                android:id="@+id/cancel_edit"
+                android:visibility="gone"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                app:tint="@color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:src="@drawable/cancel_icon" />
+            <ImageButton
+                android:visibility="gone"
+                android:id="@+id/addPosterBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="20dp"
+                app:tint="@color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:src="@drawable/add_poster" />
+            <ImageButton
+                android:id="@+id/delete_poster"
+                android:visibility="gone"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="80dp"
+                android:layout_marginBottom="20dp"
+                app:tint="@color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:src="@drawable/delete_icon" />
 
 
         </RelativeLayout>
@@ -80,35 +136,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/organizerNameTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
-                    android:padding="5dp">
-                    <TextView
-                        android:id="@+id/organizerNameTv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/organizer_name"
-                        android:letterSpacing="0.1"
-                        android:textColor="@color/dark_blue"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/addPosterBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add Poster"
-                        android:drawableEnd="@drawable/add_poster"
-                        android:drawableTint="@color/white"/>
-                </LinearLayout>
+                    android:text="@string/organizer_name"
+                    android:padding="5dp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -155,60 +197,70 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <ImageView
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:padding="3dp"
-                            android:src="@drawable/calender_small_icon" />
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="3dp"
+                                android:src="@drawable/calender_small_icon" />
 
-                        <TextView
-                            android:id="@+id/datePicker"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Select date"
-                            android:textStyle="bold"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:letterSpacing="0.09"
-                            android:textSize="15sp"
-                            android:visibility="visible" />
+                            <TextView
+                                android:id="@+id/datePicker"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Select date"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:visibility="visible" />
 
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
-                        android:background="#B0B0B0" />
+                        </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <ImageView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:padding="3dp"
-                            android:src="@drawable/clock_small_icon" />
-                        <TextView
-                            android:id="@+id/timePicker"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Select event time"
-                            android:textStyle="bold"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:letterSpacing="0.09"
-                            android:textSize="15sp"
-                            android:visibility="visible" />
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="3dp"
+                                android:src="@drawable/clock_small_icon" />
+                            <TextView
+                                android:id="@+id/timePickerFrom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Start"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:visibility="visible" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:text="to"
+                                android:letterSpacing="0.09"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/timePickerTo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="End"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:visibility="visible" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="5dp"
-                        android:background="#B0B0B0" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -220,7 +272,13 @@
                             android:orientation="horizontal">
 
                             <ImageView
+                                android:visibility="gone"
                                 android:id="@+id/LocationBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                android:src="@drawable/location_icon"/>
+                            <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_margin="5dp"
@@ -238,12 +296,6 @@
                                 android:textSize="15sp"
                                 android:visibility="visible" />
                         </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_margin="5dp"
-                            android:background="#B0B0B0" />
 
                     </LinearLayout>
 
@@ -291,6 +343,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/amount"
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -337,15 +398,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Other services"
-                        android:letterSpacing="0.1"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/orange"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        android:layout_margin="7dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Other services"
+                            android:letterSpacing="0.1"
+                            android:textColor="@color/orange"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/viewAllServices"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:layout_marginStart="10dp"
+                            android:text="View all" />
+                    </LinearLayout>
+
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -484,7 +562,85 @@
                                     android:id="@+id/paSystemTxt"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Dj and system"
+                                    android:text="Sound system"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/decorations"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/decoIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/deco_icon" />
+                                <TextView
+                                    android:id="@+id/decoTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Decorations"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/contentCreator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/contentIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/content_icon" />
+                                <TextView
+                                    android:id="@+id/contentTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Content Creators"
+                                    android:letterSpacing="0.1"
+                                    android:textColor="@color/black"
+                                    android:textSize="17sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/sponsorship"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="10dp"
+                                android:elevation="3dp"
+                                android:layout_marginEnd="10dp">
+                                <ImageView
+                                    android:id="@+id/sponsorshipIcon"
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:padding="2dp"
+                                    android:src="@drawable/sponsorship_icon" />
+                                <TextView
+                                    android:id="@+id/sponsorshipTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sponsorship"
                                     android:letterSpacing="0.1"
                                     android:textColor="@color/black"
                                     android:textSize="17sp"
@@ -564,12 +720,7 @@
                             android:layout_margin="5dp"
                             android:padding="8dp"
                             android:entries="@array/Car_Rental"/>
-                        <Button
-                            android:id="@+id/bookCar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:text="Book Car" />
+
                     </LinearLayout>
 
                     <!-- Photography Service Details -->
@@ -628,11 +779,6 @@
                             android:background="@drawable/edit_text_bg"
                             android:layout_marginBottom="10dp" />
 
-                        <Button
-                            android:id="@+id/bookPhotography"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Book Photography" />
                     </LinearLayout>
 
                     <!-- Catering Service Details -->
@@ -691,12 +837,14 @@
                             android:padding="10dp"
                             android:background="@drawable/edit_text_bg"
                             android:layout_marginBottom="10dp" />
-
-                        <Button
-                            android:id="@+id/bookCatering"
-                            android:layout_width="wrap_content"
+                        <Spinner
+                            android:id="@+id/cateringServices"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Book Catering" />
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/catering_type"/>
+
                     </LinearLayout>
 
                     <!-- Costumes Service Details -->
@@ -747,11 +895,7 @@
                             android:background="@drawable/edit_text_bg"
                             android:layout_marginBottom="10dp" />
 
-                        <Button
-                            android:id="@+id/bookCostumes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Book Costumes" />
+
                     </LinearLayout>
 
                     <!-- PA System and DJ Hire Service Details -->
@@ -769,7 +913,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="PA System and DJ Hire Details"
+                            android:text="PA and Sound System Details"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
@@ -801,12 +945,188 @@
                             android:padding="10dp"
                             android:background="@drawable/edit_text_bg"
                             android:layout_marginBottom="10dp" />
+                        <Spinner
+                            android:id="@+id/sound_Services"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/sound_services"/>
 
-                        <Button
-                            android:id="@+id/bookDj"
+                    </LinearLayout>
+
+                    <!-- Decorations Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/decorationDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Book PA System and DJ" />
+                            android:text="Decoration Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/deco_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/deco_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event Date"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/deco_duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of Hours"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+                        <EditText
+                            android:id="@+id/deco_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Price per hour"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                    </LinearLayout>
+
+                    <!-- Content Creators Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/contentCreatorsDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Content creators Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/creatorName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/name"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/creatorSocials"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter Socials"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/creator_duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of Hours"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+                        <EditText
+                            android:id="@+id/creator_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Price per hour"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                    </LinearLayout>
+
+                    <!-- Sponsorship Service Details -->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/sponsorshipDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:elevation="3dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sponsorship Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/sponsor_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event category"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/sponsor_current"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Current sponsors if any"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <EditText
+                            android:id="@+id/sponsor_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Event location"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+                        <EditText
+                            android:id="@+id/sponsor_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="SponsorShip Amount"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -816,7 +1136,8 @@
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="6dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/add_event"
                     android:textSize="18sp"
                     android:textStyle="bold" />

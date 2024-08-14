@@ -19,10 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Adapters.bidEventsAdapter;
 import com.example.eventmuziki.Adapters.biddersAdapter;
+import com.example.eventmuziki.Adapters.serviceNameAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.eventModel;
+import com.example.eventmuziki.Models.serviceNameModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,18 +39,21 @@ import java.util.Objects;
 
 public class eventBidding extends AppCompatActivity {
 
-    TextView eventName, eventDate, eventTime, eventLocation, categoryNme, organizerName, eventDetails, amountTv, category, biddersName, categoryTv;
+    TextView eventName, eventDate, eventTime, eventLocation, categoryNme, organizerName, eventDetails, amountTv, category, biddersName, categoryTv, viewAll;
     EditText bidAmountTv;
     Button placeBid;
     ImageView eventPosterTv, backArrow;
-    LinearLayout biddersView, allBiddersLayout, categoryLayout;
+    LinearLayout biddersView, categoryLayout;
     FirebaseFirestore fStore;
 
-    ArrayList<biddersEventModel> bidEvents, bidders;
-    RecyclerView recyclerView, allBiddersRv;
-    biddersAdapter bidAdapter, bidAdapter1;
+    ArrayList<biddersEventModel> bidEvents, categoryService;
+    RecyclerView recyclerView, requiredServicesRv;
+    biddersAdapter bidAdapter, categoryAdapter;
 
-    String eventId, categoryTxt, creatorId;
+    public String eventId, creatorId, userType;
+
+    ArrayList<serviceNameModel> requiredServices;
+    serviceNameAdapter nameAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,26 +75,63 @@ public class eventBidding extends AppCompatActivity {
         backArrow = findViewById(R.id.back_arrow);
         biddersName = findViewById(R.id.bidNameTv);
         biddersView = findViewById(R.id.biddersLayout);
+        viewAll = findViewById(R.id.view_all);
+
         fStore = FirebaseFirestore.getInstance();
-        recyclerView = findViewById(R.id.biddersRv);
+
         categoryTv = findViewById(R.id.category_bidderTv);
         categoryNme = findViewById(R.id.category_Tv);
-        allBiddersLayout = findViewById(R.id.allBiddersLayout);
+        recyclerView = findViewById(R.id.biddersRv);
         categoryLayout = findViewById(R.id.categoryLayout);
-        allBiddersRv = findViewById(R.id.allBiddersRv);
+        requiredServicesRv = findViewById(R.id.serviceRequiredRv);
 
         bidEvents = new ArrayList<>();
-        bidAdapter1 = new biddersAdapter(bidEvents);
+        bidAdapter = new biddersAdapter(bidEvents);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(bidAdapter1);
+        recyclerView.setAdapter(bidAdapter);
 
-        // Update RecyclerView with bidders from the selected event and category
-        bidders = new ArrayList<>();
-        bidAdapter = new biddersAdapter(bidders);
+        requiredServices = new ArrayList<>();
+        nameAdapter = new serviceNameAdapter(this,requiredServices);
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        allBiddersRv.setLayoutManager(layoutManager1);
-        allBiddersRv.setAdapter(bidAdapter);
+        requiredServicesRv.setLayoutManager(layoutManager1);
+        requiredServicesRv.setAdapter(nameAdapter);
+
+        categoryService = new ArrayList<>();
+        categoryAdapter = new biddersAdapter(categoryService);
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager2);
+        recyclerView.setAdapter(categoryAdapter);
+
+        nameAdapter.setOnItemClickListener(new serviceNameAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(serviceNameModel service) {
+                categoryTv.setText(service.getServiceName());
+                if (service.getServiceName().equals("Decorations")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Car Rental")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Photographer")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Catering")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Sound")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Costumes")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Influencers")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else if (service.getServiceName().equals("Sponsors")) {
+                    fetchCategoryBidders(eventId, service.getServiceName());
+                } else {
+                    fetchBidders(eventId);
+                }
+
+
+            }
+        });
+
+
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,16 +148,17 @@ public class eventBidding extends AppCompatActivity {
             eventDate.setText(event.getDate());
             eventTime.setText(event.getTime());
             eventLocation.setText(event.getLocation());
+            category.setText(event.getCategory());
             eventDetails.setText(event.getEventDetails());
             amountTv.setText(event.getAmount());
-            category.setText(event.getCategory());
             organizerName.setText(event.getOrganizerName());
             // Get the event ID
             eventId = event.getEventId();
-            categoryTxt = event.getCategory();
             creatorId = event.getCreatorID();
 
         }
+
+        fetchRequiredServices(Objects.requireNonNull(event).getEventId());
 
         placeBid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,9 +176,7 @@ public class eventBidding extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-
                             String eventPoster = documentSnapshot.getString("eventPoster");
-
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(eventBidding.this)
                                         .load(eventPoster)
@@ -152,14 +192,81 @@ public class eventBidding extends AppCompatActivity {
                     }
                 });
 
+        viewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchBidders(eventId);
+            }
+        });
+
         // fetch bidders user name
         fetchUserName();
         // check user access level
-        checkUserAccessLevel(eventId, categoryTxt);
+        checkUserAccessLevel(categoryTv.getText().toString());
 
     }
 
-    private void checkUserAccessLevel(String events, String categories) {
+    private void fetchRequiredServices(String eventId) {
+
+        FirebaseFirestore.getInstance()
+                .collection("Events")
+                .document(eventId)
+                .collection("EventServices")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        requiredServices.clear();
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                            // Extract service details
+                            String serviceName = documentSnapshot.getString("service");
+                            if (serviceName != null) {
+                                int serviceIcon = getIconForService(serviceName);
+                                serviceNameModel service = new serviceNameModel(serviceName, serviceIcon, null);
+                                requiredServices.add(service);
+                            }else {
+                                Toast.makeText(eventBidding.this, "Services Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        nameAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(eventBidding.this, "No services found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(eventBidding.this, "Failed to fetch services", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private int getIconForService(String serviceName) {
+        if (serviceName.equals("Car Rental")) {
+            return R.drawable.car_icon;
+        }
+        if (serviceName.equals("Photographer")) {
+            return R.drawable.camera_icon;
+        }
+        if (serviceName.equals("Catering")) {
+            return R.drawable.fastfood_icon;
+        }
+        if (serviceName.equals("Costumes")) {
+            return R.drawable.costume_icon;
+        }
+        if (serviceName.equals("Sound")) {
+            return R.drawable.dj_icon;
+        }
+        if (serviceName.equals("Decorations")) {
+            return R.drawable.deco_icon;
+        }
+        if (serviceName.equals("Influencers")) {
+            return R.drawable.content_icon;
+        }
+        if (serviceName.equals("Sponsors")) {
+            return R.drawable.sponsorship_icon;
+        }
+        return R.drawable.money_icon;
+
+    }
+
+    private void checkUserAccessLevel(String categories) {
         String userId = FirebaseAuth.getInstance().getUid();
 
         DocumentReference df = fStore.collection("Users").document(userId);
@@ -170,20 +277,37 @@ public class eventBidding extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Log.d("TAG", "onSuccess: " + documentSnapshot.getData());
                 // Identify User Access Level
-                String userType = documentSnapshot.getString("userType");
+                userType = documentSnapshot.getString("userType");
                 if (userType != null) {
-                    if (userType.equals("Corporate") ){
+                    if (userType.equalsIgnoreCase("Corporate")){
                         biddersView.setVisibility(View.GONE);
-                        allBiddersLayout.setVisibility(View.VISIBLE);
-                        categoryLayout.setVisibility(View.GONE);
-                        fetchBidders(events);
-                    } if (userType.equals("Musician")) {
-                        biddersView.setVisibility(View.VISIBLE);
-                        categoryTv.setText(categories);
+                        viewAll.setVisibility(View.VISIBLE);
+                    } if (userType.equalsIgnoreCase("Musician")) {
                         categoryNme.setText(categories);
-                        allBiddersLayout.setVisibility(View.GONE);
-                        categoryLayout.setVisibility(View.VISIBLE);
-                        fetchCategoryBidders(eventId, categories);
+                        viewAll.setVisibility(View.GONE);
+
+                        FirebaseFirestore.getInstance().collection("BidEvents")
+                                .whereEqualTo("eventId", eventId)
+                                .whereEqualTo("biddersId", FirebaseAuth.getInstance().getUid())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            if (task.getResult() != null && !task.getResult().isEmpty()) {
+                                                // User has already placed a bid for this event
+                                                biddersView.setVisibility(View.GONE);
+                                            }
+                                            else {
+                                                // User has not placed a bid for this event
+                                                biddersView.setVisibility(View.VISIBLE);
+                                            }
+                                        }else {
+                                            Toast.makeText(eventBidding.this, "Failed to check bid", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
                     } else {
                         // Handle other user types if needed
                         Log.d("TAG", "User is neither Corporate nor Musician");
@@ -202,18 +326,18 @@ public class eventBidding extends AppCompatActivity {
 
     }
 
-    private void fetchCategoryBidders(String eventId, String category) {
+    private void fetchCategoryBidders(String eventId, String service) {
         fStore.collection("BidEvents")
                 .whereEqualTo("eventId", eventId)
-                .whereEqualTo("category", category)
+                .whereEqualTo("userCategory", service)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    bidders.clear();
+                    categoryService.clear();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         biddersEventModel bidder = documentSnapshot.toObject(biddersEventModel.class);
-                        bidders.add(bidder);
+                        categoryService.add(bidder);
                     }
-                    bidAdapter.notifyDataSetChanged();
+                    categoryAdapter.notifyDataSetChanged();
 
                 }).addOnFailureListener(e -> Toast.makeText(eventBidding.this, "Failed to fetch category bidders", Toast.LENGTH_SHORT).show());
     }
@@ -233,7 +357,7 @@ public class eventBidding extends AppCompatActivity {
                                 biddersEventModel bidEvent = documentSnapshot.toObject(biddersEventModel.class);
                                 bidEvents.add(bidEvent);
                             }
-                            bidAdapter1.notifyDataSetChanged();
+                            bidAdapter.notifyDataSetChanged();
                         }
                     }
 
@@ -279,7 +403,7 @@ public class eventBidding extends AppCompatActivity {
         String time = eventTime.getText().toString().trim();
         String location = eventLocation.getText().toString().trim();
         String details = eventDetails.getText().toString().trim();
-        String eventCategory = category.getText().toString().trim();
+        // String userCategory = categoryTv.getText().toString().trim();
         String bidder = biddersName.getText().toString().trim();
 
         // Validate the bid amount
@@ -288,7 +412,7 @@ public class eventBidding extends AppCompatActivity {
         }
         else {
             // Add the bid to Firestore
-            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", eventCategory,currentUserId, "", "");
+            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", userType,currentUserId, "", "");
 
             // Check if the current user has already placed a bid for this event
             fStore.collection("BidEvents")

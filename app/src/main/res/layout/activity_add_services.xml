@@ -1,0 +1,1287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".addServices">
+
+    <LinearLayout
+        android:id="@+id/top_bar_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:padding="5dp">
+        <ImageButton
+            android:id="@+id/back_arrow"
+            android:clickable="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/back_arrow"
+            app:tint="@color/red"
+            android:focusable="true" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:letterSpacing="0.1"
+            android:textColor="@color/blue"
+            android:text="Add Details"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_below="@id/top_bar_nav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Services Details based on "
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/category_bidderTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Category"
+                    android:textColor="@color/black"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!-- Section for Car Details -->
+            <LinearLayout
+                android:id="@+id/addCarDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Add Car Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddCar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeCar"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/carDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/carPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/car_icon" />
+
+                        <ImageButton
+                            android:id="@+id/nextCarPhoto"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="10dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/previous_image_icon" />
+
+                        <ImageButton
+                            android:id="@+id/previousCarPhoto"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="10dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/next_image_icon" />
+                        <ImageButton
+                            android:id="@+id/addCarPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Car Model"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/carModelTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:hint="Car Model"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Car Details"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/carDetailsTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:hint="Car details"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Car Type"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <Spinner
+                        android:id="@+id/car_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:entries="@array/car_type"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Hire hours"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btn_minusc"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/minus_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="minus"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/tv_amountc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="5dp"
+                                android:inputType="number"
+                                android:layout_margin="5dp"
+                                android:text="6"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                            <ImageButton
+                                android:id="@+id/btn_addc"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/add_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="add"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Transmission"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <Spinner
+                        android:id="@+id/spinner_transmission"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:entries="@array/transmission"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Number of Seats"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <Spinner
+                        android:id="@+id/spinner_seats"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:entries="@array/seats"/>
+                    <Button
+                        android:id="@+id/carSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Submit"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/carRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section for Photography Details-->
+            <LinearLayout
+                android:id="@+id/AddPhotographyDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Photography Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddPhotography"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closePhotography"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/photographyDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/paparazi"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/camera_icon" />
+                        <ImageButton
+                            android:id="@+id/addPaparaziPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Artist name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/artist_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:inputType="text"
+                        android:layout_margin="5dp"
+                        android:hint="Artist name"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Social media handle"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/social_media_photography"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Social media"
+                        android:inputType="text"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:lines="3"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Price per hour"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/price_photography"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Price per hour"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/photographySubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Submit"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/photographyRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section for Catering Details-->
+            <LinearLayout
+                android:id="@+id/addCateringDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Catering Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddCatering"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeCatering"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/cateringDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/cateringPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/fastfood_icon" />
+                        <ImageButton
+                            android:id="@+id/addCateringPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Catering company name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/catering_company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:inputType="text"
+                        android:layout_margin="5dp"
+                        android:hint="Company name"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Social media handle"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/social_media_catering"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Social media"
+                        android:inputType="text"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:lines="3"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Max number of people"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/no_of_people"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="No of people"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Price per Hour"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/price_catering"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Price per hour"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Catering type"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <Spinner
+                        android:id="@+id/spinner_catering_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/catering_type"/>
+
+                    <Button
+                        android:id="@+id/cateringSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Submit"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cateringRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section for Thrift Details-->
+            <LinearLayout
+                android:id="@+id/addThriftDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Thrift Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddThrift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeThrift"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/thriftDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/thriftPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/costume_icon" />
+                        <ImageButton
+                            android:id="@+id/addThriftPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Product name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/product_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:inputType="text"
+                        android:layout_margin="5dp"
+                        android:hint="Product name"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Social media handle"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/social_media_thrift"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Social media"
+                        android:inputType="text"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:lines="3"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Product details"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/thrift_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Product details"
+                        android:inputType="text"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:lines="3"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Price"
+                            android:textStyle="bold"
+                            android:textSize="18sp"/>
+
+                        <EditText
+                            android:id="@+id/product_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Enter amount"
+                            android:inputType="number"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Size"
+                            android:textStyle="bold"
+                            android:textSize="18sp"/>
+                        <Spinner
+                            android:id="@+id/spinner_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/size"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Amount"
+                            android:textStyle="bold"
+                            android:textSize="18sp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btn_minus"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/minus_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="minus"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/tv_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="5dp"
+                                android:inputType="number"
+                                android:layout_margin="5dp"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                            <ImageButton
+                                android:id="@+id/btn_add"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/add_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="add"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/thriftSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Submit"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/thriftRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section for Dj Details-->
+            <LinearLayout
+                android:id="@+id/addDjDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Sound system details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddDj"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeDj"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/djDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/djPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/dj_icon" />
+                        <ImageButton
+                            android:id="@+id/addDjPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Company name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:inputType="text"
+                        android:layout_margin="5dp"
+                        android:hint="Company name"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Social media handle"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/social_media_dj"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Social media"
+                        android:inputType="text"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:lines="3"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Price per hour"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/price_dj"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Price per hour"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:text="Sound sytem package"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+                        <Spinner
+                            android:id="@+id/spinner_dj_services"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/sound_services"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/djSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Submit"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/soundRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section to Add Decoration Company Details -->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/addDecorationDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Add Decoration Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddDecoration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeDecoration"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/decorationDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Decoration company name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/decorationRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section to Add Content Creator Page -->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/addContentCreatorDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Add Influencer Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddInfluencer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeInfluencer"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/influencerDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Influencer name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/influencerRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- Section to Add Sponsor Details -->
+            <LinearLayout
+                android:id="@+id/addSponsorDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Add Sponsor Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp"/>
+                    <Button
+                        android:id="@+id/seeAddSponsor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="Add Details"
+                        android:textColor="@color/black"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeSponsor"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/sponsorDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sponsor name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sponsorRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

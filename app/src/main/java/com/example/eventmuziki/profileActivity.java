@@ -67,7 +67,6 @@ public class profileActivity extends AppCompatActivity {
         back = findViewById(R.id.back_arrow);
 
         imageView = findViewById(R.id.imageView);
-
         logout = findViewById(R.id.logoutBtn);
         aboutMe = findViewById(R.id.about);
         edit = findViewById(R.id.editProfileBtn);
@@ -89,7 +88,7 @@ public class profileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), startActivity.class);
+                Intent intent = new Intent(getApplicationContext(), loginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();

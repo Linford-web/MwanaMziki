@@ -7,13 +7,13 @@ import androidx.annotation.NonNull;
 
 public class biddersEventModel implements Parcelable {
 
-    String eventName, eventDetails, date, time, location, bidAmount, eventId, creatorID, bidId, category, biddersId, organizerName, biddersName;
+    String eventName, eventDetails, date, time, location, bidAmount, eventId, creatorID, bidId, userCategory, biddersId, organizerName, biddersName;
 
     public biddersEventModel() {
         // Default constructor required for Firestore
     }
 
-    public biddersEventModel(String eventName, String eventDetails, String date, String time, String location, String bidAmount, String eventId, String creatorID, String bidId, String category, String biddersId, String organizerName, String biddersName) {
+    public biddersEventModel(String eventName, String eventDetails, String date, String time, String location, String bidAmount, String eventId, String creatorID, String bidId, String userCategory, String biddersId, String organizerName, String biddersName) {
         this.eventName = eventName;
         this.eventDetails = eventDetails;
         this.date = date;
@@ -23,7 +23,7 @@ public class biddersEventModel implements Parcelable {
         this.eventId = eventId;
         this.creatorID = creatorID;
         this.bidId = bidId;
-        this.category = category;
+        this.userCategory = userCategory;
         this.biddersId = biddersId;
         this.organizerName = organizerName;
         this.biddersName = biddersName;
@@ -102,12 +102,12 @@ public class biddersEventModel implements Parcelable {
         this.bidId = bidId;
     }
 
-    public String getCategory() {
-        return category;
+    public String getUserCategory() {
+        return userCategory;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setUserCategory(String userCategory) {
+        this.userCategory = userCategory;
     }
 
     public String getBiddersId() {
@@ -144,7 +144,7 @@ public class biddersEventModel implements Parcelable {
         eventId = in.readString();
         creatorID = in.readString();
         bidId = in.readString();
-        category = in.readString();
+        userCategory = in.readString();
         biddersId = in.readString();
         organizerName = in.readString();
         biddersName = in.readString();
@@ -178,7 +178,7 @@ public class biddersEventModel implements Parcelable {
         dest.writeString(eventId);
         dest.writeString(creatorID);
         dest.writeString(bidId);
-        dest.writeString(category);
+        dest.writeString(userCategory);
         dest.writeString(biddersId);
         dest.writeString(organizerName);
         dest.writeString(biddersName);

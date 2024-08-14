@@ -96,6 +96,7 @@ public class viewAdvert extends AppCompatActivity {
                                 if (eventPoster != null && !eventPoster.isEmpty()) {
                                     Glide.with(viewAdvert.this)
                                             .load(eventPoster)
+                                            .centerCrop()
                                             .placeholder(R.drawable.cover)
                                             .error(R.drawable.poster1)
                                             .into(poster);

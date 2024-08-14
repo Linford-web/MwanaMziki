@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EventMuziki</string>
+    <string name="app_name">ASAP</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -43,11 +43,10 @@
     <string name="eventmziki">EventMziki</string>
     <string name="bid_amount">Bid Amount</string>
     <string-array name="event_Category">
-        <item>Sports event</item>
-        <item>Church event</item>
-        <item>Music event</item>
-        <item>Club event</item>
-        <item>Weddings</item>
+        <item>Sports</item>
+        <item>Church</item>
+        <item>Music</item>
+        <item>Wedding</item>
         <item>Graduation</item>
         <item>Cinematography</item>
         <item>Other</item>
@@ -67,19 +66,58 @@
     <string-array name="User_Category">
         <item>Musician</item>
         <item>Car Rental</item>
-        <item>Dj</item>
+        <item>Sound</item>
         <item>Catering</item>
-        <item>Costume Designer</item>
-        <item>Make Up Artist</item>
+        <item>Costumes</item>
+        <item>Influencers</item>
         <item>Photographer</item>
-        <item>Music Systems</item>
+        <item>Decorations</item>
+        <item>Sponsors</item>
     </string-array>
     <string-array name="Car_Rental">
+        <item>All Cars</item>
         <item>Luxury Cars</item>
         <item>Economy Cars</item>
         <item>Business Cars</item>
         <item>Bikes</item>
-        <item>Classic Cars</item>
+        <item>Electric</item>
     </string-array>
-
+    <string-array name="car_type">
+        <item>Sedans</item>
+        <item>Coupes</item>
+        <item>Hatchbacks</item>
+        <item>SUVs</item>
+        <item>Minivans</item>
+        <item>Pickup Trucks</item>
+    </string-array>
+    <string-array name="transmission">
+        <item>Manual</item>
+        <item>Automatic</item>
+        <item>Electric</item>
+        <item>Auto/Manual</item>
+    </string-array>
+    <string-array name="seats">
+        <item>2</item>
+        <item>4</item>
+        <item>5</item>
+        <item>7</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="catering_type">
+        <item>Half Board</item>
+        <item>Full Board</item>
+        <item>Cake Moment</item>
+    </string-array>
+    <string-array name="size">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Extra Large</item>
+    </string-array>
+    <string-array name="sound_services">
+        <item>DJ</item>
+        <item>System</item>
+        <item>Full Board</item>
+        <item>Event Management</item>
+    </string-array>
 </resources>

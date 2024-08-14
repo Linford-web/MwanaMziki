@@ -73,7 +73,7 @@ public class editProfile extends AppCompatActivity {
 
         // Initialize ArrayAdapter and set it to the Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.event_Category, android.R.layout.simple_spinner_item);
+                R.array.User_Category, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         category.setAdapter(adapter);
 
@@ -210,7 +210,6 @@ public class editProfile extends AppCompatActivity {
 
             }
         });
-
         // check user access level
         checkUserAccessLevel();
 

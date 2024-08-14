@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.eventModel;
+import com.example.eventmuziki.Models.serviceModels.serviceDetailModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,15 +59,15 @@ import java.util.Locale;
 
 public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageButton backArrow, cancel;
-    Button addPoster, addEvent, bookCar, bookPhotography, bookCatering, bookCostumes, bookPaSystem;
+    ImageButton backArrow, cancel, cancel_icon;
+    Button addEvent;
     ImageView imageView,locationBtn;
     EditText inputTaskName, eventDetails, otherCategory;
-    TextView datePicker, timePicker, organizerName, titleTxt;
+    TextView datePicker, timePickerFrom, timePickerTo, organizerName, titleTxt;
     EditText amountTxt, location;
     FirebaseFirestore fStore;
-    String dueTime;
-    Spinner spinnerCategory, carSpinner;
+    String startTime, endTime;
+    Spinner spinnerCategory, carSpinner, soundSpinner, cateringSpinner;
     FirebaseStorage fStorage;
 
     Uri imageUri = null;
@@ -75,18 +77,21 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     LatLng selectedLocation;
     ScrollView scrollView;
     RelativeLayout searchMap, locationMap;
+    ImageButton editBtn, addPosterBtn, deleteBtn;
 
-    LinearLayout carRental, photography, catering, costumes, paSystem,
-            carRentalDetails, photographyDetails, cateringDetails,
-            costumesDetails, paSystemDetails;
+    LinearLayout carRental, photography, catering, costumes, paSystem,decorations, contentCreators, sponsors,
+            carRentalDetails, photographyDetails, cateringDetails, costumesDetails, paSystemDetails, decoDetails, contentDetails, sponsorsDetails;
 
-    TextView carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt;
-    ImageView carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon;
+    TextView carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, viewAllServices, decorTxt, contentTxt, sponsorsTxt;
+    ImageView carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon;
 
     EditText pickUpLocation, dropOffLocation, pickUpDate, dropOffDate,
             event_location, event_date, duration, price, costumeType, costumeSize, costumeQuantity,
             cateringLocation, cateringDate, guestNumber, cuisineType,
-            djLocation, djDate, djDuration;
+            djLocation, djDate, djDuration,
+            decoLocation, decoDate, decoDuration, decoPrice,
+            creatorName, creatorSocials, contentDuration, contentPrice,
+            sponsorEventCategory, sponsorsLocation, currentSponsor, sponsorsPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,75 +102,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(v -> finish());
 
-        addPoster = findViewById(R.id.addPosterBtn);
-        imageView = findViewById(R.id.eventPoster);
-        inputTaskName = findViewById(R.id.inputTaskName);
-        eventDetails = findViewById(R.id.eventDetails);
-        datePicker = findViewById(R.id.datePicker);
-        timePicker = findViewById(R.id.timePicker);
-        locationBtn = findViewById(R.id.LocationBtn);
-        amountTxt = findViewById(R.id.amountTxt);
-        addEvent = findViewById(R.id.add_event);
-        organizerName = findViewById(R.id.organizerNameTv);
-        spinnerCategory = findViewById(R.id.spinner_category);
-        cancel = findViewById(R.id.cancel_search_location);
-        titleTxt = findViewById(R.id.titleTv);
-        scrollView = findViewById(R.id.scroll_view);
-        locationMap = findViewById(R.id.location_map);
-        location = findViewById(R.id.locationTxt);
-        otherCategory = findViewById(R.id.other_category);
-        carSpinner = findViewById(R.id.car_spinner);
-
-        carRental = findViewById(R.id.carRental);
-        photography = findViewById(R.id.photography);
-        catering = findViewById(R.id.catering);
-        costumes = findViewById(R.id.costumes);
-        paSystem = findViewById(R.id.paSystem);
-        carRentalDetails = findViewById(R.id.carRentalDetails);
-        photographyDetails = findViewById(R.id.photographyDetails);
-        cateringDetails = findViewById(R.id.cateringDetails);
-        costumesDetails = findViewById(R.id.costumesDetails);
-        paSystemDetails = findViewById(R.id.paSystemDetails);
-
-        carTxt = findViewById(R.id.carTxt);
-        photographyTxt = findViewById(R.id.photographyTxt);
-        cateringTxt = findViewById(R.id.cateringTxt);
-        costumesTxt = findViewById(R.id.costumeTxt);
-        paSystemTxt = findViewById(R.id.paSystemTxt);
-        carIcon = findViewById(R.id.carIcon);
-        photographyIcon = findViewById(R.id.photographyIcon);
-        cateringIcon = findViewById(R.id.cateringIcon);
-        costumesIcon = findViewById(R.id.costumeIcon);
-        paSystemIcon = findViewById(R.id.paSystemIcon);
-
-        pickUpLocation = findViewById(R.id.pickUpLocation);
-        dropOffLocation = findViewById(R.id.dropOffLocation);
-        pickUpDate = findViewById(R.id.pickUpDate);
-        dropOffDate = findViewById(R.id.dropOffDate);
-
-        event_location = findViewById(R.id.photography_location);
-        event_date = findViewById(R.id.photography_date);
-        duration = findViewById(R.id.photography_duration);
-        price = findViewById(R.id.price);
-
-        cateringLocation = findViewById(R.id.catering_location);
-        cateringDate = findViewById(R.id.catering_date);
-        guestNumber = findViewById(R.id.number_of_guests);
-        cuisineType = findViewById(R.id.cuisine_type);
-
-        costumeType = findViewById(R.id.costume_type);
-        costumeSize = findViewById(R.id.size);
-        costumeQuantity = findViewById(R.id.quantity);
-
-        djLocation = findViewById(R.id.dj_location);
-        djDate = findViewById(R.id.dj_date);
-        djDuration = findViewById(R.id.dj_duration);
-
-        bookCar = findViewById(R.id.bookCar);
-        bookPhotography = findViewById(R.id.bookPhotography);
-        bookCatering = findViewById(R.id.bookCatering);
-        bookCostumes = findViewById(R.id.bookCostumes);
-        bookPaSystem = findViewById(R.id.bookDj);
+        InitializeViews();
 
         fStore = FirebaseFirestore.getInstance();
         fStorage = FirebaseStorage.getInstance();
@@ -173,19 +110,8 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        bookCar.setOnClickListener(v -> {
-            startActivity(new Intent(addEvents.this, categoryOptions.class));
-        });
-        bookPhotography.setOnClickListener(v -> {
-            startActivity(new Intent(addEvents.this, categoryOptions.class));
-        });
-        bookCatering.setOnClickListener(v -> {
-            startActivity(new Intent(addEvents.this, categoryOptions.class));
-        });
-        bookCostumes.setOnClickListener(v -> {
-            startActivity(new Intent(addEvents.this, categoryOptions.class));
-            });
-        bookPaSystem.setOnClickListener(v -> {
+
+        viewAllServices.setOnClickListener(v -> {
             startActivity(new Intent(addEvents.this, categoryOptions.class));
         });
 
@@ -263,10 +189,54 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
-        timePicker.setOnClickListener(new View.OnClickListener() {
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.sound_services, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        soundSpinner.setAdapter(adapter2);
+
+        soundSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedCategory = adapterView.getItemAtPosition(i).toString();
+                // Do something with the selected category
+                Log.d("Selected Category", selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // set text to empty if nothing is selected
+                Log.d("Selected Category", "Nothing selected");
+            }
+        });
+
+        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this, R.array.catering_type, android.R.layout.simple_spinner_item);
+        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cateringSpinner.setAdapter(adapter3);
+
+        cateringSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedCategory = adapterView.getItemAtPosition(i).toString();
+                // Do something with the selected category
+                Log.d("Selected Category", selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // set text to empty if nothing is selected
+                Log.d("Selected Category", "Nothing selected");
+            }
+        });
+
+        timePickerFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimeDialog();
+                openTimeDialogFrom();
+            }
+        });
+        timePickerTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTimeDialogTo();
             }
         });
         datePicker.setOnClickListener(new View.OnClickListener() {
@@ -286,15 +256,15 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 String eventName = inputTaskName.getText().toString();
                 String eventDetail = eventDetails.getText().toString();
                 String date = datePicker.getText().toString();
-                String time = timePicker.getText().toString();
+                String time = timePickerFrom.getText().toString()+" - "+timePickerTo.getText().toString();
                 String locations = location.getText().toString();
                 String amount = amountTxt.getText().toString();
                 String category = spinnerCategory.getSelectedItem().toString();
                 String organizer = organizerName.getText().toString();
 
-                if (eventName.isEmpty() || eventDetail.isEmpty() || date.isEmpty() || time.isEmpty() || amount.isEmpty()) {
+                if (eventName.isEmpty() || eventDetail.isEmpty() || date.isEmpty() || amount.isEmpty()) {
                         // Show an error message if any of the fields are empty
-                    Toast.makeText(addEvents.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(addEvents.this, "Please fill in required fields", Toast.LENGTH_SHORT).show();
 
                 } else {
 
@@ -312,20 +282,15 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                                 documentReference.update("creatorID", userId);
 
                                 if (imageUri != null) {
-                                    uploadEventPoster(documentReference);
-                                } else {
+                                    Log.d("Image URI", imageUri.toString());
 
-                                    // Ensures that the success_layout disappears after 1 seconds
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Intent intent = new Intent(addEvents.this, eventsActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    }, 2000);
-                                    Toast.makeText(addEvents.this, "Event Added", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(addEvents.this, "Event poster failed to upload successfully", Toast.LENGTH_SHORT).show();
                                 }
+                                uploadEventPoster(documentReference);
+                                Intent intent = new Intent(addEvents.this, eventsActivity.class);
+                                startActivity(intent);
+                                finish();
                                 // Add subcollections for other services if details are provided
                                 addSubCollections(documentReference);
 
@@ -338,7 +303,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
 
         });
-        addPoster.setOnClickListener(new View.OnClickListener() {
+        addPosterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImagePicker.with(addEvents.this)
@@ -349,6 +314,135 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPosterBtn.setVisibility(View.VISIBLE);
+                deleteBtn.setVisibility(View.VISIBLE);
+                editBtn.setVisibility(View.GONE);
+                cancel_icon.setVisibility(View.VISIBLE);
+            }
+        });
+        cancel_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPosterBtn.setVisibility(View.GONE);
+                deleteBtn.setVisibility(View.GONE);
+                editBtn.setVisibility(View.VISIBLE);
+                cancel_icon.setVisibility(View.GONE);
+            }
+        });
+
+        // fetch and display organizer name
+        fetchOrganizerName();
+        // category clicks
+        setupCategoryClicks();
+
+    }
+
+    private void InitializeViews() {
+
+        imageView = findViewById(R.id.eventPoster);
+        inputTaskName = findViewById(R.id.inputTaskName);
+        eventDetails = findViewById(R.id.eventDetails);
+        datePicker = findViewById(R.id.datePicker);
+        timePickerFrom = findViewById(R.id.timePickerFrom);
+        timePickerTo = findViewById(R.id.timePickerTo);
+        locationBtn = findViewById(R.id.LocationBtn);
+        amountTxt = findViewById(R.id.amountTxt);
+        addEvent = findViewById(R.id.add_event);
+        organizerName = findViewById(R.id.organizerNameTv);
+        spinnerCategory = findViewById(R.id.spinner_category);
+        soundSpinner = findViewById(R.id.sound_Services);
+        cancel = findViewById(R.id.cancel_search_location);
+        titleTxt = findViewById(R.id.titleTv);
+        scrollView = findViewById(R.id.scroll_view);
+        locationMap = findViewById(R.id.location_map);
+        location = findViewById(R.id.locationTxt);
+        otherCategory = findViewById(R.id.other_category);
+        carSpinner = findViewById(R.id.car_spinner);
+        viewAllServices = findViewById(R.id.viewAllServices);
+        decorations = findViewById(R.id.decorations);
+        contentCreators = findViewById(R.id.contentCreator);
+        sponsors = findViewById(R.id.sponsorship);
+
+        carRental = findViewById(R.id.carRental);
+        photography = findViewById(R.id.photography);
+        catering = findViewById(R.id.catering);
+        costumes = findViewById(R.id.costumes);
+        paSystem = findViewById(R.id.paSystem);
+        carRentalDetails = findViewById(R.id.carRentalDetails);
+        photographyDetails = findViewById(R.id.photographyDetails);
+        cateringDetails = findViewById(R.id.cateringDetails);
+        costumesDetails = findViewById(R.id.costumesDetails);
+        paSystemDetails = findViewById(R.id.paSystemDetails);
+        decoDetails = findViewById(R.id.decorationDetails);
+        contentDetails = findViewById(R.id.contentCreatorsDetails);
+        sponsorsDetails = findViewById(R.id.sponsorshipDetails);
+        cateringSpinner = findViewById(R.id.cateringServices);
+
+        carTxt = findViewById(R.id.carTxt);
+        photographyTxt = findViewById(R.id.photographyTxt);
+        cateringTxt = findViewById(R.id.cateringTxt);
+        costumesTxt = findViewById(R.id.costumeTxt);
+        paSystemTxt = findViewById(R.id.paSystemTxt);
+        carIcon = findViewById(R.id.carIcon);
+        photographyIcon = findViewById(R.id.photographyIcon);
+        cateringIcon = findViewById(R.id.cateringIcon);
+        costumesIcon = findViewById(R.id.costumeIcon);
+        paSystemIcon = findViewById(R.id.paSystemIcon);
+        decorTxt = findViewById(R.id.decoTxt);
+        contentTxt = findViewById(R.id.contentTxt);
+        sponsorsTxt = findViewById(R.id.sponsorshipTxt);
+        contentIcon = findViewById(R.id.contentIcon);
+        sponsorsIcon = findViewById(R.id.sponsorshipIcon);
+        decorIcon = findViewById(R.id.decoIcon);
+        editBtn = findViewById(R.id.edit_poster);
+        addPosterBtn = findViewById(R.id.addPosterBtn);
+        deleteBtn = findViewById(R.id.delete_poster);
+        cancel_icon = findViewById(R.id.cancel_edit);
+
+        pickUpLocation = findViewById(R.id.pickUpLocation);
+        dropOffLocation = findViewById(R.id.dropOffLocation);
+        pickUpDate = findViewById(R.id.pickUpDate);
+        dropOffDate = findViewById(R.id.dropOffDate);
+
+        event_location = findViewById(R.id.photography_location);
+        event_date = findViewById(R.id.photography_date);
+        duration = findViewById(R.id.photography_duration);
+        price = findViewById(R.id.price);
+
+        cateringLocation = findViewById(R.id.catering_location);
+        cateringDate = findViewById(R.id.catering_date);
+        guestNumber = findViewById(R.id.number_of_guests);
+        cuisineType = findViewById(R.id.cuisine_type);
+
+        costumeType = findViewById(R.id.costume_type);
+        costumeSize = findViewById(R.id.size);
+        costumeQuantity = findViewById(R.id.quantity);
+
+        djLocation = findViewById(R.id.dj_location);
+        djDate = findViewById(R.id.dj_date);
+        djDuration = findViewById(R.id.dj_duration);
+
+        decoLocation = findViewById(R.id.deco_location);
+        decoDate = findViewById(R.id.deco_date);
+        decoDuration = findViewById(R.id.deco_duration);
+        decoPrice = findViewById(R.id.deco_price);
+
+        creatorName = findViewById(R.id.creatorName);
+        creatorSocials = findViewById(R.id.creatorSocials);
+        contentDuration = findViewById(R.id.creator_duration);
+        contentPrice = findViewById(R.id.creator_price);
+
+        sponsorEventCategory = findViewById(R.id.sponsor_category);
+        currentSponsor = findViewById(R.id.sponsor_current);
+        sponsorsLocation = findViewById(R.id.sponsor_location);
+        sponsorsPrice = findViewById(R.id.sponsor_amount);
+
+    }
+
+    private void setupCategoryClicks() {
         carRental.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,18 +452,27 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
                 costumesTxt.setTextColor(getResources().getColor(R.color.black));
                 paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
                 carIcon.setColorFilter(getResources().getColor(R.color.orange));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
                 costumesIcon.setColorFilter(getResources().getColor(R.color.black));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.VISIBLE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
 
             }
         });
@@ -381,18 +484,27 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
                 costumesTxt.setTextColor(getResources().getColor(R.color.black));
                 paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.orange));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
                 costumesIcon.setColorFilter(getResources().getColor(R.color.black));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 carRentalDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.VISIBLE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
             }
         });
         catering.setOnClickListener(new View.OnClickListener() {
@@ -403,18 +515,27 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 cateringTxt.setTextColor(getResources().getColor(R.color.orange));
                 costumesTxt.setTextColor(getResources().getColor(R.color.black));
                 paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.orange));
                 costumesIcon.setColorFilter(getResources().getColor(R.color.black));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.VISIBLE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
             }
         });
         costumes.setOnClickListener(new View.OnClickListener() {
@@ -425,19 +546,28 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
                 costumesTxt.setTextColor(getResources().getColor(R.color.orange));
                 paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
                 costumesIcon.setColorFilter(getResources().getColor(R.color.orange));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.VISIBLE);
-                }
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
+            }
         });
         paSystem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -447,42 +577,145 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
                 costumesTxt.setTextColor(getResources().getColor(R.color.black));
                 paSystemTxt.setTextColor(getResources().getColor(R.color.orange));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.orange));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
                 costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.VISIBLE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
             }
         });
+        decorations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        // fetch and display organizer name
-        fetchOrganizerName();
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.orange));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.orange));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                decoDetails.setVisibility(View.VISIBLE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
+
+            }
+        });
+        contentCreators.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.orange));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
+
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.orange));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.VISIBLE);
+                sponsorsDetails.setVisibility(View.GONE);
+            }
+        });
+        sponsors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.orange));
+
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.orange));
+
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.VISIBLE);
+
+            }
+        });
     }
 
     private void addSubCollections(DocumentReference documentReference) {
+        CollectionReference servicesCollection = documentReference.collection("EventServices");
+
         // Add Car Rental subcollection
         String pickUpLocationText = pickUpLocation.getText().toString();
         String dropOffLocationText = dropOffLocation.getText().toString();
         String pickUpDateText = pickUpDate.getText().toString();
         String dropOffDateText = dropOffDate.getText().toString();
+        String carType = carSpinner.getSelectedItem().toString();
         if (!pickUpLocationText.isEmpty() && !dropOffLocationText.isEmpty() && !pickUpDateText.isEmpty() && !dropOffDateText.isEmpty()) {
-            HashMap<String, Object> carRentalDetails = new HashMap<>();
-            carRentalDetails.put("pickUpLocation", pickUpLocationText);
-            carRentalDetails.put("dropOffLocation", dropOffLocationText);
-            carRentalDetails.put("pickUpDate", pickUpDateText);
-            carRentalDetails.put("dropOffDate", dropOffDateText);
-
-            documentReference.collection("CarRental").add(carRentalDetails)
-                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Car rental details added"))
-                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add car rental details"));
+            serviceDetailModel.carHire cars = new serviceDetailModel.carHire(pickUpLocationText, dropOffLocationText, pickUpDateText, dropOffDateText, carType,"Car Rental");
+            servicesCollection.add(cars).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Car Rental details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add car rental details");
+            });
         }
 
         // Add Photography subcollection
@@ -491,31 +724,28 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         String eventDateText = event_date.getText().toString();
         String durationText = duration.getText().toString();
         if (!priceText.isEmpty() && !eventLocationText.isEmpty() && !eventDateText.isEmpty() && !durationText.isEmpty()) {
-            HashMap<String, Object> photographyDetails = new HashMap<>();
-            photographyDetails.put("price", priceText);
-            photographyDetails.put("photography_location", eventLocationText);
-            photographyDetails.put("photography_date", eventDateText);
-            photographyDetails.put("duration", durationText);
-
-            documentReference.collection("Photography").add(photographyDetails)
-                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Photography details added"))
-                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add photography details"));
+            serviceDetailModel.hirePhotographer photographer = new serviceDetailModel.hirePhotographer(priceText, eventLocationText, eventDateText, durationText, "Photographer");
+            servicesCollection.add(photographer).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Photography details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add photography details");
+            });
         }
 
         // Add Catering subcollection
         String cateringLocationText = cateringLocation.getText().toString();
         String cateringDateText = cateringDate.getText().toString();
         String guestNumberText = guestNumber.getText().toString();
+        String cuisineTypeText = cuisineType.getText().toString();
+        String cateringType = cateringSpinner.getSelectedItem().toString();
         if (!cateringLocationText.isEmpty() && !cateringDateText.isEmpty() && !guestNumberText.isEmpty()) {
-            HashMap<String, Object> cateringDetails = new HashMap<>();
-            cateringDetails.put("cateringLocation", cateringLocationText);
-            cateringDetails.put("cateringDate", cateringDateText);
-            cateringDetails.put("guestNumber", guestNumberText);
-            cateringDetails.put("cuisineType", cuisineType.getText().toString());
 
-            documentReference.collection("Catering").add(cateringDetails)
-                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Catering details added"))
-                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add catering details"));
+            serviceDetailModel.hireCatering catering = new serviceDetailModel.hireCatering(cateringLocationText, cateringDateText, guestNumberText, cuisineTypeText, cateringType,"Catering");
+            servicesCollection.add(catering).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Catering details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add catering details");
+            });
         }
 
         // Add Costumes subcollection
@@ -523,34 +753,72 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         String costumeSizeText = costumeSize.getText().toString();
         String costumeQuantityText = costumeQuantity.getText().toString();
         if (!costumeTypeText.isEmpty() && !costumeSizeText.isEmpty() && !costumeQuantityText.isEmpty()) {
-            HashMap<String, Object> costumesDetails = new HashMap<>();
-            costumesDetails.put("costumeType", costumeTypeText);
-            costumesDetails.put("costumeSize", costumeSizeText);
-            costumesDetails.put("costumeQuantity", costumeQuantityText);
 
-            documentReference.collection("Costumes").add(costumesDetails)
-                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "Costumes details added"))
-                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add costumes details"));
+            serviceDetailModel.hireCostumes hireCostumes = new serviceDetailModel.hireCostumes(costumeTypeText, costumeSizeText, costumeQuantityText, "Costumes");
+            servicesCollection.add(hireCostumes).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Costumes details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add costumes details");
+            });
         }
 
         // Add PA System subcollection
         String djLocationText = djLocation.getText().toString();
         String djDateText = djDate.getText().toString();
         String djDurationText = djDuration.getText().toString();
+        String soundSpin = soundSpinner.getSelectedItem().toString();
         if (!djLocationText.isEmpty() && !djDateText.isEmpty() && !djDurationText.isEmpty()) {
-            HashMap<String, Object> paSystemDetails = new HashMap<>();
-            paSystemDetails.put("djLocation", djLocationText);
-            paSystemDetails.put("djDate", djDateText);
-            paSystemDetails.put("djDuration", djDurationText);
 
-            documentReference.collection("DjSystem").add(paSystemDetails)
-                    .addOnSuccessListener(documentRef -> Log.d("Subcollection", "PA system details added"))
-                    .addOnFailureListener(e -> Log.d("Subcollection", "Failed to add PA system details"));
+            serviceDetailModel.hirePA hirePA = new serviceDetailModel.hirePA(djLocationText, djDateText, djDurationText, soundSpin, "Sound");
+            servicesCollection.add(hirePA).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "PA system details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add PA system details");
+            });
         }
 
-        // Add other services subcollection
-        String otherServices = inputTaskName.getText().toString();
+        // Add Decorations subcollection
+        String decorationLocationText = decoLocation.getText().toString();
+        String decorationDateText = decoDate.getText().toString();
+        String decorationDurationText = decoDuration.getText().toString();
+        String decorationPriceText = decoPrice.getText().toString();
+        if (!decorationLocationText.isEmpty() && !decorationDateText.isEmpty() && !decorationDurationText.isEmpty() && !decorationPriceText.isEmpty()) {
+            serviceDetailModel.hireDeco hireDecorations = new serviceDetailModel.hireDeco(decorationLocationText, decorationDateText, decorationDurationText, decorationPriceText, "Decorations");
+            servicesCollection.add(hireDecorations).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Decorations details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add decorations details");
+            });
 
+        }
+
+        // Add Content Creators subcollection
+        String creatorNameText = creatorName.getText().toString();
+        String creatorSocialsText = creatorSocials.getText().toString();
+        String contentDurationText = contentDuration.getText().toString();
+        String contentPriceText = contentPrice.getText().toString();
+        if (!creatorNameText.isEmpty() && !creatorSocialsText.isEmpty() && !contentDurationText.isEmpty() && !contentPriceText.isEmpty()) {
+            serviceDetailModel.hireContent hireContent = new serviceDetailModel.hireContent(creatorNameText, creatorSocialsText, contentDurationText, contentPriceText, "Influencers");
+            servicesCollection.add(hireContent).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Content Creators details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add content creators details");
+            });
+        }
+
+        // Add Sponsors subcollection
+        String sponsorsEventCategory = sponsorEventCategory.getText().toString();
+        String currentSponsorText = currentSponsor.getText().toString();
+        String sponsorLocationText = sponsorsLocation.getText().toString();
+        String sponsorPriceText = sponsorsPrice.getText().toString();
+        if (!sponsorsEventCategory.isEmpty() && !currentSponsorText.isEmpty() && !sponsorLocationText.isEmpty() && !sponsorPriceText.isEmpty()) {
+            serviceDetailModel.hireSponsors hireSponsors = new serviceDetailModel.hireSponsors(sponsorsEventCategory, currentSponsorText, sponsorLocationText, sponsorPriceText, "Sponsors");
+            servicesCollection.add(hireSponsors).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Sponsors details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add sponsors details");
+            });
+        }
     }
 
     @Override
@@ -584,22 +852,8 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                Toast.makeText(addEvents.this, "Event poster updated successfully", Toast.LENGTH_SHORT).show();
+                                                Log.d("EventPoster", "Event poster updated successfully");
                                                 Glide.with(addEvents.this).load(imageUrl).into(imageView);
-
-                                                // Ensures that the success_layout disappears after 1 seconds
-                                                new Handler().postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Intent intent = new Intent(addEvents.this, eventsActivity.class);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    }
-                                                }, 2000);
-                                                Toast.makeText(addEvents.this, "Event Added", Toast.LENGTH_SHORT).show();
-
-
-
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -650,7 +904,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 // Note: month is 0-based, so add 1 to it if you want a 1-based month
-                datePicker.setText(String.format("%s : %s : %s", String.valueOf(year), String.valueOf(month + 1), String.valueOf(dayOfMonth)));
+                datePicker.setText(String.format("%s : %s : %s",String.valueOf(dayOfMonth), String.valueOf(month + 1), String.valueOf(year)));
             }
         },year,month,day);
         // Set the minimum date to the current date
@@ -658,16 +912,29 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         dialog.show();
     }
 
-    private void openTimeDialog() {
+    private void openTimeDialogFrom() {
         // Show another TimePickerDialog to select the end time
         TimePickerDialog endTimeDialog = new TimePickerDialog(addEvents.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int endHourOfDay, int endMinute) {
-                dueTime = String.valueOf(endHourOfDay) + " : " + String.valueOf(endMinute);
+                startTime = String.valueOf(endHourOfDay) + " : " + String.valueOf(endMinute);
                 // Display the selected time span or update UI as needed
-                timePicker.setText(dueTime);
+                timePickerFrom.setText(startTime);
             }
-        },12, 10,true);
+        },12, 00,true);
+        endTimeDialog.show();
+    }
+
+    private void openTimeDialogTo() {
+        // Show another TimePickerDialog to select the end time
+        TimePickerDialog endTimeDialog = new TimePickerDialog(addEvents.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int endHourOfDay, int endMinute) {
+                endTime = String.valueOf(endHourOfDay) + " : " + String.valueOf(endMinute);
+                // Display the selected time span or update UI as needed
+                timePickerTo.setText(endTime);
+            }
+        },12, 00,true);
         endTimeDialog.show();
     }
 

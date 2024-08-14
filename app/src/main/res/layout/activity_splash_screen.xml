@@ -13,62 +13,22 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="horizontal">
+            android:layout_height="260dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/asaplogo" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:letterSpacing="0.1"
-                android:text="M"
-                android:textAlignment="center"
-                android:textColor="@color/yellow"
-                android:textSize="50sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="casual"
-                android:letterSpacing="0.1"
-                android:text="M"
-                android:textAlignment="center"
-                android:textColor="@color/blue"
-                android:textSize="50sp"
-                android:textStyle="italic" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="monospace"
-                android:letterSpacing="0.1"
-                android:text="z"
-                android:textAlignment="center"
-                android:textColor="@color/orange"
-                android:textSize="50sp"
-                android:textStyle="italic" />
-
-        </LinearLayout>
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:progressTint="@color/green">
-
-        </ProgressBar>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:text="Product of Mwana Muziki"
+        android:layout_marginBottom="40dp"
+        android:text="Product of Alphest"
         android:textAlignment="center"
-        android:textColor="@color/blue"
+        android:textColor="@color/orange"
         android:textSize="16sp"/>
 
 </RelativeLayout>

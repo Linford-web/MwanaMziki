@@ -80,6 +80,7 @@ public class advertAdapter extends RecyclerView.Adapter<advertAdapter.ViewHolder
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.itemView.getContext())
                                         .load(eventPoster)
+                                        .centerCrop()
                                         .into(holder.advertPoster);
                             }
                         }

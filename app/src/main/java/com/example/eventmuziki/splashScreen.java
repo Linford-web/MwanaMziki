@@ -45,7 +45,7 @@ public class splashScreen extends AppCompatActivity {
                     startDashboardActivity();
                 } else {
 
-                Intent intent = new Intent(splashScreen.this, startActivity.class);
+                Intent intent = new Intent(splashScreen.this, loginActivity.class);
                 startActivity(intent);
                 finish();
 
@@ -65,8 +65,9 @@ public class splashScreen extends AppCompatActivity {
                     if (userType.equals("Corporate") || userType.equals("Musician")) {
                         // User is Corporate or Musician
                         startActivity(new Intent(getApplicationContext(), MainDashboard.class));
+                        finishAffinity();
                         finish();
-                        Toast.makeText(splashScreen.this, "Welcome", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "Welcome " + userType );
                     } else {
                         // Handle other user types if needed
                         Log.d("TAG", "User is neither Corporate nor Musician");
@@ -80,7 +81,9 @@ public class splashScreen extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), startActivity.class));
+                startActivity(new Intent(getApplicationContext(), loginActivity.class));
+                // clear the back stack
+                finishAffinity();
                 finish();
             }
         });

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,18 +16,23 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmuziki.Adapters.bidEventsAdapter;
 import com.example.eventmuziki.Adapters.bookedEventsAdapter;
 import com.example.eventmuziki.Adapters.categoryAdapter;
+import com.example.eventmuziki.Adapters.categoryMenuAdapter;
+import com.example.eventmuziki.Adapters.dashAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
 import com.example.eventmuziki.Adapters.eventSearchAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.bookedEventsModel;
 import com.example.eventmuziki.Models.eventModel;
+import com.example.eventmuziki.Models.menuModel;
+import com.example.eventmuziki.Models.serviceNameModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,6 +49,7 @@ import java.util.Objects;
 
 public class eventsActivity extends AppCompatActivity {
 
+    String userId;
     FloatingActionButton addTask;
     ArrayList<eventModel> events, events2, events3;
     ArrayList<bookedEventsModel> booked;
@@ -54,18 +61,16 @@ public class eventsActivity extends AppCompatActivity {
     categoryAdapter categoryAdpt;
     FirebaseFirestore fStore;
 
+    ArrayList<menuModel> menuList;
+    categoryMenuAdapter menuAdapter;
+
     ImageButton backArrow,searchEventsBtn, cancelBtn, searchBtn, allBids, allBooked, cancelCategory;
     TextView title, categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt;
-    LinearLayout searchTv, menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, bookedEvents, viewBid, categoryLayout;
+    LinearLayout searchTv, menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, bookedEvents, viewBid, categoryLayout, menuCategoryLayout;;
     ScrollView scrollView;
     EditText searchTxt;
-    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView;
+    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv;;
     eventSearchAdapter eventSearch;
-    View allEventsView, bookedEventsView, bidEventsView;
-
-    LinearLayout sportsCategory, churchCategory, weddingCategory, musicCategory, graduationCategory, photographyCategory, otherCategory, categoryLayoutOptions;
-    TextView sportsTxt, churchTxt, weddingTxt, musicTxt, graduationTxt, photographyTxt, otherTxt;
-    ImageView sportsIcon, churchIcon, weddingIcon, musicIcon, graduationIcon, photographyIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +100,6 @@ public class eventsActivity extends AppCompatActivity {
         categoryTxt = findViewById(R.id.categoryTxt);
         categoryLayout = findViewById(R.id.categoryLayout);
         cancelCategory = findViewById(R.id.cancelCategory);
-        categoryLayoutOptions = findViewById(R.id.categoryLayoutOptions);
 
         viewAll = findViewById(R.id.allLayoutPg);
         viewBid = findViewById(R.id.bidEventsPg);
@@ -111,220 +115,29 @@ public class eventsActivity extends AppCompatActivity {
         allEventsTxt = findViewById(R.id.allEventsTxt);
         allBidsTxt = findViewById(R.id.bidEventTxt);
         allBookedTxt = findViewById(R.id.bookEventTxt);
+        menuCategoryLayout = findViewById(R.id.menuCategoryLayout);
 
-        allEventsView = findViewById(R.id.allEventsView);
-        bookedEventsView = findViewById(R.id.bookedEventsView);
-        bidEventsView = findViewById(R.id.bidEventsView);
-
-        sportsCategory = findViewById(R.id.sportsCategory);
-        churchCategory = findViewById(R.id.churchCategory);
-        weddingCategory = findViewById(R.id.weddingCategory);
-        musicCategory = findViewById(R.id.musicCategory);
-        graduationCategory = findViewById(R.id.graduationCategory);
-        photographyCategory = findViewById(R.id.photographyCategory);
-        otherCategory = findViewById(R.id.otherCategory);
-
-        sportsTxt = findViewById(R.id.sportsTxt);
-        churchTxt = findViewById(R.id.churchTxt);
-        weddingTxt = findViewById(R.id.weddingTxt);
-        musicTxt = findViewById(R.id.musicTxt);
-        graduationTxt = findViewById(R.id.graduationTxt);
-        photographyTxt = findViewById(R.id.photographyTxt);
-        otherTxt = findViewById(R.id.otherTxt);
-
-        sportsIcon = findViewById(R.id.sportsIcon);
-        churchIcon = findViewById(R.id.churchIcon);
-        weddingIcon = findViewById(R.id.weddingIcon);
-        musicIcon = findViewById(R.id.musicIcon);
-        graduationIcon = findViewById(R.id.graduationIcon);
-        photographyIcon = findViewById(R.id.photographyIcon);
+        categoryMenuRv = findViewById(R.id.categoriesRv);
+        //get user type
+        userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
 
-        sportsCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Sports");
-                sportsTxt.setTextColor(getResources().getColor(R.color.orange));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.orange));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        churchCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Church");
-                churchTxt.setTextColor(getResources().getColor(R.color.orange));
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.orange));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        weddingCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Wedding");
-                weddingTxt.setTextColor(getResources().getColor(R.color.orange));
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.orange));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        musicCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Music");
-                musicTxt.setTextColor(getResources().getColor(R.color.orange));
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.orange));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        graduationCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Graduation");
-                graduationTxt.setTextColor(getResources().getColor(R.color.orange));
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.orange));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        photographyCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Photography");
-                photographyTxt.setTextColor(getResources().getColor(R.color.orange));
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.orange));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        otherCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCategoryEvents("Other");
-                otherTxt.setTextColor(getResources().getColor(R.color.orange));
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                cancelCategory.setVisibility(View.VISIBLE);
-                allEvents.setVisibility(View.GONE);
-                categoryLayout.setVisibility(View.VISIBLE);
-            }
-        });
+
         cancelCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 categoryLayout.setVisibility(View.GONE);
                 cancelCategory.setVisibility(View.GONE);
                 allEvents.setVisibility(View.VISIBLE);
-                sportsTxt.setTextColor(getResources().getColor(R.color.black));
-                churchTxt.setTextColor(getResources().getColor(R.color.black));
-                weddingTxt.setTextColor(getResources().getColor(R.color.black));
-                musicTxt.setTextColor(getResources().getColor(R.color.black));
-                graduationTxt.setTextColor(getResources().getColor(R.color.black));
-                photographyTxt.setTextColor(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
-                sportsIcon.setColorFilter(getResources().getColor(R.color.black));
-                churchIcon.setColorFilter(getResources().getColor(R.color.black));
-                weddingIcon.setColorFilter(getResources().getColor(R.color.black));
-                musicIcon.setColorFilter(getResources().getColor(R.color.black));
-                graduationIcon.setColorFilter(getResources().getColor(R.color.black));
-                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
-                otherTxt.setTextColor(getResources().getColor(R.color.black));
 
             }
         });
 
 
+        setUpCategoryMenu();
+        menuAdapter = new categoryMenuAdapter(this, menuList);
+        categoryMenuRv.setLayoutManager(new GridLayoutManager(this, 4));
+        categoryMenuRv.setAdapter(menuAdapter);
 
         // Set up all Events RecyclerView
         events = new ArrayList<>();
@@ -365,6 +178,7 @@ public class eventsActivity extends AppCompatActivity {
         checkUserAccessLevel();
         // Fetch events from Firestore
         fetchEvents();
+        fetchEventsS(userId);
 
         backArrow.setOnClickListener(v -> {
             onBackPressed();
@@ -373,17 +187,17 @@ public class eventsActivity extends AppCompatActivity {
         viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 bidEvents.setVisibility(View.GONE);
                 bookedEvents.setVisibility(View.GONE);
                 allEvents.setVisibility(View.VISIBLE);
-                categoryLayoutOptions.setVisibility(View.VISIBLE);
+                cancelCategory.setVisibility(View.GONE);
+                addTask.setVisibility(View.VISIBLE);
+                menuCategoryLayout.setVisibility(View.VISIBLE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.orange));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBookedTxt.setTextColor(getResources().getColor(R.color.black));
-                allEventsView.setBackgroundColor(getResources().getColor(R.color.orange));
-                bookedEventsView.setBackgroundColor(getResources().getColor(R.color.gray));
-                bidEventsView.setBackgroundColor(getResources().getColor(R.color.gray));
                 // Fetch events from Firestore
                 fetchEvents();
 
@@ -396,15 +210,12 @@ public class eventsActivity extends AppCompatActivity {
                 bookedEvents.setVisibility(View.GONE);
                 allEvents.setVisibility(View.GONE);
                 addTask.setVisibility(View.GONE);
-                categoryLayoutOptions.setVisibility(View.GONE);
                 categoryLayout.setVisibility(View.GONE);
+                menuCategoryLayout.setVisibility(View.GONE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.orange));
                 allBookedTxt.setTextColor(getResources().getColor(R.color.black));
-                bidEventsView.setBackgroundColor(getResources().getColor(R.color.orange));
-                bookedEventsView.setBackgroundColor(getResources().getColor(R.color.gray));
-                allEventsView.setBackgroundColor(getResources().getColor(R.color.gray));
                 // Fetch booked events from Firestore
                 fetchBidEvents();
 
@@ -417,15 +228,12 @@ public class eventsActivity extends AppCompatActivity {
                 bookedEvents.setVisibility(View.VISIBLE);
                 allEvents.setVisibility(View.GONE);
                 addTask.setVisibility(View.GONE);
-                categoryLayoutOptions.setVisibility(View.GONE);
                 categoryLayout.setVisibility(View.GONE);
+                menuCategoryLayout.setVisibility(View.GONE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBookedTxt.setTextColor(getResources().getColor(R.color.orange));
-                bookedEventsView.setBackgroundColor(getResources().getColor(R.color.orange));
-                allEventsView.setBackgroundColor(getResources().getColor(R.color.gray));
-                bidEventsView.setBackgroundColor(getResources().getColor(R.color.gray));
                 // fetch booked events from Firestore
                 fetchBookedEvents();
             }
@@ -479,6 +287,11 @@ public class eventsActivity extends AppCompatActivity {
                 addTask.setVisibility(View.VISIBLE);
                 backArrow.setVisibility(View.VISIBLE);
                 cancelBtn.setVisibility(View.GONE);
+                // hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
             }
         });
 
@@ -494,9 +307,71 @@ public class eventsActivity extends AppCompatActivity {
             }
         });
 
+        menuAdapter.setOnItemClickListener(new categoryMenuAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String itemName) {
+                if (itemName.equals("Sports")) {
+                    fetchCategoryEvents("Sports");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+                if (itemName.equals("Church")) {
+                    fetchCategoryEvents("Church");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+                if (itemName.equals("Wedding")) {
+                    fetchCategoryEvents("Wedding");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+                if (itemName.equals("Music")) {
+                    fetchCategoryEvents("Music");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+                if (itemName.equals("Graduation")) {
+                    fetchCategoryEvents("Graduation");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+                if (itemName.equals("Photography")) {
+                    fetchCategoryEvents("Photography");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+                if (itemName.equals("Other")) {
+                    fetchCategoryEvents("Other");
+                    cancelCategory.setVisibility(View.VISIBLE);
+                    allEvents.setVisibility(View.GONE);
+                    categoryLayout.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+
+    }
+
+    private void setUpCategoryMenu() {
+        menuList = new ArrayList<>();
+        menuList.add(new menuModel(R.drawable.sport_icon, "Sports"));
+        menuList.add(new menuModel(R.drawable.church_icon, "Church"));
+        menuList.add(new menuModel(R.drawable.flower_icon, "Wedding"));
+        menuList.add(new menuModel(R.drawable.music_icon, "Music"));
+        menuList.add(new menuModel(R.drawable.grad_icon, "Graduation"));
+        menuList.add(new menuModel(R.drawable.camera_icon, "Photography"));
+        menuList.add(new menuModel(R.drawable.other_icon, "Other"));
     }
 
     private void fetchCategoryEvents(String category) {
+
         fStore.collection("Events")
                 .whereEqualTo("category", category)
                 .get()
@@ -508,6 +383,12 @@ public class eventsActivity extends AppCompatActivity {
                     }
                     categoryAdpt.notifyDataSetChanged();
                 }).addOnFailureListener(e -> Toast.makeText(eventsActivity.this, "Failed to fetch category events", Toast.LENGTH_SHORT).show());
+
+        if (category.equals("All")) {
+
+        }
+
+
     }
 
     private void setUpRecyclerView(String searchTerm) {
@@ -543,6 +424,7 @@ public class eventsActivity extends AppCompatActivity {
                         }
                     });
     }
+
     private void fetchEventsS(String userId) {
         fStore.collection("Events")
                 .whereEqualTo("creatorID", userId)
@@ -563,27 +445,6 @@ public class eventsActivity extends AppCompatActivity {
                     }
                 });
 
-
-    }
-    private void fetchSEvents(){
-        fStore.collection("Events")
-                .limit(6)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            eventModel event = documentSnapshot.toObject(eventModel.class);
-                            events2.add(event);
-                        }
-                        eventAdapters.notifyDataSetChanged();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(eventsActivity.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
     private void fetchBookedEvents() {
 
@@ -660,11 +521,7 @@ public class eventsActivity extends AppCompatActivity {
 
     private void checkUserAccessLevel() {
 
-        FirebaseAuth fAuth = FirebaseAuth.getInstance();
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-
-        //get user type
-        String userId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
 
         fStore.collection("Users")
                 .document(userId)
@@ -676,11 +533,8 @@ public class eventsActivity extends AppCompatActivity {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
                                addTask.setVisibility(View.VISIBLE);
-                                fetchEventsS(userId);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
-                                addTask.setVisibility(View.GONE);
-                                // Fetch events from Firestore
-                                fetchSEvents();
+                                addTask.setVisibility(View.VISIBLE);
                                 String category = document.getString("category");
                                 categoryTxt.setText(category);
                             } else {

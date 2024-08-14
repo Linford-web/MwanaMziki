@@ -30,6 +30,16 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
 
     ArrayList<biddersEventModel> bidders;
 
+    OnItemClickListner listener;
+
+    public interface OnItemClickListner {
+        void onItemClick(biddersEventModel bidder);
+    }
+
+    public void setOnItemClickListner(OnItemClickListner listener) {
+        this.listener = listener;
+    }
+
     public biddersAdapter(ArrayList<biddersEventModel> bidders) {
         this.bidders = bidders;
     }
