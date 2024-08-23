@@ -53,7 +53,7 @@ public class bookedEventsAdapter extends RecyclerView.Adapter<bookedEventsAdapte
     @Override
     public bookedEventsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_booked_events, parent, false);
+                .inflate(R.layout.item_event_view2, parent, false);
         return new ViewHolder(view);
     }
 

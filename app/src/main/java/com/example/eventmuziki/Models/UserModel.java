@@ -4,14 +4,17 @@ import android.os.Parcel;
 
 public class UserModel {
 
-    String  profilePicture, userID, name, email, phone;
+    String  profilePicture, userID, name, email, phone, userType, category;
 
-    public UserModel(String profilePicture, String userID, String name, String email, String phone) {
+    public UserModel(String profilePicture, String userID, String name, String email, String phone , String userType, String category) {
         this.profilePicture = profilePicture;
         this.userID = userID;
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.userType = userType;
+        this.category = category;
+
     }
 
     public UserModel() {
@@ -57,6 +60,20 @@ public class UserModel {
         this.phone = phone;
     }
 
+    public String getUserType() {
+        return userType;
+    }
 
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }
 

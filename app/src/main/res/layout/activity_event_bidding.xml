@@ -5,409 +5,430 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".eventBidding">
 
     <ImageView
         android:id="@+id/eventPoster"
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="250dp"
         android:scaleType="centerCrop"
         android:src="@drawable/cover"/>
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginTop="8dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@android:color/white">
+
+        <ImageButton
+            android:id="@+id/back_arrow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            app:tint="@color/red"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/back_arrow" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/eventPoster"
+        android:padding="3dp"
+        android:scrollbars="none"
+        android:id="@+id/scrollView">
 
         <LinearLayout
-            android:id="@+id/top_bar_nav"
-            android:layout_width="match_parent"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
-            <ImageView
-                android:id="@+id/back_arrow"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="start"
-                android:padding="5dp"
-                android:background="@drawable/round_bg"
-                android:src="@drawable/back_arrow"
-                app:tint="@color/red"
-                android:focusable="true" />
-        </LinearLayout>
-
-        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:padding="3dp"
-            android:scrollbars="none"
-            android:id="@+id/scrollView">
+            android:layout_margin="3dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp">
+
                 <TextView
                     android:id="@+id/eventNameTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/event_name"
                     android:textColor="@color/blue"
+                    android:layout_marginBottom="5dp"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/organizerNameTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/organizer_name"
-                            android:textColor="@color/blue"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_margin="5dp"
-                                app:tint="@color/orange"
-                                android:src="@drawable/event_small_icon"/>
-
-                            <TextView
-                                android:id="@+id/dateTv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/date"
-                                android:textSize="13sp"
-                                android:textColor="@color/orange"
-                                android:layout_margin="2dp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="70dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_margin="5dp"
-                                app:tint="@color/red"
-                                android:src="@drawable/clock_small_icon"/>
-
-                            <TextView
-                                android:id="@+id/timeTv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/time"
-                                android:textColor="@color/red" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_margin="5dp"
-                            app:tint="@color/blue"
-                            android:src="@drawable/list_icons"/>
-
-                        <TextView
-                            android:id="@+id/categoryTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/category"
-                            android:textColor="@color/black"
-                            android:layout_margin="2dp"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_margin="5dp"
-                            app:tint="@color/blue"
-                            android:src="@drawable/event_not_icon"/>
-
-                        <TextView
-                            android:id="@+id/eventDetailsTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/event_details"
-                            android:textColor="@color/black"
-                            android:layout_margin="7dp"
-                            android:layout_marginBottom="10dp"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_margin="5dp"
-                            app:tint="@color/dark_blue"
-                            android:src="@drawable/location_icon"/>
-
-                        <TextView
-                            android:id="@+id/locationTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/location"
-                            android:textColor="@color/black"
-                            android:layout_margin="7dp"
-                            android:layout_marginBottom="10dp"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="3dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/organizerNameTv"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Required Services"
+                        android:text="@string/organizer_name"
                         android:textColor="@color/black"
-                        android:layout_margin="5dp"
-                        android:textSize="15sp"
-                        android:textStyle="bold"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:id="@+id/serviceRequiredRv"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/categoryLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:id="@+id/category_bidderTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Category"
-                            android:textColor="@color/black"
-                            android:layout_marginEnd="5dp"
-                            android:textSize="15sp"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="event bidders"
-                            android:textColor="@color/black"
-                            android:textSize="15sp"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/view_all"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:layout_gravity="end"
-                            android:text="View all"
-                            android:layout_marginEnd="10dp"
-                            android:textColor="@color/black"
-                            />
-
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:id="@+id/biddersRv"/>
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/biddersLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/card_view"
-                    android:visibility="gone"
-                    android:layout_marginBottom="30dp"
-                    android:elevation="3dp"
-                    android:orientation="vertical"
-                    android:layout_margin="7dp">
-
-                    <TextView
-                        android:id="@+id/bidNameTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Bidder Name"
-                        android:textColor="@color/blue"
-                        android:layout_margin="7dp"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bid on"
-                            android:textColor="@color/orange"
-                            android:layout_margin="3dp"
-                            android:textSize="15sp"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/category_Tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/category"
-                            android:textColor="@color/orange"
-                            android:layout_margin="3dp"
-                            android:textSize="15sp"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Event"
-                            android:textColor="@color/orange"
-                            android:layout_margin="3dp"
-                            android:textSize="15sp"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="5dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:padding="1dp"
                             app:tint="@color/orange"
-                            android:src="@drawable/money_icon"/>
+                            android:src="@drawable/event_small_icon"/>
 
                         <TextView
-                            android:id="@+id/amountTv"
+                            android:id="@+id/dateTv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/amount"
+                            android:text="@string/date"
+                            android:textSize="13sp"
+                            android:paddingStart="3dp"
                             android:textColor="@color/black"
-                            android:layout_margin="7dp"
-                            android:layout_marginBottom="10dp"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:layout_margin="2dp" />
+
                     </LinearLayout>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Enter your amount"
-                        android:textColor="@color/black"
-                        android:layout_margin="7dp"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ksh"
-                            android:textStyle="bold"
-                            android:layout_margin="5dp"
-                            android:padding="7dp"
-                            android:letterSpacing="0.1"
-                            android:textSize="15sp"/>
-
-                        <EditText
-                            android:id="@+id/amountTxt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/edit_text_bg"
-                            android:hint="@string/amount"
-                            android:textStyle="bold"
-                            android:inputType="text"
-                            android:layout_margin="5dp"
-                            android:padding="7dp"
-                            android:letterSpacing="0.1"
-                            android:textSize="15sp"/>
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/placeBidBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_margin="5dp"
-                        android:padding="15dp"
-                        android:text="@string/place_bid"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:layout_marginEnd="70dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:padding="1dp"
+                            app:tint="@color/red"
+                            android:src="@drawable/clock_small_icon"/>
+
+                        <TextView
+                            android:id="@+id/timeTv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/time"
+                            android:paddingStart="3dp"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="1dp"
+                        app:tint="@color/blue"
+                        android:src="@drawable/list_icons"/>
+
+                    <TextView
+                        android:id="@+id/categoryTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category"
+                        android:paddingStart="3dp"
+                        android:textColor="@color/black"
+                        android:layout_margin="2dp"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="1dp"
+                        app:tint="@color/blue"
+                        android:src="@drawable/event_not_icon"/>
+
+                    <TextView
+                        android:id="@+id/eventDetailsTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_details"
+                        android:paddingStart="3dp"
+                        android:textColor="@color/black"
+                        android:maxLines="5"
+                        android:layout_marginBottom="3dp"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="1dp"
+                        app:tint="@color/dark_blue"
+                        android:src="@drawable/location_icon"/>
+
+                    <TextView
+                        android:id="@+id/locationTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/location"
+                        android:paddingStart="3dp"
+                        android:textColor="@color/black"
+                        android:layout_margin="7dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
-        </ScrollView>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:elevation="1dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Required Services"
+                    android:textColor="@color/black"
+                    android:layout_margin="5dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/serviceRequiredRv"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/categoryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/category_bidderTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="5dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="event bidders"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/view_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:layout_gravity="end"
+                        android:focusable="true"
+                        android:text="View all"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/orange"
+                        />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:id="@+id/biddersRv"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:id="@+id/allRv"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/biddersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_view"
+                android:visibility="gone"
+                android:layout_marginBottom="30dp"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:layout_margin="7dp">
+
+                <TextView
+                    android:id="@+id/bidNameTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bidder Name"
+                    android:textColor="@color/blue"
+                    android:layout_margin="7dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bid on"
+                        android:textColor="@color/orange"
+                        android:layout_margin="3dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/category_Tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category"
+                        android:textColor="@color/orange"
+                        android:layout_margin="3dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Event"
+                        android:textColor="@color/orange"
+                        android:layout_margin="3dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        app:tint="@color/orange"
+                        android:src="@drawable/money_icon"/>
+
+                    <TextView
+                        android:id="@+id/amountTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/amount"
+                        android:textColor="@color/black"
+                        android:layout_margin="7dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enter your amount"
+                    android:textColor="@color/black"
+                    android:layout_margin="7dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ksh"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp"
+                        android:padding="7dp"
+                        android:letterSpacing="0.1"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/amountTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:hint="@string/amount"
+                        android:textStyle="bold"
+                        android:inputType="text"
+                        android:layout_margin="5dp"
+                        android:padding="7dp"
+                        android:letterSpacing="0.1"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/placeBidBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:backgroundTint="@color/orange"
+                    android:textColor="@color/black"
+                    android:layout_margin="5dp"
+                    android:padding="15dp"
+                    android:text="@string/place_bid"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

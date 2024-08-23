@@ -1,6 +1,9 @@
 package com.example.eventmuziki.Adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,17 +29,17 @@ import java.util.ArrayList;
 public class eventAdapter2 extends RecyclerView.Adapter<eventAdapter2.ViewHolder2> {
 
     ArrayList<eventModel> events;
+    Context context;
 
-    public eventAdapter2(ArrayList<eventModel> events) {
+    public eventAdapter2(ArrayList<eventModel> events, Context context) {
         this.events = events;
+        this.context = context;
     }
 
     public static class ViewHolder2 extends RecyclerView.ViewHolder {
 
         TextView eventName, eventDate, eventTime, eventLocation;
-        LinearLayout container;
         ImageView posterTv;
-
 
         public ViewHolder2(@NonNull View itemView) {
             super(itemView);
@@ -44,9 +47,7 @@ public class eventAdapter2 extends RecyclerView.Adapter<eventAdapter2.ViewHolder
             eventDate = itemView.findViewById(R.id.eventDate);
             eventTime = itemView.findViewById(R.id.eventTime);
             eventLocation = itemView.findViewById(R.id.eventLocation);
-            container = itemView.findViewById(R.id.container2);
             posterTv = itemView.findViewById(R.id.bigCardTv);
-
 
         }
     }
@@ -70,7 +71,7 @@ public class eventAdapter2 extends RecyclerView.Adapter<eventAdapter2.ViewHolder
         holder.eventTime.setText(event.getTime());
         holder.eventLocation.setText(event.getLocation());
 
-        holder.container.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle the click event here
@@ -94,10 +95,18 @@ public class eventAdapter2 extends RecyclerView.Adapter<eventAdapter2.ViewHolder
                             String eventPoster = documentSnapshot.getString("eventPoster");
 
                             if (eventPoster != null && !eventPoster.isEmpty()) {
-                                Glide.with(holder.itemView.getContext())
-                                        .load(eventPoster)
-                                        .centerCrop()
-                                        .into(holder.posterTv);
+                                // Load profile photo into imageView using Glide or any other image loading library
+                                if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
+                                    Glide.with(context)
+                                            .load(eventPoster)
+                                            .placeholder(R.drawable.error_icon)
+                                            .error(R.drawable.error_icon)
+                                            .into(holder.posterTv);
+                                }else {
+                                    Log.d("eventAdapter2", "Context is null or activity is destroyed");
+                                }
+                            }else {
+                                Log.d("eventAdapter2", "No profile photo found");
                             }
                         }
                     }

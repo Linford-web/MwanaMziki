@@ -1,5 +1,7 @@
 package com.example.eventmuziki.Adapters.serviceAdapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Models.serviceModels.costumeModel;
+import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -19,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHolder> {
-    ArrayList<costumeModel> costumeList;
+    ArrayList<ServicesDetails.costumeModel> costumeList;
+    Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -34,8 +37,9 @@ public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHold
             status = itemView.findViewById(R.id.item_status);
         }
     }
-    public costumeAdapter(ArrayList<costumeModel> costumeList) {
+    public costumeAdapter(ArrayList<ServicesDetails.costumeModel> costumeList, Context context) {
         this.costumeList = costumeList;
+        this.context = context;
     }
 
     @NonNull
@@ -47,28 +51,23 @@ public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull costumeAdapter.ViewHolder holder, int position) {
-        costumeModel service = costumeList.get(position);
-        holder.productName.setText(service.getProductName());
-        holder.productPrice.setText(service.getProductPrice());
+        ServicesDetails.costumeModel service = costumeList.get(position);
+        holder.productName.setText(service.getCostumeName());
+        holder.productPrice.setText(service.getMaterial());
         holder.status.setText(service.getStatus());
 
-        FirebaseFirestore.getInstance().collection("Services")
-                .document()
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.exists()) {
-
-                                Glide.with(holder.itemView.getContext())
-                                        .load(service.getImages().get(0))
-                                        .into(holder.productImage);
-
-                            }else {
-                                Toast.makeText(holder.itemView.getContext(), "No images uploaded", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(e -> {
-                            // Handle failure
-                            e.printStackTrace();
-                        });
+       String imageUrl = service.getImage();
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            holder.productImage.setImageResource(R.drawable.tshirt);
+        }
+        // load image using Glide
+        if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(imageUrl)
+                    .placeholder(R.drawable.error_icon)
+                    .error(R.drawable.error_icon)
+                    .into(holder.productImage);
+        }
 
     }
 

@@ -1,5 +1,7 @@
 package com.example.eventmuziki.Adapters.serviceAdapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Models.serviceModels.carModel;
+import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
 
 import java.util.ArrayList;
 
 public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
-    ArrayList<carModel> carList;
+    ArrayList<ServicesDetails.carModel> carList;
+    Context context;
 
-    public carAdapter(ArrayList<carModel> carList) {
+    public carAdapter(ArrayList<ServicesDetails.carModel> carList, Context context) {
         this.carList = carList;
+        this.context = context;
     }
 
     @NonNull
@@ -30,16 +34,26 @@ public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull carAdapter.ViewHolder viewHolder, int i) {
-        carModel service = carList.get(i);
+    public void onBindViewHolder(@NonNull carAdapter.ViewHolder viewHolder, int init) {
+        ServicesDetails.carModel service = carList.get(init);
         viewHolder.carModel.setText(service.getCar_model());
         viewHolder.carSeats.setText(service.getSeats());
         viewHolder.carStatus.setText(service.getStatus());
         viewHolder.carCategory.setText(service.getCar_type());
+
+        String imageUrl = service.getCarImage();
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            viewHolder.carImage.setImageResource(R.drawable.car_icon);
+            return;
+        }
         // load image using Glide or Picasso
-        Glide.with(viewHolder.itemView.getContext())
-                .load(R.drawable.car_icon)
-                .into(viewHolder.carImage);
+        if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
+            Glide.with(viewHolder.itemView.getContext())
+                    .load(imageUrl)
+                    .placeholder(R.drawable.error_icon)
+                    .error(R.drawable.error_icon)
+                    .into(viewHolder.carImage);
+        }
 
     }
 

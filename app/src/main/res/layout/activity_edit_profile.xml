@@ -9,46 +9,42 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:background="@color/yellow"/>
+        android:layout_height="240dp"
+        android:background="@color/my_primary"/>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginTop="8dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@android:color/white">
+
+        <ImageButton
+            android:id="@+id/back_arrow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            app:tint="@color/red"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/back_arrow" />
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/top_toolbar"
         android:orientation="vertical"
         android:padding="10dp">
 
-        <LinearLayout
-            android:id="@+id/top_bar_nav"
-            android:layout_width="match_parent"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
-            <ImageButton
-                android:id="@+id/back_arrow"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="start"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/back_arrow"
-                app:tint="@color/red"
-                android:focusable="true" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:letterSpacing="0.1"
-                android:textColor="@color/blue"
-                android:text="Edit Profile"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
@@ -182,6 +178,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:backgroundTint="@color/orange"
+            android:textColor="@color/black"
             android:text="Save Changes"
             android:layout_margin="10dp" />
 

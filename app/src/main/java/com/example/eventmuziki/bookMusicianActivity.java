@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.biddersEventModel;
@@ -66,11 +67,11 @@ public class bookMusicianActivity extends AppCompatActivity {
         details = findViewById(R.id.eventDescription);
 
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        back.setOnClickListener(v -> {
+            finish();
         });
 
         biddersEventModel bookEvent = getIntent().getParcelableExtra("biddersEventModel");

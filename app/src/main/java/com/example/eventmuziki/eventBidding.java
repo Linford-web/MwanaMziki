@@ -47,7 +47,7 @@ public class eventBidding extends AppCompatActivity {
     FirebaseFirestore fStore;
 
     ArrayList<biddersEventModel> bidEvents, categoryService;
-    RecyclerView recyclerView, requiredServicesRv;
+    RecyclerView recyclerView, requiredServicesRv, recyclerView1;
     biddersAdapter bidAdapter, categoryAdapter;
 
     public String eventId, creatorId, userType;
@@ -82,14 +82,15 @@ public class eventBidding extends AppCompatActivity {
         categoryTv = findViewById(R.id.category_bidderTv);
         categoryNme = findViewById(R.id.category_Tv);
         recyclerView = findViewById(R.id.biddersRv);
+        recyclerView1 = findViewById(R.id.allRv);
         categoryLayout = findViewById(R.id.categoryLayout);
         requiredServicesRv = findViewById(R.id.serviceRequiredRv);
 
         bidEvents = new ArrayList<>();
         bidAdapter = new biddersAdapter(bidEvents);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(bidAdapter);
+        recyclerView1.setLayoutManager(layoutManager);
+        recyclerView1.setAdapter(bidAdapter);
 
         requiredServices = new ArrayList<>();
         nameAdapter = new serviceNameAdapter(this,requiredServices);
@@ -109,29 +110,44 @@ public class eventBidding extends AppCompatActivity {
                 categoryTv.setText(service.getServiceName());
                 if (service.getServiceName().equals("Decorations")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Car Rental")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Photographer")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Catering")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Sound")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Costumes")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Influencers")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else if (service.getServiceName().equals("Sponsors")) {
                     fetchCategoryBidders(eventId, service.getServiceName());
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView1.setVisibility(View.GONE);
                 } else {
-                    fetchBidders(eventId);
+                    Log.d("TAG", "onItemClick: No service selected");
+                    Toast.makeText(eventBidding.this, "No service selected", Toast.LENGTH_SHORT).show();
                 }
 
 
             }
         });
-
-
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,10 +211,11 @@ public class eventBidding extends AppCompatActivity {
         viewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fetchBidders(eventId);
+                recyclerView.setVisibility(View.GONE);
+                recyclerView1.setVisibility(View.VISIBLE);
             }
         });
-
+        fetchBidders(eventId);
         // fetch bidders user name
         fetchUserName();
         // check user access level
@@ -262,7 +279,7 @@ public class eventBidding extends AppCompatActivity {
         if (serviceName.equals("Sponsors")) {
             return R.drawable.sponsorship_icon;
         }
-        return R.drawable.money_icon;
+        return R.drawable.service_icon;
 
     }
 

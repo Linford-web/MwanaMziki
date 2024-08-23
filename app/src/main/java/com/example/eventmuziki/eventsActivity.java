@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +24,6 @@ import com.example.eventmuziki.Adapters.bidEventsAdapter;
 import com.example.eventmuziki.Adapters.bookedEventsAdapter;
 import com.example.eventmuziki.Adapters.categoryAdapter;
 import com.example.eventmuziki.Adapters.categoryMenuAdapter;
-import com.example.eventmuziki.Adapters.dashAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
 import com.example.eventmuziki.Adapters.eventSearchAdapter;
@@ -32,15 +31,18 @@ import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.bookedEventsModel;
 import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.Models.menuModel;
-import com.example.eventmuziki.Models.serviceNameModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -49,13 +51,13 @@ import java.util.Objects;
 
 public class eventsActivity extends AppCompatActivity {
 
-    String userId;
+    String userId, userCategory;
     FloatingActionButton addTask;
-    ArrayList<eventModel> events, events2, events3;
+    ArrayList<eventModel> events, events2, events3, events4;
     ArrayList<bookedEventsModel> booked;
     ArrayList<biddersEventModel> bidder;
     bidEventsAdapter bidAdapter;
-    eventAdapter adapter;
+    eventAdapter adapter, adapter1;
     eventAdapter2 eventAdapters;
     bookedEventsAdapter bookedAdapter;
     categoryAdapter categoryAdpt;
@@ -64,12 +66,12 @@ public class eventsActivity extends AppCompatActivity {
     ArrayList<menuModel> menuList;
     categoryMenuAdapter menuAdapter;
 
-    ImageButton backArrow,searchEventsBtn, cancelBtn, searchBtn, allBids, allBooked, cancelCategory;
-    TextView title, categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt;
-    LinearLayout searchTv, menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, bookedEvents, viewBid, categoryLayout, menuCategoryLayout;;
+    ImageButton backArrow,searchEventsBtn, cancelBtn, searchBtn, cancelCategory;
+    TextView categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt, allBids, allBooked, userCategoryTv;
+    LinearLayout menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, bookedEvents, viewBid, categoryLayout, menuCategoryLayout, userCategoryLayout;
     ScrollView scrollView;
     EditText searchTxt;
-    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv;;
+    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv;
     eventSearchAdapter eventSearch;
 
     @Override
@@ -88,12 +90,10 @@ public class eventsActivity extends AppCompatActivity {
         categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
         searchEventsBtn = findViewById(R.id.searchEventsBtn);
-        title = findViewById(R.id.titleTxt);
-        searchTv = findViewById(R.id.search_layout);
         menu = findViewById(R.id.menu_layout);
         scrollView = findViewById(R.id.scrollView);
         searchLayout = findViewById(R.id.search_events_layout);
-        cancelBtn = findViewById(R.id.cancel_search);
+        cancelBtn = findViewById(R.id.cancelBtn);
         searchTxt = findViewById(R.id.searchInput);
         searchBtn = findViewById(R.id.search_icon);
         searchEventsRv = findViewById(R.id.searchEventsRv);
@@ -116,23 +116,21 @@ public class eventsActivity extends AppCompatActivity {
         allBidsTxt = findViewById(R.id.bidEventTxt);
         allBookedTxt = findViewById(R.id.bookEventTxt);
         menuCategoryLayout = findViewById(R.id.menuCategoryLayout);
+        userCategoryRv = findViewById(R.id.userCategoryRv);
+        userCategoryTv = findViewById(R.id.userCategoryTv);
+        userCategoryLayout = findViewById(R.id.userCategoryEvents);
 
         categoryMenuRv = findViewById(R.id.categoriesRv);
         //get user type
         userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        // Check user access level
+        checkUserAccessLevel();
 
-
-
-        cancelCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                categoryLayout.setVisibility(View.GONE);
-                cancelCategory.setVisibility(View.GONE);
-                allEvents.setVisibility(View.VISIBLE);
-
-            }
-        });
-
+        events4 = new ArrayList<>();
+        adapter1 = new eventAdapter(events4, this);
+        RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        userCategoryRv.setLayoutManager(layoutManager4);
+        userCategoryRv.setAdapter(adapter1);
 
         setUpCategoryMenu();
         menuAdapter = new categoryMenuAdapter(this, menuList);
@@ -141,14 +139,14 @@ public class eventsActivity extends AppCompatActivity {
 
         // Set up all Events RecyclerView
         events = new ArrayList<>();
-        adapter = new eventAdapter(events);
+        adapter = new eventAdapter(events, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         // Set up event RecyclerView
         events2 = new ArrayList<>();
-        eventAdapters = new eventAdapter2(events2);
+        eventAdapters = new eventAdapter2(events2, this);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         eventRecyclerView.setLayoutManager(layoutManager2);
         eventRecyclerView.setAdapter(eventAdapters);
@@ -163,8 +161,8 @@ public class eventsActivity extends AppCompatActivity {
         // Set up bid RecyclerView
         bidder = new ArrayList<>();
         bidAdapter = new bidEventsAdapter(bidder);
-        RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        bidRecyclerView.setLayoutManager(layoutManager4);
+        RecyclerView.LayoutManager layoutManager6 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        bidRecyclerView.setLayoutManager(layoutManager6);
         bidRecyclerView.setAdapter(bidAdapter);
 
         // Update RecyclerView with events from the selected category
@@ -173,15 +171,61 @@ public class eventsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager5 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         categoryRecyclerView.setLayoutManager(layoutManager5);
         categoryRecyclerView.setAdapter(categoryAdpt);
-
-        // Check user access level
-        checkUserAccessLevel();
+        // Fetch events from Firestore
+        fetchEventsS(userId);
         // Fetch events from Firestore
         fetchEvents();
-        fetchEventsS(userId);
+        // Fetch events based on user category
+        fetchEventsBasedOnCategory(userCategory);
+        // Set up toolbar
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        findViewById(R.id.back_arrow).setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainDashboard.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        });
+        findViewById(R.id.searchEventsBtn).setOnClickListener(v -> {
+            searchEventsBtn.setVisibility(View.GONE);
+            menu.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
+            searchLayout.setVisibility(View.VISIBLE);
+            addTask.setVisibility(View.GONE);
+            cancelBtn.setVisibility(View.VISIBLE);
+            backArrow.setVisibility(View.GONE);
+            bidEvents.setVisibility(View.GONE);
+            // set title to search
+            getSupportActionBar().setTitle("Search Events");
+        });
+        findViewById(R.id.cancelBtn).setOnClickListener(v -> {
+            menu.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.VISIBLE);
+            searchLayout.setVisibility(View.GONE);
+            addTask.setVisibility(View.VISIBLE);
+            backArrow.setVisibility(View.VISIBLE);
+            cancelBtn.setVisibility(View.GONE);
+            searchEventsBtn.setVisibility(View.VISIBLE);
+            // set title to events
+            getSupportActionBar().setTitle("Events");
+            searchTxt.setText("");
+            // hide the keyboard
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
 
-        backArrow.setOnClickListener(v -> {
-            onBackPressed();
+        });
+
+        cancelCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryLayout.setVisibility(View.GONE);
+                cancelCategory.setVisibility(View.GONE);
+                allEvents.setVisibility(View.VISIBLE);
+                checkUserAccessLevel();
+            }
         });
 
         viewAll.setOnClickListener(new View.OnClickListener() {
@@ -194,15 +238,17 @@ public class eventsActivity extends AppCompatActivity {
                 cancelCategory.setVisibility(View.GONE);
                 addTask.setVisibility(View.VISIBLE);
                 menuCategoryLayout.setVisibility(View.VISIBLE);
+                searchEventsBtn.setVisibility(View.VISIBLE);
+                categoryLayout.setVisibility(View.GONE);
+                checkUserAccessLevel();
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.orange));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBookedTxt.setTextColor(getResources().getColor(R.color.black));
-                // Fetch events from Firestore
-                fetchEvents();
 
             }
         });
+
         viewBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,6 +258,8 @@ public class eventsActivity extends AppCompatActivity {
                 addTask.setVisibility(View.GONE);
                 categoryLayout.setVisibility(View.GONE);
                 menuCategoryLayout.setVisibility(View.GONE);
+                searchEventsBtn.setVisibility(View.GONE);
+                userCategoryLayout.setVisibility(View.GONE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.orange));
@@ -221,6 +269,7 @@ public class eventsActivity extends AppCompatActivity {
 
             }
         });
+
         viewBooked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,6 +279,8 @@ public class eventsActivity extends AppCompatActivity {
                 addTask.setVisibility(View.GONE);
                 categoryLayout.setVisibility(View.GONE);
                 menuCategoryLayout.setVisibility(View.GONE);
+                searchEventsBtn.setVisibility(View.GONE);
+                userCategoryLayout.setVisibility(View.GONE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.black));
@@ -260,41 +311,6 @@ public class eventsActivity extends AppCompatActivity {
             }
         });
 
-        searchEventsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                title.setText("Search Events");
-                menu.setVisibility(View.GONE);
-                searchTv.setVisibility(View.GONE);
-                scrollView.setVisibility(View.GONE);
-                searchLayout.setVisibility(View.VISIBLE);
-                addTask.setVisibility(View.GONE);
-                cancelBtn.setVisibility(View.VISIBLE);
-                backArrow.setVisibility(View.GONE);
-
-            }
-        });
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                title.setText("Events");
-                menu.setVisibility(View.VISIBLE);
-                searchTv.setVisibility(View.VISIBLE);
-                scrollView.setVisibility(View.VISIBLE);
-                searchLayout.setVisibility(View.GONE);
-                addTask.setVisibility(View.VISIBLE);
-                backArrow.setVisibility(View.VISIBLE);
-                cancelBtn.setVisibility(View.GONE);
-                // hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        });
-
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -315,44 +331,89 @@ public class eventsActivity extends AppCompatActivity {
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
                 if (itemName.equals("Church")) {
                     fetchCategoryEvents("Church");
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
                 if (itemName.equals("Wedding")) {
                     fetchCategoryEvents("Wedding");
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
                 if (itemName.equals("Music")) {
                     fetchCategoryEvents("Music");
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
                 if (itemName.equals("Graduation")) {
                     fetchCategoryEvents("Graduation");
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
                 if (itemName.equals("Photography")) {
                     fetchCategoryEvents("Photography");
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
                 if (itemName.equals("Other")) {
                     fetchCategoryEvents("Other");
                     cancelCategory.setVisibility(View.VISIBLE);
                     allEvents.setVisibility(View.GONE);
                     categoryLayout.setVisibility(View.VISIBLE);
+                    categoryTxt.setText(itemName);
+                    userCategoryLayout.setVisibility(View.GONE);
                 }
 
+            }
+        });
+
+    }
+
+    private void fetchEventsBasedOnCategory(String category) {
+        if (category == null || category.isEmpty()) {
+            Log.e("fetchEventsBasedOnCategory", "User category is null or empty");
+            return;
+        } else {
+            Log.d("fetchEventsBasedOnCategory", "User category: " + category);
+        }
+
+        CollectionReference eventsRef = fStore.collection("Events");
+
+        eventsRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                String eventId = documentSnapshot.getId();
+
+                fStore.collection("Events")
+                        .document(eventId)
+                        .collection("EventServices")
+                        .whereEqualTo("service", category)
+                        .get()
+                        .addOnSuccessListener(serviceSnapshot -> {
+                            if (!serviceSnapshot.isEmpty()) {
+                                eventModel event = documentSnapshot.toObject(eventModel.class);
+                                events4.add(event);
+                            }
+                            adapter1.notifyDataSetChanged();
+                        });
             }
         });
 
@@ -446,6 +507,7 @@ public class eventsActivity extends AppCompatActivity {
                 });
 
     }
+
     private void fetchBookedEvents() {
 
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
@@ -486,6 +548,7 @@ public class eventsActivity extends AppCompatActivity {
                 }).addOnFailureListener(e -> Toast.makeText(eventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
     }
+
     private void fetchBidEvents() {
 
         String userId = FirebaseAuth.getInstance().getUid();
@@ -532,11 +595,12 @@ public class eventsActivity extends AppCompatActivity {
                         if (document != null && document.exists()) {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
-                               addTask.setVisibility(View.VISIBLE);
+                               userCategoryLayout.setVisibility(View.GONE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
-                                addTask.setVisibility(View.VISIBLE);
-                                String category = document.getString("category");
-                                categoryTxt.setText(category);
+                                userCategoryLayout.setVisibility(View.VISIBLE);
+                                userCategory = document.getString("category");
+                                userCategoryTv.setText(userCategory);
+
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");

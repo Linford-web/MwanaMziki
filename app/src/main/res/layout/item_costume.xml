@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -21,8 +22,9 @@
 
             <ImageView
                 android:id="@+id/item_icon"
-                android:layout_width="180dp"
-                android:layout_height="220dp"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:padding="15dp"
                 android:src="@drawable/tshirt"
                 android:scaleType="centerCrop"/>
 
@@ -31,23 +33,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:textSize="17sp"
                 android:textStyle="bold"
-                android:layout_margin="3dp"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/black" />
             <TextView
                 android:id="@+id/item_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_marginStart="2dp"
+                android:textSize="11sp"
                 android:text="Status"
                 android:textStyle="bold"
-                android:textColor="@color/dark_gray" />
+                android:textColor="@color/green" />
             <TextView
                 android:id="@+id/item_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginStart="2dp"
+                android:textSize="11sp"
                 android:text="@string/amount"
                 android:textColor="@color/dark_blue" />
 

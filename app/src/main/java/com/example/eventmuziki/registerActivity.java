@@ -3,14 +3,18 @@ package com.example.eventmuziki;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,16 +34,18 @@ import com.hbb20.CountryCodePicker;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class registerActivity extends AppCompatActivity {
 
     EditText name, email, password, number, conPassword;
     Button registerBtn;
-    CheckBox bossCheck, musicianCheck;
+    CheckBox bossCheck, musicianCheck, termsAndCondition;
     ProgressBar progressbar;
     ImageView passwordIcon, conPasswordIcon;
     CountryCodePicker countryCodePicker;
     TextView loginTxt;
+    Spinner spinner;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 
@@ -71,6 +77,41 @@ public class registerActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         countryCodePicker = findViewById(R.id.countryCodePicker);
         loginTxt = findViewById(R.id.loginTxt);
+        spinner = findViewById(R.id.spinner_category);
+        termsAndCondition = findViewById(R.id.termsCheck);
+        registerBtn.setEnabled(false);
+        registerBtn.setBackgroundColor(getResources().getColor(R.color.gray));
+
+        // Initialize ArrayAdapter and set it to the Spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.User_Category, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        termsAndCondition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                registerBtn.setEnabled(compoundButton.isChecked());
+                registerBtn.setBackgroundColor(compoundButton.isChecked() ? getResources().getColor(R.color.orange) : getResources().getColor(R.color.gray));
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Handle selection here
+                String selectedCategory = parent.getItemAtPosition(position).toString();
+                // Do something with the selected category
+                Log.d("Selected Category", selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // set default value as blank
+                //spinner.setSelection(0);
+                // Do nothing if nothing is selected
+                Log.d("Selected Category", "Nothing selected");
+            }
+        });
 
         loginTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +130,13 @@ public class registerActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (compoundButton.isChecked()) {
                     bossCheck.setChecked(false);
+                    spinner.setVisibility(View.VISIBLE);
+                    bossCheck.setVisibility(View.GONE);
+                    spinner.setSelection(0);
+
+                }else {
+                    bossCheck.setVisibility(View.VISIBLE);
+                    spinner.setVisibility(View.GONE);
                 }
 
             }
@@ -98,6 +146,7 @@ public class registerActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (compoundButton.isChecked()) {
                     musicianCheck.setChecked(false);
+                    spinner.setVisibility(View.GONE);
                 }
             }
         });
@@ -165,6 +214,9 @@ public class registerActivity extends AppCompatActivity {
 
                 if (valid){
 
+                    String phone = countryCodePicker.getFullNumberWithPlus();
+                    // Get the selected category from the Spinner
+
                     progressbar.setVisibility(View.VISIBLE);
                     // start the user registration process
                     fAuth.createUserWithEmailAndPassword(email.getText().toString(),password.getText().toString())
@@ -172,35 +224,39 @@ public class registerActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
 
-                                    FirebaseUser user =fAuth.getCurrentUser();
+                                    FirebaseUser user = fAuth.getCurrentUser();
+                                    String selected = spinner.getSelectedItem().toString();
 
-                                    Toast.makeText(registerActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                    // Create UserModel object
+                                    String userType = bossCheck.isChecked() ? "Corporate" : "Musician";
+                                    String category = musicianCheck.isChecked() ? selected : "organizer";
 
-                                    assert user != null;
-                                    DocumentReference df = fStore.collection("Users")
-                                            .document(user.getUid());
-                                    Map<String,Object> User= new HashMap<>();
-                                    User.put("userid",user.getUid());
-                                    User.put("name", name.getText().toString());
-                                    User.put("number", number.getText().toString());
-                                    User.put("email", email.getText().toString());
-
-                                    // specify Access Level
-                                    if (bossCheck.isChecked()){
-                                        User.put("userType", "Corporate");
-                                    }
-                                    if (musicianCheck.isChecked()){
-                                        User.put("userType", "Musician");
-                                    }
-                                    // df.set(User);
-
-                                    UserModel userModel = new UserModel("", user.getUid(), name.getText().toString(), email.getText().toString(), number.getText().toString());
-                                    fStore.collection("Users").document(user.getUid()).set(userModel);
-
-                                    Intent intent = new Intent(registerActivity.this, MainDashboard.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    progressbar.setVisibility(View.INVISIBLE);
+                                    UserModel userModel = new UserModel("", Objects.requireNonNull(user).getUid(),
+                                            name.getText().toString(),
+                                            email.getText().toString(),
+                                            phone,
+                                            userType,
+                                            category);
+                                    // Save the UserModel to Firestore
+                                    fStore.collection("Users").document(user.getUid())
+                                            .set(userModel)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    // Redirect to MainDashboard
+                                                    Intent intent = new Intent(registerActivity.this, MainDashboard.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    progressbar.setVisibility(View.INVISIBLE);
+                                                    Toast.makeText(registerActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(registerActivity.this, "Failed to Create Account!", Toast.LENGTH_SHORT).show();
+                                                    progressbar.setVisibility(View.INVISIBLE);
+                                                }
+                                            });
 
                                 }
 
@@ -214,8 +270,6 @@ public class registerActivity extends AppCompatActivity {
                             });
 
                 }
-
-
 
             }
 
@@ -232,4 +286,5 @@ public class registerActivity extends AppCompatActivity {
         }
 
     }
+
 }

@@ -1,6 +1,9 @@
 package com.example.eventmuziki.Adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.eventBidding;
+import com.example.eventmuziki.profileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,10 +29,12 @@ import java.util.ArrayList;
 
 public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> {
 
+    Context context;
     ArrayList<eventModel> events;
 
-    public eventAdapter(ArrayList<eventModel> events) {
+    public eventAdapter(ArrayList<eventModel> events, Context context) {
         this.events = events;
+        this.context = context;
     }
 
     public static class ViewHolder  extends RecyclerView.ViewHolder{
@@ -89,13 +95,16 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> 
                         if (documentSnapshot.exists()) {
 
                             String eventPoster = documentSnapshot.getString("eventPoster");
-
-                            if (eventPoster != null && !eventPoster.isEmpty()) {
-                                Glide.with(holder.itemView.getContext())
+                            if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
+                                Glide.with(context)
                                         .load(eventPoster)
-                                        //.centerCrop()
+                                        .placeholder(R.drawable.error_icon)
+                                        .error(R.drawable.error_icon)
                                         .into(holder.posterTv);
+                            }else {
+                                Log.d("eventAdapter", "Context is null or activity is destroyed");
                             }
+
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {

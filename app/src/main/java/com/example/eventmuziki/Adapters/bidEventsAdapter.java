@@ -58,36 +58,7 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
 
         holder.eventName.setText(bookedEvent.getEventName());
         holder.bidAmount.setText(bookedEvent.getBidAmount());
-
-        String bidderId = bookedEvent.getCreatorID();
-
-        FirebaseFirestore.getInstance()
-                .collection("Users")
-                .whereEqualTo("userid", bidderId)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-
-                            DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
-
-                            String name = document.getString("name");
-
-                            holder.bidderName.setText(name);
-
-
-                        } else {
-                            Toast.makeText(holder.itemView.getContext(), "User document not found", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(holder.itemView.getContext(), "Failed To fetch Students", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        holder.bidderName.setText(bookedEvent.getBiddersName());
 
         String eventId = bookedEvent.getEventId();
 

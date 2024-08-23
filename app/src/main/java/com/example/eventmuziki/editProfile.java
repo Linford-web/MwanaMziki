@@ -19,6 +19,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -70,6 +71,17 @@ public class editProfile extends AppCompatActivity {
         profileImage = findViewById(R.id.imageView);
         editBtn = findViewById(R.id.updateProfileBtn);
         deleteBtn = findViewById(R.id.deleteProfileBtn);
+
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        findViewById(R.id.back_arrow).setOnClickListener(v -> {
+            // clear the back stack and start a new activity
+            Intent intent = new Intent(editProfile.this, profileActivity.class);
+            // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
 
         // Initialize ArrayAdapter and set it to the Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,

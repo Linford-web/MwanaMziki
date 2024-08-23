@@ -74,6 +74,24 @@
         <item>Decorations</item>
         <item>Sponsors</item>
     </string-array>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="age_group">
+        <item>Child</item>
+        <item>Teenager</item>
+        <item>Adult</item>
+        <item>Old</item>
+    </string-array>
+    <string-array name="material">
+        <item>Leather</item>
+        <item>Silk</item>
+        <item>Cotton</item>
+        <item>Polyester</item>
+        <item>Other</item>
+    </string-array>
     <string-array name="Car_Rental">
         <item>All Cars</item>
         <item>Luxury Cars</item>
@@ -89,6 +107,50 @@
         <item>SUVs</item>
         <item>Minivans</item>
         <item>Pickup Trucks</item>
+    </string-array>
+    <string-array name="car_models">
+        <item>Toyota</item>
+        <item>Nissan</item>
+        <item>Mitsubishi</item>
+        <item>Ford</item>
+        <item>Honda</item>
+        <item>Mazda</item>
+        <item>Kia</item>
+        <item>Chevrolet</item>
+        <item>Hyundai</item>
+        <item>Volkswagen</item>
+        <item>BMW</item>
+        <item>Mercedes-Benz</item>
+        <item>Audi</item>
+        <item>Lexus</item>
+        <item>Subaru</item>
+        <item>Tesla</item>
+        <item>Porsche</item>
+        <item>Ferrari</item>
+        <item>Lamborghini</item>
+        <item>Rolls-Royce</item>
+        <item>Maserati</item>
+        <item>Jaguar</item>
+        <item>Land Rover</item>
+        <item>Volvo</item>
+        <item>Jeep</item>
+    </string-array>
+    <string-array name="car_color">
+        <item>Black</item>
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Orange</item>
+        <item>Silver</item>
+        <item>Gold</item>
+        <item>Brown</item>
+        <item>Purple</item>
+        <item>Pink</item>
+        <item>Gray</item>
+        <item>Beige</item>
+        <item>Other</item>
     </string-array>
     <string-array name="transmission">
         <item>Manual</item>
@@ -116,8 +178,50 @@
     </string-array>
     <string-array name="sound_services">
         <item>DJ</item>
-        <item>System</item>
+        <item>Sound System</item>
+        <item>Equipment</item>
         <item>Full Board</item>
         <item>Event Management</item>
     </string-array>
+    <string-array name="photography_package">
+        <item>Indoor Package</item>
+        <item>Outdoor Package</item>
+        <item>Studio Package</item>
+        <item>Travel Package</item>
+        <item>Corporate Package</item>
+        <item>Contract Package</item>
+        <item>Aerial Package</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="photo_format">
+        <item>RAW</item>
+        <item>Edited</item>
+        <item>Printed</item>
+        <item>All</item>
+    </string-array>
+    <string-array name="delivery_method">
+        <item>Online Gallery</item>
+        <item>USB Drive</item>
+        <item>Physical Library</item>
+        <item>All</item>
+    </string-array>
+    <string-array name="special_equipments">
+        <item>Drones</item>
+        <item>Props</item>
+        <item>Lighting</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="sound_equipment">
+        <item>Microphone</item>
+        <item>Speakers</item>
+        <item>Headphones</item>
+        <item>Mixers</item>
+        <item>Amplifiers</item>
+        <item>Drum Set</item>
+        <item>Guitars</item>
+        <item>Keyboards</item>
+        <item>Cables</item>
+        <item>Other</item>
+    </string-array>
+
 </resources>

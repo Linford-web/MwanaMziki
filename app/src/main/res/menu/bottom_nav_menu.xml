@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/chat_icon"
-        android:title="Chats" />
-    <item
-        android:id="@+id/navigation_messages"
-        android:icon="@drawable/event_icon"
-        android:title="Events" />
-    <item
-        android:id="@+id/navigation_events"
-        android:icon="@drawable/advert_icon"
-        android:title="Adverts" />
+        android:id="@+id/home"
+        android:icon="@drawable/home_icon"
+        android:title="Home" />
 
     <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/profile_icon"
+        android:id="@+id/search"
+        android:icon="@drawable/search_icon"
+        android:title="Search" />
+
+    <item
+        android:id="@+id/services"
+        android:icon="@drawable/gear"
+        android:title="Services"/>
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/user"
         android:title="Profile" />
+
+
 </menu>

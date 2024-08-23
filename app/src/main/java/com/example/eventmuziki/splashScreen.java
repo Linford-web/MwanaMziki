@@ -71,10 +71,21 @@ public class splashScreen extends AppCompatActivity {
                     } else {
                         // Handle other user types if needed
                         Log.d("TAG", "User is neither Corporate nor Musician");
+                        Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finishAffinity();
+                        finish();
                     }
                 } else {
                     // Handle the case where userType is null if needed
                     Log.d("TAG", "userType is null");
+                    Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finishAffinity();
+                    finish();
+
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

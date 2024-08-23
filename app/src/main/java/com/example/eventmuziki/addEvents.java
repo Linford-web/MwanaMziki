@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.eventModel;
@@ -56,14 +58,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageButton backArrow, cancel, cancel_icon;
+    ImageButton backArrow, cancel_icon;
     Button addEvent;
     ImageView imageView,locationBtn;
     EditText inputTaskName, eventDetails, otherCategory;
-    TextView datePicker, timePickerFrom, timePickerTo, organizerName, titleTxt;
+    TextView datePicker, timePickerFrom, timePickerTo, organizerName;
     EditText amountTxt, location;
     FirebaseFirestore fStore;
     String startTime, endTime;
@@ -110,6 +113,16 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        backArrow.setOnClickListener(v -> {
+            // clear the back stack and start a new activity
+            Intent intent = new Intent(addEvents.this, eventsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
 
         viewAllServices.setOnClickListener(v -> {
             startActivity(new Intent(addEvents.this, categoryOptions.class));
@@ -118,9 +131,9 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancel.setVisibility(View.VISIBLE);
+                //cancel.setVisibility(View.VISIBLE);
                 backArrow.setVisibility(View.GONE);
-                titleTxt.setText("Select Location");
+                // titleTxt.setText("Select Location");
                 searchMap.setVisibility(View.GONE);
                 scrollView.setVisibility(View.GONE);
                 locationMap.setVisibility(View.VISIBLE);
@@ -134,6 +147,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
 
         });
+        /*
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +159,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 locationMap.setVisibility(View.GONE);
             }
         });
+         */
 
     // Initialize ArrayAdapter and set it to the Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -158,7 +173,11 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 // Handle selection here
                 String selectedCategory = parent.getItemAtPosition(position).toString();
                 // Do something with the selected category
-                Log.d("Selected Category", selectedCategory);
+                if (selectedCategory.equalsIgnoreCase("Other")){
+                    otherCategory.setVisibility(View.VISIBLE);
+                }else{
+                    otherCategory.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -259,8 +278,15 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 String time = timePickerFrom.getText().toString()+" - "+timePickerTo.getText().toString();
                 String locations = location.getText().toString();
                 String amount = amountTxt.getText().toString();
-                String category = spinnerCategory.getSelectedItem().toString();
+                String category = "";
                 String organizer = organizerName.getText().toString();
+
+                // check if the spinner has option Other and set the category accordingly
+                if (spinnerCategory.getSelectedItem().toString().equalsIgnoreCase("Other")){
+                    category = otherCategory.getText().toString();
+                } else {
+                    category = spinnerCategory.getSelectedItem().toString();
+                }
 
                 if (eventName.isEmpty() || eventDetail.isEmpty() || date.isEmpty() || amount.isEmpty()) {
                         // Show an error message if any of the fields are empty
@@ -281,12 +307,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                                 documentReference.update("eventId", eventId);
                                 documentReference.update("creatorID", userId);
 
-                                if (imageUri != null) {
-                                    Log.d("Image URI", imageUri.toString());
-
-                                } else {
-                                    Toast.makeText(addEvents.this, "Event poster failed to upload successfully", Toast.LENGTH_SHORT).show();
-                                }
                                 uploadEventPoster(documentReference);
                                 Intent intent = new Intent(addEvents.this, eventsActivity.class);
                                 startActivity(intent);
@@ -311,6 +331,13 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                         .compress(1024)
                         .maxResultSize(1080, 1080)
                         .start();
+            }
+        });
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle delete button click here
+                deletePoster();
             }
         });
 
@@ -340,6 +367,41 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
     }
 
+    private void deletePoster() {
+        // Get a reference to the Firebase Storage
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        // Create a reference to 'profile_pictures/<FILENAME>.jpg'
+        final StorageReference profileRef = storageRef.child("event_posters/" + FirebaseAuth.getInstance().getUid() + ".jpg");
+        // Delete the file from Firebase Storage
+        profileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Remove the profile picture URL from FireStore
+                FirebaseFirestore.getInstance().collection("Events")
+                        .document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                        .update("eventPoster", null)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // Set default image in ImageView
+                                imageView.setImageResource(R.drawable.profile_image); // Replace with your default image resource
+                                Toast.makeText(addEvents.this, "Profile photo deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(addEvents.this, "Failed to remove profile picture URL", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(addEvents.this, "Failed to delete profile photo", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void InitializeViews() {
 
         imageView = findViewById(R.id.eventPoster);
@@ -354,8 +416,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         organizerName = findViewById(R.id.organizerNameTv);
         spinnerCategory = findViewById(R.id.spinner_category);
         soundSpinner = findViewById(R.id.sound_Services);
-        cancel = findViewById(R.id.cancel_search_location);
-        titleTxt = findViewById(R.id.titleTv);
         scrollView = findViewById(R.id.scroll_view);
         locationMap = findViewById(R.id.location_map);
         location = findViewById(R.id.locationTxt);
@@ -831,6 +891,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         } else {
             Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void uploadEventPoster(DocumentReference documentReference) {
@@ -854,6 +915,10 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                                             public void onSuccess(Void unused) {
                                                 Log.d("EventPoster", "Event poster updated successfully");
                                                 Glide.with(addEvents.this).load(imageUrl).into(imageView);
+                                                Intent intent = new Intent(addEvents.this, eventsActivity.class);
+                                                startActivity(intent);
+                                                finish();
+
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override

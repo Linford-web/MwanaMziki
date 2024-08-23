@@ -6,208 +6,204 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".addAdverts">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/my_primary">
+    </View>
 
-    <LinearLayout
-        android:id="@+id/allLyt"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+        android:layout_marginTop="8dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@android:color/white">
 
-        <LinearLayout
-            android:id="@+id/top_bar_nav"
-            android:layout_width="match_parent"
-            android:layout_margin="5dp"
+        <ImageButton
+            android:id="@+id/back_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="start"
+            app:tint="@color/red"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/back_arrow" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
-            <ImageButton
-                android:id="@+id/back_arrow"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="start"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/back_arrow"
-                app:tint="@color/red"
-                android:focusable="true" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:letterSpacing="0.1"
-                android:textColor="@color/blue"
-                android:text="Add Advertisments"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:text="Add Advertisments"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:letterSpacing="0.1"
+            android:textStyle="bold" />
 
-        <ScrollView
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_toolbar">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cover"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/cover"/>
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Add Advertisment Documents"
-                        android:textSize="18sp"/>
+                    android:text="Add Advertisment Documents"
+                    android:layout_marginStart="5dp"
+                    android:textStyle="bold" />
 
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Upload Image"
-                        android:layout_margin="5dp"
-                        android:textSize="15sp"
-                        android:textStyle="bold"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Upload Documents"
-                        android:textSize="15sp"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Image"
+                    android:layout_margin="5dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Documents"
+                    android:textSize="15sp"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"/>
 
-                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Other Details"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:padding="8dp"
+                android:elevation="2dp"
+                android:layout_margin="5dp"
+                android:hint="Add more details..."/>
+
+            <LinearLayout
+                android:id="@+id/namesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Other Details"
+                    android:text=" Choose Advertisment Places"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
-
-                <EditText
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="8dp"
-                    android:elevation="2dp"
-                    android:layout_margin="5dp"
-                    android:hint="Add more details..."/>
+                    android:id="@+id/musicianNamesRv"
+                    android:layout_margin="5dp"/>
 
                 <LinearLayout
-                    android:id="@+id/namesLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text=" Choose Advertisment Places"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/musicianNamesRv"
-                        android:layout_margin="5dp"/>
+                        android:layout_weight="1"
+                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
+                        android:textStyle="normal"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                            android:textStyle="normal"/>
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_marginTop="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                            android:textStyle="normal"/>
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_marginTop="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                            android:textStyle="normal"/>
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_marginTop="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                            android:textStyle="normal"/>
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/addAdvertBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:text="Make Advertisment"
-                    android:layout_gravity="center"
-                    android:textSize="18sp"
-                    android:layout_margin="20dp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1"/>
+                <LinearLayout
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
+                        android:textStyle="normal"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
+                        android:textStyle="normal"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
+                        android:textStyle="normal"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/addAdvertBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Make Advertisment"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:layout_margin="20dp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

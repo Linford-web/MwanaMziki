@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,6 +31,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,10 +46,9 @@ import java.util.UUID;
 
 public class profileActivity extends AppCompatActivity {
 
-    TextView name, phone, email, aboutMe, socials, category;
-    ImageView back, imageView;
-    Button logout, edit;
-    SwitchCompat themeSwitch;
+    TextView name, phone, email, aboutMe, socials, category, text1, text2, text3;
+    ImageView imageView;
+    BottomNavigationView bottomNavigationView;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -64,34 +67,61 @@ public class profileActivity extends AppCompatActivity {
         name = findViewById(R.id.user_name);
         phone = findViewById(R.id.phone_number);
         email = findViewById(R.id.email);
-        back = findViewById(R.id.back_arrow);
 
         imageView = findViewById(R.id.imageView);
-        logout = findViewById(R.id.logoutBtn);
         aboutMe = findViewById(R.id.about);
-        edit = findViewById(R.id.editProfileBtn);
         socials = findViewById(R.id.socials);
         category = findViewById(R.id.category);
-        themeSwitch = findViewById(R.id.switch_theme);
+        text1 = findViewById(R.id.text1);
+        text2 = findViewById(R.id.text2);
+        text3 = findViewById(R.id.text3);
 
         // check user access level
         checkUserAccessLevel();
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), editProfile.class));
-            }
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        findViewById(R.id.left_button).setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
-        // Logic For Logout Button
-        logout.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.right_button).setOnClickListener(v -> {
+            // Handle right button click
+            startActivity(new Intent(getApplicationContext(), editProfile.class));
+        });
+
+        bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setSelectedItemId(R.id.profile);
+
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNavigationView, (view, insets) -> {
+            Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(0, 0, 0, 0);
+            insets.consumeSystemWindowInsets();
+            return insets;
+        });
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), loginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.home) {
+                    startActivity(new Intent(getApplicationContext(), MainDashboard.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                } else if (itemId == R.id.profile) {
+                    return true;
+                } else if (itemId == R.id.services) {
+                    startActivity(new Intent(getApplicationContext(), categoryOptions.class));
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (itemId == R.id.search){
+                    // Handle other menu items if needed
+                }
+                return false;
             }
         });
 
@@ -109,7 +139,7 @@ public class profileActivity extends AppCompatActivity {
                             if (document != null && document.exists()) {
                                 // Retrieve user details
                                 String userName = document.getString("name");
-                                String userNumber = document.getString("number");
+                                String userNumber = document.getString("phone");
                                 String userEmail = document.getString("email");
                                 String Category = document.getString("category");
                                 String about = document.getString("about");
@@ -162,32 +192,19 @@ public class profileActivity extends AppCompatActivity {
                         if (document != null && document.exists()) {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
-                                // Back Button
-                                back.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
-                                        finish();
-                                    }
-                                });
                                 category.setVisibility(View.GONE);
                                 aboutMe.setVisibility(View.GONE);
                                 socials.setVisibility(View.GONE);
-
+                                text1.setVisibility(View.GONE);
+                                text2.setVisibility(View.GONE);
+                                text3.setVisibility(View.GONE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
-                                // Back Button
-                                back.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
-                                        finish();
-                                    }
-                                });
                                 category.setVisibility(View.VISIBLE);
                                 aboutMe.setVisibility(View.VISIBLE);
                                 socials.setVisibility(View.VISIBLE);
-                                edit.setVisibility(View.VISIBLE);
-
+                                text1.setVisibility(View.VISIBLE);
+                                text2.setVisibility(View.VISIBLE);
+                                text3.setVisibility(View.VISIBLE);
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");
@@ -198,62 +215,6 @@ public class profileActivity extends AppCompatActivity {
                         Log.e("TaskListAdapter", "Error getting document", task.getException());
                     }
                 });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Uri imageUri = null;
-        if (data != null) {
-            imageUri = data.getData();
-        }
-        imageView.setImageURI(imageUri);
-
-        // Upload the selected image to Firebase Storage
-        StorageReference storageRef = fStorage.getReference();
-        final StorageReference profileRef = storageRef.child("profile_photos/" + FirebaseAuth.getInstance().getUid() + ".jpg");
-
-        if (imageUri != null) {
-            profileRef.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String imageUrl = uri.toString();
-
-                                    fStore.collection("Users")
-                                            .document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
-                                            .update("profilePicture", imageUrl)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Toast.makeText(profileActivity.this, "Profile photo updated successfully", Toast.LENGTH_SHORT).show();
-                                                    // Update ImageView with the new image URL
-                                                    Glide.with(profileActivity.this).load(imageUrl).into(imageView);
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(profileActivity.this, "Failed to update profile photo", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
-                            });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(profileActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
-        }
-
-
     }
 
 }

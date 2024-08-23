@@ -3,7 +3,9 @@ package com.example.eventmuziki;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +28,8 @@ import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.Models.serviceNameModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,7 +41,7 @@ import java.util.Objects;
 public class MainDashboard extends AppCompatActivity {
 
     Button adverts;
-    ImageView profile, allAdverts, upcomingEvents;
+    ImageView profile;
     TextView userNameTv;
     RecyclerView eventRv, advertsRv, menuRv;
     ArrayList<eventModel> events;
@@ -45,8 +50,9 @@ public class MainDashboard extends AppCompatActivity {
     advertAdapter adapter2;
     dashAdapter adapter3;
     FirebaseFirestore fStore;
+    BottomNavigationView bottomNavigationView;
 
-    String name, email;
+    String name, email, userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +64,47 @@ public class MainDashboard extends AppCompatActivity {
         profile = findViewById(R.id.userProfileTv);
         userNameTv = findViewById(R.id.get_name);
         eventRv = findViewById(R.id.eventsRecyclerView);
-        allAdverts = findViewById(R.id.allAdvertsBtn);
-        upcomingEvents = findViewById(R.id.allEventsBtn);
         fStore = FirebaseFirestore.getInstance();
         advertsRv = findViewById(R.id.advertRv);
         menuRv = findViewById(R.id.menuRv);
+        userId = FirebaseAuth.getInstance().getUid();
 
+        bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setSelectedItemId(R.id.home);
+
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNavigationView, (view, insets) -> {
+            // Remove the bottom padding
+            view.setPadding(0, 0, 0,0);
+            return insets;
+        });
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.home) {
+                    return true;
+                } else if (itemId == R.id.profile) {
+                    startActivity(new Intent(getApplicationContext(), profileActivity.class));
+                    return true;
+                } else if (itemId == R.id.services) {
+                    startActivity(new Intent(getApplicationContext(), categoryOptions.class));
+                    return true;
+                }else {
+                    // Handle other menu items if needed
+                }
+                return false;
+            }
+        });
+
+        // Fetch events from Firestore
+        fetchEventSs(userId);
+        fetchAdverts(userId);
         // Initialize Event RecyclerView
         events = new ArrayList<>();
-        adapter = new eventAdapter2(events);
+        adapter = new eventAdapter2(events, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         eventRv.setLayoutManager(layoutManager);
         eventRv.setAdapter(adapter);
@@ -78,7 +116,6 @@ public class MainDashboard extends AppCompatActivity {
         advertsRv.setLayoutManager(layoutManager2);
         advertsRv.setAdapter(adapter2);
 
-        String userId = FirebaseAuth.getInstance().getUid();
         if (userId != null){
             // Fetch user details from FireStore "Users" collection
             fStore.collection("Users")
@@ -110,75 +147,21 @@ public class MainDashboard extends AppCompatActivity {
                     });
         }
 
-        // check user access level
-        checkUserAccessLevel();
-
         setUpRecyclerView();
-
 
     }
 
     private void setUpRecyclerView() {
         ArrayList<serviceNameModel> menuItems = new ArrayList<>();
 
-        menuItems.add(new serviceNameModel("Events", R.drawable.garland, eventsActivity.class));
-        menuItems.add(new serviceNameModel("Adverts", R.drawable.ads, advertActivity.class));
-        menuItems.add(new serviceNameModel("Chats", R.drawable.chat, chatActivity.class));
-        menuItems.add(new serviceNameModel("Profile", R.drawable.user, profileActivity.class));
+        menuItems.add(new serviceNameModel("Events", R.drawable.event_icon, eventsActivity.class));
+        menuItems.add(new serviceNameModel("Adverts", R.drawable.advertising, advertActivity.class));
+        menuItems.add(new serviceNameModel("Chats", R.drawable.chat_icon, chatActivity.class));
         menuItems.add(new serviceNameModel("Services", R.drawable.service_icon, categoryOptions.class));
 
         adapter3 = new dashAdapter(MainDashboard.this, menuItems);
-        menuRv.setLayoutManager(new GridLayoutManager(this, 5));
+        menuRv.setLayoutManager(new GridLayoutManager(this, 4));
         menuRv.setAdapter(adapter3);
-    }
-
-    private void checkUserAccessLevel() {
-        FirebaseAuth fAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-
-        //get user type
-        String userId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
-
-        fStore.collection("Users")
-                .document(userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-
-                        if (document != null && document.exists()) {
-                            String userType = document.getString("userType");
-                            if ("Corporate".equals(userType)) {
-                                // Fetch events from Firestore
-                                fetchEventSs(userId);
-                                fetchAdverts(userId);
-
-                            } else if ("Musician".equalsIgnoreCase(userType)) {
-                                // Fetch events from Firestore
-                                fetchEvents();
-                                fetchAllAdverts();
-                            } else {
-                                // Handle other user types if needed
-                                Log.d("TAG", "User is neither Corporate nor Musician");
-                            }
-
-                        }
-                    } else {
-                        Log.e("TaskListAdapter", "Error getting document", task.getException());
-                    }
-                });
-    }
-
-    private void fetchAllAdverts() {
-        fStore.collection("Advertisements")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        advertisementModel advertTv = documentSnapshot.toObject(advertisementModel.class);
-                        advert.add(advertTv);
-                    }
-                    adapter2.notifyDataSetChanged();
-                }).addOnFailureListener(e -> Toast.makeText(MainDashboard.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     private void fetchAdverts(String userId) {
@@ -216,26 +199,6 @@ public class MainDashboard extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(MainDashboard.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void fetchEvents() {
-        fStore.collection("Events")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            eventModel event = documentSnapshot.toObject(eventModel.class);
-                            events.add(event);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
                     }
                 });
     }
