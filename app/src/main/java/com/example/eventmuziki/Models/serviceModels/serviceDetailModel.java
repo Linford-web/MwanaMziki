@@ -3,58 +3,58 @@ package com.example.eventmuziki.Models.serviceModels;
 public class serviceDetailModel {
 
     public static class carHire{
-        public String pickUpLocation, dropOffLocation, pickUpDate, dropOffDate, carType, service;
+        public String model, type, color, seats, time, service;
 
         public carHire() {
         }
 
-        public carHire(String pickUpLocation, String dropOffLocation, String pickUpDate, String dropOffDate, String carType, String service) {
-            this.pickUpLocation = pickUpLocation;
-            this.dropOffLocation = dropOffLocation;
-            this.pickUpDate = pickUpDate;
-            this.dropOffDate = dropOffDate;
-            this.carType = carType;
+        public carHire(String model, String type, String color, String seats, String time, String service) {
+            this.model = model;
+            this.type = type;
+            this.color = color;
+            this.seats = seats;
+            this.time = time;
             this.service = service;
         }
 
-        public String getPickUpLocation() {
-            return pickUpLocation;
+        public String getModel() {
+            return model;
         }
 
-        public void setPickUpLocation(String pickUpLocation) {
-            this.pickUpLocation = pickUpLocation;
+        public void setModel(String model) {
+            this.model = model;
         }
 
-        public String getDropOffLocation() {
-            return dropOffLocation;
+        public String getType() {
+            return type;
         }
 
-        public void setDropOffLocation(String dropOffLocation) {
-            this.dropOffLocation = dropOffLocation;
+        public void setType(String type) {
+            this.type = type;
         }
 
-        public String getPickUpDate() {
-            return pickUpDate;
+        public String getColor() {
+            return color;
         }
 
-        public void setPickUpDate(String pickUpDate) {
-            this.pickUpDate = pickUpDate;
+        public void setColor(String color) {
+            this.color = color;
         }
 
-        public String getDropOffDate() {
-            return dropOffDate;
+        public String getSeats() {
+            return seats;
         }
 
-        public void setDropOffDate(String dropOffDate) {
-            this.dropOffDate = dropOffDate;
+        public void setSeats(String seats) {
+            this.seats = seats;
         }
 
-        public String getCarType() {
-            return carType;
+        public String getTime() {
+            return time;
         }
 
-        public void setCarType(String carType) {
-            this.carType = carType;
+        public void setTime(String time) {
+            this.time = time;
         }
 
         public String getService() {
@@ -67,41 +67,24 @@ public class serviceDetailModel {
     }
 
     public static class hirePhotographer{
-        public String price, photography_location, photography_date, duration, service;
+        public String photoPackage, duration, equipment, delivery, service;
 
         public hirePhotographer() {
         }
-
-        public hirePhotographer(String price, String photography_location, String photography_date, String duration, String service) {
-            this.price = price;
-            this.photography_location = photography_location;
-            this.photography_date = photography_date;
+        public hirePhotographer(String photoPackage, String duration, String equipment, String delivery, String service) {
+            this.photoPackage = photoPackage;
             this.duration = duration;
+            this.equipment = equipment;
+            this.delivery = delivery;
             this.service = service;
         }
 
-        public String getPrice() {
-            return price;
+        public String getPhotoPackage() {
+            return photoPackage;
         }
 
-        public void setPrice(String price) {
-            this.price = price;
-        }
-
-        public String getPhotography_location() {
-            return photography_location;
-        }
-
-        public void setPhotography_location(String photography_location) {
-            this.photography_location = photography_location;
-        }
-
-        public String getPhotography_date() {
-            return photography_date;
-        }
-
-        public void setPhotography_date(String photography_date) {
-            this.photography_date = photography_date;
+        public void setPhotoPackage(String photoPackage) {
+            this.photoPackage = photoPackage;
         }
 
         public String getDuration() {
@@ -110,6 +93,22 @@ public class serviceDetailModel {
 
         public void setDuration(String duration) {
             this.duration = duration;
+        }
+
+        public String getEquipment() {
+            return equipment;
+        }
+
+        public void setEquipment(String equipment) {
+            this.equipment = equipment;
+        }
+
+        public String getDelivery() {
+            return delivery;
+        }
+
+        public void setDelivery(String delivery) {
+            this.delivery = delivery;
         }
 
         public String getService() {
@@ -122,58 +121,49 @@ public class serviceDetailModel {
     }
 
     public static class hireCatering{
-        public String catering_location, catering_date, number_of_guests, cuisine_type, catering_tpye, service;
+        public String caterings, cuisine, serviceCatering, cateringGuests, service;
 
         public hireCatering() {
         }
 
-        public hireCatering(String catering_location, String catering_date, String number_of_guests, String cuisine_type, String catering_tpye, String service) {
-            this.catering_location = catering_location;
-            this.catering_date = catering_date;
-            this.number_of_guests = number_of_guests;
-            this.cuisine_type = cuisine_type;
-            this.catering_tpye = catering_tpye;
+        public hireCatering(String caterings, String cuisine, String serviceCatering, String cateringGuests, String service) {
+            this.caterings = caterings;
+            this.cuisine = cuisine;
+            this.serviceCatering = serviceCatering;
+            this.cateringGuests = cateringGuests;
             this.service = service;
         }
 
-        public String getCatering_location() {
-            return catering_location;
+        public String getCaterings() {
+            return caterings;
         }
 
-        public void setCatering_location(String catering_location) {
-            this.catering_location = catering_location;
+        public void setCaterings(String caterings) {
+            this.caterings = caterings;
         }
 
-        public String getCatering_date() {
-            return catering_date;
+        public String getCuisine() {
+            return cuisine;
         }
 
-        public void setCatering_date(String catering_date) {
-            this.catering_date = catering_date;
+        public void setCuisine(String cuisine) {
+            this.cuisine = cuisine;
         }
 
-        public String getNumber_of_guests() {
-            return number_of_guests;
+        public String getServiceCatering() {
+            return serviceCatering;
         }
 
-        public void setNumber_of_guests(String number_of_guests) {
-            this.number_of_guests = number_of_guests;
+        public void setServiceCatering(String serviceCatering) {
+            this.serviceCatering = serviceCatering;
         }
 
-        public String getCatering_tpye() {
-            return catering_tpye;
+        public String getCateringGuests() {
+            return cateringGuests;
         }
 
-        public void setCatering_tpye(String catering_tpye) {
-            this.catering_tpye = catering_tpye;
-        }
-
-        public String getCuisine_type() {
-            return cuisine_type;
-        }
-
-        public void setCuisine_type(String cuisine_type) {
-            this.cuisine_type = cuisine_type;
+        public void setCateringGuests(String cateringGuests) {
+            this.cateringGuests = cateringGuests;
         }
 
         public String getService() {
@@ -186,24 +176,26 @@ public class serviceDetailModel {
     }
 
     public static class hireCostumes{
-        public String costumeType, costumeSize, costumeQuantity, service;
+        public String costumeAge, costumeSize, costumeQuantity, costumeDelivery, costumeDuration, service;
 
         public hireCostumes() {
         }
 
-        public hireCostumes(String costumeType, String costumeSize, String costumeQuantity, String service) {
-            this.costumeType = costumeType;
+        public hireCostumes(String costumeAge, String costumeSize, String costumeQuantity, String costumeDelivery, String costumeDuration, String service) {
+            this.costumeAge = costumeAge;
             this.costumeSize = costumeSize;
             this.costumeQuantity = costumeQuantity;
+            this.costumeDelivery = costumeDelivery;
+            this.costumeDuration = costumeDuration;
             this.service = service;
         }
 
-        public String getCostumeType() {
-            return costumeType;
+        public String getCostumeAge() {
+            return costumeAge;
         }
 
-        public void setCostumeType(String costumeType) {
-            this.costumeType = costumeType;
+        public void setCostumeAge(String costumeAge) {
+            this.costumeAge = costumeAge;
         }
 
         public String getCostumeSize() {
@@ -220,6 +212,22 @@ public class serviceDetailModel {
 
         public void setCostumeQuantity(String costumeQuantity) {
             this.costumeQuantity = costumeQuantity;
+        }
+
+        public String getCostumeDelivery() {
+            return costumeDelivery;
+        }
+
+        public void setCostumeDelivery(String costumeDelivery) {
+            this.costumeDelivery = costumeDelivery;
+        }
+
+        public String getCostumeDuration() {
+            return costumeDuration;
+        }
+
+        public void setCostumeDuration(String costumeDuration) {
+            this.costumeDuration = costumeDuration;
         }
 
         public String getService() {

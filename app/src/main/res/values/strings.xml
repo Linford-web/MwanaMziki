@@ -165,11 +165,6 @@
         <item>7</item>
         <item>10</item>
     </string-array>
-    <string-array name="catering_type">
-        <item>Half Board</item>
-        <item>Full Board</item>
-        <item>Cake Moment</item>
-    </string-array>
     <string-array name="size">
         <item>Small</item>
         <item>Medium</item>
@@ -222,6 +217,159 @@
         <item>Keyboards</item>
         <item>Cables</item>
         <item>Other</item>
+    </string-array>
+    <string-array name="catering_package">
+        <item>Buffet Package</item>
+        <item>Event Cakes Package</item>
+        <item>Wedding Package</item>
+        <item>Anniversary Package</item>
+        <item>Corporate Package</item>
+        <item>Vegan Branch Package</item>
+        <item>BBQ Package</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="Cuisine_type">
+        <item>African</item>
+        <item>Asian</item>
+        <item>American</item>
+        <item>Italian</item>
+        <item>Mexican</item>
+        <item>Chinese</item>
+        <item>Japanese</item>
+        <item>French</item>
+        <item>Spanish</item>
+        <item>Indian</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="service_type">
+        <item>Buffet</item>
+        <item>Plated service</item>
+        <item>Drop-Off</item>
+        <item>Delivery</item>
+        <item>Half Service</item>
+        <item>Full Service</item>
+
+    </string-array>
+    <string-array name="catering_type">
+        <item>Half Board</item>
+        <item>Full Board</item>
+        <item>Event Management</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="social_media_platforms">
+        <item>Facebook</item>
+        <item>Instagram</item>
+        <item>Twitter</item>
+        <item>TikTok</item>
+        <item>YouTube</item>
+        <item>Snapchat</item>
+        <item>Pinterest</item>
+        <item>LinkedIn</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="audience_age">
+        <item>under 5</item>
+        <item>5-10</item>
+        <item>10-18</item>
+        <item>18+</item>
+    </string-array>
+    <string-array name="audience_gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="audience_location">
+        <item>My Country</item>
+        <item>My Continent</item>
+        <item>Worldwide</item>
+        <item>Not Specified</item>
+    </string-array>
+    <string-array name="social_media_influencer_package">
+        <item>Instagram Story Take Over</item>
+        <item>Youtube Shorts Take Over</item>
+        <item>Youtube Product review</item>
+        <item>Instagram product review</item>
+        <item>Youtube Shorts Take Over</item>
+        <item>Youtube Product review</item>
+
+    </string-array>
+    <string-array name="content_type">
+        <item>Video</item>
+        <item>Image</item>
+        <item>Text</item>
+        <item>Audio</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="posting_schedule">
+        <item>Daily</item>
+        <item>Twice Daily</item>
+        <item>Twice Weekly</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+    <string-array name="content_theme">
+        <item>Lifestyle</item>
+        <item>Fashion</item>
+        <item>Technology</item>
+        <item>Sports</item>
+        <item>Food</item>
+        <item>Travel</item>
+        <item>Music</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="creativity_freedom">
+        <item>Fully controlled by Influencer</item>
+        <item>Limited creativity</item>
+        <item>Full creativity</item>
+        <item>Guided by brand</item>
+    </string-array>
+    <string-array name="sponsorship_type">
+        <item>Financial</item>
+        <item>Non-Financial</item>
+        <item>In Kind</item>
+        <item>Media</item>
+        <item>Co-Sponsorship</item>
+        <item>Full Sponsorship</item>
+    </string-array>
+    <string-array name="sponsorship_industry">
+        <item>Automotive</item>
+        <item>Construction</item>
+        <item>Education</item>
+        <item>Energy</item>
+        <item>Entertainment</item>
+        <item>Financial Services</item>
+        <item>Food and Beverage</item>
+        <item>Healthcare</item>
+        <item>Hospitality</item>
+        <item>Manufacturing</item>
+        <item>Media</item>
+        <item>Real Estate</item>
+        <item>Retail</item>
+        <item>Telecommunications</item>
+        <item>Transport</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="sponsorship_interests">
+        <item>Advertising</item>
+        <item>Brand Management</item>
+        <item>Project Management</item>
+        <item>Product Management</item>
+        <item>Online Marketing</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="decoration_package">
+        <item>Elegant Wedding</item>
+        <item>Birthday Package</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="decoration_theme">
+        <item>Rustic</item>
+        <item>Modern</item>
+        <item>Classic</item>
+        <item>Vintage</item>
+        <item>Cultural</item>
+        <item>Floral</item>
     </string-array>
 
 </resources>

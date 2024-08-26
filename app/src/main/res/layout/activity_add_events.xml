@@ -265,7 +265,6 @@
                             android:padding="5dp"
                             android:letterSpacing="0.1"
                             android:background="@drawable/edit_text_bg"
-                            android:textSize="15sp"
                             android:visibility="visible" />
                     </LinearLayout>
 
@@ -354,7 +353,6 @@
                             android:hint="@string/amount"
                             android:textStyle="bold"
                             android:inputType="number"
-
                             android:layout_margin="5dp"
                             android:padding="10dp"
                             android:letterSpacing="0.1"
@@ -626,7 +624,7 @@
 
                 <!-- Car Rental Service Details -->
                 <LinearLayout
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/carRentalDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -636,63 +634,212 @@
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Car Rental Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
-
-                    <EditText
-                        android:id="@+id/pickUpLocation"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Pickup Location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
 
-                    <EditText
-                        android:id="@+id/dropOffLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Drop-off Location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Car Rental Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkCar"/>
+                    </LinearLayout>
+
+
+
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <EditText
-                            android:id="@+id/pickUpDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Pickup Date"
-                            android:padding="10dp"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp" />
-
-                        <EditText
-                            android:id="@+id/dropOffDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Drop-off Date"
-                            android:padding="10dp"
-                            android:background="@drawable/edit_text_bg"
-                            android:layout_margin="5dp" />
-
-                    </LinearLayout>
-                    <Spinner
-                        android:id="@+id/car_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:padding="8dp"
-                        android:entries="@array/Car_Rental"/>
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Car Model"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerCarModel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/car_models"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Car Type"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerCarType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/car_type"/>
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Car color"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerCarColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/car_color"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Number of Seats"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_marginBottom="10dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerCarSeats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/seats"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Hire hours"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btn_minusC"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/minus_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="minus"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/tv_amountC"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="5dp"
+                                android:inputType="number"
+                                android:layout_margin="5dp"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                            <ImageButton
+                                android:id="@+id/btn_addC"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/add_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="add"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Car model type"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+
+                        <Spinner
+                            android:id="@+id/car_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/Car_Rental"/>
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -703,54 +850,109 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:background="@drawable/edit_text_bg"
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Photography Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkPhotography"/>
+
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Photography Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
+                        android:text="Package name"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_photography_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:entries="@array/photography_package"
+                        android:background="@drawable/edit_text_bg" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/photography_location"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Event Location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Duration"
+                            android:background="@drawable/edit_text_bg" />
 
-                    <EditText
-                        android:id="@+id/photography_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Event Date"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        <EditText
+                            android:id="@+id/photographyDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of Hours"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg" />
 
-                    <EditText
-                        android:id="@+id/photography_duration"
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Number of Hours"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
-                    <EditText
-                        android:id="@+id/price"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Special equipments"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+
+                        <Spinner
+                            android:id="@+id/photographyEquipments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/special_equipments"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Price per hour"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Delivery Method"
+                            android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/spinner_photo_deliveryMethod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="7dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/delivery_method"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -766,63 +968,119 @@
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Catering Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Catering Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkCatering"/>
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/catering_location"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Event Location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_margin="5dp">
 
-                    <EditText
-                        android:id="@+id/catering_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Event Date"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Catering Package" />
+                        <Spinner
+                            android:id="@+id/spinner_catering_package"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/catering_package"/>
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/number_of_guests"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Number of Guests"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
 
-                    <EditText
-                        android:id="@+id/cuisine_type"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Cuisine type"/>
+
+                        <Spinner
+                            android:id="@+id/spinner_cuisine_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/Cuisine_type"/>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cuisine Type"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
-                    <Spinner
-                        android:id="@+id/cateringServices"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Service type"/>
+
+                        <Spinner
+                            android:id="@+id/spinner_catering_service_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/service_type"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:padding="8dp"
-                        android:entries="@array/catering_type"/>
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Number of guests" />
+
+                        <EditText
+                            android:id="@+id/cateringGuests"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of guests"
+                            android:padding="8dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
                 <!-- Costumes Service Details -->
                 <LinearLayout
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/costumesDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -832,42 +1090,119 @@
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Costumes Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
-
-                    <EditText
-                        android:id="@+id/costume_type"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Costume Type"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Costumes Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkCostumes"/>
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/size"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Size"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Age group"
+                            android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/spinner_ageGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="7dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/age_group"/>
 
-                    <EditText
-                        android:id="@+id/quantity"
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Quantity"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Size"
+                            android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/spinner_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="7dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/size"/>
 
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Costume delivery service"
+                        android:id="@+id/checkBoxCostumeDelivery" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Quantity"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/costumeQuantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Quantity"
+                            android:padding="8dp"
+                            android:inputType="number"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Hire duration"
+                            android:textStyle="bold" />
+                        <EditText
+                            android:id="@+id/costumeDurations"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Days"
+                            android:padding="8dp"
+                            android:inputType="number"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -883,41 +1218,26 @@
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PA and Sound System Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
-
-                    <EditText
-                        android:id="@+id/dj_location"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Event Location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Sound System Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkSoundSystem"/>
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/dj_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Event Date"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
 
-                    <EditText
-                        android:id="@+id/dj_duration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Duration (Hours)"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
                     <Spinner
                         android:id="@+id/sound_Services"
                         android:layout_width="match_parent"
@@ -949,40 +1269,78 @@
                         android:textColor="@color/black"
                         android:layout_marginBottom="10dp" />
 
-                    <EditText
-                        android:id="@+id/deco_location"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Event Location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:text="Decoration Package"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
 
-                    <EditText
-                        android:id="@+id/deco_date"
+                    <Spinner
+                        android:id="@+id/spinnerDecorationPackage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Event Date"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_margin="5dp"
+                        android:padding="8dp"
+                        android:entries="@array/decoration_package"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Event Theme"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
 
-                    <EditText
-                        android:id="@+id/deco_duration"
+                    <Spinner
+                        android:id="@+id/spinnerDecorationTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Number of Hours"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
-                    <EditText
-                        android:id="@+id/deco_price"
+                        android:layout_margin="5dp"
+                        android:padding="8dp"
+                        android:entries="@array/decoration_theme"/>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Price per hour"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Color Theme"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+                        <Spinner
+                            android:id="@+id/spinnerFirstColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/car_color"/>
+                        <Spinner
+                            android:id="@+id/spinnerSecondColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/car_color"/>
+
+                    </LinearLayout>
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Further event Customization"
+                        android:id="@+id/checkBoxCustomization"/>
+
+
+
+
+
+
+
+
+
 
                 </LinearLayout>
 

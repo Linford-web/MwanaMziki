@@ -768,6 +768,10 @@
                     android:padding="10dp"
                     android:background="@drawable/edit_text_bg"
                     android:layout_marginBottom="10dp" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/decoRv"/>
 
             </LinearLayout>
 
@@ -827,6 +831,11 @@
                     android:background="@drawable/edit_text_bg"
                     android:layout_marginBottom="10dp" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/contentCreatorsRv"/>
+
             </LinearLayout>
 
             <!-- Sponsorship Service Details -->
@@ -884,6 +893,11 @@
                     android:padding="10dp"
                     android:background="@drawable/edit_text_bg"
                     android:layout_marginBottom="10dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sponsorshipRv"/>
 
             </LinearLayout>
 

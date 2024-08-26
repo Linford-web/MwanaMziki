@@ -1,7 +1,5 @@
 package com.example.eventmuziki.Models.serviceModels;
 
-import java.util.ArrayList;
-
 public class ServicesDetails {
 
     public static class serviceDetail{
@@ -171,76 +169,158 @@ public class ServicesDetails {
     }
 
     public static class cateringModel {
-        String catering_company_name, social_media_catering, no_of_people, price_catering, catering_type, category, status, creatorId;
-        ArrayList<String> images;
+        String name,Package,cuisine, service ,number, packagePrice, detail, booking, setup, staff, noOffStaff, coordinator, theme, transportation ,cancelPolicy, status ,creatorId, image;
 
         public cateringModel() {
         }
 
-        public cateringModel(String catering_company_name, String social_media_catering, String no_of_people, String price_catering, String catering_type, String category, String status, String creatorId, ArrayList<String> images) {
-            this.catering_company_name = catering_company_name;
-            this.social_media_catering = social_media_catering;
-            this.no_of_people = no_of_people;
-            this.price_catering = price_catering;
-            this.catering_type = catering_type;
-            this.category = category;
+        public cateringModel(String name, String Package, String cuisine, String service, String number, String packagePrice, String detail, String booking, String setup, String staff,String noOffStaff,String coordinator, String theme, String transportation, String cancelPolicy, String status, String creatorId, String image) {
+            this.name = name;
+            this.Package = Package;
+            this.cuisine = cuisine;
+            this.service = service;
+            this.number = number;
+            this.packagePrice = packagePrice;
+            this.detail = detail;
+            this.booking = booking;
+            this.setup = setup;
+            this.staff = staff;
+            this.noOffStaff = noOffStaff;
+            this.coordinator = coordinator;
+            this.theme = theme;
+            this.transportation = transportation;
+            this.cancelPolicy = cancelPolicy;
             this.status = status;
             this.creatorId = creatorId;
-            this.images = images;
+            this.image = image;
         }
 
-        public String getCatering_company_name() {
-            return catering_company_name;
+        public String getName() {
+            return name;
         }
 
-        public void setCatering_company_name(String catering_company_name) {
-            this.catering_company_name = catering_company_name;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public String getSocial_media_catering() {
-            return social_media_catering;
+        public String getPackage() {
+            return Package;
         }
 
-        public void setSocial_media_catering(String social_media_catering) {
-            this.social_media_catering = social_media_catering;
+        public void setPackage(String Package) {
+            Package = Package;
         }
 
-        public String getNo_of_people() {
-            return no_of_people;
+        public String getCuisine() {
+            return cuisine;
         }
 
-        public void setNo_of_people(String no_of_people) {
-            this.no_of_people = no_of_people;
+        public void setCuisine(String cuisine) {
+            this.cuisine = cuisine;
         }
 
-        public String getPrice_catering() {
-            return price_catering;
+        public String getService() {
+            return service;
         }
 
-        public void setPrice_catering(String price_catering) {
-            this.price_catering = price_catering;
+        public void setService(String service) {
+            this.service = service;
         }
 
-        public String getCatering_type() {
-            return catering_type;
+        public String getNumber() {
+            return number;
         }
 
-        public void setCatering_type(String catering_type) {
-            this.catering_type = catering_type;
+        public void setNumber(String number) {
+            this.number = number;
         }
 
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
         public String getStatus() {
             return status;
         }
+
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public String getPackagePrice() {
+            return packagePrice;
+        }
+
+        public void setPackagePrice(String packagePrice) {
+            this.packagePrice = packagePrice;
+        }
+
+        public String getDetail() {
+            return detail;
+        }
+
+        public void setDetail(String detail) {
+            this.detail = detail;
+        }
+
+        public String getBooking() {
+            return booking;
+        }
+
+        public String getNoOffStaff() {
+            return noOffStaff;
+        }
+
+        public void setNoOffStaff(String noOffStaff) {
+            this.noOffStaff = noOffStaff;
+        }
+
+        public void setBooking(String booking) {
+            this.booking = booking;
+        }
+
+        public String getSetup() {
+            return setup;
+        }
+
+        public void setSetup(String setup) {
+            this.setup = setup;
+        }
+
+        public String getStaff() {
+            return staff;
+        }
+
+        public void setStaff(String staff) {
+            this.staff = staff;
+        }
+
+        public String getCoordinator() {
+            return coordinator;
+        }
+
+        public void setCoordinator(String coordinator) {
+            this.coordinator = coordinator;
+        }
+
+        public String getTheme() {
+            return theme;
+        }
+
+        public void setTheme(String theme) {
+            this.theme = theme;
+        }
+
+        public String getTransportation() {
+            return transportation;
+        }
+
+        public void setTransportation(String transportation) {
+            this.transportation = transportation;
+        }
+
+        public String getCancelPolicy() {
+            return cancelPolicy;
+        }
+
+        public void setCancelPolicy(String cancelPolicy) {
+            this.cancelPolicy = cancelPolicy;
         }
 
         public String getCreatorId() {
@@ -251,12 +331,12 @@ public class ServicesDetails {
             this.creatorId = creatorId;
         }
 
-        public ArrayList<String> getImages() {
-            return images;
+        public String getImage() {
+            return image;
         }
 
-        public void setImages(ArrayList<String> images) {
-            this.images = images;
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 
@@ -433,12 +513,12 @@ public class ServicesDetails {
 
     public static class soundModel {
 
-        String type, name, details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, userId, image;
+        String type, name, details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, status,userId, image;
 
         public soundModel() {
         }
 
-        public soundModel(String type, String name, String details, String area, String quantity, String price, String extraPrice, String setup, String delivery, String wireless, String packaged, String userId, String image) {
+        public soundModel(String type, String name, String details, String area, String quantity, String price, String extraPrice, String setup, String delivery, String wireless, String packaged, String status, String userId, String image) {
             this.type = type;
             this.name = name;
             this.details = details;
@@ -450,6 +530,7 @@ public class ServicesDetails {
             this.delivery = delivery;
             this.wireless = wireless;
             this.packaged = packaged;
+            this.status = status;
             this.userId = userId;
             this.image = image;
         }
@@ -516,6 +597,14 @@ public class ServicesDetails {
 
         public void setSetup(String setup) {
             this.setup = setup;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
         }
 
         public String getDelivery() {
@@ -720,6 +809,460 @@ public class ServicesDetails {
 
         public void setPreShoot(String preShoot) {
             this.preShoot = preShoot;
+        }
+    }
+
+    public static class influencerModel{
+
+        String handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage, status, creatorId, image;
+
+        public influencerModel() {
+        }
+
+        public influencerModel(String handle, String platform, String subscribers, String age, String gender, String location, String aPackage, String content, String posts, String schedule, String theme, String freedom, String collaboration, String cancellation, String coverage, String status, String creatorId, String image) {
+            this.handle = handle;
+            this.platform = platform;
+            this.subscribers = subscribers;
+            this.age = age;
+            this.gender = gender;
+            this.location = location;
+            Package = aPackage;
+            this.content = content;
+            this.posts = posts;
+            this.schedule = schedule;
+            this.theme = theme;
+            this.freedom = freedom;
+            this.collaboration = collaboration;
+            this.cancellation = cancellation;
+            this.coverage = coverage;
+            this.status = status;
+            this.creatorId = creatorId;
+            this.image = image;
+        }
+
+        public String getHandle() {
+            return handle;
+        }
+
+        public void setHandle(String handle) {
+            this.handle = handle;
+        }
+
+        public String getPlatform() {
+            return platform;
+        }
+
+        public void setPlatform(String platform) {
+            this.platform = platform;
+        }
+
+        public String getSubscribers() {
+            return subscribers;
+        }
+
+        public void setSubscribers(String subscribers) {
+            this.subscribers = subscribers;
+        }
+
+        public String getAge() {
+            return age;
+        }
+
+        public void setAge(String age) {
+            this.age = age;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public String getPackage() {
+            return Package;
+        }
+
+        public void setPackage(String aPackage) {
+            Package = aPackage;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getPosts() {
+            return posts;
+        }
+
+        public void setPosts(String posts) {
+            this.posts = posts;
+        }
+
+        public String getSchedule() {
+            return schedule;
+        }
+
+        public void setSchedule(String schedule) {
+            this.schedule = schedule;
+        }
+
+        public String getTheme() {
+            return theme;
+        }
+
+        public void setTheme(String theme) {
+            this.theme = theme;
+        }
+
+        public String getFreedom() {
+            return freedom;
+        }
+
+        public void setFreedom(String freedom) {
+            this.freedom = freedom;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getCollaboration() {
+            return collaboration;
+        }
+
+        public void setCollaboration(String collaboration) {
+            this.collaboration = collaboration;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getCancellation() {
+            return cancellation;
+        }
+
+        public void setCancellation(String cancellation) {
+            this.cancellation = cancellation;
+        }
+
+        public String getCoverage() {
+            return coverage;
+        }
+
+        public void setCoverage(String coverage) {
+            this.coverage = coverage;
+        }
+    }
+
+    public static class sponsorModel{
+        String name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellationPolicy, status, creatorId, image;
+        public sponsorModel() {
+        }
+
+        public sponsorModel(String name, String type, String event, String age, String industry, String interests, String promotion, String amount, String guide, String preBooking, String audience, String cancellationPolicy, String status, String creatorId, String image) {
+            this.name = name;
+            this.type = type;
+            this.event = event;
+            this.age = age;
+            this.industry = industry;
+            this.interests = interests;
+            this.promotion = promotion;
+            this.amount = amount;
+            this.guide = guide;
+            this.preBooking = preBooking;
+            this.audience = audience;
+            this.cancellationPolicy = cancellationPolicy;
+            this.status = status;
+            this.creatorId = creatorId;
+            this.image = image;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getEvent() {
+            return event;
+        }
+
+        public void setEvent(String event) {
+            this.event = event;
+        }
+
+        public String getAge() {
+            return age;
+        }
+
+        public void setAge(String age) {
+            this.age = age;
+        }
+
+        public String getIndustry() {
+            return industry;
+        }
+
+        public void setIndustry(String industry) {
+            this.industry = industry;
+        }
+
+        public String getInterests() {
+            return interests;
+        }
+
+        public void setInterests(String interests) {
+            this.interests = interests;
+        }
+
+        public String getPromotion() {
+            return promotion;
+        }
+
+        public void setPromotion(String promotion) {
+            this.promotion = promotion;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getGuide() {
+            return guide;
+        }
+
+        public void setGuide(String guide) {
+            this.guide = guide;
+        }
+
+        public String getPreBooking() {
+            return preBooking;
+        }
+
+        public void setPreBooking(String preBooking) {
+            this.preBooking = preBooking;
+        }
+
+        public String getAudience() {
+            return audience;
+        }
+
+        public void setAudience(String audience) {
+            this.audience = audience;
+        }
+
+        public String getCancellationPolicy() {
+            return cancellationPolicy;
+        }
+
+        public void setCancellationPolicy(String cancellationPolicy) {
+            this.cancellationPolicy = cancellationPolicy;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+    }
+
+    public static class decorationModel {
+
+        String name , Package , theme , event, details , customization , emergency, setUp ,time , cancellation, amount, status, creatorId, image;
+
+        public decorationModel() {
+        }
+
+        public decorationModel(String name, String aPackage, String theme, String event, String details, String customization, String emergency, String setUp, String time, String cancellation, String status, String amount, String creatorId, String image) {
+            this.name = name;
+            Package = aPackage;
+            this.theme = theme;
+            this.event = event;
+            this.details = details;
+            this.customization = customization;
+            this.emergency = emergency;
+            this.setUp = setUp;
+            this.time = time;
+            this.cancellation = cancellation;
+            this.status = status;
+            this.amount = amount;
+            this.creatorId = creatorId;
+            this.image = image;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPackage() {
+            return Package;
+        }
+
+        public void setPackage(String aPackage) {
+            Package = aPackage;
+        }
+
+        public String getTheme() {
+            return theme;
+        }
+
+        public void setTheme(String theme) {
+            this.theme = theme;
+        }
+
+        public String getEvent() {
+            return event;
+        }
+
+        public void setEvent(String event) {
+            this.event = event;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+
+        public void setDetails(String details) {
+            this.details = details;
+        }
+
+        public String getCustomization() {
+            return customization;
+        }
+
+        public void setCustomization(String customization) {
+            this.customization = customization;
+        }
+
+        public String getEmergency() {
+            return emergency;
+        }
+
+        public void setEmergency(String emergency) {
+            this.emergency = emergency;
+        }
+
+        public String getSetUp() {
+            return setUp;
+        }
+
+        public void setSetUp(String setUp) {
+            this.setUp = setUp;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+
+        public String getCancellation() {
+            return cancellation;
+        }
+
+        public void setCancellation(String cancellation) {
+            this.cancellation = cancellation;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 

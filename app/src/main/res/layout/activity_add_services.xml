@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+ <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -166,6 +166,7 @@
                             app:tint="@color/blue" />
 
                     </RelativeLayout>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -806,7 +807,7 @@
             <!-- Section for Catering Details-->
             <LinearLayout
                 android:id="@+id/addCateringDetails"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -847,7 +848,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/cateringDetailsTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -907,23 +908,48 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Social media handle"
+                        android:text="Catering Package"
                         android:textStyle="bold"
                         android:textSize="15sp"/>
-                    <EditText
-                        android:id="@+id/social_media_catering"
+                    <Spinner
+                        android:id="@+id/spinner_catering_package"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Social media"
-                        android:inputType="text"
-                        android:background="@drawable/edit_text_bg"
                         android:padding="10dp"
                         android:layout_margin="5dp"
-                        android:lines="3"/>
+                        android:entries="@array/catering_package"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cuisine type"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <Spinner
+                        android:id="@+id/spinner_cuisine_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/Cuisine_type"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Service type"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <Spinner
+                        android:id="@+id/spinner_catering_service_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/service_type"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
@@ -948,39 +974,178 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Price per Hour"
+                            android:text="Price of Package"
                             android:textStyle="bold"
                             android:textSize="15sp"/>
 
                         <EditText
-                            android:id="@+id/price_catering"
+                            android:id="@+id/package_price_catering"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/edit_text_bg"
                             android:padding="10dp"
                             android:layout_margin="5dp"
-                            android:hint="Price per hour"
+                            android:hint="Package price"
                             android:inputType="numberDecimal"/>
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Pre booking Time in days"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btn_minusZ"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/minus_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="minus"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/tv_catering_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="5dp"
+                                android:inputType="number"
+                                android:layout_margin="5dp"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                            <ImageButton
+                                android:id="@+id/btn_addZ"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/add_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="add"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkBoxCateringSetUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Set Up and Clean Services"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"/>
+
+                    <CheckBox
+                        android:id="@+id/checkBoxWaitStaffIncluded"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Wait Staff Included"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"/>
+                    <EditText
+                        android:visibility="gone"
+                        android:id="@+id/no_of_staff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="5dp"
+                        android:layout_margin="3dp"
+                        android:hint="No. of staff included"/>
+
+                    <CheckBox
+                        android:id="@+id/checkBoxEventCoordinationServices"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Event Coordination Services"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"/>
+                    <CheckBox
+                        android:id="@+id/checkBoxProvideThemedTable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Provide Themed Table Wear an Linens"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Transportation Fee"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+
+                        <EditText
+                            android:id="@+id/catering_delivery_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Amount"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Catering type"
+                        android:text="Package Details"
                         android:textStyle="bold"
                         android:textSize="15sp"/>
-                    <Spinner
-                        android:id="@+id/spinner_catering_type"
+                    <EditText
+                        android:id="@+id/catering_details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
                         android:padding="10dp"
-                        android:layout_margin="5dp"
-                        android:entries="@array/catering_type"/>
+                        android:inputType="text"
+                        android:maxLines="6"
+                        android:hint="Enter details"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cacellation policy"
+                        android:textStyle="bold"
+                        android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/catering_cancellation_policy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:inputType="text"
+                        android:maxLines="10"
+                        android:hint="Enter Policy"/>
 
                     <Button
                         android:id="@+id/cateringSubmit"
@@ -989,6 +1154,7 @@
                         android:backgroundTint="@color/orange"
                         android:textColor="@color/white"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
                         android:text="Submit"/>
 
                 </LinearLayout>
@@ -1433,6 +1599,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/orange"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
                         android:text="Submit"/>
 
                 </LinearLayout>
@@ -1780,7 +1947,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:background="@drawable/edit_text_bg"
                 android:layout_marginBottom="16dp">
 
@@ -1801,9 +1968,9 @@
                         android:id="@+id/seeAddDecoration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:backgroundTint="@color/orange"
                         android:text="Add Details"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/white"/>
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -1822,15 +1989,265 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp"
+                    android:padding="5dp"
                     android:background="@drawable/edit_text_bg"
                     android:layout_marginBottom="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/decorationPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:src="@drawable/deco_icon" />
+
+                        <ImageButton
+                            android:id="@+id/addDecorationPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+                        <ImageButton
+                            android:id="@+id/deleteDecorationPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginEnd="50dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/delete_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Decoration company name"
                         android:textStyle="bold"
                         android:textSize="15sp"/>
+                    <EditText
+                        android:id="@+id/decoration_company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:hint="Company name"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Decoration Package"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_decoration_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:entries="@array/decoration_package"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Decoration theme"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_decoration_theme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:entries="@array/decoration_theme"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Event type suitability"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_decoration_event"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/event_Category"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Package Details"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/decoration_package_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:maxLines="8"
+                        android:hint="Details"
+                        android:inputType="text"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Package Price"
+                            android:textStyle="bold" />
+
+                       <EditText
+                           android:id="@+id/decoration_amount"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:background="@drawable/edit_text_bg"
+                           android:padding="10dp"
+                           android:layout_margin="5dp"
+                           android:maxLines="8"
+                           android:hint="Amount"
+                           android:inputType="text"/>
+
+
+                    </LinearLayout>
+
+                        <CheckBox
+                        android:id="@+id/checkbox_decoration_customization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Provide customization option"
+                        android:layout_margin="5dp"
+                        android:layout_marginStart="10dp"/>
+
+                    <CheckBox
+                        android:id="@+id/checkbox_decoration_setup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Decoration Set Up and Takedown"
+                        android:layout_margin="5dp"
+                        android:layout_marginStart="10dp"/>
+                    <CheckBox
+                        android:id="@+id/checkbox_decoration_emergency"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Delivery and Support"
+                        android:layout_margin="5dp"
+                        android:layout_marginStart="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Lead booking time in days"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btn_minusM"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/minus_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="minus"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/tv_decoration_booking"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="5dp"
+                                android:inputType="number"
+                                android:layout_margin="5dp"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                            <ImageButton
+                                android:id="@+id/btn_addM"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/add_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="add"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cancellation Policy"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/deco_cancellation_policy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Policy"
+                            android:inputType="text"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/decorationSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:textColor="@color/white"
+                        android:text="Submit"/>
+
+
+
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -1852,7 +2269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:background="@drawable/edit_text_bg"
                 android:layout_marginBottom="16dp">
 
@@ -1873,9 +2290,9 @@
                         android:id="@+id/seeAddInfluencer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:backgroundTint="@color/orange"
                         android:text="Add Details"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/white"/>
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -1894,15 +2311,335 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp"
                     android:background="@drawable/edit_text_bg"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/influencerPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:src="@drawable/content_icon" />
+
+                        <ImageButton
+                            android:id="@+id/addContentPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+
+                        <ImageButton
+                            android:id="@+id/deleteContentPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginEnd="50dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/delete_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Influencer name"
-                        android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:text="Influencer Handle"
+                        android:layout_margin="3dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/influencer_handle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:hint="Influencer Handle"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Social Media Platform"
+                        android:layout_margin="3dp"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_social_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/social_media_platforms"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Follow Subscriber count"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/subscriber_count"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="5dp"
+                            android:inputType="number"
+                            android:layout_margin="5dp"
+                            android:hint="60000"
+                            android:textSize="16sp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Intended Audience"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <Spinner
+                                android:id="@+id/spinner_audience_age"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/audience_age"/>
+                            <Spinner
+                                android:id="@+id/spinner_audience_gender"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/audience_gender"/>
+                            <Spinner
+                                android:id="@+id/spinner_audience_Location"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/audience_location"/>
+
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Collaboration package"
+                        android:layout_margin="3dp"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_social_media_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/social_media_influencer_package"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Content type"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_content_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/content_type"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text= "Number of posts for package"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/post_count"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="5dp"
+                            android:inputType="number"
+                            android:layout_margin="5dp"
+                            android:hint="60"
+                            android:textSize="16sp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Posting Schedule"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_posting_schedule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/posting_schedule"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Content theme"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_content_theme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/content_theme"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Creativity Freedom"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_creativity_freedom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/creativity_freedom"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Collaboration Fee"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/content_fee"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="5dp"
+                            android:inputType="number"
+                            android:layout_margin="5dp"
+                            android:hint="60000"
+                            android:textSize="16sp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkBoxEventCoverage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Event coverage"
+                        android:layout_margin="5dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Booking and cancellation policy"
+                        android:layout_margin="3dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/booking_cancellation_policy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:maxLines="8"
+                        android:hint="Policy"
+                        android:inputType="text"/>
+
+                    <Button
+                        android:id="@+id/influencerSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:text="Submit"/>
 
                 </LinearLayout>
 
@@ -1925,7 +2662,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:background="@drawable/edit_text_bg"
                 android:layout_marginBottom="16dp">
 
@@ -1946,9 +2683,9 @@
                         android:id="@+id/seeAddSponsor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:backgroundTint="@color/orange"
                         android:text="Add Details"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/white"/>
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -1967,16 +2704,263 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp"
+                    android:padding="5dp"
                     android:background="@drawable/edit_text_bg"
                     android:layout_marginBottom="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/sponsorPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/sponsorship_icon" />
+
+                        <ImageButton
+                            android:id="@+id/addSponsorPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+                        <ImageButton
+                            android:id="@+id/deleteSponsorPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginEnd="50dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/delete_icon"
+                            app:tint="@color/blue" />
+
+                    </RelativeLayout>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Sponsor name"
-                        android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/sponsor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="8dp"
+                        android:hint="Sponsor name"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sponsorship type"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_sponsorship_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/sponsorship_type"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Event type"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_event_Category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/event_Category"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Intended Audience"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <Spinner
+                                android:id="@+id/spinner_sponsorship_audience_age"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/audience_age"/>
+                            <Spinner
+                                android:id="@+id/spinner_sponsorship_audience_industry"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/sponsorship_industry"/>
+                            <Spinner
+                                android:id="@+id/spinner_sponsorship_audience_interest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/sponsorship_interests"/>
+
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/checkBoxDigitalPromotion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Digital Promotion"
+                            android:layout_margin="5dp"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Contribution Amount"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/sponsor_con_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Amount"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Branding guidelines"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/branding_guidelines"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Type guidelines"
+                            android:inputType="text"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Sponsorship booking Lead time"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/branding_leadTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Time in Days"
+                            android:inputType="text"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Expected Audience"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/sponsor_expected_audience"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="600"
+                            android:inputType="text"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sponsorship cancellation policy"
+                        android:layout_margin="3dp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/sponsor_cancellation_policy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:maxLines="8"
+                        android:hint="Policy"
+                        android:inputType="text"/>
+
+                    <Button
+                        android:id="@+id/sponsorSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:text="Submit"/>
+
 
                 </LinearLayout>
 

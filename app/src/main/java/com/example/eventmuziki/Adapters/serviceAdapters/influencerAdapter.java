@@ -18,30 +18,29 @@ import com.example.eventmuziki.R;
 
 import java.util.ArrayList;
 
-public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> {
+public class influencerAdapter extends RecyclerView.Adapter<influencerAdapter.influencerViewHolder>{
 
-    ArrayList<ServicesDetails.photoModel> photoList;
+    ArrayList<ServicesDetails.influencerModel> influencerList;
     Context context;
 
-    public photoAdapter(ArrayList<ServicesDetails.photoModel> photoList, Context context) {
-        this.photoList = photoList;
+    public influencerAdapter(ArrayList<ServicesDetails.influencerModel> influencerList, Context context) {
+        this.influencerList = influencerList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public photoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public influencerAdapter.influencerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_added_service, parent, false);
-        return new photoAdapter.ViewHolder(view);
+        return new influencerAdapter.influencerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull photoAdapter.ViewHolder holder, int position) {
-        ServicesDetails.photoModel photo = photoList.get(position);
-        // Set the photo details in the views
-        holder.name.setText(photo.getPackageName());
-        holder.packageName.setText(photo.getNoPhotos());
-        holder.status.setText(photo.getStatus());
+    public void onBindViewHolder(@NonNull influencerAdapter.influencerViewHolder holder, int position) {
+        ServicesDetails.influencerModel content = influencerList.get(position);
+        holder.name.setText(content.getHandle());
+        holder.packageName.setText(content.getPlatform());
+        holder.status.setText(content.getStatus());
 
         // Set the click listener for the book button
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +50,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
             }
         });
         // Load the decoration poster using a library like Glide or Picasso
-        String posterUrl = photo.getImage();
+        String posterUrl = content.getImage();
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
@@ -61,22 +60,19 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");
         }
-
     }
 
     @Override
     public int getItemCount() {
-        return photoList.size();
+        return influencerList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
+    public class influencerViewHolder extends RecyclerView.ViewHolder {
         ImageView posterTv;
         TextView name, packageName ,status;
 
-        public ViewHolder(@NonNull View itemView) {
+        public influencerViewHolder(@NonNull View itemView) {
             super(itemView);
-
             posterTv = itemView.findViewById(R.id.poster_Tv);
             name = itemView.findViewById(R.id.event_Name);
             packageName = itemView.findViewById(R.id.item_package);

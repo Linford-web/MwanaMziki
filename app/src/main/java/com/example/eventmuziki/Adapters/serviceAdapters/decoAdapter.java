@@ -18,31 +18,31 @@ import com.example.eventmuziki.R;
 
 import java.util.ArrayList;
 
-public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> {
+public class decoAdapter extends RecyclerView.Adapter<decoAdapter.ViewHolder> {
 
-    ArrayList<ServicesDetails.photoModel> photoList;
+    ArrayList<ServicesDetails.decorationModel> decorationList;
     Context context;
 
-    public photoAdapter(ArrayList<ServicesDetails.photoModel> photoList, Context context) {
-        this.photoList = photoList;
+    public decoAdapter(ArrayList<ServicesDetails.decorationModel> decorationList, Context context) {
+        this.decorationList = decorationList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public photoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_added_service, parent, false);
-        return new photoAdapter.ViewHolder(view);
+    public decoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_added_service, parent, false);
+        return new decoAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull photoAdapter.ViewHolder holder, int position) {
-        ServicesDetails.photoModel photo = photoList.get(position);
-        // Set the photo details in the views
-        holder.name.setText(photo.getPackageName());
-        holder.packageName.setText(photo.getNoPhotos());
-        holder.status.setText(photo.getStatus());
-
+    public void onBindViewHolder(@NonNull decoAdapter.ViewHolder holder, int position) {
+        ServicesDetails.decorationModel decoration = decorationList.get(position);
+        // Set the decoration details in the views
+        holder.name.setText(decoration.getName());
+        holder.packageName.setText(decoration.getPackage());
+        holder.status.setText(decoration.getStatus());
         // Set the click listener for the book button
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +51,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
             }
         });
         // Load the decoration poster using a library like Glide or Picasso
-        String posterUrl = photo.getImage();
+        String posterUrl = decoration.getImage();
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
@@ -61,12 +61,11 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");
         }
-
     }
 
     @Override
     public int getItemCount() {
-        return photoList.size();
+        return decorationList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

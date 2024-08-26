@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -62,20 +63,24 @@ import java.util.Objects;
 
 public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageButton backArrow, cancel_icon;
+    ImageButton backArrow, cancel_icon, addBtnC, minusBtnC;
     Button addEvent;
     ImageView imageView,locationBtn;
-    EditText inputTaskName, eventDetails, otherCategory;
+    EditText inputTaskName, eventDetails, otherCategory, tvCarTime;
     TextView datePicker, timePickerFrom, timePickerTo, organizerName;
     EditText amountTxt, location;
     FirebaseFirestore fStore;
     String startTime, endTime;
-    Spinner spinnerCategory, carSpinner, soundSpinner, cateringSpinner;
+    Spinner spinnerCategory, soundSpinner, cateringSpinner,
+            spinnerCarModel, carType, carColor, carSeats, carModelType,
+            photoPackage, photoEquipment, photoDelivery, cateringPackage, cuisineType, cateringService, costumeAge, costumeSize;
     FirebaseStorage fStorage;
 
+    CheckBox carCheck, photoCheck, cateringCheck, costumeCheck, paSystemCheck, decorationsCheck, contentCheck, sponsorsCheck, costumeDelivery;
     Uri imageUri = null;
     String eventId;
 
+    int amount = 0;
     GoogleMap mMap;
     LatLng selectedLocation;
     ScrollView scrollView;
@@ -88,9 +93,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     TextView carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, viewAllServices, decorTxt, contentTxt, sponsorsTxt;
     ImageView carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon;
 
-    EditText pickUpLocation, dropOffLocation, pickUpDate, dropOffDate,
-            event_location, event_date, duration, price, costumeType, costumeSize, costumeQuantity,
-            cateringLocation, cateringDate, guestNumber, cuisineType,
+    EditText costumeQuantity, costumeDuration,guestNumber, photoDuration,
             djLocation, djDate, djDuration,
             decoLocation, decoDate, decoDuration, decoPrice,
             creatorName, creatorSocials, contentDuration, contentPrice,
@@ -190,9 +193,9 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.Car_Rental, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        carSpinner.setAdapter(adapter1);
+        carModelType.setAdapter(adapter1);
 
-        carSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        carModelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCategory = parent.getItemAtPosition(position).toString();
@@ -360,6 +363,23 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        addBtnC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                amount++;
+                tvCarTime.setText(String.valueOf(amount));
+            }
+        });
+        minusBtnC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (amount > 0) {
+                    amount--;
+                    tvCarTime.setText(String.valueOf(amount));
+                }
+            }
+        });
+
         // fetch and display organizer name
         fetchOrganizerName();
         // category clicks
@@ -420,7 +440,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         locationMap = findViewById(R.id.location_map);
         location = findViewById(R.id.locationTxt);
         otherCategory = findViewById(R.id.other_category);
-        carSpinner = findViewById(R.id.car_spinner);
         viewAllServices = findViewById(R.id.viewAllServices);
         decorations = findViewById(R.id.decorations);
         contentCreators = findViewById(R.id.contentCreator);
@@ -439,7 +458,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         decoDetails = findViewById(R.id.decorationDetails);
         contentDetails = findViewById(R.id.contentCreatorsDetails);
         sponsorsDetails = findViewById(R.id.sponsorshipDetails);
-        cateringSpinner = findViewById(R.id.cateringServices);
+
 
         carTxt = findViewById(R.id.carTxt);
         photographyTxt = findViewById(R.id.photographyTxt);
@@ -462,25 +481,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         deleteBtn = findViewById(R.id.delete_poster);
         cancel_icon = findViewById(R.id.cancel_edit);
 
-        pickUpLocation = findViewById(R.id.pickUpLocation);
-        dropOffLocation = findViewById(R.id.dropOffLocation);
-        pickUpDate = findViewById(R.id.pickUpDate);
-        dropOffDate = findViewById(R.id.dropOffDate);
-
-        event_location = findViewById(R.id.photography_location);
-        event_date = findViewById(R.id.photography_date);
-        duration = findViewById(R.id.photography_duration);
-        price = findViewById(R.id.price);
-
-        cateringLocation = findViewById(R.id.catering_location);
-        cateringDate = findViewById(R.id.catering_date);
-        guestNumber = findViewById(R.id.number_of_guests);
-        cuisineType = findViewById(R.id.cuisine_type);
-
-        costumeType = findViewById(R.id.costume_type);
-        costumeSize = findViewById(R.id.size);
-        costumeQuantity = findViewById(R.id.quantity);
-
         djLocation = findViewById(R.id.dj_location);
         djDate = findViewById(R.id.dj_date);
         djDuration = findViewById(R.id.dj_duration);
@@ -499,6 +499,35 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         currentSponsor = findViewById(R.id.sponsor_current);
         sponsorsLocation = findViewById(R.id.sponsor_location);
         sponsorsPrice = findViewById(R.id.sponsor_amount);
+
+        spinnerCarModel = findViewById(R.id.spinnerCarModel);
+        carType = findViewById(R.id.spinnerCarType);
+        carColor = findViewById(R.id.spinnerCarColor);
+        carSeats = findViewById(R.id.spinnerCarSeats);
+        carModelType = findViewById(R.id.car_spinner);
+        tvCarTime = findViewById(R.id.tv_amountC);
+        carCheck = findViewById(R.id.checkCar);
+        addBtnC = findViewById(R.id.btn_addC);
+        minusBtnC = findViewById(R.id.btn_minusC);
+
+        photoCheck = findViewById(R.id.checkPhotography);
+        photoDuration = findViewById(R.id.photographyDuration);
+        photoDelivery = findViewById(R.id.spinner_photo_deliveryMethod);
+        photoEquipment = findViewById(R.id.photographyEquipments);
+        photoPackage = findViewById(R.id.spinner_photography_package);
+
+        cateringCheck = findViewById(R.id.checkCatering);
+        cateringPackage = findViewById(R.id.spinner_catering_package);
+        cuisineType = findViewById(R.id.spinner_cuisine_type);
+        cateringService = findViewById(R.id.spinner_catering_service_type);
+        guestNumber = findViewById(R.id.cateringGuests);
+
+        costumeCheck = findViewById(R.id.checkCostumes);
+        costumeAge = findViewById(R.id.spinner_ageGroup);
+        costumeSize = findViewById(R.id.spinner_size);
+        costumeDelivery = findViewById(R.id.checkBoxCostumeDelivery);
+        costumeDuration = findViewById(R.id.costumeDurations);
+        costumeQuantity = findViewById(R.id.costumeQuantity);
 
     }
 
@@ -764,62 +793,70 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         CollectionReference servicesCollection = documentReference.collection("EventServices");
 
         // Add Car Rental subcollection
-        String pickUpLocationText = pickUpLocation.getText().toString();
-        String dropOffLocationText = dropOffLocation.getText().toString();
-        String pickUpDateText = pickUpDate.getText().toString();
-        String dropOffDateText = dropOffDate.getText().toString();
-        String carType = carSpinner.getSelectedItem().toString();
-        if (!pickUpLocationText.isEmpty() && !dropOffLocationText.isEmpty() && !pickUpDateText.isEmpty() && !dropOffDateText.isEmpty()) {
-            serviceDetailModel.carHire cars = new serviceDetailModel.carHire(pickUpLocationText, dropOffLocationText, pickUpDateText, dropOffDateText, carType,"Car Rental");
+        String model = spinnerCarModel.getSelectedItem().toString();
+        String type = carType.getSelectedItem().toString();
+        String color = carColor.getSelectedItem().toString();
+        String seats = carSeats.getSelectedItem().toString();
+        String time = tvCarTime.getText().toString();
+        if (carCheck.isChecked()) {
+            serviceDetailModel.carHire cars = new serviceDetailModel.carHire(model, type, color, seats, time,"Car Rental");
             servicesCollection.add(cars).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Car Rental details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add car rental details");
             });
+        } else {
+            Log.d("Subcollection", "Car rental checkbox not checked");
         }
 
         // Add Photography subcollection
-        String priceText = price.getText().toString();
-        String eventLocationText = event_location.getText().toString();
-        String eventDateText = event_date.getText().toString();
-        String durationText = duration.getText().toString();
-        if (!priceText.isEmpty() && !eventLocationText.isEmpty() && !eventDateText.isEmpty() && !durationText.isEmpty()) {
-            serviceDetailModel.hirePhotographer photographer = new serviceDetailModel.hirePhotographer(priceText, eventLocationText, eventDateText, durationText, "Photographer");
-            servicesCollection.add(photographer).addOnSuccessListener(documentReference1 -> {
+        String Package  = photoPackage.getSelectedItem().toString();
+        String duration = photoDuration.getText().toString();
+        String equipment = photoEquipment.getSelectedItem().toString();
+        String delivery = photoDelivery.getSelectedItem().toString();
+        if (photoCheck.isChecked()) {
+            serviceDetailModel.hirePhotographer photography = new serviceDetailModel.hirePhotographer(Package, duration, equipment, delivery,"Photography");
+            servicesCollection.add(photography).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Photography details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add photography details");
             });
+        }else {
+            Log.d("Subcollection", "Photography checkbox not checked");
         }
 
         // Add Catering subcollection
-        String cateringLocationText = cateringLocation.getText().toString();
-        String cateringDateText = cateringDate.getText().toString();
-        String guestNumberText = guestNumber.getText().toString();
-        String cuisineTypeText = cuisineType.getText().toString();
-        String cateringType = cateringSpinner.getSelectedItem().toString();
-        if (!cateringLocationText.isEmpty() && !cateringDateText.isEmpty() && !guestNumberText.isEmpty()) {
-
-            serviceDetailModel.hireCatering catering = new serviceDetailModel.hireCatering(cateringLocationText, cateringDateText, guestNumberText, cuisineTypeText, cateringType,"Catering");
+        String caterings = cateringPackage.getSelectedItem().toString();
+        String cuisine = cuisineType.getSelectedItem().toString();
+        String cateringGuests = guestNumber.getText().toString();
+        String service = cateringService.getSelectedItem().toString();
+        if (cateringCheck.isChecked()) {
+            serviceDetailModel.hireCatering catering = new serviceDetailModel.hireCatering(caterings, cuisine, service, cateringGuests,"Catering");
             servicesCollection.add(catering).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Catering details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add catering details");
             });
+        } else {
+            Log.d("Subcollection", "Catering checkbox not checked");
         }
 
-        // Add Costumes subcollection
-        String costumeTypeText = costumeType.getText().toString();
-        String costumeSizeText = costumeSize.getText().toString();
-        String costumeQuantityText = costumeQuantity.getText().toString();
-        if (!costumeTypeText.isEmpty() && !costumeSizeText.isEmpty() && !costumeQuantityText.isEmpty()) {
 
-            serviceDetailModel.hireCostumes hireCostumes = new serviceDetailModel.hireCostumes(costumeTypeText, costumeSizeText, costumeQuantityText, "Costumes");
+        // Add Costumes subcollection
+        String costumeAges = costumeAge.getSelectedItem().toString();
+        String costumeSizes = costumeSize.getSelectedItem().toString();
+        String costumeQuantitys = costumeQuantity.getText().toString();
+        String costumeDeliverys = costumeDelivery.isChecked() ? "Yes" : "No";
+        String costumeDurations = costumeDuration.getText().toString();
+        if (costumeCheck.isChecked()) {
+            serviceDetailModel.hireCostumes hireCostumes = new serviceDetailModel.hireCostumes(costumeAges, costumeSizes, costumeQuantitys, costumeDeliverys, costumeDurations, "Costumes");
             servicesCollection.add(hireCostumes).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Costumes details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add costumes details");
             });
+        }else {
+            Log.d("Subcollection", "Costumes checkbox not checked");
         }
 
         // Add PA System subcollection

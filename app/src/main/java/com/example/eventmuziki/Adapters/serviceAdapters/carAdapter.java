@@ -18,6 +18,7 @@ import com.example.eventmuziki.R;
 import java.util.ArrayList;
 
 public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
+
     ArrayList<ServicesDetails.carModel> carList;
     Context context;
 

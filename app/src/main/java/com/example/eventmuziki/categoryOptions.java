@@ -23,7 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eventmuziki.Adapters.serviceAdapters.carAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.cateringAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.costumeAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.decoAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.djAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.influencerAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.photoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.serviceDetailAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.sponsorAdapter;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,11 +65,16 @@ public class categoryOptions extends AppCompatActivity {
     carAdapter cars;
     ArrayList<ServicesDetails.cateringModel> cateringList = new ArrayList<>();
     cateringAdapter caterings;
-//    ArrayList<ServicesDetails.photographerModel> photographerList = new ArrayList<>();
-//    ArrayList<ServicesDetails.DjModel> djList = new ArrayList<>();
-//    ArrayList<ServicesDetails.decorationModel> decorationList = new ArrayList<>();
-//    ArrayList<ServicesDetails.contentModel> contentList = new ArrayList<>();
-//    ArrayList<ServicesDetails.sponsorshipModel> sponsorshipList = new ArrayList<>();
+    ArrayList<ServicesDetails.photoModel> photographerList = new ArrayList<>();
+    photoAdapter adapterPhoto;
+    ArrayList<ServicesDetails.soundModel> djList = new ArrayList<>();
+    djAdapter adapterSound;
+    ArrayList<ServicesDetails.decorationModel> decorationList = new ArrayList<>();
+    decoAdapter adapterDecoration;
+    ArrayList<ServicesDetails.influencerModel> contentList = new ArrayList<>();
+    influencerAdapter adapterContent;
+    ArrayList<ServicesDetails.sponsorModel> sponsorshipList = new ArrayList<>();
+    sponsorAdapter adapterSponsorship;
     ArrayList<ServicesDetails.costumeModel> costumeList = new ArrayList<>();
     costumeAdapter costumeAdapters;
 
@@ -133,9 +143,9 @@ public class categoryOptions extends AppCompatActivity {
         cateringRv = findViewById(R.id.cateringRv);
         costumesRv = findViewById(R.id.costumesRv);
         DjRv = findViewById(R.id.DjRv);
-        decorationRv = findViewById(R.id.decorationRv);
-        //contentCreatorsRv = findViewById(R.id.contentCreatorsRv);
-        //sponsorshipRv = findViewById(R.id.sponsorshipRv);
+        decorationRv = findViewById(R.id.decoRv);
+        contentCreatorsRv = findViewById(R.id.contentCreatorsRv);
+        sponsorshipRv = findViewById(R.id.sponsorshipRv);
 
 
         Toolbar toolbar = findViewById(R.id.top_toolbar);
@@ -184,6 +194,48 @@ public class categoryOptions extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         carRentalRv.setLayoutManager(layoutManager1);
         carRentalRv.setAdapter(cars);
+
+        cateringList = new ArrayList<>();
+        caterings = new cateringAdapter(cateringList);
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        cateringRv.setLayoutManager(layoutManager2);
+        cateringRv.setAdapter(caterings);
+
+        photographerList = new ArrayList<>();
+        adapterPhoto = new photoAdapter(photographerList, this);
+        RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        photographyRentalRv.setLayoutManager(layoutManager3);
+        photographyRentalRv.setAdapter(adapterPhoto);
+
+        djList = new ArrayList<>();
+        adapterSound = new djAdapter(djList, this);
+        RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        DjRv.setLayoutManager(layoutManager4);
+        DjRv.setAdapter(adapterSound);
+
+        contentList = new ArrayList<>();
+        adapterContent = new influencerAdapter(contentList, this);
+        RecyclerView.LayoutManager layoutManager5 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        contentCreatorsRv.setLayoutManager(layoutManager5);
+        contentCreatorsRv.setAdapter(adapterContent);
+
+        decorationList = new ArrayList<>();
+        adapterDecoration = new decoAdapter(decorationList, this);
+        RecyclerView.LayoutManager layoutManager6 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        decorationRv.setLayoutManager(layoutManager6);
+        decorationRv.setAdapter(adapterDecoration);
+
+        sponsorshipList = new ArrayList<>();
+        adapterSponsorship = new sponsorAdapter(sponsorshipList, this);
+        RecyclerView.LayoutManager layoutManager7 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        sponsorshipRv.setLayoutManager(layoutManager7);
+        sponsorshipRv.setAdapter(adapterSponsorship);
+
+        costumeList = new ArrayList<>();
+        costumeAdapters = new costumeAdapter(costumeList, this);
+        RecyclerView.LayoutManager layoutManager8 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        costumesRv.setLayoutManager(layoutManager8);
+        costumesRv.setAdapter(costumeAdapters);
 
         carRental.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -501,13 +553,13 @@ public class categoryOptions extends AppCompatActivity {
                                                         }
                                                         cars.notifyDataSetChanged();
                                                     }
-                                                    /*
+
                                                     if (serviceCategory.equalsIgnoreCase("Photographer")){
-                                                        photoList.clear();
+                                                        photographerList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
                                                             // Process each product document
                                                             ServicesDetails.photoModel product = productDoc.toObject(ServicesDetails.photoModel.class);
-                                                            photoList.add(product);
+                                                            photographerList.add(product);
                                                             }
                                                         adapterPhoto.notifyDataSetChanged();
                                                     }
@@ -518,7 +570,7 @@ public class categoryOptions extends AppCompatActivity {
                                                             ServicesDetails.cateringModel product = productDoc.toObject(ServicesDetails.cateringModel.class);
                                                             cateringList.add(product);
                                                         }
-                                                        adapterCatering.notifyDataSetChanged();
+                                                        caterings.notifyDataSetChanged();
                                                     }
                                                     if (serviceCategory.equalsIgnoreCase("Costumes")) {
                                                         costumeList.clear();
@@ -527,7 +579,7 @@ public class categoryOptions extends AppCompatActivity {
                                                             ServicesDetails.costumeModel product = productDoc.toObject(ServicesDetails.costumeModel.class);
                                                             costumeList.add(product);
                                                         }
-                                                        adapterCostume.notifyDataSetChanged();
+                                                        costumeAdapters.notifyDataSetChanged();
                                                     }
                                                     if (serviceCategory.equalsIgnoreCase("Sound")) {
                                                         djList.clear();
@@ -536,7 +588,7 @@ public class categoryOptions extends AppCompatActivity {
                                                             ServicesDetails.soundModel product = productDoc.toObject(ServicesDetails.soundModel.class);
                                                             djList.add(product);
                                                         }
-                                                        adapterDj.notifyDataSetChanged();
+                                                        adapterSound.notifyDataSetChanged();
                                                     }
                                                     if (serviceCategory.equalsIgnoreCase("Decorations")) {
                                                         decorationList.clear();
@@ -551,7 +603,7 @@ public class categoryOptions extends AppCompatActivity {
                                                         contentList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
                                                             // Process each product document
-                                                            ServicesDetails.contentModel product = productDoc.toObject(ServicesDetails.contentModel.class);
+                                                            ServicesDetails.influencerModel product = productDoc.toObject(ServicesDetails.influencerModel.class);
                                                             contentList.add(product);
                                                             }
                                                         adapterContent.notifyDataSetChanged();
@@ -560,13 +612,12 @@ public class categoryOptions extends AppCompatActivity {
                                                         sponsorshipList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
                                                             // Process each product document
-                                                            ServicesDetails.sponsorshipModel product = productDoc.toObject(ServicesDetails.sponsorshipModel.class);
+                                                            ServicesDetails.sponsorModel product = productDoc.toObject(ServicesDetails.sponsorModel.class);
                                                             sponsorshipList.add(product);
                                                             }
                                                         adapterSponsorship.notifyDataSetChanged();
                                                     }
 
-                                                     */
                                                 }
                                             }
                                         })

@@ -18,30 +18,30 @@ import com.example.eventmuziki.R;
 
 import java.util.ArrayList;
 
-public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> {
+public class sponsorAdapter extends RecyclerView.Adapter<sponsorAdapter.ViewHolder> {
 
-    ArrayList<ServicesDetails.photoModel> photoList;
+    ArrayList<ServicesDetails.sponsorModel> sponsorList;
     Context context;
 
-    public photoAdapter(ArrayList<ServicesDetails.photoModel> photoList, Context context) {
-        this.photoList = photoList;
+    public sponsorAdapter(ArrayList<ServicesDetails.sponsorModel> sponsorList, Context context) {
+        this.sponsorList = sponsorList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public photoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public sponsorAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_added_service, parent, false);
-        return new photoAdapter.ViewHolder(view);
+        return new sponsorAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull photoAdapter.ViewHolder holder, int position) {
-        ServicesDetails.photoModel photo = photoList.get(position);
-        // Set the photo details in the views
-        holder.name.setText(photo.getPackageName());
-        holder.packageName.setText(photo.getNoPhotos());
-        holder.status.setText(photo.getStatus());
+    public void onBindViewHolder(@NonNull sponsorAdapter.ViewHolder holder, int position) {
+
+        ServicesDetails.sponsorModel sponsor = sponsorList.get(position);
+        holder.name.setText(sponsor.getName());
+        holder.packageName.setText(sponsor.getType());
+        holder.status.setText(sponsor.getStatus());
 
         // Set the click listener for the book button
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
             }
         });
         // Load the decoration poster using a library like Glide or Picasso
-        String posterUrl = photo.getImage();
+        String posterUrl = sponsor.getImage();
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
@@ -66,7 +66,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return photoList.size();
+        return sponsorList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
