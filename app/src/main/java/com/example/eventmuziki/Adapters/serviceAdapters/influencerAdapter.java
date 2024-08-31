@@ -2,6 +2,7 @@ package com.example.eventmuziki.Adapters.serviceAdapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
+import com.example.eventmuziki.viewServices;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,11 @@ public class influencerAdapter extends RecyclerView.Adapter<influencerAdapter.in
             @Override
             public void onClick(View v) {
                 // Handle the click event here
+                Intent intent = new Intent(context, viewServices.class);
+                intent.putExtra("product", content.getProductId());
+                intent.putExtra("service", "Influencer");
+                intent.putExtra("creatorId", content.getCreatorId());
+                context.startActivity(intent);
             }
         });
         // Load the decoration poster using a library like Glide or Picasso

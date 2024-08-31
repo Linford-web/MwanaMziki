@@ -624,7 +624,7 @@
 
                 <!-- Car Rental Service Details -->
                 <LinearLayout
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/carRentalDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -656,9 +656,6 @@
                             android:padding="5dp"
                             android:id="@+id/checkCar"/>
                     </LinearLayout>
-
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -708,8 +705,6 @@
                             android:entries="@array/car_type"/>
 
                     </LinearLayout>
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -1080,7 +1075,7 @@
 
                 <!-- Costumes Service Details -->
                 <LinearLayout
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/costumesDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1238,13 +1233,106 @@
                     </LinearLayout>
 
 
-                    <Spinner
-                        android:id="@+id/sound_Services"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:padding="8dp"
-                        android:entries="@array/sound_services"/>
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:text="Sound sytem package"
+                            android:textStyle="bold"
+                            android:textSize="15sp"/>
+                        <Spinner
+                            android:id="@+id/spinnerSoundServices"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/sound_services"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Equipment Type"/>
+                        <Spinner
+                            android:id="@+id/spinner_equipment_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/sound_equipment"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Quantity of equipment" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:elevation="2dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btn_minusE"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/minus_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="minus"
+                                android:layout_margin="5dp"/>
+
+                            <EditText
+                                android:id="@+id/tv_equipment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:padding="5dp"
+                                android:inputType="number"
+                                android:layout_margin="5dp"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:gravity="center"/>
+
+                            <ImageButton
+                                android:id="@+id/btn_addE"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/add_icon"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="add"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/checkBoxSoundDelivery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Provide delivery and pick up option"
+                        android:layout_margin="5dp"/>
 
                 </LinearLayout>
 
@@ -1259,15 +1347,24 @@
                     android:background="@drawable/edit_text_bg"
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Decoration Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Decoration Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkDecoration"/>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -1286,7 +1383,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Event Theme"
+                        android:text="Decoration Theme"
                         android:textStyle="bold"
                         android:textColor="@color/black" />
 
@@ -1327,19 +1424,24 @@
                             android:entries="@array/car_color"/>
 
                     </LinearLayout>
-                    <CheckBox
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Further event Customization"
-                        android:id="@+id/checkBoxCustomization"/>
-
-
-
-
-
-
-
-
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Decoration Duration"/>
+                        <EditText
+                            android:id="@+id/decorationDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Number of Hours"
+                            android:padding="10dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -1355,50 +1457,113 @@
                     android:background="@drawable/edit_text_bg"
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Content creator Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkContentCreators"/>
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Content creators Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
+                        android:text="Collaboration package"
+                        android:layout_margin="3dp"
+                        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_content_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_margin="5dp"
+                        android:entries="@array/social_media_influencer_package"/>
 
-                    <EditText
-                        android:id="@+id/creatorName"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Campaign Duration"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"/>
+                        <EditText
+                            android:id="@+id/campaignDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Days"
+                            android:padding="8dp"
+                            android:background="@drawable/edit_text_bg"
+                            android:layout_margin="5dp" />
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/creatorSocials"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Socials"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <EditText
-                        android:id="@+id/creator_duration"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Content theme"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_content_theme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/content_theme"/>
+
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkBoxEventCoverage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Number of Hours"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
-                    <EditText
-                        android:id="@+id/creator_price"
+                        android:text="Event coverage"
+                        android:layout_margin="5dp" />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Price per hour"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Creativity Freedom"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_creativity_freedom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/creativity_freedom"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -1414,24 +1579,95 @@
                     android:elevation="3dp"
                     android:layout_marginTop="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sponsorship Details"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="10dp" />
-
-                    <EditText
-                        android:id="@+id/sponsor_category"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Event category"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Sponsorship Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp"/>
 
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkSponsorship"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Sponsorship type"
+                            android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/spinner_sponsorship_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/sponsorship_type"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Sponsorship industry"
+                            android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/spinner_sponsorship_industry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/sponsorship_industry"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Contribution Amount"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/sponsor_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:hint="Amount"
+                            android:inputType="numberDecimal"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Current sponsors"
+                        android:textStyle="bold" />
                     <EditText
                         android:id="@+id/sponsor_current"
                         android:layout_width="match_parent"
@@ -1441,22 +1677,6 @@
                         android:background="@drawable/edit_text_bg"
                         android:layout_marginBottom="10dp" />
 
-                    <EditText
-                        android:id="@+id/sponsor_location"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Event location"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
-                    <EditText
-                        android:id="@+id/sponsor_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="SponsorShip Amount"
-                        android:padding="10dp"
-                        android:background="@drawable/edit_text_bg"
-                        android:layout_marginBottom="10dp" />
 
                 </LinearLayout>
 
@@ -1469,7 +1689,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/orange"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_marginTop="10dp"
                 android:text="@string/add_event"
                 android:textSize="18sp"

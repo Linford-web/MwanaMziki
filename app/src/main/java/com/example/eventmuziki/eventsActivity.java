@@ -51,7 +51,7 @@ import java.util.Objects;
 
 public class eventsActivity extends AppCompatActivity {
 
-    String userId, userCategory;
+    String userId;
     FloatingActionButton addTask;
     ArrayList<eventModel> events, events2, events3, events4;
     ArrayList<bookedEventsModel> booked;
@@ -175,15 +175,14 @@ public class eventsActivity extends AppCompatActivity {
         fetchEventsS(userId);
         // Fetch events from Firestore
         fetchEvents();
-        // Fetch events based on user category
-        fetchEventsBasedOnCategory(userCategory);
+
         // Set up toolbar
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         findViewById(R.id.back_arrow).setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), MainDashboard.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         });
@@ -394,8 +393,8 @@ public class eventsActivity extends AppCompatActivity {
             return;
         } else {
             Log.d("fetchEventsBasedOnCategory", "User category: " + category);
-        }
 
+        }
         CollectionReference eventsRef = fStore.collection("Events");
 
         eventsRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -598,8 +597,10 @@ public class eventsActivity extends AppCompatActivity {
                                userCategoryLayout.setVisibility(View.GONE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 userCategoryLayout.setVisibility(View.VISIBLE);
-                                userCategory = document.getString("category");
+                                String userCategory = document.getString("category");
                                 userCategoryTv.setText(userCategory);
+                                // Fetch events based on user category
+                                fetchEventsBasedOnCategory(userCategory);
 
                             } else {
                                 // Handle other user types if needed

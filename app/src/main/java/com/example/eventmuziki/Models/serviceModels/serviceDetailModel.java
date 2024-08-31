@@ -3,17 +3,18 @@ package com.example.eventmuziki.Models.serviceModels;
 public class serviceDetailModel {
 
     public static class carHire{
-        public String model, type, color, seats, time, service;
+        public String model, type, color, seats, time, carModel, service;
 
         public carHire() {
         }
 
-        public carHire(String model, String type, String color, String seats, String time, String service) {
+        public carHire(String model, String type, String color, String seats, String time, String carModel,String service) {
             this.model = model;
             this.type = type;
             this.color = color;
             this.seats = seats;
             this.time = time;
+            this.carModel = carModel;
             this.service = service;
         }
 
@@ -55,6 +56,14 @@ public class serviceDetailModel {
 
         public void setTime(String time) {
             this.time = time;
+        }
+
+        public String getCarModel() {
+            return carModel;
+        }
+
+        public void setCarModel(String carModel) {
+            this.carModel = carModel;
         }
 
         public String getService() {
@@ -240,49 +249,49 @@ public class serviceDetailModel {
     }
 
     public static class hirePA{
-        public String event_location, event_date, sound_duration, soundServices, service;
+        public String soundPackage, equipmentType, quantity,delivery, service;
 
         public hirePA() {
         }
 
-        public hirePA(String event_location, String event_date, String sound_duration, String soundServices, String service) {
-            this.event_location = event_location;
-            this.event_date = event_date;
-            this.sound_duration = sound_duration;
-            this.soundServices = soundServices;
+        public hirePA(String soundPackage, String equipmentType, String quantity, String delivery, String service) {
+            this.soundPackage = soundPackage;
+            this.equipmentType = equipmentType;
+            this.quantity = quantity;
+            this.delivery = delivery;
             this.service = service;
         }
 
-        public String getEvent_location() {
-            return event_location;
+        public String getSoundPackage() {
+            return soundPackage;
         }
 
-        public void setEvent_location(String event_location) {
-            this.event_location = event_location;
+        public void setSoundPackage(String soundPackage) {
+            this.soundPackage = soundPackage;
         }
 
-        public String getEvent_date() {
-            return event_date;
+        public String getEquipmentType() {
+            return equipmentType;
         }
 
-        public void setEvent_date(String event_date) {
-            this.event_date = event_date;
+        public void setEquipmentType(String equipmentType) {
+            this.equipmentType = equipmentType;
         }
 
-        public String getSound_duration() {
-            return sound_duration;
+        public String getQuantity() {
+            return quantity;
         }
 
-        public void setSound_duration(String sound_duration) {
-            this.sound_duration = sound_duration;
+        public void setQuantity(String quantity) {
+            this.quantity = quantity;
         }
 
-        public String getSoundServices() {
-            return soundServices;
+        public String getDelivery() {
+            return delivery;
         }
 
-        public void setSoundServices(String soundServices) {
-            this.soundServices = soundServices;
+        public void setDelivery(String delivery) {
+            this.delivery = delivery;
         }
 
         public String getService() {
@@ -295,49 +304,58 @@ public class serviceDetailModel {
     }
 
     public static class hireDeco{
-        public String deco_location, deco_date, deco_duration, deco_price, service;
+        public String decoPackage ,color1, color2 ,decoDuration, decoTheme, service;
 
         public hireDeco() {
         }
 
-        public hireDeco(String deco_location, String deco_date, String deco_duration, String deco_price, String service) {
-            this.deco_location = deco_location;
-            this.deco_date = deco_date;
-            this.deco_duration = deco_duration;
-            this.deco_price = deco_price;
+        public hireDeco(String decoPackage, String color1, String color2, String decoDuration, String decoTheme, String service) {
+            this.decoPackage = decoPackage;
+            this.color1 = color1;
+            this.color2 = color2;
+            this.decoDuration = decoDuration;
+            this.decoTheme = decoTheme;
             this.service = service;
         }
 
-        public String getDeco_location() {
-            return deco_location;
+        public String getDecoPackage() {
+            return decoPackage;
         }
 
-        public void setDeco_location(String deco_location) {
-            this.deco_location = deco_location;
+        public void setDecoPackage(String decoPackage) {
+            this.decoPackage = decoPackage;
         }
 
-        public String getDeco_date() {
-            return deco_date;
+        public String getColor1() {
+            return color1;
         }
 
-        public void setDeco_date(String deco_date) {
-            this.deco_date = deco_date;
+        public void setColor1(String color1) {
+            this.color1 = color1;
         }
 
-        public String getDeco_duration() {
-            return deco_duration;
+        public String getColor2() {
+            return color2;
         }
 
-        public void setDeco_duration(String deco_duration) {
-            this.deco_duration = deco_duration;
+        public void setColor2(String color2) {
+            this.color2 = color2;
         }
 
-        public String getDeco_price() {
-            return deco_price;
+        public String getDecoDuration() {
+            return decoDuration;
         }
 
-        public void setDeco_price(String deco_price) {
-            this.deco_price = deco_price;
+        public void setDecoDuration(String decoDuration) {
+            this.decoDuration = decoDuration;
+        }
+
+        public String getDecoTheme() {
+            return decoTheme;
+        }
+
+        public void setDecoTheme(String decoTheme) {
+            this.decoTheme = decoTheme;
         }
 
         public String getService() {
@@ -350,49 +368,58 @@ public class serviceDetailModel {
     }
 
     public static class hireContent{
-        public String creatorName, creatorSocials, content_duration, content_price, service;
+        public String creatorPackage, duration, creatorTheme, creativity, eventCoverages, service;
 
         public hireContent() {
         }
 
-        public hireContent(String creatorName, String creatorSocials, String content_duration, String content_price, String service) {
-            this.creatorName = creatorName;
-            this.creatorSocials = creatorSocials;
-            this.content_duration = content_duration;
-            this.content_price = content_price;
+        public hireContent(String creatorPackage, String duration, String creatorTheme, String creativity, String eventCoverages, String service) {
+            this.creatorPackage = creatorPackage;
+            this.duration = duration;
+            this.creatorTheme = creatorTheme;
+            this.creativity = creativity;
+            this.eventCoverages = eventCoverages;
             this.service = service;
         }
 
-        public String getCreatorName() {
-            return creatorName;
+        public String getCreatorPackage() {
+            return creatorPackage;
         }
 
-        public void setCreatorName(String creatorName) {
-            this.creatorName = creatorName;
+        public void setCreatorPackage(String creatorPackage) {
+            this.creatorPackage = creatorPackage;
         }
 
-        public String getCreatorSocials() {
-            return creatorSocials;
+        public String getDuration() {
+            return duration;
         }
 
-        public void setCreatorSocials(String creatorSocials) {
-            this.creatorSocials = creatorSocials;
+        public void setDuration(String duration) {
+            this.duration = duration;
         }
 
-        public String getContent_duration() {
-            return content_duration;
+        public String getCreatorTheme() {
+            return creatorTheme;
         }
 
-        public void setContent_duration(String content_duration) {
-            this.content_duration = content_duration;
+        public void setCreatorTheme(String creatorTheme) {
+            this.creatorTheme = creatorTheme;
         }
 
-        public String getContent_price() {
-            return content_price;
+        public String getCreativity() {
+            return creativity;
         }
 
-        public void setContent_price(String content_price) {
-            this.content_price = content_price;
+        public void setCreativity(String creativity) {
+            this.creativity = creativity;
+        }
+
+        public String getEventCoverages() {
+            return eventCoverages;
+        }
+
+        public void setEventCoverages(String eventCoverages) {
+            this.eventCoverages = eventCoverages;
         }
 
         public String getService() {
@@ -405,49 +432,49 @@ public class serviceDetailModel {
     }
 
     public static class hireSponsors {
-        public String sponsorEventCategory, currentSponsor, sponsorsLocation, sponsorsPrice, service;
+        public String  sponsorType, industry ,sponsorshipAmount ,currentSponsors ,service;
 
         public hireSponsors() {
         }
 
-        public hireSponsors(String sponsorEventCategory, String currentSponsor, String sponsorsLocation, String sponsorsPrice, String service) {
-            this.sponsorEventCategory = sponsorEventCategory;
-            this.currentSponsor = currentSponsor;
-            this.sponsorsLocation = sponsorsLocation;
-            this.sponsorsPrice = sponsorsPrice;
+        public hireSponsors(String sponsorType, String industry, String sponsorshipAmount, String currentSponsors, String service) {
+            this.sponsorType = sponsorType;
+            this.industry = industry;
+            this.sponsorshipAmount = sponsorshipAmount;
+            this.currentSponsors = currentSponsors;
             this.service = service;
         }
 
-        public String getSponsorEventCategory() {
-            return sponsorEventCategory;
+        public String getSponsorType() {
+            return sponsorType;
         }
 
-        public void setSponsorEventCategory(String sponsorEventCategory) {
-            this.sponsorEventCategory = sponsorEventCategory;
+        public void setSponsorType(String sponsorType) {
+            this.sponsorType = sponsorType;
         }
 
-        public String getCurrentSponsor() {
-            return currentSponsor;
+        public String getIndustry() {
+            return industry;
         }
 
-        public void setCurrentSponsor(String currentSponsor) {
-            this.currentSponsor = currentSponsor;
+        public void setIndustry(String industry) {
+            this.industry = industry;
         }
 
-        public String getSponsorsLocation() {
-            return sponsorsLocation;
+        public String getSponsorshipAmount() {
+            return sponsorshipAmount;
         }
 
-        public void setSponsorsLocation(String sponsorsLocation) {
-            this.sponsorsLocation = sponsorsLocation;
+        public void setSponsorshipAmount(String sponsorshipAmount) {
+            this.sponsorshipAmount = sponsorshipAmount;
         }
 
-        public String getSponsorsPrice() {
-            return sponsorsPrice;
+        public String getCurrentSponsors() {
+            return currentSponsors;
         }
 
-        public void setSponsorsPrice(String sponsorsPrice) {
-            this.sponsorsPrice = sponsorsPrice;
+        public void setCurrentSponsors(String currentSponsors) {
+            this.currentSponsors = currentSponsors;
         }
 
         public String getService() {

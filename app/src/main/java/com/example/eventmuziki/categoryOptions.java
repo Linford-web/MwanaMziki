@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -196,9 +197,9 @@ public class categoryOptions extends AppCompatActivity {
         carRentalRv.setAdapter(cars);
 
         cateringList = new ArrayList<>();
-        caterings = new cateringAdapter(cateringList);
-        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        cateringRv.setLayoutManager(layoutManager2);
+        caterings = new cateringAdapter(cateringList, this);
+        RecyclerView.LayoutManager grid = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        cateringRv.setLayoutManager(grid);
         cateringRv.setAdapter(caterings);
 
         photographerList = new ArrayList<>();
@@ -233,7 +234,7 @@ public class categoryOptions extends AppCompatActivity {
 
         costumeList = new ArrayList<>();
         costumeAdapters = new costumeAdapter(costumeList, this);
-        RecyclerView.LayoutManager layoutManager8 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager8 = new GridLayoutManager(this, 2);
         costumesRv.setLayoutManager(layoutManager8);
         costumesRv.setAdapter(costumeAdapters);
 
@@ -608,7 +609,7 @@ public class categoryOptions extends AppCompatActivity {
                                                             }
                                                         adapterContent.notifyDataSetChanged();
                                                     }
-                                                    if (serviceCategory.equalsIgnoreCase("Sponsorships")) {
+                                                    if (serviceCategory.equalsIgnoreCase("Sponsors")) {
                                                         sponsorshipList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
                                                             // Process each product document
@@ -692,6 +693,5 @@ public class categoryOptions extends AppCompatActivity {
                 });
 
     }
-
 
 }

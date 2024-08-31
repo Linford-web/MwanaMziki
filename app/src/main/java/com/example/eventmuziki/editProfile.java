@@ -44,10 +44,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class editProfile extends AppCompatActivity {
 
     EditText name, phoneNumber, email, aboutMe, socials;
-    Spinner category;
     Button saveBtn;
     ImageButton back;
-    TextView categoryTxt;
 
     CircleImageView profileImage;
     ImageButton editBtn, deleteBtn ;
@@ -63,11 +61,8 @@ public class editProfile extends AppCompatActivity {
         email = findViewById(R.id.emailTxt);
         aboutMe = findViewById(R.id.aboutTxt);
         socials = findViewById(R.id.socialTxt);
-        category = findViewById(R.id.spinner_category);
         saveBtn = findViewById(R.id.saveBtn);
         back = findViewById(R.id.back_arrow);
-        categoryTxt = findViewById(R.id.categoryTxt);
-
         profileImage = findViewById(R.id.imageView);
         editBtn = findViewById(R.id.updateProfileBtn);
         deleteBtn = findViewById(R.id.deleteProfileBtn);
@@ -83,28 +78,6 @@ public class editProfile extends AppCompatActivity {
             finish();
         });
 
-        // Initialize ArrayAdapter and set it to the Spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.User_Category, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category.setAdapter(adapter);
-
-        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Handle selection here
-                String selectedCategory = parent.getItemAtPosition(position).toString();
-                // Do something with the selected category
-                Log.d("Selected Category", selectedCategory);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing if nothing is selected
-                Toast.makeText(editProfile.this, "Please select a category", Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
         // Get the current user ID from Firebase Authentication
         String userId = FirebaseAuth.getInstance().getUid();
@@ -124,11 +97,9 @@ public class editProfile extends AppCompatActivity {
                                     if (document.getString("about") != null || document.getString("socials") !=null || document.getString("category") != null) {
                                         aboutMe.setText(document.getString("about"));
                                         socials.setText(document.getString("socials"));
-                                        category.setSelection(adapter.getPosition(document.getString("category")));
                                     } else {
                                         aboutMe.setText("");
                                         socials.setText("");
-                                        category.setSelection(0);
                                     }
 
                                     String profileImageUrl = document.getString("profilePicture");
@@ -175,8 +146,6 @@ public class editProfile extends AppCompatActivity {
                 String user_email = email.getText().toString();
                 String user_about = aboutMe.getText().toString();
                 String user_socials = socials.getText().toString();
-                String music_category = category.getSelectedItem().toString();
-
 
                 if (user_name.isEmpty() || user_phone.isEmpty() || user_email.isEmpty() || user_about.isEmpty() || user_socials.isEmpty()) {
                     // Show an error message if any of the fields are empty
@@ -191,8 +160,8 @@ public class editProfile extends AppCompatActivity {
                                     "number", user_phone,
                                     "email", user_email,
                                     "about", user_about,
-                                    "socials", user_socials,
-                                    "category", music_category
+                                    "socials", user_socials
+
                             )
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -249,10 +218,8 @@ public class editProfile extends AppCompatActivity {
                                         finish();
                                     }
                                 });
-                                category.setVisibility(View.GONE);
                                 aboutMe.setVisibility(View.GONE);
                                 socials.setVisibility(View.GONE);
-                                categoryTxt.setVisibility(View.GONE);
 
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 // Back Button
@@ -263,10 +230,8 @@ public class editProfile extends AppCompatActivity {
                                         finish();
                                     }
                                 });
-                                category.setVisibility(View.VISIBLE);
                                 aboutMe.setVisibility(View.VISIBLE);
                                 socials.setVisibility(View.VISIBLE);
-                                categoryTxt.setVisibility(View.VISIBLE);
 
                             } else {
                                 // Handle other user types if needed

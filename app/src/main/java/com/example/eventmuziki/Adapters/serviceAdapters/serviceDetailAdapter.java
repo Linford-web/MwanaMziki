@@ -39,6 +39,7 @@ public class serviceDetailAdapter extends RecyclerView.Adapter<serviceDetailAdap
     public void onBindViewHolder(@NonNull serviceDetailAdapter.ViewHolder holder, int position) {
         ServicesDetails.serviceDetail serviceDetail = serviceDetailList.get(position);
         holder.category.setText(serviceDetail.getCategory());
+
         FirebaseFirestore.getInstance().collection("Users")
                 .document(serviceDetail.getCreatorId())
                 .get()

@@ -37,15 +37,6 @@
                 android:layout_marginStart="2dp"
                 android:textColor="@color/black" />
             <TextView
-                android:id="@+id/item_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:textSize="11sp"
-                android:text="Status"
-                android:textStyle="bold"
-                android:textColor="@color/green" />
-            <TextView
                 android:id="@+id/item_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +45,15 @@
                 android:textSize="11sp"
                 android:text="@string/amount"
                 android:textColor="@color/dark_blue" />
-
+            <TextView
+                android:id="@+id/item_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:textSize="11sp"
+                android:text="Status"
+                android:textStyle="bold"
+                android:textColor="@color/green" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

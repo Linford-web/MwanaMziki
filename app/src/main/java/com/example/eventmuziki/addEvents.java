@@ -63,21 +63,24 @@ import java.util.Objects;
 
 public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageButton backArrow, cancel_icon, addBtnC, minusBtnC;
+    ImageButton backArrow, cancel_icon, addBtnC, minusBtnC, addBtnE, minusBtnE;
     Button addEvent;
     ImageView imageView,locationBtn;
-    EditText inputTaskName, eventDetails, otherCategory, tvCarTime;
+    EditText inputTaskName, eventDetails, otherCategory, tvCarTime, equipmentQuantity, decorationDuration, campaignDuration;
     TextView datePicker, timePickerFrom, timePickerTo, organizerName;
     EditText amountTxt, location;
     FirebaseFirestore fStore;
     String startTime, endTime;
-    Spinner spinnerCategory, soundSpinner, cateringSpinner,
+    Spinner spinnerCategory,
             spinnerCarModel, carType, carColor, carSeats, carModelType,
-            photoPackage, photoEquipment, photoDelivery, cateringPackage, cuisineType, cateringService, costumeAge, costumeSize;
+            photoPackage, photoEquipment, photoDelivery, cateringPackage, cuisineType, cateringService, costumeAge, costumeSize,
+            decorationPackage, decorationColor1, decorationColor2, decorationTheme
+            ,soundPackage, equipmentType,
+            influencerPackage, influencerTheme, creativityFreedom, sponsorsType, sponsorsIndustry;
     FirebaseStorage fStorage;
 
-    CheckBox carCheck, photoCheck, cateringCheck, costumeCheck, paSystemCheck, decorationsCheck, contentCheck, sponsorsCheck, costumeDelivery;
-    Uri imageUri = null;
+    CheckBox carCheck, photoCheck, cateringCheck, costumeCheck, soundCheck, decorationCheck, contentCheck, sponsorsCheck, costumeDelivery, soundDelivery, eventCoverage;
+    Uri imageUri;
     String eventId;
 
     int amount = 0;
@@ -94,10 +97,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     ImageView carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon;
 
     EditText costumeQuantity, costumeDuration,guestNumber, photoDuration,
-            djLocation, djDate, djDuration,
-            decoLocation, decoDate, decoDuration, decoPrice,
-            creatorName, creatorSocials, contentDuration, contentPrice,
-            sponsorEventCategory, sponsorsLocation, currentSponsor, sponsorsPrice;
+            currentSponsor, sponsorsPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,64 +188,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 // Do nothing if nothing is selected
                 Toast.makeText(addEvents.this, "Please select a category", Toast.LENGTH_SHORT).show();
 
-            }
-        });
-
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.Car_Rental, android.R.layout.simple_spinner_item);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        carModelType.setAdapter(adapter1);
-
-        carModelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = parent.getItemAtPosition(position).toString();
-                // Do something with the selected category
-                Log.d("Selected Category", selectedCategory);
-                carRental.performClick();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing if nothing is selected
-                Toast.makeText(addEvents.this, "Please select a category", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.sound_services, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        soundSpinner.setAdapter(adapter2);
-
-        soundSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedCategory = adapterView.getItemAtPosition(i).toString();
-                // Do something with the selected category
-                Log.d("Selected Category", selectedCategory);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // set text to empty if nothing is selected
-                Log.d("Selected Category", "Nothing selected");
-            }
-        });
-
-        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this, R.array.catering_type, android.R.layout.simple_spinner_item);
-        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cateringSpinner.setAdapter(adapter3);
-
-        cateringSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedCategory = adapterView.getItemAtPosition(i).toString();
-                // Do something with the selected category
-                Log.d("Selected Category", selectedCategory);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // set text to empty if nothing is selected
-                Log.d("Selected Category", "Nothing selected");
             }
         });
 
@@ -380,6 +322,23 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        addBtnE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                amount++;
+                equipmentQuantity.setText(String.valueOf(amount));
+            }
+        });
+        minusBtnE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (amount > 0) {
+                    amount--;
+                    equipmentQuantity.setText(String.valueOf(amount));
+                }
+            }
+        });
+
         // fetch and display organizer name
         fetchOrganizerName();
         // category clicks
@@ -435,7 +394,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         addEvent = findViewById(R.id.add_event);
         organizerName = findViewById(R.id.organizerNameTv);
         spinnerCategory = findViewById(R.id.spinner_category);
-        soundSpinner = findViewById(R.id.sound_Services);
         scrollView = findViewById(R.id.scroll_view);
         locationMap = findViewById(R.id.location_map);
         location = findViewById(R.id.locationTxt);
@@ -459,7 +417,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         contentDetails = findViewById(R.id.contentCreatorsDetails);
         sponsorsDetails = findViewById(R.id.sponsorshipDetails);
 
-
         carTxt = findViewById(R.id.carTxt);
         photographyTxt = findViewById(R.id.photographyTxt);
         cateringTxt = findViewById(R.id.cateringTxt);
@@ -481,24 +438,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         deleteBtn = findViewById(R.id.delete_poster);
         cancel_icon = findViewById(R.id.cancel_edit);
 
-        djLocation = findViewById(R.id.dj_location);
-        djDate = findViewById(R.id.dj_date);
-        djDuration = findViewById(R.id.dj_duration);
-
-        decoLocation = findViewById(R.id.deco_location);
-        decoDate = findViewById(R.id.deco_date);
-        decoDuration = findViewById(R.id.deco_duration);
-        decoPrice = findViewById(R.id.deco_price);
-
-        creatorName = findViewById(R.id.creatorName);
-        creatorSocials = findViewById(R.id.creatorSocials);
-        contentDuration = findViewById(R.id.creator_duration);
-        contentPrice = findViewById(R.id.creator_price);
-
-        sponsorEventCategory = findViewById(R.id.sponsor_category);
-        currentSponsor = findViewById(R.id.sponsor_current);
-        sponsorsLocation = findViewById(R.id.sponsor_location);
-        sponsorsPrice = findViewById(R.id.sponsor_amount);
 
         spinnerCarModel = findViewById(R.id.spinnerCarModel);
         carType = findViewById(R.id.spinnerCarType);
@@ -528,6 +467,34 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         costumeDelivery = findViewById(R.id.checkBoxCostumeDelivery);
         costumeDuration = findViewById(R.id.costumeDurations);
         costumeQuantity = findViewById(R.id.costumeQuantity);
+
+        soundCheck = findViewById(R.id.checkSoundSystem);
+        soundPackage = findViewById(R.id.spinnerSoundServices);
+        equipmentType = findViewById(R.id.spinner_equipment_type);
+        equipmentQuantity = findViewById(R.id.tv_equipment);
+        soundDelivery = findViewById(R.id.checkBoxSoundDelivery);
+
+        decorationCheck = findViewById(R.id.checkDecoration);
+        decorationPackage = findViewById(R.id.spinnerDecorationPackage);
+        decorationColor1 = findViewById(R.id.spinnerFirstColor);
+        decorationColor2 = findViewById(R.id.spinnerSecondColor);
+        decorationDuration = findViewById(R.id.decorationDuration);
+        decorationTheme = findViewById(R.id.spinnerDecorationTheme);
+
+        contentCheck = findViewById(R.id.checkContentCreators);
+        influencerPackage = findViewById(R.id.spinner_content_package);
+        campaignDuration = findViewById(R.id.campaignDuration);
+        influencerTheme = findViewById(R.id.spinner_content_theme);
+        eventCoverage = findViewById(R.id.checkBoxEventCoverage);
+        creativityFreedom = findViewById(R.id.spinner_creativity_freedom);
+
+        sponsorsCheck = findViewById(R.id.checkSponsorship);
+        sponsorsType = findViewById(R.id.spinner_sponsorship_type);
+        sponsorsIndustry = findViewById(R.id.spinner_sponsorship_industry);
+        sponsorsPrice = findViewById(R.id.sponsor_amount);
+        currentSponsor = findViewById(R.id.sponsor_current);
+        addBtnE = findViewById(R.id.btn_addE);
+        minusBtnE = findViewById(R.id.btn_minusE);
 
     }
 
@@ -798,8 +765,9 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         String color = carColor.getSelectedItem().toString();
         String seats = carSeats.getSelectedItem().toString();
         String time = tvCarTime.getText().toString();
+        String modelType = carModelType.getSelectedItem().toString();
         if (carCheck.isChecked()) {
-            serviceDetailModel.carHire cars = new serviceDetailModel.carHire(model, type, color, seats, time,"Car Rental");
+            serviceDetailModel.carHire cars = new serviceDetailModel.carHire(model, type, color, seats, time, modelType,"Car Rental");
             servicesCollection.add(cars).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Car Rental details added");
             }).addOnFailureListener(e -> {
@@ -815,7 +783,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         String equipment = photoEquipment.getSelectedItem().toString();
         String delivery = photoDelivery.getSelectedItem().toString();
         if (photoCheck.isChecked()) {
-            serviceDetailModel.hirePhotographer photography = new serviceDetailModel.hirePhotographer(Package, duration, equipment, delivery,"Photography");
+            serviceDetailModel.hirePhotographer photography = new serviceDetailModel.hirePhotographer(Package, duration, equipment, delivery,"Photographer");
             servicesCollection.add(photography).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Photography details added");
             }).addOnFailureListener(e -> {
@@ -860,62 +828,72 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         // Add PA System subcollection
-        String djLocationText = djLocation.getText().toString();
-        String djDateText = djDate.getText().toString();
-        String djDurationText = djDuration.getText().toString();
-        String soundSpin = soundSpinner.getSelectedItem().toString();
-        if (!djLocationText.isEmpty() && !djDateText.isEmpty() && !djDurationText.isEmpty()) {
-
-            serviceDetailModel.hirePA hirePA = new serviceDetailModel.hirePA(djLocationText, djDateText, djDurationText, soundSpin, "Sound");
+        String soundPackages = soundPackage.getSelectedItem().toString();
+        String equipmentTypes = equipmentType.getSelectedItem().toString();
+        String equipmentQuantitys = equipmentQuantity.getText().toString();
+        String soundDeliverys = soundDelivery.isChecked() ? "Yes" : "No";
+        if (soundCheck.isChecked()) {
+            serviceDetailModel.hirePA hirePA = new serviceDetailModel.hirePA(soundPackages, equipmentTypes, equipmentQuantitys, soundDeliverys, "Sound");
             servicesCollection.add(hirePA).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "PA system details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add PA system details");
             });
+        } else {
+            Log.d("Subcollection", "PA system checkbox not checked");
         }
 
         // Add Decorations subcollection
-        String decorationLocationText = decoLocation.getText().toString();
-        String decorationDateText = decoDate.getText().toString();
-        String decorationDurationText = decoDuration.getText().toString();
-        String decorationPriceText = decoPrice.getText().toString();
-        if (!decorationLocationText.isEmpty() && !decorationDateText.isEmpty() && !decorationDurationText.isEmpty() && !decorationPriceText.isEmpty()) {
-            serviceDetailModel.hireDeco hireDecorations = new serviceDetailModel.hireDeco(decorationLocationText, decorationDateText, decorationDurationText, decorationPriceText, "Decorations");
+        String decoPackage = decorationPackage.getSelectedItem().toString();
+        String color1 = decorationColor1.getSelectedItem().toString();
+        String color2 = decorationColor2.getSelectedItem().toString();
+        String decoDuration = decorationDuration.getText().toString();
+        String decoTheme = decorationTheme.getSelectedItem().toString();
+        if (decorationCheck.isChecked()) {
+            serviceDetailModel.hireDeco hireDecorations = new serviceDetailModel.hireDeco(decoPackage, color1, color2, decoDuration, decoTheme, "Decorations");
             servicesCollection.add(hireDecorations).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Decorations details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add decorations details");
             });
-
+        } else {
+            Log.d("Subcollection", "Decorations checkbox not checked");
         }
 
+
         // Add Content Creators subcollection
-        String creatorNameText = creatorName.getText().toString();
-        String creatorSocialsText = creatorSocials.getText().toString();
-        String contentDurationText = contentDuration.getText().toString();
-        String contentPriceText = contentPrice.getText().toString();
-        if (!creatorNameText.isEmpty() && !creatorSocialsText.isEmpty() && !contentDurationText.isEmpty() && !contentPriceText.isEmpty()) {
-            serviceDetailModel.hireContent hireContent = new serviceDetailModel.hireContent(creatorNameText, creatorSocialsText, contentDurationText, contentPriceText, "Influencers");
+        String creatorPackage = influencerPackage.getSelectedItem().toString();
+        String campaignDurations = campaignDuration.getText().toString();
+        String creatorTheme = influencerTheme.getSelectedItem().toString();
+        String creativity = creativityFreedom.getSelectedItem().toString();
+        String eventCoverages = eventCoverage.isChecked() ? "Yes" : "No";
+        if (contentCheck.isChecked()) {
+            serviceDetailModel.hireContent hireContent = new serviceDetailModel.hireContent(creatorPackage, campaignDurations, creatorTheme, creativity, eventCoverages, "Influencers");
             servicesCollection.add(hireContent).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Content Creators details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add content creators details");
             });
+        } else {
+            Log.d("Subcollection", "Content Creators checkbox not checked");
         }
 
         // Add Sponsors subcollection
-        String sponsorsEventCategory = sponsorEventCategory.getText().toString();
-        String currentSponsorText = currentSponsor.getText().toString();
-        String sponsorLocationText = sponsorsLocation.getText().toString();
-        String sponsorPriceText = sponsorsPrice.getText().toString();
-        if (!sponsorsEventCategory.isEmpty() && !currentSponsorText.isEmpty() && !sponsorLocationText.isEmpty() && !sponsorPriceText.isEmpty()) {
-            serviceDetailModel.hireSponsors hireSponsors = new serviceDetailModel.hireSponsors(sponsorsEventCategory, currentSponsorText, sponsorLocationText, sponsorPriceText, "Sponsors");
-            servicesCollection.add(hireSponsors).addOnSuccessListener(documentReference1 -> {
+        String sponsorType = sponsorsType.getSelectedItem().toString();
+        String industry = sponsorsIndustry.getSelectedItem().toString();
+        String sponsorshipAmount = sponsorsPrice.getText().toString();
+        String currentSponsors = currentSponsor.getText().toString();
+        if (sponsorsCheck.isChecked()) {
+            serviceDetailModel.hireSponsors sponsors = new serviceDetailModel.hireSponsors(sponsorType, industry, sponsorshipAmount, currentSponsors, "Sponsors");
+            servicesCollection.add(sponsors).addOnSuccessListener(documentReference1 -> {
                 Log.d("Subcollection", "Sponsors details added");
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add sponsors details");
             });
+        }else {
+            Log.d("Subcollection", "Sponsors checkbox not checked");
         }
+
     }
 
     @Override
@@ -936,42 +914,46 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         StorageReference storageRef = fStorage.getReference();
         final StorageReference posterRef = storageRef.child("event_posters/" + eventId + ".jpg");
 
-        posterRef.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        posterRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                eventId = documentReference.getId();
-                                DocumentReference documentReference = fStore.collection("Events").document(eventId);
-                                String imageUrl = uri.toString();
-                                documentReference.update("eventPoster", imageUrl)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d("EventPoster", "Event poster updated successfully");
-                                                Glide.with(addEvents.this).load(imageUrl).into(imageView);
-                                                Intent intent = new Intent(addEvents.this, eventsActivity.class);
-                                                startActivity(intent);
-                                                finish();
+        if (imageUri == null) {
+            Log.d("EventPoster", "No image selected");
+        } else {
+            posterRef.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            posterRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    eventId = documentReference.getId();
+                                    DocumentReference documentReference = fStore.collection("Events").document(eventId);
+                                    String imageUrl = uri.toString();
+                                    documentReference.update("eventPoster", imageUrl)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d("EventPoster", "Event poster updated successfully");
+                                                    Glide.with(addEvents.this).load(imageUrl).into(imageView);
+                                                    Intent intent = new Intent(addEvents.this, eventsActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
 
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(addEvents.this, "Failed to update event poster", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(addEvents.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(addEvents.this, "Failed to update event poster", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(addEvents.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private void fetchOrganizerName() {

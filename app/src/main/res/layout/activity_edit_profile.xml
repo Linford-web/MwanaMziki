@@ -154,25 +154,6 @@
                 android:padding="10dp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/categoryTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="User Category"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_margin="10dp" />
-
-        <Spinner
-            android:id="@+id/spinner_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="15dp"
-            android:elevation="5dp"
-            android:entries="@array/User_Category"/>
-
         <Button
             android:id="@+id/saveBtn"
             android:layout_width="wrap_content"

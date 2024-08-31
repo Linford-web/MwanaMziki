@@ -2,6 +2,7 @@ package com.example.eventmuziki.Adapters.serviceAdapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
+import com.example.eventmuziki.viewServices;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -55,6 +57,17 @@ public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHold
         holder.productName.setText(service.getCostumeName());
         holder.productPrice.setText(service.getMaterial());
         holder.status.setText(service.getStatus());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, viewServices.class);
+                intent.putExtra("product", service.getProductId());
+                intent.putExtra("service", "Costumes");
+                intent.putExtra("creatorId", service.getCreatorId());
+                context.startActivity(intent);
+            }
+        });
 
        String imageUrl = service.getImage();
         if (imageUrl == null || imageUrl.isEmpty()) {

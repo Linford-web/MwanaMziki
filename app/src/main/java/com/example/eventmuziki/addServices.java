@@ -59,14 +59,14 @@ public class addServices extends AppCompatActivity {
     FirebaseAuth fAuth;
     ImageButton back, addCarPhoto, addPaparaziPhoto, addCateringPhoto, addThriftPhoto, addDjPhoto, addInfluencersPhoto, addSponsorPhoto, addDecorationPhoto,
             deleteCar, deleteThrift, deletePaparazi, deleteSound, deleteCatering, deleteContent, deleteSponsor, deleteDecoration,
-            btnMinus, btnAdd, btnMinusc, btnAddc, btnAddD, btnMinusD, btnAddE, btnMinusE, btnAddZ, btnMinusZ, btnAddM, btnMinusM;
+            btnMinus, btnAdd, btnAddD, btnMinusD, btnAddE, btnMinusE, btnAddZ, btnMinusZ, btnAddM, btnMinusM, btnAddP, btnMinusP;
     ImageView carPhoto, paparazi, cateringPhoto, thriftPhoto, djPhoto, influencerPhoto, sponsorPhoto, decorationPhoto,
             carClose, photographyClose, cateringClose, thriftClose, djClose, decorationClose, influencersClose, sponsorClose;
     EditText carDetailsTxt, carPriceTxt, carExtraPriceTxt,
             photographerNumbers, no_photos, delivery_time, portfolio_link, photo_package_price,price_per_hour, photo_extra_price, photo_advanced_booking,
             catering_company_name, no_of_people, cateringPackagePrice, catering_details,catering_transport, catering_cancel, tv_catering, no_staff,
             costume_name, thrift_details, tvAmount, tvDuration, costume_buy, costume_hire, costume_lateFee, costume_delivery, costume_policy,
-             equipmentName, soundDetails, areaCoverage, quantityEquipment, price_dj, extraSoundPrice, hourTv,
+             equipmentName, soundDetails, areaCoverage, quantityEquipment, price_dj, extraSoundPrice,
             influencerHandle, subscriber_count, collaborationFee, influencerCancellationPolicy, no_of_posts,
             sponsorName, brandingGuidelines, sponsorPreBooking, expectedAudience, sponsorCancellationPolicy, sponsorAmount,
             decoName, decoDetails, decoCancellationPolicy, tvDecoBooking, decoAmount;
@@ -184,7 +184,7 @@ public class addServices extends AppCompatActivity {
         soundRv.setAdapter(adapterSound);
 
         cateringList = new ArrayList<>();
-        adapterCatering = new cateringAdapter(cateringList);
+        adapterCatering = new cateringAdapter(cateringList, this);
         cateringRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         cateringRv.setAdapter(adapterCatering);
 
@@ -202,7 +202,6 @@ public class addServices extends AppCompatActivity {
         adapterDecoration = new decoAdapter(decorationList, this);
         decorationRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         decorationRv.setAdapter(adapterDecoration);
-
 
         // Set click listeners for add and minus image buttons
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -235,23 +234,6 @@ public class addServices extends AppCompatActivity {
                 if (duration > 1) {
                     duration--;
                     tvDuration.setText(String.valueOf(duration));
-                }
-            }
-        });
-
-        btnAddc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hour++;
-                hourTv.setText(String.valueOf(hour));
-            }
-        });
-        btnMinusc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hour > 6) {
-                    hour--;
-                    hourTv.setText(String.valueOf(hour));
                 }
             }
         });
@@ -307,6 +289,23 @@ public class addServices extends AppCompatActivity {
             }
         });
 
+        btnAddP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                amount++;
+                photographerNumbers.setText(String.valueOf(amount));
+            }
+        });
+        btnMinusP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (amount > 0) {
+                    amount--;
+                    photographerNumbers.setText(String.valueOf(amount));
+                }
+            }
+        });
+
         // check if the delivery checkbox is checked
         checkBoxDelivery.setOnClickListener(v -> {
             if (checkBoxDelivery.isChecked()) {
@@ -320,7 +319,6 @@ public class addServices extends AppCompatActivity {
         checkBoxCateringStaff.setOnClickListener(v -> {
             if (checkBoxCateringStaff.isChecked()) {
                 no_staff.setVisibility(View.VISIBLE);
-                no_staff.setText("");
             }else {
                 no_staff.setVisibility(View.GONE);
                 no_staff.setText("0");
@@ -422,7 +420,6 @@ public class addServices extends AppCompatActivity {
             car_type.setSelection(0);
             spinner_transmission.setSelection(0);
             spinner_seats.setSelection(0);
-            hourTv.setText("");
             carCheckbox.setChecked(false);
             amount = 0;
             hour = 6;
@@ -575,9 +572,6 @@ public class addServices extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
 
-        btnAddc = findViewById(R.id.btn_addc);
-        btnMinusc = findViewById(R.id.btn_minusc);
-        hourTv = findViewById(R.id.tv_amountc);
         carCheckbox = findViewById(R.id.driverProvided);
 
         carClose = findViewById(R.id.closeCar);
@@ -783,6 +777,9 @@ public class addServices extends AppCompatActivity {
         btnAddM = findViewById(R.id.btn_addM);
         btnMinusM = findViewById(R.id.btn_minusM);
         decoAmount = findViewById(R.id.decoration_amount);
+        btnAddP = findViewById(R.id.btn_addP);
+        btnMinusP = findViewById(R.id.btn_minusP);
+        photographerNumbers = findViewById(R.id.tv_number_of_photographers);
 
     }
 
@@ -873,7 +870,7 @@ public class addServices extends AppCompatActivity {
                                                         adapterDecoration.notifyDataSetChanged();
                                                     }
 
-                                                    if (serviceCategory.equalsIgnoreCase("Sponsorships")) {
+                                                    if (serviceCategory.equalsIgnoreCase("Sponsors")) {
                                                         sponsorList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
                                                             // Process each product document
@@ -1189,6 +1186,7 @@ public class addServices extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && data != null) {
+
             imageUri = data.getData();
             carPhoto.setImageURI(imageUri);
             thriftPhoto.setImageURI(imageUri);
@@ -1218,8 +1216,7 @@ public class addServices extends AppCompatActivity {
         String driver = carCheckbox.isChecked() ? "Provided" : "Not Provided";
 
         ServicesDetails.carModel car = new ServicesDetails.carModel(carModel, carDetailsTxt.getText().toString(),
-                carType, carColor, "Available", hourTv.getText().toString(),
-                carTransmission, seats, driver, userId, carPrice, carExtraPrice, "");
+                carType, carColor, "Available", carTransmission, seats, driver, userId, carPrice, carExtraPrice, "", "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1232,6 +1229,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(car)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFields();
                                 })
@@ -1250,6 +1250,9 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(car)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFields();
                                             })
@@ -1282,7 +1285,7 @@ public class addServices extends AppCompatActivity {
         String cleaning = checkBoxCleaning.isChecked() ? "Yes" : "No";
 
 
-        ServicesDetails.costumeModel thrift = new ServicesDetails.costumeModel(name, gender, ageGroup, detail, size, number,material, customization,cleaning, duration, buyPrice, hirePrice, lateFee, deliveryPrice, policy,"Available", userId,"");
+        ServicesDetails.costumeModel thrift = new ServicesDetails.costumeModel(name, gender, ageGroup, detail, size, number,material, customization,cleaning, duration, buyPrice, hirePrice, lateFee, deliveryPrice, policy,"Available", userId,"", "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1295,6 +1298,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(thrift)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsThrift();
                                     Toast.makeText(addServices.this, "Thrift added successfully", Toast.LENGTH_SHORT).show();
@@ -1308,12 +1314,17 @@ public class addServices extends AppCompatActivity {
                         fStore.collection("Services")
                                 .add(costumes)
                                 .addOnSuccessListener(documentReference -> {
+
                                     String documentId = documentReference.getId();
                                     documentReference.update("serviceId", documentId);
 
                                     documentReference.collection("Products")
                                             .add(thrift)
                                             .addOnSuccessListener(productRef -> {
+
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsThrift();
                                                 Toast.makeText(addServices.this, "Thrift added successfully", Toast.LENGTH_SHORT).show();
@@ -1353,7 +1364,7 @@ public class addServices extends AppCompatActivity {
         }else {
             preShoot = "Meet up for event only";
         }
-        ServicesDetails.photoModel photos = new ServicesDetails.photoModel(packageName, noPhotographers, noPhotos, format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, "Available", userId, "", travel, preShoot);
+        ServicesDetails.photoModel photos = new ServicesDetails.photoModel(packageName, noPhotographers, noPhotos, format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, "Available", userId, "", travel, preShoot, "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1366,6 +1377,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(photos)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsPhotos();
                                     Toast.makeText(addServices.this, "Photography added successfully", Toast.LENGTH_SHORT).show();
@@ -1385,6 +1399,9 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(photos)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsPhotos();
                                                 Toast.makeText(addServices.this, "Photography added successfully", Toast.LENGTH_SHORT).show();
@@ -1428,7 +1445,7 @@ public class addServices extends AppCompatActivity {
         }
 
         ServicesDetails.soundModel thrift = new ServicesDetails.soundModel(type, name,
-                details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, "Available", userId, "");
+                details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, "Available", userId, "", "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1441,9 +1458,12 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(thrift)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsSound();
-                                    Toast.makeText(addServices.this, "Thrift added successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(addServices.this, "Sound added successfully", Toast.LENGTH_SHORT).show();
                                 })
                                 .addOnFailureListener(e -> Toast.makeText(addServices.this, "Error adding product", Toast.LENGTH_SHORT).show());
 
@@ -1460,9 +1480,12 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(thrift)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsSound();
-                                                Toast.makeText(addServices.this, "Thrift added successfully", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(addServices.this, "Sound added successfully", Toast.LENGTH_SHORT).show();
                                             })
                                             .addOnFailureListener(e -> Toast.makeText(addServices.this, "Error creating product", Toast.LENGTH_SHORT).show());
 
@@ -1512,7 +1535,7 @@ public class addServices extends AppCompatActivity {
         }
 
         ServicesDetails.cateringModel food = new ServicesDetails.cateringModel( name,Package,cuisine,
-                service ,number, packagePrice, detail, booking, setup, staff, numberStaff, coordinator, theme, transportation ,cancelPolicy,"Available", userId, "");
+                service ,number, packagePrice, detail, booking, setup, staff, numberStaff, coordinator, theme, transportation ,cancelPolicy,"Available", userId, "", "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1525,6 +1548,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(food)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsCatering();
                                 })
@@ -1543,6 +1569,9 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(food)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsCatering();
                                             })
@@ -1574,7 +1603,7 @@ public class addServices extends AppCompatActivity {
         String cancellation = influencerCancellationPolicy.getText().toString();
         String coverage = eventCoverage.getText().toString();
 
-        ServicesDetails.influencerModel influencer = new ServicesDetails.influencerModel(handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage,"Available", userId, "");
+        ServicesDetails.influencerModel influencer = new ServicesDetails.influencerModel(handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage,"Available", userId, "", "");
 
 
         // Query to check if a document with the same userId exists
@@ -1588,6 +1617,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(influencer)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsInfluencer();
                                     Toast.makeText(addServices.this, "Influencer added successfully", Toast.LENGTH_SHORT).show();
@@ -1607,6 +1639,9 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(influencer)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsInfluencer();
                                                 Toast.makeText(addServices.this, "Influencer added successfully", Toast.LENGTH_SHORT).show();
@@ -1641,7 +1676,7 @@ public class addServices extends AppCompatActivity {
         }
 
 
-        ServicesDetails.sponsorModel sponsor = new ServicesDetails.sponsorModel( name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellation,"Available", userId, "");
+        ServicesDetails.sponsorModel sponsor = new ServicesDetails.sponsorModel( name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellation,"Available", userId, "", "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1654,6 +1689,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(sponsor)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsSponsor();
                                 })
@@ -1672,6 +1710,9 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(sponsor)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsSponsor();
                                             })
@@ -1698,7 +1739,7 @@ public class addServices extends AppCompatActivity {
         String cancellation = decoCancellationPolicy.getText().toString();
         String amounts = decoAmount.getText().toString();
 
-        ServicesDetails.decorationModel deco = new ServicesDetails.decorationModel( name , Package , theme , event, details , customization , emergency, setUp ,time , cancellation, amounts, "Available", userId, "");
+        ServicesDetails.decorationModel deco = new ServicesDetails.decorationModel( name , Package , theme , event, details , customization , emergency, setUp ,time , cancellation, amounts, "Available", userId, "", "");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1711,6 +1752,9 @@ public class addServices extends AppCompatActivity {
                         existingDocument.getReference().collection("Products")
                                 .add(deco)
                                 .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
                                     uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
                                     clearInputFieldsDeco();
                                 })
@@ -1729,6 +1773,9 @@ public class addServices extends AppCompatActivity {
                                     documentReference.collection("Products")
                                             .add(deco)
                                             .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
                                                 uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
                                                 clearInputFieldsDeco();
                                             })
@@ -1822,7 +1869,6 @@ public class addServices extends AppCompatActivity {
         carCheckbox.setChecked(false);
         spinner_transmission.setSelection(0);
         spinner_seats.setSelection(0);
-        hourTv.setText("");
         carPhoto.setImageResource(R.drawable.car_icon);
         fetchServicesCategory();
 
@@ -1884,7 +1930,7 @@ public class addServices extends AppCompatActivity {
         equipmentName.setText("");
         soundDetails.setText("");
         areaCoverage.setText("");
-        quantityEquipment.setText("");
+        quantityEquipment.setText("0");
         price_dj.setText("");
         extraSoundPrice.setText("");
         checkBoxSetUp.setChecked(false);
@@ -1927,7 +1973,7 @@ public class addServices extends AppCompatActivity {
         influencerHandle.setText("");
         subscriber_count.setText("");
         collaborationFee.setText("");
-        eventCoverage.setText("");
+        eventCoverage.setChecked(false);
         spinnerSocialMedia.setSelection(0);
         spinnerAudienceAge.setSelection(0);
         spinnerAudienceGender.setSelection(0);
