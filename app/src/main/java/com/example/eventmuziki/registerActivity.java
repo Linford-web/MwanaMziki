@@ -40,7 +40,7 @@ public class registerActivity extends AppCompatActivity {
 
     EditText name, email, password, number, conPassword;
     Button registerBtn;
-    CheckBox bossCheck, musicianCheck, termsAndCondition;
+    CheckBox bossCheck, musicianCheck, termsAndCondition, normalCheck;
     ProgressBar progressbar;
     ImageView passwordIcon, conPasswordIcon;
     CountryCodePicker countryCodePicker;
@@ -79,6 +79,7 @@ public class registerActivity extends AppCompatActivity {
         loginTxt = findViewById(R.id.loginTxt);
         spinner = findViewById(R.id.spinner_category);
         termsAndCondition = findViewById(R.id.termsCheck);
+        normalCheck = findViewById(R.id.normalCheck);
         registerBtn.setEnabled(false);
         registerBtn.setBackgroundColor(getResources().getColor(R.color.gray));
 
@@ -150,6 +151,20 @@ public class registerActivity extends AppCompatActivity {
                 }
             }
         });
+        normalCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isChecked()) {
+                    bossCheck.setChecked(false);
+                    musicianCheck.setChecked(false);
+                    spinner.setVisibility(View.GONE);
+                } else {
+                    bossCheck.setChecked(false);
+                    musicianCheck.setChecked(false);
+                    spinner.setVisibility(View.GONE);
+                }
+            }
+        });
 
         passwordIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +211,7 @@ public class registerActivity extends AppCompatActivity {
                 checkField(conPassword);
 
                 //checkbox validation
-                if (!(bossCheck.isChecked() || musicianCheck.isChecked())){
+                if (!(bossCheck.isChecked() || musicianCheck.isChecked() || normalCheck.isChecked())){
                     Toast.makeText(registerActivity.this, "Select User Type", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -228,7 +243,18 @@ public class registerActivity extends AppCompatActivity {
                                     String selected = spinner.getSelectedItem().toString();
 
                                     // Create UserModel object
-                                    String userType = bossCheck.isChecked() ? "Corporate" : "Musician";
+                                    String userType;
+                                    if (normalCheck.isChecked()) {
+                                        userType = "Normal";
+                                    } else if (bossCheck.isChecked()) {
+                                        userType = "Organizer";
+                                    } else if(musicianCheck.isChecked()) {
+                                        userType = "Musician";
+                                    } else {
+                                        // Handle if no checkbox is checked
+                                        userType = "Null";
+                                    }
+
                                     String category = musicianCheck.isChecked() ? selected : "organizer";
 
                                     UserModel userModel = new UserModel("", Objects.requireNonNull(user).getUid(),

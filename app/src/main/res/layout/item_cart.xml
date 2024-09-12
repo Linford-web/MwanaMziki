@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/flat_bg"
+    android:layout_margin="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:backgroundTint="@color/white"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="10dp"
+            android:background="@drawable/card_view">
+
+            <ImageView
+                android:id="@+id/cover"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cover" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:textColor="@color/blue"
+                        android:id="@+id/cardName"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Package"
+                        android:textSize="12sp"
+                        android:id="@+id/cardPackage"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:id="@+id/cardPrice"/>
+                </LinearLayout>
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/delete_icon"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="delete"
+                    app:tint="@color/red"
+                    android:layout_margin="3dp"
+                    android:id="@+id/delete" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Quantity"
+                    android:textSize="12sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_bg"
+                    android:backgroundTint="@color/light_gray"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btn_minus"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/minus_icon"
+                        android:elevation="2dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="minus"
+                        android:layout_margin="3dp"/>
+
+                    <EditText
+                        android:id="@+id/amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="2dp"
+                        android:inputType="number"
+                        android:text="1"
+                        android:textSize="18sp"
+                        android:gravity="center"/>
+
+                    <ImageButton
+                        android:id="@+id/btn_add"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/add_icon"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="add"
+                        android:layout_margin="3dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

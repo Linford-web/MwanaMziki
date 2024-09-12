@@ -99,7 +99,6 @@ public class loginActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
-
                                     checkUserAccessLevel(Objects.requireNonNull(authResult.getUser()).getUid());
                                     progressbar.setVisibility(View.INVISIBLE);
 
@@ -168,7 +167,7 @@ public class loginActivity extends AppCompatActivity {
                 // Identify User Access Level
                 String userType = documentSnapshot.getString("userType");
                 if (userType != null) {
-                    if (userType.equals("Corporate") || userType.equals("Musician")) {
+                    if (userType.equals("Corporate") || userType.equals("Musician") || userType.equals("Normal")) {
                         // User is Corporate or Musician
                         startActivity(new Intent(getApplicationContext(), MainDashboard.class));
                         finish();

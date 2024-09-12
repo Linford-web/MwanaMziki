@@ -1,9 +1,14 @@
 package com.example.eventmuziki;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -21,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -51,6 +58,9 @@ public class viewServices extends AppCompatActivity {
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
 
+    String userId;
+    private Dialog popupDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +69,7 @@ public class viewServices extends AppCompatActivity {
 
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
+        userId = fAuth.getCurrentUser().getUid();
 
         addCar = findViewById(R.id.addCar);
         addSound = findViewById(R.id.addSound);
@@ -77,7 +88,6 @@ public class viewServices extends AppCompatActivity {
         editCostume = findViewById(R.id.editCostume);
         editSponsor = findViewById(R.id.editSponsor);
         editInfluencer = findViewById(R.id.editInfluencer);
-
 
         carRentalCardView = findViewById(R.id.carRentalCardView);
         soundSystemCardView = findViewById(R.id.soundSystemCardView);
@@ -207,133 +217,381 @@ public class viewServices extends AppCompatActivity {
         delivery = findViewById(R.id.costumeDelivery);
         policy = findViewById(R.id.costumePolicy);
         costumeStatus = findViewById(R.id.costumeStatus);
-        
+
         // Get the car details from the intent
         Intent intent = getIntent();
         if (intent != null) {
             String serviceType = intent.getStringExtra("service");
             String productId = intent.getStringExtra("product");
             String creatorId = intent.getStringExtra("creatorId");
-            fetchCarDetails(productId, creatorId);
-            fetchCateringDetails(productId, creatorId);
-            fetchCateringDetails(productId, creatorId);
-            fetchPhotographerDetails(productId, creatorId);
-            fetchDecorationDetails(productId, creatorId);
-            fetchCarDetails(productId, creatorId);
-            fetchSponsorDetails(productId, creatorId);
-            fetchInfluencerDetails(productId, creatorId);
-            fetchCostumeDetails(productId, creatorId);
 
-            // Handle the car details as needed
-            if (serviceType != null && serviceType.equalsIgnoreCase("Car Rental")) {
-                carRentalCardView.setVisibility(View.VISIBLE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.GONE);
+            fetchDetails(productId, creatorId);
+
+            addCar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = carModel.getText().toString();
+                    String type = carType.getText().toString();
+                    String price = carPrice.getText().toString();
+
+                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Car Rental");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(carModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                // Delay for 3 seconds before moving to the cartActivity
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e ->
+                                                    Toast.makeText(viewServices.this, "Error adding car to cart", Toast.LENGTH_SHORT).show()
+                                            );
+                                }
+                            });
+
+                }
+            });
+            addSound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = instrumentName.getText().toString();
+                    String instrument = soundPackage.getText().toString();
+                    String price = soundHirePrice.getText().toString();
 
 
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Sound")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.VISIBLE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.GONE);
-                fetchSoundDetails(productId, creatorId);
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Catering")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.VISIBLE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.GONE);
+                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, userId, "Sound System");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else {
+                                    fStore.collection("Cart")
+                                            .add(soundModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
 
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Photographer")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.VISIBLE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.GONE);
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Decorations")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.VISIBLE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.GONE);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding sound to cart", Toast.LENGTH_SHORT).show());
 
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Costumes")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.VISIBLE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.GONE);
+                                }
+                            }).addOnFailureListener(e -> {
+                                Toast.makeText(viewServices.this, "Error checking cart", Toast.LENGTH_SHORT).show();
+                            });
+                }
+            });
+            addCatering.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = cateringName.getText().toString();
+                    String packaged = cateringPackaged.getText().toString();
+                    String price = cateringPrice.getText().toString();
 
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Sponsors")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.VISIBLE);
-                influencerCardView.setVisibility(View.GONE);
+                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Catering");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(cateringModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding catering to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            }).addOnFailureListener(e -> {
+                                Toast.makeText(viewServices.this, "Error checking cart", Toast.LENGTH_SHORT).show();
+                            });
+                }
+            });
+            addPhotography.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = photoPackage.getText().toString();
+                    String numbers = photoStatus.getText().toString();
+                    String price = photoPackagePrice.getText().toString();
 
-            }
-            if (serviceType != null && serviceType.equalsIgnoreCase("Influencer")) {
-                carRentalCardView.setVisibility(View.GONE);
-                soundSystemCardView.setVisibility(View.GONE);
-                cateringCardView.setVisibility(View.GONE);
-                photographerCardView.setVisibility(View.GONE);
-                decorationCardView.setVisibility(View.GONE);
-                costumeCardView.setVisibility(View.GONE);
-                sponsorCardView.setVisibility(View.GONE);
-                influencerCardView.setVisibility(View.VISIBLE);
+                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, userId, "Photography");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(photographyModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding photography to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            });
+
+                }
+            });
+            addDecoration.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = decoName.getText().toString();
+                    String packaged = decoPackage.getText().toString();
+                    String price = decoAmount.getText().toString();
+
+                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Decoration");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(decorationModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding decoration to cart", Toast.LENGTH_SHORT).show());
+
+                                }
+                            });
+
+                }
+            });
+            addCostume.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = costumeName.getText().toString();
+                    String materials = material.getText().toString();
+                    String price = hirePrice.getText().toString();
+
+                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, userId, "Costume");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(costumeModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding costume to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            });
+
+                }
+            });
+            addSponsor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = sponsorName.getText().toString();
+                    String type = sponsorType.getText().toString();
+                    String price = sponsorAmount.getText().toString();
+
+                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Sponsor");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(sponsorModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding sponsor to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            });
+
+
+                }
+            });
+            addInfluencer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = influencerHandle.getText().toString();
+                    String platform = influencerPlatform.getText().toString();
+                    String price = collaboration.getText().toString();
+
+                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, userId, "Influencer");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(influencerModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding influencer to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            });
+
+                }
+            });
+
+            // Display the correct card view based on service type
+            if (serviceType != null) {
+                switch (serviceType) {
+                    case "Car Rental":
+                        carRentalCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(carRentalCardView);
+                        break;
+                    case "Sound":
+                        soundSystemCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(soundSystemCardView);
+                        break;
+                    case "Catering":
+                        cateringCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(cateringCardView);
+                        break;
+                    case "Photographer":
+                        photographerCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(photographerCardView);
+                        break;
+                    case "Decorations":
+                        decorationCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(decorationCardView);
+                        break;
+                    case "Costumes":
+                        costumeCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(costumeCardView);
+                        break;
+                    case "Sponsors":
+                        sponsorCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(sponsorCardView);
+                        break;
+                    case "Influencer":
+                        influencerCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(influencerCardView);
+                        break;
+                    default:
+                        Toast.makeText(this, "Unknown service type", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            } else {
+                Toast.makeText(this, "Failed to get service details", Toast.LENGTH_SHORT).show();
             }
 
-        } else {
-            Toast.makeText(this, "Failed to load details", Toast.LENGTH_SHORT).show();
+            // Set up toolbar
+            Toolbar toolbar = findViewById(R.id.top_toolbar);
+            setSupportActionBar(toolbar);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+            findViewById(R.id.back_arrow).setOnClickListener(v -> {
+                finish();
+            });
+
+
         }
-
-
-        // Set up toolbar
-        Toolbar toolbar = findViewById(R.id.top_toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        findViewById(R.id.back_arrow).setOnClickListener(v -> {
-            finish();
-        });
-
-
-
-
 
 
     }
 
-    private void fetchCostumeDetails(String productId, String creatorId) {
+
+    private void hideOtherCardViews(View visibleCardView) {
+            // Hide all card views except the one passed as the argument
+            carRentalCardView.setVisibility(visibleCardView == carRentalCardView ? View.VISIBLE : View.GONE);
+            soundSystemCardView.setVisibility(visibleCardView == soundSystemCardView ? View.VISIBLE : View.GONE);
+            cateringCardView.setVisibility(visibleCardView == cateringCardView ? View.VISIBLE : View.GONE);
+            photographerCardView.setVisibility(visibleCardView == photographerCardView ? View.VISIBLE : View.GONE);
+            decorationCardView.setVisibility(visibleCardView == decorationCardView ? View.VISIBLE : View.GONE);
+            costumeCardView.setVisibility(visibleCardView == costumeCardView ? View.VISIBLE : View.GONE);
+            sponsorCardView.setVisibility(visibleCardView == sponsorCardView ? View.VISIBLE : View.GONE);
+            influencerCardView.setVisibility(visibleCardView == influencerCardView ? View.VISIBLE : View.GONE);
+        }
+
+    private void showPopupDialog(View view) {
+        if (isFinishing() || isDestroyed()) return; // Prevent showing the dialog if the activity is not in a valid state
+
+        if (popupDialog == null) { // Initialize the dialog only once
+            popupDialog = new Dialog(view.getContext());
+            popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            popupDialog.setCancelable(false);
+            popupDialog.setContentView(R.layout.popup_layout);
+
+            if (popupDialog.getWindow() != null) {
+                popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        }
+
+        popupDialog.show();
+
+        new Handler().postDelayed(() -> {
+            if (popupDialog != null && popupDialog.isShowing() && !isFinishing() && !isDestroyed()) {
+                popupDialog.dismiss();
+            }
+        }, 3000);
+    }
+
+    private void fetchDetails(String productId, String creatorId) {
         if (productId == null || productId.isEmpty()) {
             Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
             return;
@@ -354,6 +612,7 @@ public class viewServices extends AppCompatActivity {
                                     .document(productId)
                                     .get()
                                     .addOnSuccessListener(documentSnapshot -> {
+
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Costumes")) {
                                             // Fetch and display product details
                                             costumeName.setText(documentSnapshot.getString("costumeName"));
@@ -392,43 +651,8 @@ public class viewServices extends AppCompatActivity {
                                                 editCostume.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
 
-    }
-
-    private void fetchInfluencerDetails(String productId, String creatorId) {
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Influencers")) {
                                             // Fetch and display product details
                                             influencerHandle.setText(documentSnapshot.getString("handle"));
@@ -467,43 +691,8 @@ public class viewServices extends AppCompatActivity {
                                                 editInfluencer.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
 
-    }
-
-    private void fetchSponsorDetails(String productId, String creatorId) {
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Sponsors")) {
                                             // Fetch and display product details
                                             sponsorName.setText(documentSnapshot.getString("name"));
@@ -539,44 +728,8 @@ public class viewServices extends AppCompatActivity {
                                                 editSponsor.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
 
-    }
-
-    private void fetchDecorationDetails(String productId, String creatorId) {
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Decorations")) {
                                             // Fetch and display product details
                                             decoName.setText(documentSnapshot.getString("name"));
@@ -610,43 +763,8 @@ public class viewServices extends AppCompatActivity {
                                                 editDecoration.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
-    }
 
-    private void fetchPhotographerDetails(String productId, String creatorId) {
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Photographer")) {
                                             // Fetch and display product details
                                             photoPackage.setText(documentSnapshot.getString("packageName"));
@@ -674,51 +792,15 @@ public class viewServices extends AppCompatActivity {
                                             }
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
-                                                addInfluencer.setVisibility(View.GONE);
-                                                editInfluencer.setVisibility(View.VISIBLE);
+                                                addPhotography.setVisibility(View.GONE);
+                                                editPhotography.setVisibility(View.VISIBLE);
                                             }else {
-                                                addInfluencer.setVisibility(View.VISIBLE);
-                                                editInfluencer.setVisibility(View.GONE);
+                                                addPhotography.setVisibility(View.VISIBLE);
+                                                editPhotography.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
-    }
 
-    private void fetchCateringDetails(String productId, String creatorId) {
-
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Catering")) {
                                             // Fetch and display product details
                                             cateringName.setText(documentSnapshot.getString("name"));
@@ -756,43 +838,8 @@ public class viewServices extends AppCompatActivity {
                                                 editCatering.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
-    }
 
-    private void fetchSoundDetails(String productId, String creatorId) {
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Sound")) {
                                             // Fetch and display product details
                                             soundPackage.setText(documentSnapshot.getString("packaged"));
@@ -826,44 +873,8 @@ public class viewServices extends AppCompatActivity {
                                                 editSound.setVisibility(View.GONE);
                                             }
 
-                                        } else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
-    }
 
-    private void fetchCarDetails(String productId, String creatorId) {
-
-        if (productId == null || productId.isEmpty()) {
-            Toast.makeText(this, "Invalid product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        fStore.collection("Services")
-                .whereEqualTo("creatorId", creatorId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                            String serviceId = document.getId();
-                            String serviceCategory = document.getString("category");
-
-                            // Now fetch the specific document from Products subcollection
-                            fStore.collection("Services")
-                                    .document(serviceId)
-                                    .collection("Products")
-                                    .document(productId)
-                                    .get()
-                                    .addOnSuccessListener(documentSnapshot -> {
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Car Rental")) {
                                             // Fetch and display product details
                                             carModel.setText(documentSnapshot.getString("car_model"));
@@ -897,9 +908,12 @@ public class viewServices extends AppCompatActivity {
                                             }
 
 
-                                        } else {
+                                        }
+
+                                        else {
                                             Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
                                         }
+
                                     })
                                     .addOnFailureListener(e -> {
                                         Toast.makeText(viewServices.this, "Error fetching product details", Toast.LENGTH_SHORT).show();
@@ -910,7 +924,15 @@ public class viewServices extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error fetching services", Toast.LENGTH_SHORT).show());
+
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (popupDialog != null && popupDialog.isShowing()) {
+            popupDialog.dismiss();
+        }
+    }
 
 }

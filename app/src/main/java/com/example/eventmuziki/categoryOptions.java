@@ -148,7 +148,6 @@ public class categoryOptions extends AppCompatActivity {
         contentCreatorsRv = findViewById(R.id.contentCreatorsRv);
         sponsorshipRv = findViewById(R.id.sponsorshipRv);
 
-
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -269,7 +268,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(car);
-                fetchServices(car);
+
             }
         });
         photography.setOnClickListener(new View.OnClickListener() {
@@ -303,7 +302,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(photo);
                 fetchServices(photo);
-                fetchProducts(photo);
+
             }
         });
         catering.setOnClickListener(new View.OnClickListener() {
@@ -337,7 +336,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(food);
                 fetchServices(food);
-                fetchProducts(food);
+                //fetchProducts(food);
             }
         });
         costumes.setOnClickListener(new View.OnClickListener() {
@@ -371,7 +370,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(costume);
                 fetchServices(costume);
-                fetchProducts(costume);
+                //fetchProducts(costume);
             }
         });
         paSystem.setOnClickListener(new View.OnClickListener() {
@@ -405,7 +404,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(pa);
                 fetchServices(pa);
-                fetchProducts(pa);
+                //fetchProducts(pa);
             }
         });
         decoration.setOnClickListener(new View.OnClickListener() {
@@ -439,7 +438,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(decorations);
                 fetchServices(decorations);
-                fetchProducts(decorations);
+                //fetchProducts(decorations);
             }
         });
         contentCreators.setOnClickListener(new View.OnClickListener() {
@@ -473,7 +472,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.GONE);
                 serviceTxt.setText(content);
                 fetchServices(content);
-                fetchProducts(content);
+                //fetchProducts(content);
 
             }
         });
@@ -508,7 +507,7 @@ public class categoryOptions extends AppCompatActivity {
                 sponsorshipDetails.setVisibility(View.VISIBLE);
                 serviceTxt.setText(sponsorships);
                 fetchServices(sponsorships);
-                fetchProducts(sponsorships);
+
             }
         });
 
@@ -522,121 +521,116 @@ public class categoryOptions extends AppCompatActivity {
 
         checkUserAccessLevel();
         fetchProducts(car);
+        fetchProducts(photo);
+        fetchProducts(food);
+        fetchProducts(costume);
+        fetchProducts(pa);
+        fetchProducts(decorations);
+        fetchProducts(content);
+        fetchServices(car);
 
     }
 
     private void fetchProducts(String string) {
+        // Clear lists outside the loop to avoid clearing them multiple times
+        carList.clear();
+        photographerList.clear();
+        cateringList.clear();
+        costumeList.clear();
+        djList.clear();
+        decorationList.clear();
+        contentList.clear();
+        sponsorshipList.clear();
+
         fStore.collection("Services")
                 .whereEqualTo("category", string)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                                String serviceId = document.getId();
-                                String serviceCategory = document.getString("category");
-                                // Now fetch all documents under the Products subcollection
-                                fStore.collection("Services")
-                                        .document(serviceId)
-                                        .collection("Products")
-                                        .get()
-                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot productsSnapshot) {
-                                                if (!productsSnapshot.isEmpty()) {
-                                                    if (serviceCategory.equalsIgnoreCase("Car Rental")){
-                                                        carList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.carModel product = productDoc.toObject(ServicesDetails.carModel.class);
-                                                            carList.add(product);
-                                                        }
-                                                        cars.notifyDataSetChanged();
-                                                    }
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Use a counter to keep track of how many fetches are completed
+                        int[] remainingFetches = {queryDocumentSnapshots.size()};
 
-                                                    if (serviceCategory.equalsIgnoreCase("Photographer")){
-                                                        photographerList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.photoModel product = productDoc.toObject(ServicesDetails.photoModel.class);
-                                                            photographerList.add(product);
-                                                            }
-                                                        adapterPhoto.notifyDataSetChanged();
-                                                    }
-                                                    if (serviceCategory.equalsIgnoreCase("Catering")) {
-                                                        cateringList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.cateringModel product = productDoc.toObject(ServicesDetails.cateringModel.class);
-                                                            cateringList.add(product);
-                                                        }
-                                                        caterings.notifyDataSetChanged();
-                                                    }
-                                                    if (serviceCategory.equalsIgnoreCase("Costumes")) {
-                                                        costumeList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.costumeModel product = productDoc.toObject(ServicesDetails.costumeModel.class);
-                                                            costumeList.add(product);
-                                                        }
-                                                        costumeAdapters.notifyDataSetChanged();
-                                                    }
-                                                    if (serviceCategory.equalsIgnoreCase("Sound")) {
-                                                        djList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.soundModel product = productDoc.toObject(ServicesDetails.soundModel.class);
-                                                            djList.add(product);
-                                                        }
-                                                        adapterSound.notifyDataSetChanged();
-                                                    }
-                                                    if (serviceCategory.equalsIgnoreCase("Decorations")) {
-                                                        decorationList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.decorationModel product = productDoc.toObject(ServicesDetails.decorationModel.class);
-                                                            decorationList.add(product);
-                                                        }
-                                                        adapterDecoration.notifyDataSetChanged();
-                                                    }
-                                                    if (serviceCategory.equalsIgnoreCase("Influencers")) {
-                                                        contentList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.influencerModel product = productDoc.toObject(ServicesDetails.influencerModel.class);
-                                                            contentList.add(product);
-                                                            }
-                                                        adapterContent.notifyDataSetChanged();
-                                                    }
-                                                    if (serviceCategory.equalsIgnoreCase("Sponsors")) {
-                                                        sponsorshipList.clear();
-                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
-                                                            // Process each product document
-                                                            ServicesDetails.sponsorModel product = productDoc.toObject(ServicesDetails.sponsorModel.class);
-                                                            sponsorshipList.add(product);
-                                                            }
-                                                        adapterSponsorship.notifyDataSetChanged();
-                                                    }
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            String serviceId = document.getId();
+                            String serviceCategory = document.getString("category");
 
+                            fStore.collection("Services")
+                                    .document(serviceId)
+                                    .collection("Products")
+                                    .get()
+                                    .addOnSuccessListener(productsSnapshot -> {
+                                        if (!productsSnapshot.isEmpty()) {
+                                            for (DocumentSnapshot productDoc : productsSnapshot) {
+                                                switch (serviceCategory) {
+                                                    case "Car Rental":
+                                                        ServicesDetails.carModel carProduct = productDoc.toObject(ServicesDetails.carModel.class);
+                                                        carList.add(carProduct);
+                                                        break;
+                                                    case "Photographer":
+                                                        ServicesDetails.photoModel photoProduct = productDoc.toObject(ServicesDetails.photoModel.class);
+                                                        photographerList.add(photoProduct);
+                                                        break;
+                                                    case "Catering":
+                                                        ServicesDetails.cateringModel cateringProduct = productDoc.toObject(ServicesDetails.cateringModel.class);
+                                                        cateringList.add(cateringProduct);
+                                                        break;
+                                                    case "Costumes":
+                                                        ServicesDetails.costumeModel costumeProduct = productDoc.toObject(ServicesDetails.costumeModel.class);
+                                                        costumeList.add(costumeProduct);
+                                                        break;
+                                                    case "Sound":
+                                                        ServicesDetails.soundModel soundProduct = productDoc.toObject(ServicesDetails.soundModel.class);
+                                                        djList.add(soundProduct);
+                                                        break;
+                                                    case "Decorations":
+                                                        ServicesDetails.decorationModel decorationProduct = productDoc.toObject(ServicesDetails.decorationModel.class);
+                                                        decorationList.add(decorationProduct);
+                                                        break;
+                                                    case "Influencers":
+                                                        ServicesDetails.influencerModel influencerProduct = productDoc.toObject(ServicesDetails.influencerModel.class);
+                                                        contentList.add(influencerProduct);
+                                                        break;
+                                                    case "Sponsors":
+                                                        ServicesDetails.sponsorModel sponsorProduct = productDoc.toObject(ServicesDetails.sponsorModel.class);
+                                                        sponsorshipList.add(sponsorProduct);
+                                                        break;
+                                                    default:
+                                                        // Handle any unexpected category
+                                                        break;
                                                 }
                                             }
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            // Handle errors here
-                                            Toast.makeText(categoryOptions.this, "Error fetching products", Toast.LENGTH_SHORT).show();
-                                        });
-                            }
-                        } else {
-                            // No document with the given category found
-                            Toast.makeText(categoryOptions.this, "No products found for this category", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        // Decrement the counter and notify the adapters when all fetches are completed
+                                        remainingFetches[0]--;
+                                        if (remainingFetches[0] == 0) {
+                                            notifyAllAdapters();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle errors in product fetching
+                                        Toast.makeText(categoryOptions.this, "Error fetching products", Toast.LENGTH_SHORT).show();
+                                    });
                         }
+                    } else {
+                        Toast.makeText(categoryOptions.this, "No products found for this category", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    // Handle errors here
                     Toast.makeText(categoryOptions.this, "Error fetching services", Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    // Notify all adapters method
+    private void notifyAllAdapters() {
+        cars.notifyDataSetChanged();
+        adapterPhoto.notifyDataSetChanged();
+        caterings.notifyDataSetChanged();
+        costumeAdapters.notifyDataSetChanged();
+        adapterSound.notifyDataSetChanged();
+        adapterDecoration.notifyDataSetChanged();
+        adapterContent.notifyDataSetChanged();
+        adapterSponsorship.notifyDataSetChanged();
     }
 
     private void checkUserAccessLevel() {

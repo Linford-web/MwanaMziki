@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -66,9 +67,10 @@ public class eventsActivity extends AppCompatActivity {
     ArrayList<menuModel> menuList;
     categoryMenuAdapter menuAdapter;
 
+    ImageView addEvents;
     ImageButton backArrow,searchEventsBtn, cancelBtn, searchBtn, cancelCategory;
     TextView categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt, allBids, allBooked, userCategoryTv;
-    LinearLayout menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, bookedEvents, viewBid, categoryLayout, menuCategoryLayout, userCategoryLayout;
+    LinearLayout emptyRv, addEventsTv, menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, allEventsLayout, bookedEvents, viewBid, categoryLayout, menuCategoryLayout, userCategoryLayout;
     ScrollView scrollView;
     EditText searchTxt;
     RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv;
@@ -119,6 +121,10 @@ public class eventsActivity extends AppCompatActivity {
         userCategoryRv = findViewById(R.id.userCategoryRv);
         userCategoryTv = findViewById(R.id.userCategoryTv);
         userCategoryLayout = findViewById(R.id.userCategoryEvents);
+        allEventsLayout = findViewById(R.id.allEventsLayout);
+        emptyRv = findViewById(R.id.displayEmptyRv);
+        addEvents = findViewById(R.id.addEventsBtn);
+        addEventsTv = findViewById(R.id.addEventsTv);
 
         categoryMenuRv = findViewById(R.id.categoriesRv);
         //get user type
@@ -239,6 +245,7 @@ public class eventsActivity extends AppCompatActivity {
                 menuCategoryLayout.setVisibility(View.VISIBLE);
                 searchEventsBtn.setVisibility(View.VISIBLE);
                 categoryLayout.setVisibility(View.GONE);
+                allEventsLayout.setVisibility(View.VISIBLE);
                 checkUserAccessLevel();
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.orange));
@@ -259,6 +266,7 @@ public class eventsActivity extends AppCompatActivity {
                 menuCategoryLayout.setVisibility(View.GONE);
                 searchEventsBtn.setVisibility(View.GONE);
                 userCategoryLayout.setVisibility(View.GONE);
+                allEventsLayout.setVisibility(View.GONE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.orange));
@@ -280,6 +288,7 @@ public class eventsActivity extends AppCompatActivity {
                 menuCategoryLayout.setVisibility(View.GONE);
                 searchEventsBtn.setVisibility(View.GONE);
                 userCategoryLayout.setVisibility(View.GONE);
+                allEventsLayout.setVisibility(View.GONE);
 
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.black));
@@ -327,61 +336,40 @@ public class eventsActivity extends AppCompatActivity {
             public void onItemClick(String itemName) {
                 if (itemName.equals("Sports")) {
                     fetchCategoryEvents("Sports");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
                 if (itemName.equals("Church")) {
                     fetchCategoryEvents("Church");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
                 if (itemName.equals("Wedding")) {
                     fetchCategoryEvents("Wedding");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
                 if (itemName.equals("Music")) {
                     fetchCategoryEvents("Music");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
                 if (itemName.equals("Graduation")) {
                     fetchCategoryEvents("Graduation");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
                 if (itemName.equals("Photography")) {
                     fetchCategoryEvents("Photography");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
                 if (itemName.equals("Other")) {
                     fetchCategoryEvents("Other");
-                    cancelCategory.setVisibility(View.VISIBLE);
-                    allEvents.setVisibility(View.GONE);
-                    categoryLayout.setVisibility(View.VISIBLE);
-                    categoryTxt.setText(itemName);
-                    userCategoryLayout.setVisibility(View.GONE);
+                    clearDisplay(itemName);
                 }
 
+            }
+        });
+
+        addEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), addEvents.class));
             }
         });
 
@@ -436,6 +424,13 @@ public class eventsActivity extends AppCompatActivity {
                 .whereEqualTo("category", category)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        userCategoryRv.setVisibility(View.VISIBLE);
+                        emptyRv.setVisibility(View.GONE);
+                    } else {
+                        userCategoryRv.setVisibility(View.GONE);
+                        emptyRv.setVisibility(View.VISIBLE);
+                    }
                     events3.clear();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         eventModel event = documentSnapshot.toObject(eventModel.class);
@@ -443,11 +438,6 @@ public class eventsActivity extends AppCompatActivity {
                     }
                     categoryAdpt.notifyDataSetChanged();
                 }).addOnFailureListener(e -> Toast.makeText(eventsActivity.this, "Failed to fetch category events", Toast.LENGTH_SHORT).show());
-
-        if (category.equals("All")) {
-
-        }
-
 
     }
 
@@ -471,6 +461,14 @@ public class eventsActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                addEventsTv.setVisibility(View.GONE);
+                                eventRecyclerView.setVisibility(View.VISIBLE);
+                            } else {
+                                addEventsTv.setVisibility(View.VISIBLE);
+                                eventRecyclerView.setVisibility(View.GONE);
+                            }
+                            events.clear();
                             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 eventModel event = documentSnapshot.toObject(eventModel.class);
                                 events.add(event);
@@ -492,6 +490,11 @@ public class eventsActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            allEvents.setVisibility(View.VISIBLE);
+                        }else {
+                            allEvents.setVisibility(View.GONE);
+                        }
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             eventModel event = documentSnapshot.toObject(eventModel.class);
                             events2.add(event);
@@ -510,12 +513,8 @@ public class eventsActivity extends AppCompatActivity {
     private void fetchBookedEvents() {
 
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getUid();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        if (userId == null) {
-            Toast.makeText(this, "User ID is null", Toast.LENGTH_SHORT).show();
-            return;
-        }
         fStore.collection("BookedEvents")
                 .whereEqualTo("creatorID", userId)
                 .get()
@@ -524,11 +523,9 @@ public class eventsActivity extends AppCompatActivity {
                     HashSet<String> events = new HashSet<>();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
-                        if (userId != null){
-                            if (!events.contains(event.getEventId())) {
-                                booked.add(event);
-                                events.add(event.getEventId());
-                            }
+                        if (!events.contains(event.getEventId())) {
+                            booked.add(event);
+                            events.add(event.getEventId());
                         }
 
                     }
@@ -595,10 +592,12 @@ public class eventsActivity extends AppCompatActivity {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
                                userCategoryLayout.setVisibility(View.GONE);
+                               addTask.setVisibility(View.VISIBLE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 userCategoryLayout.setVisibility(View.VISIBLE);
                                 String userCategory = document.getString("category");
                                 userCategoryTv.setText(userCategory);
+                                addTask.setVisibility(View.GONE);
                                 // Fetch events based on user category
                                 fetchEventsBasedOnCategory(userCategory);
 
@@ -613,5 +612,14 @@ public class eventsActivity extends AppCompatActivity {
                     }
                 });
         }
+
+    private void clearDisplay(String itemName) {
+        cancelCategory.setVisibility(View.VISIBLE);
+        allEvents.setVisibility(View.GONE);
+        categoryLayout.setVisibility(View.VISIBLE);
+        categoryTxt.setText(itemName);
+        userCategoryLayout.setVisibility(View.GONE);
+        allEventsLayout.setVisibility(View.GONE);
+    }
 
 }

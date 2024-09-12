@@ -1,8 +1,11 @@
 package com.example.eventmuziki;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -10,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -83,6 +87,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     Uri imageUri;
     String eventId;
 
+    private Dialog popupDialog;
     int amount = 0;
     GoogleMap mMap;
     LatLng selectedLocation;
@@ -90,11 +95,11 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     RelativeLayout searchMap, locationMap;
     ImageButton editBtn, addPosterBtn, deleteBtn;
 
-    LinearLayout carRental, photography, catering, costumes, paSystem,decorations, contentCreators, sponsors,
-            carRentalDetails, photographyDetails, cateringDetails, costumesDetails, paSystemDetails, decoDetails, contentDetails, sponsorsDetails;
+    LinearLayout music, carRental, photography, catering, costumes, paSystem,decorations, contentCreators, sponsors,
+            musicDetails, carRentalDetails, photographyDetails, cateringDetails, costumesDetails, paSystemDetails, decoDetails, contentDetails, sponsorsDetails;
 
-    TextView carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, viewAllServices, decorTxt, contentTxt, sponsorsTxt;
-    ImageView carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon;
+    TextView musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decorTxt, contentTxt, sponsorsTxt;
+    ImageView musicIcon, carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon;
 
     EditText costumeQuantity, costumeDuration,guestNumber, photoDuration,
             currentSponsor, sponsorsPrice;
@@ -125,10 +130,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-        });
-
-        viewAllServices.setOnClickListener(v -> {
-            startActivity(new Intent(addEvents.this, categoryOptions.class));
         });
 
         locationBtn.setOnClickListener(new View.OnClickListener() {
@@ -251,13 +252,22 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
 
                                 documentReference.update("eventId", eventId);
                                 documentReference.update("creatorID", userId);
-
                                 uploadEventPoster(documentReference);
-                                Intent intent = new Intent(addEvents.this, eventsActivity.class);
-                                startActivity(intent);
-                                finish();
-                                // Add subcollections for other services if details are provided
-                                addSubCollections(documentReference);
+
+                                showPopupDialog(v);
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        popupDialog.dismiss();
+                                        Intent intent = new Intent(addEvents.this, eventsActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                        addSubCollections(documentReference);
+                                    }
+
+                                }, 3000);
 
                             }).addOnFailureListener(e -> {
                                 Toast.makeText(addEvents.this, "Failed to add event", Toast.LENGTH_SHORT).show();
@@ -398,16 +408,17 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         locationMap = findViewById(R.id.location_map);
         location = findViewById(R.id.locationTxt);
         otherCategory = findViewById(R.id.other_category);
-        viewAllServices = findViewById(R.id.viewAllServices);
         decorations = findViewById(R.id.decorations);
         contentCreators = findViewById(R.id.contentCreator);
         sponsors = findViewById(R.id.sponsorship);
 
+        music = findViewById(R.id.Music);
         carRental = findViewById(R.id.carRental);
         photography = findViewById(R.id.photography);
         catering = findViewById(R.id.catering);
         costumes = findViewById(R.id.costumes);
         paSystem = findViewById(R.id.paSystem);
+        musicDetails = findViewById(R.id.musicDetails);
         carRentalDetails = findViewById(R.id.carRentalDetails);
         photographyDetails = findViewById(R.id.photographyDetails);
         cateringDetails = findViewById(R.id.cateringDetails);
@@ -417,11 +428,13 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         contentDetails = findViewById(R.id.contentCreatorsDetails);
         sponsorsDetails = findViewById(R.id.sponsorshipDetails);
 
+        musicTxt = findViewById(R.id.musicTxt);
         carTxt = findViewById(R.id.carTxt);
         photographyTxt = findViewById(R.id.photographyTxt);
         cateringTxt = findViewById(R.id.cateringTxt);
         costumesTxt = findViewById(R.id.costumeTxt);
         paSystemTxt = findViewById(R.id.paSystemTxt);
+        musicIcon = findViewById(R.id.musicIcon);
         carIcon = findViewById(R.id.carIcon);
         photographyIcon = findViewById(R.id.photographyIcon);
         cateringIcon = findViewById(R.id.cateringIcon);
@@ -437,7 +450,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         addPosterBtn = findViewById(R.id.addPosterBtn);
         deleteBtn = findViewById(R.id.delete_poster);
         cancel_icon = findViewById(R.id.cancel_edit);
-
 
         spinnerCarModel = findViewById(R.id.spinnerCarModel);
         carType = findViewById(R.id.spinnerCarType);
@@ -499,10 +511,46 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     private void setupCategoryClicks() {
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicTxt.setTextColor(getResources().getColor(R.color.orange));
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
+
+                musicIcon.setColorFilter(getResources().getColor(R.color.orange));
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
+
+                musicDetails.setVisibility(View.VISIBLE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                carRentalDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
+
+            }
+        });
         carRental.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // set text and icon color to white
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.orange));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -512,6 +560,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.orange));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -521,6 +570,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
@@ -530,11 +580,13 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentDetails.setVisibility(View.GONE);
                 sponsorsDetails.setVisibility(View.GONE);
 
+
             }
         });
         photography.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.orange));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -544,6 +596,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.orange));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -553,6 +606,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
@@ -566,6 +620,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         catering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.orange));
@@ -575,6 +630,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.orange));
@@ -584,6 +640,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
@@ -597,6 +654,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         costumes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -606,6 +664,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -615,6 +674,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
@@ -628,6 +688,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         paSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -637,6 +698,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.orange));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -646,6 +708,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
@@ -659,7 +722,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         decorations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -669,6 +732,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -678,6 +742,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
@@ -692,7 +757,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         contentCreators.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -702,6 +767,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.orange));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -711,6 +777,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.orange));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
@@ -724,7 +791,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         sponsors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
                 carTxt.setTextColor(getResources().getColor(R.color.black));
                 photographyTxt.setTextColor(getResources().getColor(R.color.black));
                 cateringTxt.setTextColor(getResources().getColor(R.color.black));
@@ -734,6 +801,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.orange));
 
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
                 photographyIcon.setColorFilter(getResources().getColor(R.color.black));
                 cateringIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -743,6 +811,7 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.orange));
 
+                musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
@@ -1050,5 +1119,28 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             e.printStackTrace();
         }
         return "Unknown Location";
+    }
+
+    private void showPopupDialog(View view) {
+        if (isFinishing() || isDestroyed()) return; // Prevent showing the dialog if the activity is not in a valid state
+
+        if (popupDialog == null) { // Initialize the dialog only once
+            popupDialog = new Dialog(view.getContext());
+            popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            popupDialog.setCancelable(false);
+            popupDialog.setContentView(R.layout.popup_layout);
+
+            if (popupDialog.getWindow() != null) {
+                popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        }
+
+        popupDialog.show();
+
+        new Handler().postDelayed(() -> {
+            if (popupDialog != null && popupDialog.isShowing() && !isFinishing() && !isDestroyed()) {
+                popupDialog.dismiss();
+            }
+        }, 3000);
     }
 }

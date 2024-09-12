@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,7 @@ public class advertActivity extends AppCompatActivity {
     advertAdapter adapter;
     ArrayList<advertisementModel> adverts;
     FirebaseFirestore fStore;
+    LinearLayout addAdvertTv, advertRv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class advertActivity extends AppCompatActivity {
         allAdvertsRv = findViewById(R.id.allAdvertsRv);
         addAdvertBtn = findViewById(R.id.addAdvertBtn);
         fStore = FirebaseFirestore.getInstance();
+        addAdvertTv = findViewById(R.id.emptyRecyclerviewTv);
+        advertRv = findViewById(R.id.advertRv);
 
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
@@ -84,16 +88,29 @@ public class advertActivity extends AppCompatActivity {
                 .whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        advertisementModel advert = documentSnapshot.toObject(advertisementModel.class);
-                        adverts.add(advert);
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Clear previous data
+                        adverts.clear();
+
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            advertisementModel advert = documentSnapshot.toObject(advertisementModel.class);
+                            adverts.add(advert);
+                        }
+
+                        // Show the RecyclerView and hide the "Add Advertisement" TextView
+                        advertRv.setVisibility(View.VISIBLE);
+                        addAdvertTv.setVisibility(View.GONE);
+
+                    } else {
+                        // If no documents found, show the "Add Advertisement" TextView
+                        advertRv.setVisibility(View.GONE);
+                        addAdvertTv.setVisibility(View.VISIBLE);
                     }
+
+                    // Notify adapter to update RecyclerView
                     adapter.notifyDataSetChanged();
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(advertActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                }).addOnFailureListener(e ->
+                        Toast.makeText(advertActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }

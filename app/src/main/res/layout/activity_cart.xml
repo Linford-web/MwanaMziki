@@ -26,6 +26,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="start"
+            android:contentDescription="Back"
             app:tint="@color/red"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/back_arrow" />
@@ -43,5 +44,186 @@
 
 
     </androidx.appcompat.widget.Toolbar>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_toolbar"
+        android:layout_marginBottom="50dp"
+        android:background="@color/white"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/totalLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Sub Total: "
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"
+                    android:layout_gravity="start"/>
+                <TextView
+                    android:id="@+id/totalCartAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Amount"
+                    android:layout_margin="5dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_gray"
+                    android:layout_gravity="end"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CART"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cartRv"/>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/emptyCartTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:elevation="0.3dp"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:background="@drawable/round_bg"
+                        app:tint="@color/gray"
+                        android:contentDescription="@string/adverts"
+                        android:src="@drawable/add_cart"
+                        android:padding="25dp" />
+
+                    <Button
+                        android:id="@+id/addAdvertBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:layout_margin="5dp"
+                        android:text="Go to Services Shopping"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="visible"
+                android:id="@+id/linkedLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Link Services to Event"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/linkBtn"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/orange"
+                    android:drawableEnd="@drawable/add_link_icon"
+                    android:drawableTint="@color/white"
+                    android:text="Link Services in Cart" />
+
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/cancelLinkBtn"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/orange"
+                    android:drawableEnd="@drawable/add_link_icon"
+                    android:drawableTint="@color/white"
+                    android:text="Cancel Linking" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/linkedRv"/>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/emptyEventsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:elevation="0.3dp"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:background="@drawable/round_bg"
+                        app:tint="@color/gray"
+                        android:contentDescription="@string/adverts"
+                        android:src="@drawable/add_events_cion"
+                        android:padding="25dp" />
+
+                    <Button
+                        android:id="@+id/addEventBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:layout_margin="5dp"
+                        android:text="Add Events to link with Service"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Confirm"
+        android:backgroundTint="@color/orange"
+        android:textColor="@color/white"/>
+
 
 </RelativeLayout>

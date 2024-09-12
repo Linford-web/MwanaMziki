@@ -36,7 +36,6 @@ public class splashScreen extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

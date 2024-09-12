@@ -1185,10 +1185,10 @@ public class addServices extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Check if the result is OK and the request code matches
         if (resultCode == RESULT_OK && data != null) {
+            Uri imageUri = data.getData();
 
-            imageUri = data.getData();
-            carPhoto.setImageURI(imageUri);
             thriftPhoto.setImageURI(imageUri);
             paparazi.setImageURI(imageUri);
             cateringPhoto.setImageURI(imageUri);
@@ -1196,9 +1196,41 @@ public class addServices extends AppCompatActivity {
             influencerPhoto.setImageURI(imageUri);
             sponsorPhoto.setImageURI(imageUri);
             decorationPhoto.setImageURI(imageUri);
+            // Set the selected image URI to the relevant ImageView (if applicable)
+            carPhoto.setImageURI(imageUri);
 
+            // Repeat for other ImageViews if necessary
+
+            if (imageUri != null) {
+                // Get reference to Firebase Storage
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                // Create a unique path for each product photo
+                final StorageReference photoRef = storageRef.child("product_photos/" + FirebaseAuth.getInstance().getUid() + "/" + System.currentTimeMillis() + ".jpg");
+
+                // Upload the selected image to Firebase Storage
+                photoRef.putFile(imageUri)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            photoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String imageUrl = uri.toString();
+
+                                // Save the image URL to Firestore
+                                FirebaseFirestore.getInstance().collection("Products")
+                                        .document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                                        .update("image", imageUrl)
+                                        .addOnSuccessListener(unused -> {
+                                            Toast.makeText(addServices.this, "Product photo updated successfully", Toast.LENGTH_SHORT).show();
+                                        }).addOnFailureListener(e -> {
+                                            Toast.makeText(addServices.this, "Failed to update product photo", Toast.LENGTH_SHORT).show();
+                                        });
+                            });
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(addServices.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -1216,7 +1248,7 @@ public class addServices extends AppCompatActivity {
         String driver = carCheckbox.isChecked() ? "Provided" : "Not Provided";
 
         ServicesDetails.carModel car = new ServicesDetails.carModel(carModel, carDetailsTxt.getText().toString(),
-                carType, carColor, "Available", carTransmission, seats, driver, userId, carPrice, carExtraPrice, "", "");
+                carType, carColor, "Available", carTransmission, seats, driver, userId, carPrice, carExtraPrice, "", "", "Car Rental");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1285,7 +1317,7 @@ public class addServices extends AppCompatActivity {
         String cleaning = checkBoxCleaning.isChecked() ? "Yes" : "No";
 
 
-        ServicesDetails.costumeModel thrift = new ServicesDetails.costumeModel(name, gender, ageGroup, detail, size, number,material, customization,cleaning, duration, buyPrice, hirePrice, lateFee, deliveryPrice, policy,"Available", userId,"", "");
+        ServicesDetails.costumeModel thrift = new ServicesDetails.costumeModel(name, gender, ageGroup, detail, size, number,material, customization,cleaning, duration, buyPrice, hirePrice, lateFee, deliveryPrice, policy,"Available", userId,"", "", "Costumes");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1364,7 +1396,7 @@ public class addServices extends AppCompatActivity {
         }else {
             preShoot = "Meet up for event only";
         }
-        ServicesDetails.photoModel photos = new ServicesDetails.photoModel(packageName, noPhotographers, noPhotos, format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, "Available", userId, "", travel, preShoot, "");
+        ServicesDetails.photoModel photos = new ServicesDetails.photoModel(packageName, noPhotographers, noPhotos, format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, "Available", userId, "", travel, preShoot, "", "Photographers");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1445,7 +1477,7 @@ public class addServices extends AppCompatActivity {
         }
 
         ServicesDetails.soundModel thrift = new ServicesDetails.soundModel(type, name,
-                details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, "Available", userId, "", "");
+                details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, "Available", userId, "", "", "Sound");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1535,7 +1567,7 @@ public class addServices extends AppCompatActivity {
         }
 
         ServicesDetails.cateringModel food = new ServicesDetails.cateringModel( name,Package,cuisine,
-                service ,number, packagePrice, detail, booking, setup, staff, numberStaff, coordinator, theme, transportation ,cancelPolicy,"Available", userId, "", "");
+                service ,number, packagePrice, detail, booking, setup, staff, numberStaff, coordinator, theme, transportation ,cancelPolicy,"Available", userId, "", "", "Catering");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1603,7 +1635,7 @@ public class addServices extends AppCompatActivity {
         String cancellation = influencerCancellationPolicy.getText().toString();
         String coverage = eventCoverage.getText().toString();
 
-        ServicesDetails.influencerModel influencer = new ServicesDetails.influencerModel(handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage,"Available", userId, "", "");
+        ServicesDetails.influencerModel influencer = new ServicesDetails.influencerModel(handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage,"Available", userId, "", "", "Influencers");
 
 
         // Query to check if a document with the same userId exists
@@ -1676,7 +1708,7 @@ public class addServices extends AppCompatActivity {
         }
 
 
-        ServicesDetails.sponsorModel sponsor = new ServicesDetails.sponsorModel( name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellation,"Available", userId, "", "");
+        ServicesDetails.sponsorModel sponsor = new ServicesDetails.sponsorModel( name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellation,"Available", userId, "", "", "Sponsors");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1739,7 +1771,8 @@ public class addServices extends AppCompatActivity {
         String cancellation = decoCancellationPolicy.getText().toString();
         String amounts = decoAmount.getText().toString();
 
-        ServicesDetails.decorationModel deco = new ServicesDetails.decorationModel( name , Package , theme , event, details , customization , emergency, setUp ,time , cancellation, amounts, "Available", userId, "", "");
+        ServicesDetails.decorationModel deco = new ServicesDetails.decorationModel( name , Package , theme , event, details ,
+                customization , emergency, setUp ,time , cancellation, amounts, "Available", userId, "", "", "Decorations");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")

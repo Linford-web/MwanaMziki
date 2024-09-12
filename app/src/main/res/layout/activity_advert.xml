@@ -44,22 +44,82 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:layout_below="@id/top_toolbar"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/word"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="vertical">
+            android:layout_height="150dp"
+            android:background="@drawable/card_view"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="20dp"
+            android:padding="8dp"
+            android:backgroundTint="@color/gray"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:id="@+id/words_layout3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/first2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Make Advertisments"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/blue"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
+                    android:id="@+id/second3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/first2"
+                    android:text="Manage Advertisments"
+                    android:textStyle="bold"
+                    android:layout_margin="7dp"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp"
+                    android:letterSpacing="0.1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/second3"
+                    android:text="Create and book events and services"
+                    android:textStyle="bold"
+                    android:layout_margin="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.1"/>
+
+            </RelativeLayout>
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/cover"/>
-        </LinearLayout>
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@id/words_layout3"
+                app:tint="@color/red"
+                android:padding="15dp"
+                android:src="@drawable/advertising" />
+
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/advertRv"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -68,14 +128,44 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All Advertisments"
-                android:textSize="20sp"
+                android:text="My Advertisments"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/allAdvertsRv"
                 android:padding="5dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/emptyRecyclerviewTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/edit_text_bg"
+            android:padding="10dp"
+            android:layout_margin="20dp"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/add_icon"
+                android:layout_margin="10dp"
+                android:layout_gravity="start"
+                app:tint="@color/blue"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Advertisments to be displayed here"
+                android:letterSpacing="0.09"
+                android:textSize="16sp"
+                android:textColor="@color/blue"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -87,10 +177,11 @@
         android:src="@drawable/add_icon"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
         android:elevation="20dp"
-        android:backgroundTint="@color/blue"
+        android:tint="@color/white"
+        android:backgroundTint="@color/orange"
         android:importantForAccessibility="no">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 

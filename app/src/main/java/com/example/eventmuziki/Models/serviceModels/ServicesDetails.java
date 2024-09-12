@@ -41,12 +41,12 @@ public class ServicesDetails {
 
     public static class carModel {
 
-        String car_model, car_details, car_type, car_color, status, transmission, seats, driverProvided, creatorId, price_per_hour, price_per_extra_hour, carImage, productId;
+        String car_model, car_details, car_type, car_color, status, transmission, seats, driverProvided, creatorId, price_per_hour, price_per_extra_hour, image, productId, productType;
 
         public carModel() {
         }
 
-        public carModel(String car_model, String car_details, String car_type, String car_color, String status, String transmission, String seats, String driverProvided, String creatorId, String price_per_hour, String price_per_extra_hour, String carImage, String productId) {
+        public carModel(String car_model, String car_details, String car_type, String car_color, String status, String transmission, String seats, String driverProvided, String creatorId, String price_per_hour, String price_per_extra_hour, String image, String productId, String productType) {
             this.car_model = car_model;
             this.car_details = car_details;
             this.car_type = car_type;
@@ -58,9 +58,18 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.price_per_hour = price_per_hour;
             this.price_per_extra_hour = price_per_extra_hour;
-            this.carImage = carImage;
+            this.image = image;
             this.productId = productId;
+            this.productType = productType;
 
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getCar_model() {
@@ -159,22 +168,22 @@ public class ServicesDetails {
             this.productId = productId;
         }
 
-        public String getCarImage() {
-            return carImage;
+        public String getImage() {
+            return image;
         }
 
-        public void setCarImage(String carImage) {
-            this.carImage = carImage;
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 
     public static class cateringModel {
-        String name,Packaged,cuisine, service ,number, packagePrice, detail, booking, setup, staff, noOffStaff, coordinator, theme, transportation ,cancelPolicy, status ,creatorId, image, productId;
+        String name,Packaged,cuisine, service ,number, packagePrice, detail, booking, setup, staff, noOffStaff, coordinator, theme, transportation ,cancelPolicy, status ,creatorId, image, productId, productType;
 
         public cateringModel() {
         }
 
-        public cateringModel(String name, String Packaged, String cuisine, String service, String number, String packagePrice, String detail, String booking, String setup, String staff,String noOffStaff,String coordinator, String theme, String transportation, String cancelPolicy, String status, String creatorId, String image, String productId) {
+        public cateringModel(String name, String Packaged, String cuisine, String service, String number, String packagePrice, String detail, String booking, String setup, String staff,String noOffStaff,String coordinator, String theme, String transportation, String cancelPolicy, String status, String creatorId, String image, String productId, String productType) {
             this.name = name;
             this.Packaged = Packaged;
             this.cuisine = cuisine;
@@ -194,6 +203,15 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.image = image;
             this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getName() {
@@ -351,12 +369,12 @@ public class ServicesDetails {
 
     public static class costumeModel {
 
-        String costumeName, gender, ageGroup, details, size, productAmount, material, customization, cleaning, duration, buyPrice, hirePrice, lateFee, delivery, policy, status, creatorId, image, productId;
+        String costumeName, gender, ageGroup, details, size, productAmount, material, customization, cleaning, duration, buyPrice, hirePrice, lateFee, delivery, policy, status, creatorId, image, productId, productType;
 
         public costumeModel() {
         }
 
-        public costumeModel(String costumeName, String gender, String ageGroup, String details, String size, String productAmount, String material, String customization, String cleaning, String duration, String buyPrice, String hirePrice, String lateFee, String delivery, String policy, String status, String creatorId, String image, String productId) {
+        public costumeModel(String costumeName, String gender, String ageGroup, String details, String size, String productAmount, String material, String customization, String cleaning, String duration, String buyPrice, String hirePrice, String lateFee, String delivery, String policy, String status, String creatorId, String image, String productId, String productType) {
             this.costumeName = costumeName;
             this.gender = gender;
             this.ageGroup = ageGroup;
@@ -376,6 +394,7 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.image = image;
             this.productId = productId;
+            this.productType = productType;
         }
 
         public String getCostumeName() {
@@ -531,12 +550,12 @@ public class ServicesDetails {
 
     public static class soundModel {
 
-        String type, name, details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, status, creatorId, image, productId;
+        String type, name, details, area, quantity, price, extraPrice, setup, delivery, wireless, packaged, status, creatorId, image, productId, productType;
 
         public soundModel() {
         }
 
-        public soundModel(String type, String name, String details, String area, String quantity, String price, String extraPrice, String setup, String delivery, String wireless, String packaged, String status, String creatorId, String image, String productId) {
+        public soundModel(String type, String name, String details, String area, String quantity, String price, String extraPrice, String setup, String delivery, String wireless, String packaged, String status, String creatorId, String image, String productId, String productType) {
             this.type = type;
             this.name = name;
             this.details = details;
@@ -552,6 +571,15 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.image = image;
             this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getProductId() {
@@ -677,12 +705,12 @@ public class ServicesDetails {
 
     public static class photoModel {
 
-        String packageName, NoPhotographers,noPhotos,format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, status, creatorId, image, travel, preShoot, productId;
+        String packageName, NoPhotographers,noPhotos,format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, status, creatorId, image, travel, preShoot, productId, productType;
 
         public photoModel() {
         }
 
-        public photoModel( String packageName, String noPhotographers, String noPhotos, String format, String deliveryTime, String delivery, String portfolioLink, String photoPackagePrice, String pricePerHour, String photoExtraPrice, String photoAdvancedBooking, String specialEquipment, String status, String creatorId, String image, String travel, String preShoot, String productId) {
+        public photoModel( String packageName, String noPhotographers, String noPhotos, String format, String deliveryTime, String delivery, String portfolioLink, String photoPackagePrice, String pricePerHour, String photoExtraPrice, String photoAdvancedBooking, String specialEquipment, String status, String creatorId, String image, String travel, String preShoot, String productId, String productType) {
             this.packageName = packageName;
             this.NoPhotographers = noPhotographers;
             this.noPhotos = noPhotos;
@@ -701,6 +729,15 @@ public class ServicesDetails {
             this.travel = travel;
             this.preShoot = preShoot;
             this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getProductId() {
@@ -850,12 +887,12 @@ public class ServicesDetails {
 
     public static class influencerModel{
 
-        String handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage, status, creatorId, image, productId;
+        String handle ,platform, subscribers, age, gender, location , Package, content,posts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage, status, creatorId, image, productId, productType;
 
         public influencerModel() {
         }
 
-        public influencerModel(String handle, String platform, String subscribers, String age, String gender, String location, String aPackage, String content, String posts, String schedule, String theme, String freedom, String collaboration, String cancellation, String coverage, String status, String creatorId, String image, String productId) {
+        public influencerModel(String handle, String platform, String subscribers, String age, String gender, String location, String aPackage, String content, String posts, String schedule, String theme, String freedom, String collaboration, String cancellation, String coverage, String status, String creatorId, String image, String productId, String productType) {
             this.handle = handle;
             this.platform = platform;
             this.subscribers = subscribers;
@@ -875,6 +912,15 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.image = image;
             this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getProductId() {
@@ -1031,14 +1077,14 @@ public class ServicesDetails {
     }
 
     public static class sponsorModel{
-        String name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellationPolicy, status, creatorId, image, productId;
+        String name, type, event , age , industry, interests, promotion, amount, guide, preBooking , audience ,cancellationPolicy, status, creatorId, image, productId, productType;
 
         public sponsorModel() {
         }
 
         public sponsorModel(String name, String type, String event, String age, String industry,
                             String interests, String promotion, String amount, String guide, String preBooking,
-                            String audience, String cancellationPolicy, String status, String creatorId, String image, String productId) {
+                            String audience, String cancellationPolicy, String status, String creatorId, String image, String productId, String productType) {
             this.name = name;
             this.type = type;
             this.event = event;
@@ -1055,6 +1101,15 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.image = image;
             this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getProductId() {
@@ -1188,13 +1243,14 @@ public class ServicesDetails {
 
     public static class decorationModel {
 
-        String name , Package , theme , event, details , customization , emergency, setUp ,time , cancellation, amount, status, creatorId, image, productId;
+        String name , Package , theme , event, details , customization , emergency, setUp ,time , cancellation, amount, status, creatorId, image, productId, productType;
 
         public decorationModel() {
         }
 
         public decorationModel(String name, String aPackage, String theme, String event, String details, String customization,
-                               String emergency, String setUp, String time, String cancellation, String status, String amount, String creatorId, String image, String productId) {
+                               String emergency, String setUp, String time, String cancellation, String status, String amount,
+                               String creatorId, String image, String productId, String productType) {
             this.name = name;
             Package = aPackage;
             this.theme = theme;
@@ -1210,6 +1266,15 @@ public class ServicesDetails {
             this.creatorId = creatorId;
             this.image = image;
             this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
         }
 
         public String getProductId() {
@@ -1330,6 +1395,79 @@ public class ServicesDetails {
 
         public void setImage(String image) {
             this.image = image;
+        }
+    }
+
+    public static class cartModel{
+        String name, packageName, price, creatorId, productId, bookerId, pType;
+
+        public cartModel() {
+        }
+
+        public cartModel(String name, String packageName, String price, String creatorId, String productId, String bookerId, String pType) {
+            this.name = name;
+            this.packageName = packageName;
+            this.price = price;
+            this.creatorId = creatorId;
+            this.productId = productId;
+            this.bookerId = bookerId;
+            this.pType = pType;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public void setPackageName(String packageName) {
+            this.packageName = packageName;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
+        public String getBookerId() {
+            return bookerId;
+        }
+
+        public void setBookerId(String bookerId) {
+            this.bookerId = bookerId;
+        }
+
+        public String getpType() {
+            return pType;
+        }
+
+        public void setpType(String pType) {
+            this.pType = pType;
         }
     }
 

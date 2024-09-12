@@ -370,30 +370,14 @@
                 android:layout_marginBottom="5dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="Other services"
-                        android:letterSpacing="0.1"
-                        android:textColor="@color/orange"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/viewAllServices"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:layout_marginStart="10dp"
-                        android:text="View all" />
-                </LinearLayout>
+                    android:text="Event Services"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/orange"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -409,6 +393,34 @@
                         android:padding="10dp">
 
                         <LinearLayout
+                            android:id="@+id/Music"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/musicIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                app:tint="@color/orange"
+                                android:src="@drawable/car_icon" />
+
+                            <TextView
+                                android:id="@+id/musicTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/musician"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/orange"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:id="@+id/carRental"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -422,7 +434,7 @@
                                 android:layout_width="25dp"
                                 android:layout_height="match_parent"
                                 android:padding="2dp"
-                                app:tint="@color/orange"
+                                app:tint="@color/black"
                                 android:src="@drawable/car_icon" />
 
                             <TextView
@@ -431,7 +443,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Car rental"
                                 android:letterSpacing="0.1"
-                                android:textColor="@color/orange"
+                                android:textColor="@color/black"
                                 android:textSize="17sp"
                                 android:textStyle="normal" />
                         </LinearLayout>
@@ -622,9 +634,47 @@
 
                 </HorizontalScrollView>
 
-                <!-- Car Rental Service Details -->
+                <!-- Music Service Details -->
                 <LinearLayout
                     android:visibility="visible"
+                    android:id="@+id/musicDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:elevation="3dp"
+                    android:layout_marginTop="10dp">
+
+                    <!-- add necessary data for a musician -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Musician Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkMusic"/>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!-- Car Rental Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/carRentalDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

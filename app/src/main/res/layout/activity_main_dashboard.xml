@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".MainDashboard">
 
     <View
@@ -52,6 +51,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="73dp"
             android:layout_height="73dp"
@@ -71,7 +71,7 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/word"
         android:layout_below="@id/top"
         android:layout_width="match_parent"
@@ -87,7 +87,8 @@
 
         <RelativeLayout
             android:id="@+id/words_layout3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center">
@@ -134,9 +135,10 @@
             android:layout_toEndOf="@id/words_layout3"
             android:src="@drawable/service" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="visible"
         android:layout_below="@id/word"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -156,6 +158,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -165,57 +168,53 @@
                 android:letterSpacing="0.1"
                 android:text="My Events"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:id="@+id/eventsRecyclerView"/>
-
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/addEventsTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/edit_text_bg"
-                android:padding="10dp"
-                android:elevation="1dp"
+                android:padding="20dp"
+                android:elevation="2dp"
                 android:layout_marginTop="5dp">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/addEventBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:padding="2dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textStyle="bold"
-                        android:textColor="@color/blue"
-                        android:letterSpacing="0.1"
-                        android:text="@string/adverts"/>
-
-                </LinearLayout>
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/events"
+                    android:src="@drawable/add_icon"
+                    app:tint="@color/blue"
+                    android:padding="10dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Advertise with Us!!"
+                    android:text="Manage events and services with us!!"
                     android:letterSpacing="0.09"
                     android:textSize="16sp"
+                    android:textAlignment="center"
                     android:textColor="@color/red"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/addAdvertBtn"
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eventsTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:elevation="1dp"
+                android:visibility="gone"
+                android:layout_marginTop="5dp">
+
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/orange"
-                    android:text="Add Advert"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:layout_marginTop="7dp"
+                    android:id="@+id/eventsRecyclerView"/>
 
             </LinearLayout>
 
@@ -227,11 +226,56 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp" />
-            <androidx.recyclerview.widget.RecyclerView
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/addAdvertTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:id="@+id/advertRv"/>
+                android:orientation="vertical"
+                android:background="@drawable/edit_text_bg"
+                android:padding="20dp"
+                android:elevation="2dp"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/addAdvertBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:tint="@color/blue"
+                    android:contentDescription="@string/adverts"
+                    android:src="@drawable/add_icon"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Advertise with Us!!"
+                    android:letterSpacing="0.09"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/red"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/advertTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:elevation="1dp"
+                android:visibility="gone"
+                android:layout_marginTop="5dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:id="@+id/advertRv"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

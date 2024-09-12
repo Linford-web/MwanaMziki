@@ -267,16 +267,49 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:textColor="@color/black"/>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/userCategoryRv"
                         android:layout_marginTop="10dp"/>
 
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/displayEmptyRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="20dp"
+                        android:elevation="2dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/addEventBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:contentDescription="@string/events"
+                            android:src="@drawable/event_icon"
+                            app:tint="@color/blue"
+                            android:padding="10dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No Events to display yet!!"
+                            android:letterSpacing="0.09"
+                            android:textSize="16sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/red"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/popularEventsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -298,30 +331,63 @@
                         android:id="@+id/eventRecyclerView"
                         android:layout_marginTop="10dp"/>
 
-                    <RelativeLayout
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/addEventsTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:orientation="vertical"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="20dp"
+                        android:elevation="2dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/addEventsBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:contentDescription="@string/events"
+                            android:src="@drawable/add_icon"
+                            app:tint="@color/blue"
+                            android:padding="10dp" />
 
                         <TextView
-                            android:id="@+id/allEventTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="All Events"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="5dp"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"/>
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/allEventTxt"
-                            android:id="@+id/allRecyclerView"
-                            android:padding="5dp"
-                            android:layout_marginTop="10dp"/>
+                            android:text="Manage events and services with us!!"
+                            android:letterSpacing="0.09"
+                            android:textSize="16sp"
+                            android:textAlignment="center"
+                            android:textColor="@color/red"
+                            android:textStyle="bold" />
 
-                    </RelativeLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/allEventsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/allEventTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="All Events"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="5dp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/black"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/allRecyclerView"
+                        android:padding="5dp"
+                        android:layout_marginTop="10dp"/>
 
                 </LinearLayout>
 
@@ -329,6 +395,7 @@
 
         </ScrollView>
 
+        <!-- Bid Events Linear layout -->
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/bidEventsLayout"
@@ -371,6 +438,7 @@
 
         </LinearLayout>
 
+        <!-- Booked Events Linear layout -->
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/bookedEventsLayout"
@@ -413,6 +481,7 @@
 
         </LinearLayout>
 
+        <!-- search Events Linear layout -->
         <LinearLayout
             android:visibility="gone"
             android:layout_marginTop="10dp"
@@ -465,6 +534,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
         android:id="@+id/add_taskFBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

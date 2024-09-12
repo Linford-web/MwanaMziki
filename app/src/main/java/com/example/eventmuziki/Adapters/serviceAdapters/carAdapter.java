@@ -56,7 +56,7 @@ public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
             }
         });
 
-        String imageUrl = service.getCarImage();
+        String imageUrl = service.getImage();
         if (imageUrl == null || imageUrl.isEmpty()) {
             viewHolder.carImage.setImageResource(R.drawable.car_icon);
         }

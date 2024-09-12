@@ -158,7 +158,8 @@ public class bookMusicianActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle the click event here
-                bookMusicians(Objects.requireNonNull(bookEvent).getBidId(), bookEvent.getBiddersId(), bookEvent.getOrganizerName(), bookEvent.getEventId(), bookEvent.getBiddersName(), bookEvent.getCreatorID());
+                bookMusicians(Objects.requireNonNull(bookEvent).getBidId(),
+                        bookEvent.getBiddersId(), bookEvent.getOrganizerName(), bookEvent.getEventId(), bookEvent.getBiddersName(), bookEvent.getCreatorID());
 
             }
         });
