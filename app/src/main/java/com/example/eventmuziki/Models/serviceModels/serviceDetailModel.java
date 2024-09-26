@@ -2,6 +2,62 @@ package com.example.eventmuziki.Models.serviceModels;
 
 public class serviceDetailModel {
 
+    public static class hireMusician {
+
+        public String genre, duration, equipment, priceRange, service;
+
+        public hireMusician() {
+        }
+
+        public hireMusician(String genre, String duration, String equipment, String priceRange, String service) {
+            this.genre = genre;
+            this.duration = duration;
+            this.equipment = equipment;
+            this.priceRange = priceRange;
+            this.service = service;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public void setDuration(String duration) {
+            this.duration = duration;
+        }
+
+        public String getEquipment() {
+            return equipment;
+        }
+
+        public void setEquipment(String equipment) {
+            this.equipment = equipment;
+        }
+
+        public String getPriceRange() {
+            return priceRange;
+        }
+
+        public void setPriceRange(String priceRange) {
+            this.priceRange = priceRange;
+        }
+
+        public String getService() {
+            return service;
+        }
+
+        public void setService(String service) {
+            this.service = service;
+        }
+    }
+
     public static class carHire{
         public String model, type, color, seats, time, carModel, service;
 

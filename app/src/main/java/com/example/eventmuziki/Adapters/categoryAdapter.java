@@ -93,6 +93,8 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.ViewHo
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.itemView.getContext())
                                         .load(eventPoster)
+                                        .placeholder(R.drawable.cover)
+                                        .error(R.drawable.cover)
                                         .into(holder.posterTv);
                             }
                         }

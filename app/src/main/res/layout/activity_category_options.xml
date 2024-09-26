@@ -89,487 +89,649 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/addService"
-        android:padding="10dp">
+        android:scrollbars="none"
+        android:padding="5dp">
 
         <LinearLayout
-            android:id="@+id/category_optionsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Other services"
-                android:letterSpacing="0.1"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/blue"
-                android:textSize="17sp"
-                android:textStyle="bold" />
 
-            <HorizontalScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:scrollbars="none">
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:weightSum="2"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:id="@+id/allCategories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:background="@drawable/edit_text_bg"
+                    android:padding="10dp"
+                    android:elevation="3dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="10dp">
 
-                    <LinearLayout
-                        android:id="@+id/carRental"
+                    <TextView
+                        android:id="@+id/allCategoryTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/carIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            app:tint="@color/orange"
-                            android:src="@drawable/car_icon" />
-
-                        <TextView
-                            android:id="@+id/carTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Car rental"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/orange"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/photography"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/photographyIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/camera_icon" />
-                        <TextView
-                            android:id="@+id/photographyTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Photography"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/catering"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/cateringIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/fastfood_icon" />
-                        <TextView
-                            android:id="@+id/cateringTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Catering"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/costumes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/costumeIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/costume_icon" />
-                        <TextView
-                            android:id="@+id/costumeTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Costumes"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/paSystem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/paSystemIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/dj_icon" />
-                        <TextView
-                            android:id="@+id/paSystemTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sound system"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/decorations"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/decoIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/deco_icon" />
-                        <TextView
-                            android:id="@+id/decoTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Decorations"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/contentCreator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/contentIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/content_icon" />
-                        <TextView
-                            android:id="@+id/contentTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Influencers"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sponsorship"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edit_text_bg"
-                        android:padding="10dp"
-                        android:elevation="3dp"
-                        android:layout_marginEnd="10dp">
-                        <ImageView
-                            android:id="@+id/sponsorshipIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="match_parent"
-                            android:padding="2dp"
-                            android:src="@drawable/sponsorship_icon" />
-                        <TextView
-                            android:id="@+id/sponsorshipTxt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sponsors"
-                            android:letterSpacing="0.1"
-                            android:textColor="@color/black"
-                            android:textSize="17sp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
+                        android:text="All Services"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/orange"
+                        android:textSize="17sp"
+                        android:textStyle="normal" />
 
                 </LinearLayout>
 
-            </HorizontalScrollView>
+                <LinearLayout
+                    android:id="@+id/bookedCategories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:background="@drawable/edit_text_bg"
+                    android:padding="10dp"
+                    android:elevation="3dp"
+                    android:layout_marginEnd="10dp">
 
-            <!-- Car Rental Service Details -->
+                    <TextView
+                        android:id="@+id/bookedCategoryTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Booked Services"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- All Category Layout -->
             <LinearLayout
                 android:visibility="visible"
-                android:id="@+id/carRentalDetails"
+                android:id="@+id/allCategoryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Car Rental Details"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="7dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/carRentalRv"/>
-
-            </LinearLayout>
-            <!-- Photography Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/photographyDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Photography Details"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="7dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/photographyRentalRv"/>
-
-            </LinearLayout>
-            <!-- Catering Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/cateringDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Catering Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="10dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/cateringRv"/>
-
-            </LinearLayout>
-            <!-- Costumes Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/costumesDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Costumes Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="10dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/costumesRv"/>
-
-            </LinearLayout>
-            <!-- PA System and DJ Hire Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/paSystemDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PA System and DJ Hire Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="10dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/DjRv"/>
-
-            </LinearLayout>
-            <!-- Decorations Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/decorationDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Decoration Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="10dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/decoRv"/>
-
-            </LinearLayout>
-            <!-- Content Creators Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/contentCreatorsDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Content creators Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="10dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/contentCreatorsRv"/>
-
-            </LinearLayout>
-            <!-- Sponsorship Service Details -->
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/sponsorshipDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sponsorship Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="10dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sponsorshipRv"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/serviceTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Our services"
+                    android:letterSpacing="0.1"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/blue"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:id="@+id/Musicians"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/musicIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                app:tint="@color/orange"
+                                android:src="@drawable/music_icon" />
+
+                            <TextView
+                                android:id="@+id/musicTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Musicians"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/orange"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/carRental"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/carIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                app:tint="@color/black"
+                                android:src="@drawable/car_icon" />
+
+                            <TextView
+                                android:id="@+id/carTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Car rental"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/photography"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/photographyIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/camera_icon" />
+                            <TextView
+                                android:id="@+id/photographyTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Photography"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/catering"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/cateringIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/fastfood_icon" />
+                            <TextView
+                                android:id="@+id/cateringTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Catering"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/costumes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/costumeIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/costume_icon" />
+                            <TextView
+                                android:id="@+id/costumeTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Costumes"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paSystem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/paSystemIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/dj_icon" />
+                            <TextView
+                                android:id="@+id/paSystemTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sound system"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/decorations"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/decoIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/deco_icon" />
+                            <TextView
+                                android:id="@+id/decoTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Decorations"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/contentCreator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/contentIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/content_icon" />
+                            <TextView
+                                android:id="@+id/contentTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Influencers"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sponsorship"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/sponsorshipIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/sponsorship_icon" />
+                            <TextView
+                                android:id="@+id/sponsorshipTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sponsors"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+                <!-- Musician Service Details -->
+                <LinearLayout
+                    android:visibility="visible"
+                    android:id="@+id/musicDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Service"
-                    android:padding="5dp"
-                    android:textStyle="bold"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Musicians"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/musicRv"/>
+
+                </LinearLayout>
+                <!-- Car Rental Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/carRentalDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Car Rentals"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="7dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/carRentalRv"/>
+
+                </LinearLayout>
+                <!-- Photography Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/photographyDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Photography"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="7dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/photographyRentalRv"/>
+
+                </LinearLayout>
+                <!-- Catering Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/cateringDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Catering"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cateringRv"/>
+
+                </LinearLayout>
+                <!-- Costumes Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/costumesDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Costumes"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/costumesRv"/>
+
+                </LinearLayout>
+                <!-- PA System and DJ Hire Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/paSystemDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sound instruments and System"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/DjRv"/>
+
+                </LinearLayout>
+                <!-- Decorations Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/decorationDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Decoration Styles"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/decoRv"/>
+
+                </LinearLayout>
+                <!-- Content Creators Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/contentCreatorsDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Influencers and Content creators"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/contentCreatorsRv"/>
+
+                </LinearLayout>
+                <!-- Sponsorship Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/sponsorshipDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sponsorship packages"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sponsorshipRv"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/serviceTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/black" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/serviceRv"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- BookedCategory layout -->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/bookedCategoryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Booked services"
                     android:letterSpacing="0.1"
-                    android:textColor="@color/black" />
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/blue"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bookedCategoryRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/addServiceTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/serviceRv"/>
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:gravity="center"
+                    android:elevation="2dp"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/addBookedService"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:tint="@color/gray"
+                        android:contentDescription="@string/adverts"
+                        android:src="@drawable/add_icon"
+                        android:background="@drawable/round_bg"
+                        android:elevation="1dp"
+                        android:padding="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="All Booked Services will be displayed here"
+                        android:letterSpacing="0.09"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:itemIconTint="@drawable/item_selector"
-        android:background="@drawable/bottom_view_bg"
-        android:elevation="2dp"
-        app:itemIconSize="30dp"
-        android:fitsSystemWindows="true"
-        app:itemRippleColor="@android:color/transparent"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_nav_menu" />
 
 </RelativeLayout>

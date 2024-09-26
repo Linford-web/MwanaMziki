@@ -31,6 +31,7 @@ import com.example.eventmuziki.Adapters.serviceAdapters.costumeAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.decoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.djAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.influencerAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.musicianAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.photoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.sponsorAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
@@ -57,11 +58,11 @@ public class addServices extends AppCompatActivity {
     FirebaseStorage fStorage;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
-    ImageButton back, addCarPhoto, addPaparaziPhoto, addCateringPhoto, addThriftPhoto, addDjPhoto, addInfluencersPhoto, addSponsorPhoto, addDecorationPhoto,
-            deleteCar, deleteThrift, deletePaparazi, deleteSound, deleteCatering, deleteContent, deleteSponsor, deleteDecoration,
+    ImageButton back, addMusicianPhoto,addCarPhoto, addPaparaziPhoto, addCateringPhoto, addThriftPhoto, addDjPhoto, addInfluencersPhoto, addSponsorPhoto, addDecorationPhoto,
+            deleteCar, deleteThrift, deletePaparazi, deleteSound, deleteCatering, deleteContent, deleteSponsor, deleteDecoration, deleteMusician,
             btnMinus, btnAdd, btnAddD, btnMinusD, btnAddE, btnMinusE, btnAddZ, btnMinusZ, btnAddM, btnMinusM, btnAddP, btnMinusP;
-    ImageView carPhoto, paparazi, cateringPhoto, thriftPhoto, djPhoto, influencerPhoto, sponsorPhoto, decorationPhoto,
-            carClose, photographyClose, cateringClose, thriftClose, djClose, decorationClose, influencersClose, sponsorClose;
+    ImageView musicianPhoto, carPhoto, paparazi, cateringPhoto, thriftPhoto, djPhoto, influencerPhoto, sponsorPhoto, decorationPhoto,
+            musicClose, carClose, photographyClose, cateringClose, thriftClose, djClose, decorationClose, influencersClose, sponsorClose;
     EditText carDetailsTxt, carPriceTxt, carExtraPriceTxt,
             photographerNumbers, no_photos, delivery_time, portfolio_link, photo_package_price,price_per_hour, photo_extra_price, photo_advanced_booking,
             catering_company_name, no_of_people, cateringPackagePrice, catering_details,catering_transport, catering_cancel, tv_catering, no_staff,
@@ -69,17 +70,17 @@ public class addServices extends AppCompatActivity {
              equipmentName, soundDetails, areaCoverage, quantityEquipment, price_dj, extraSoundPrice,
             influencerHandle, subscriber_count, collaborationFee, influencerCancellationPolicy, no_of_posts,
             sponsorName, brandingGuidelines, sponsorPreBooking, expectedAudience, sponsorCancellationPolicy, sponsorAmount,
-            decoName, decoDetails, decoCancellationPolicy, tvDecoBooking, decoAmount;
+            decoName, decoDetails, decoCancellationPolicy, tvDecoBooking, decoAmount, instrumentDetails, payRate, musicDetails, musicianPolicy;
 
     CheckBox carCheckbox, checkBoxCustomization, checkBoxCleaning, checkBoxDelivery, checkBoxPhotoTravel, checkBoxPreShoot,
                 checkBoxSetUp, checkBoxSoundDelivery, checkBoxWireless,
             checkBoxCateringSetUp, checkBoxCateringStaff, checkBoxCateringTheme, checkBoxCateringEventManagement,
             eventCoverage, checkBoxDigitalPromotion,
-            checkBoxDecoSetUp, checkBoxDecoCustomization, checkBoxDecoEmergency;
-    Button seeAddCar, seeAddPhotography, seeAddCatering, seeAddThrift, seeAddDj, seeAddInfluencers, seeAddSponsor, seeAddDecoration;
+            checkBoxDecoSetUp, checkBoxDecoCustomization, checkBoxDecoEmergency, musicInstrument;
+    Button seeAddMusic, seeAddCar, seeAddPhotography, seeAddCatering, seeAddThrift, seeAddDj, seeAddInfluencers, seeAddSponsor, seeAddDecoration;
 
     TextView categoryTxt;
-    RecyclerView carRv, photographyRv, cateringRv, thriftRv, soundRv, decorationRv, influencersRv, sponsorRv;
+    RecyclerView musicianRv, carRv, photographyRv, cateringRv, thriftRv, soundRv, decorationRv, influencersRv, sponsorRv;
     int amount = 0;
     int hour = 6;
     int duration = 1;
@@ -93,12 +94,12 @@ public class addServices extends AppCompatActivity {
             ,spinner_soundEquipment,spinner_djServices,
             spinnerSocialMedia, spinnerAudienceAge, spinnerAudienceGender, spinnerAudienceLocation, spinnerSocialMediaPackage, spinnerContentType, spinnerPostingSchedule, spinnerContentTheme, spinnerContentFreedom,
             spinnerSponsorshipType, spinnerSponsorEventType, sponsorAge, sponsorIndustry, sponsorInterests,
-            spinnerDecoPackage, spinnerDecoTheme, spinnerDecoEvent;
+            spinnerDecoPackage, spinnerDecoTheme, spinnerDecoEvent, spinnerMusicGenre;
 
-    Button carSubmit, photographySubmit, cateringSubmit, thriftSubmit, djSubmit, influencerSubmit, sponsorSubmit, decorationSubmit ;
+    Button carSubmit, photographySubmit, cateringSubmit, thriftSubmit, djSubmit, influencerSubmit, sponsorSubmit, decorationSubmit, musicianSubmit;
 
-    LinearLayout addCarDetails, addPhotographyDetails, addCateringDetails, addThriftDetails, addDjDetails, addDecorationDetails, addInfluencersDetails ,addSponsorDetails,
-            carDetailsTv, photographyDetailsTv, cateringDetailsTv, thriftDetailsTv, djDetailsTv, decorationDetailsTv, influencersDetailsTv, sponsorDetailsTv;
+    LinearLayout addMusicianDetails, addCarDetails, addPhotographyDetails, addCateringDetails, addThriftDetails, addDjDetails, addDecorationDetails, addInfluencersDetails ,addSponsorDetails,
+            musicDetailsTv, carDetailsTv, photographyDetailsTv, cateringDetailsTv, thriftDetailsTv, djDetailsTv, decorationDetailsTv, influencersDetailsTv, sponsorDetailsTv;
 
     String userCategory, userId;
 
@@ -127,6 +128,9 @@ public class addServices extends AppCompatActivity {
     ArrayList<ServicesDetails.decorationModel> decorationList = new ArrayList<>();
     decoAdapter adapterDecoration;
 
+    ArrayList<ServicesDetails.Musicians> musicList = new ArrayList<>();
+    musicianAdapter adapterMusic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +143,7 @@ public class addServices extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
         back.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), categoryOptions.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -163,6 +168,12 @@ public class addServices extends AppCompatActivity {
 
         deleteServiceButtons();
         // set up the RecyclerView and its adapter
+
+        musicList = new ArrayList<>();
+        adapterMusic = new musicianAdapter(musicList, this);
+        musicianRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        musicianRv.setAdapter(adapterMusic);
+
         carList = new ArrayList<>();
         adapterCar = new carAdapter(carList, this);
         carRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -324,12 +335,33 @@ public class addServices extends AppCompatActivity {
                 no_staff.setText("0");
             }
         });
+        musicInstrument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (musicInstrument.isChecked()){
+                    instrumentDetails.setVisibility(View.VISIBLE);
+                }else {
+                    instrumentDetails.setVisibility(View.GONE);
+                    instrumentDetails.setText("");
+                }
+            }
+        });
 
 
     }
 
     private void setupAddButtons() {
 
+        seeAddMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                musicDetailsTv.setVisibility(View.VISIBLE);
+                musicianRv.setVisibility(View.GONE);
+                seeAddMusic.setVisibility(View.GONE);
+                musicClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
+            }
+        });
         seeAddCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -337,6 +369,7 @@ public class addServices extends AppCompatActivity {
                 carRv.setVisibility(View.GONE);
                 seeAddCar.setVisibility(View.GONE);
                 carClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddPhotography.setOnClickListener(new View.OnClickListener() {
@@ -346,6 +379,7 @@ public class addServices extends AppCompatActivity {
                 photographyRv.setVisibility(View.GONE);
                 seeAddPhotography.setVisibility(View.GONE);
                 photographyClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddCatering.setOnClickListener(new View.OnClickListener() {
@@ -355,6 +389,7 @@ public class addServices extends AppCompatActivity {
                 cateringRv.setVisibility(View.GONE);
                 seeAddCatering.setVisibility(View.GONE);
                 cateringClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddThrift.setOnClickListener(new View.OnClickListener() {
@@ -364,6 +399,7 @@ public class addServices extends AppCompatActivity {
                 thriftRv.setVisibility(View.GONE);
                 seeAddThrift.setVisibility(View.GONE);
                 thriftClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddDj.setOnClickListener(new View.OnClickListener() {
@@ -373,6 +409,7 @@ public class addServices extends AppCompatActivity {
                 soundRv.setVisibility(View.GONE);
                 seeAddDj.setVisibility(View.GONE);
                 djClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddInfluencers.setOnClickListener(new View.OnClickListener() {
@@ -382,6 +419,7 @@ public class addServices extends AppCompatActivity {
                 influencersRv.setVisibility(View.GONE);
                 seeAddInfluencers.setVisibility(View.GONE);
                 influencersClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddSponsor.setOnClickListener(new View.OnClickListener() {
@@ -391,6 +429,7 @@ public class addServices extends AppCompatActivity {
                 sponsorRv.setVisibility(View.GONE);
                 seeAddSponsor.setVisibility(View.GONE);
                 sponsorClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
         seeAddDecoration.setOnClickListener(new View.OnClickListener() {
@@ -400,6 +439,7 @@ public class addServices extends AppCompatActivity {
                 decorationRv.setVisibility(View.GONE);
                 seeAddDecoration.setVisibility(View.GONE);
                 decorationClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
             }
         });
 
@@ -407,6 +447,21 @@ public class addServices extends AppCompatActivity {
 
     private void setupCloseButton() {
 
+        musicClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicDetailsTv.setVisibility(View.GONE);
+                musicianRv.setVisibility(View.VISIBLE);
+                seeAddMusic.setVisibility(View.VISIBLE);
+                musicClose.setVisibility(View.GONE);
+                spinnerMusicGenre.setSelection(0);
+                musicDetails.setText("");
+                payRate.setText("");
+                musicDetails.setText("");
+                musicianPolicy.setText("");
+
+            }
+        });
         carClose.setOnClickListener(v -> {
             carDetailsTv.setVisibility(View.GONE);
             carRv.setVisibility(View.VISIBLE);
@@ -583,6 +638,7 @@ public class addServices extends AppCompatActivity {
         influencersClose = findViewById(R.id.closeInfluencer);
         sponsorClose = findViewById(R.id.closeSponsor);
 
+        seeAddMusic = findViewById(R.id.seeAddMusic);
         seeAddCar = findViewById(R.id.seeAddCar);
         seeAddPhotography = findViewById(R.id.seeAddPhotography);
         seeAddCatering = findViewById(R.id.seeAddCatering);
@@ -592,6 +648,7 @@ public class addServices extends AppCompatActivity {
         seeAddSponsor = findViewById(R.id.seeAddSponsor);
         seeAddDecoration = findViewById(R.id.seeAddDecoration);
 
+        addMusicianDetails = findViewById(R.id.addMusicianDetails);
         addCarDetails = findViewById(R.id.addCarDetails);
         addPhotographyDetails = findViewById(R.id.AddPhotographyDetails);
         addCateringDetails = findViewById(R.id.addCateringDetails);
@@ -601,6 +658,7 @@ public class addServices extends AppCompatActivity {
         addInfluencersDetails = findViewById(R.id.addContentCreatorDetails);
         addSponsorDetails = findViewById(R.id.addSponsorDetails);
 
+        addMusicianPhoto = findViewById(R.id.addMusicianPhoto);
         addCarPhoto = findViewById(R.id.addCarPhoto);
         addPaparaziPhoto = findViewById(R.id.addPaparaziPhoto);
         addCateringPhoto = findViewById(R.id.addCateringPhoto);
@@ -781,6 +839,20 @@ public class addServices extends AppCompatActivity {
         btnMinusP = findViewById(R.id.btn_minusP);
         photographerNumbers = findViewById(R.id.tv_number_of_photographers);
 
+        musicianPhoto = findViewById(R.id.musicianPhoto);
+        deleteMusician = findViewById(R.id.deleteMusicianPhoto);
+        musicClose = findViewById(R.id.closeMusic);
+        musicDetailsTv = findViewById(R.id.musicianDetailsTv);
+        musicianRv = findViewById(R.id.musicianRv);
+        musicianSubmit = findViewById(R.id.musicianSubmit);
+        spinnerMusicGenre = findViewById(R.id.musicianGenre);
+        musicInstrument = findViewById(R.id.instrumentProvided);
+        instrumentDetails = findViewById(R.id.instrumentDetails);
+        payRate = findViewById(R.id.musicianPricePerHour);
+        musicDetails = findViewById(R.id.musicianDetailsTxt);
+        musicianPolicy = findViewById(R.id.musicianPolicy);
+
+
     }
 
     private void fetchServicesCategory() {
@@ -804,6 +876,15 @@ public class addServices extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(QuerySnapshot productsSnapshot) {
                                                 if (!productsSnapshot.isEmpty()) {
+                                                    if (Objects.requireNonNull(serviceCategory).equalsIgnoreCase("Music")){
+                                                        musicList.clear();
+                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
+                                                            // Process each product document
+                                                            ServicesDetails.Musicians product = productDoc.toObject(ServicesDetails.Musicians.class);
+                                                            musicList.add(product);
+                                                            }
+                                                        adapterMusic.notifyDataSetChanged();
+                                                    }
                                                     if (Objects.requireNonNull(serviceCategory).equalsIgnoreCase("Car Rental")){
                                                         carList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
@@ -903,6 +984,14 @@ public class addServices extends AppCompatActivity {
     }
 
     private void setupAddPhotoListeners() {
+
+        addMusicianPhoto.setOnClickListener(v -> {
+            ImagePicker.with(addServices.this)
+                    .crop()
+                    .compress(1024)
+                    .maxResultSize(1080, 1080)
+                    .start();
+        });
         addCarPhoto.setOnClickListener(v -> {
             ImagePicker.with(addServices.this)
                     .crop()
@@ -960,10 +1049,18 @@ public class addServices extends AppCompatActivity {
                     .start();
         });
 
-
     }
 
     private void deleteServiceButtons() {
+
+        deleteMusician.setOnClickListener(v -> {
+                    if (imageUri != null) {
+                        deletePoster();
+                    } else {
+                        Log.d("add Service Musician", "No image selected");
+                    }
+
+        });
         deleteCar.setOnClickListener(v -> {
             if (imageUri != null) {
                 deletePoster();
@@ -1013,7 +1110,6 @@ public class addServices extends AppCompatActivity {
                 Log.d("add Service Content", "No image selected");
             }
         });
-
         deleteSponsor.setOnClickListener(v -> {
             if (imageUri != null) {
                 deletePoster();
@@ -1077,6 +1173,7 @@ public class addServices extends AppCompatActivity {
 
                     if (userCategory != null){
                         if (userCategory.equalsIgnoreCase("Car Rental")) {
+                            addMusicianDetails.setVisibility(View.GONE);
                             addCarDetails.setVisibility(View.VISIBLE);
                             addPhotographyDetails.setVisibility(View.GONE);
                             addCateringDetails.setVisibility(View.GONE);
@@ -1086,7 +1183,19 @@ public class addServices extends AppCompatActivity {
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
 
+                        } else if (userCategory.equalsIgnoreCase("Music")) {
+                            addMusicianDetails.setVisibility(View.VISIBLE);
+                            addCarDetails.setVisibility(View.GONE);
+                            addPhotographyDetails.setVisibility(View.GONE);
+                            addCateringDetails.setVisibility(View.GONE);
+                            addThriftDetails.setVisibility(View.GONE);
+                            addDjDetails.setVisibility(View.GONE);
+                            addDecorationDetails.setVisibility(View.GONE);
+                            addInfluencersDetails.setVisibility(View.GONE);
+                            addSponsorDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Photographer")) {
+                            addMusicianDetails.setVisibility(View.GONE);
                             addPhotographyDetails.setVisibility(View.VISIBLE);
                             addCarDetails.setVisibility(View.GONE);
                             addCateringDetails.setVisibility(View.GONE);
@@ -1096,6 +1205,7 @@ public class addServices extends AppCompatActivity {
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
                         } else if (userCategory.equalsIgnoreCase("Catering")){
+                            addMusicianDetails.setVisibility(View.GONE);
                             addCateringDetails.setVisibility(View.VISIBLE);
                             addCarDetails.setVisibility(View.GONE);
                             addPhotographyDetails.setVisibility(View.GONE);
@@ -1105,6 +1215,7 @@ public class addServices extends AppCompatActivity {
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
                         } else if (userCategory.equalsIgnoreCase("Costumes")){
+                            addMusicianDetails.setVisibility(View.GONE);
                             addThriftDetails.setVisibility(View.VISIBLE);
                             addCarDetails.setVisibility(View.GONE);
                             addPhotographyDetails.setVisibility(View.GONE);
@@ -1114,6 +1225,7 @@ public class addServices extends AppCompatActivity {
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
                         } else if (userCategory.equalsIgnoreCase("Sound")){
+                            addMusicianDetails.setVisibility(View.GONE);
                             addDjDetails.setVisibility(View.VISIBLE);
                             addCarDetails.setVisibility(View.GONE);
                             addPhotographyDetails.setVisibility(View.GONE);
@@ -1123,6 +1235,7 @@ public class addServices extends AppCompatActivity {
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
                         } else if (userCategory.equalsIgnoreCase("Influencers")) {
+                            addMusicianDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.VISIBLE);
                             addDjDetails.setVisibility(View.GONE);
                             addCarDetails.setVisibility(View.GONE);
@@ -1132,6 +1245,7 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
                         } else if (userCategory.equalsIgnoreCase("Decorations")) {
+                            addMusicianDetails.setVisibility(View.GONE);
                             addDecorationDetails.setVisibility(View.VISIBLE);
                             addDjDetails.setVisibility(View.GONE);
                             addCarDetails.setVisibility(View.GONE);
@@ -1141,6 +1255,7 @@ public class addServices extends AppCompatActivity {
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
                         } else if (userCategory.equalsIgnoreCase("Sponsors")) {
+                            addMusicianDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.VISIBLE);
                             addDjDetails.setVisibility(View.GONE);
                             addCarDetails.setVisibility(View.GONE);
@@ -1168,9 +1283,11 @@ public class addServices extends AppCompatActivity {
         addDecorationDetails.setVisibility(View.GONE);
         addInfluencersDetails.setVisibility(View.GONE);
         addSponsorDetails.setVisibility(View.GONE);
+        addMusicianDetails.setVisibility(View.GONE);
     }
 
     private void setupSubmitButtons() {
+        musicianSubmit.setOnClickListener(view -> uploadMusicianDetails());
         carSubmit.setOnClickListener(v -> uploadCarDetails());
         photographySubmit.setOnClickListener(v -> uploadPhotographyDetails());
         cateringSubmit.setOnClickListener(v -> uploadCateringDetails());
@@ -1189,6 +1306,7 @@ public class addServices extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
 
+            musicianPhoto.setImageURI(imageUri);
             thriftPhoto.setImageURI(imageUri);
             paparazi.setImageURI(imageUri);
             cateringPhoto.setImageURI(imageUri);
@@ -1232,6 +1350,74 @@ public class addServices extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
         }
+
+
+    }
+
+    private void uploadMusicianDetails() {
+        String genre = spinnerMusicGenre.getSelectedItem().toString();
+        String instrument;
+        String InstrumentDetail = instrumentDetails.getText().toString();
+        String musicPayRate = payRate.getText().toString();
+        String musicDetail = musicDetails.getText().toString();
+        String policy = musicianPolicy.getText().toString();
+
+       if (musicInstrument.isChecked()){
+           instrument = "Artist to provide their Instrument";
+       } else {
+           instrument = "Organizer to provide Instrument";
+       }
+
+       ServicesDetails.Musicians music = new ServicesDetails.Musicians(genre, instrument, InstrumentDetail,
+               "Available", musicPayRate,musicDetail,policy,"","", FirebaseAuth.getInstance().getCurrentUser().getUid(),"Music");
+
+        // Query to check if a document with the same userId exists
+        fStore.collection("Services")
+                .whereEqualTo("creatorId", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        // Document with same userId exists, add car model details to the 'Products' subcollection
+                        DocumentSnapshot existingDocument = task.getResult().getDocuments().get(0);
+                        existingDocument.getReference().collection("Products")
+                                .add(music)
+                                .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
+                                    uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
+                                    clearInputFieldsMusic();
+                                    Toast.makeText(addServices.this, "Photography added successfully", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(addServices.this, "Error adding product", Toast.LENGTH_SHORT).show());
+
+                    } else {
+                        // No document with the same userId exists, create new service document and add product details
+                        ServicesDetails.serviceDetail photo = new ServicesDetails.serviceDetail(userId, categoryTxt.getText().toString(), "");
+
+                        fStore.collection("Services")
+                                .add(photo)
+                                .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("serviceId", documentId);
+
+                                    documentReference.collection("Products")
+                                            .add(music)
+                                            .addOnSuccessListener(productRef -> {
+                                                String docId = productRef.getId();
+                                                productRef.update("productId", docId);
+
+                                                uploadPhotos(productRef.getId(), categoryTxt.getText().toString());
+                                                clearInputFieldsMusic();
+                                                Toast.makeText(addServices.this, "Photography added successfully", Toast.LENGTH_SHORT).show();
+                                            })
+                                            .addOnFailureListener(e -> Toast.makeText(addServices.this, "Error creating product", Toast.LENGTH_SHORT).show());
+
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(addServices.this, "Error creating service", Toast.LENGTH_SHORT).show());
+                    }
+                });
+
 
 
     }
@@ -1396,7 +1582,10 @@ public class addServices extends AppCompatActivity {
         }else {
             preShoot = "Meet up for event only";
         }
-        ServicesDetails.photoModel photos = new ServicesDetails.photoModel(packageName, noPhotographers, noPhotos, format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour, photoExtraPrice, photoAdvancedBooking, specialEquipment, "Available", userId, "", travel, preShoot, "", "Photographers");
+        ServicesDetails.photoModel photos = new ServicesDetails.photoModel(packageName, noPhotographers,
+                noPhotos, format, deliveryTime, delivery, portfolioLink, photoPackagePrice, pricePerHour,
+                photoExtraPrice, photoAdvancedBooking, specialEquipment, "Available", userId, "",
+                travel, preShoot, "", "Photographers");
 
         // Query to check if a document with the same userId exists
         fStore.collection("Services")
@@ -1843,6 +2032,9 @@ public class addServices extends AppCompatActivity {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
+                                                    if (userCategory.equalsIgnoreCase("Music")){
+                                                        Glide.with(addServices.this).load(imageUrl).into(musicianPhoto);
+                                                    }
                                                     if (userCategory.equalsIgnoreCase("Car Rental")) {
                                                         Glide.with(addServices.this).load(imageUrl).into(carPhoto);
                                                     }
@@ -1888,6 +2080,19 @@ public class addServices extends AppCompatActivity {
         }
     }
 
+    private void clearInputFieldsMusic() {
+        musicDetailsTv.setVisibility(View.GONE);
+        musicianRv.setVisibility(View.VISIBLE);
+        seeAddMusic.setVisibility(View.VISIBLE);
+        musicClose.setVisibility(View.GONE);
+        spinnerMusicGenre.setSelection(0);
+        musicInstrument.setChecked(false);
+        musicDetails.setText("");
+        payRate.setText("");
+        musicDetails.setText("");
+        musicianPolicy.setText("");
+        fetchServicesCategory();
+    }
     private void clearInputFields() {
         carDetailsTv.setVisibility(View.GONE);
         carRv.setVisibility(View.VISIBLE);

@@ -14,6 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.eventmuziki.Models.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,14 +43,17 @@ public class registerActivity extends AppCompatActivity {
 
     EditText name, email, password, number, conPassword;
     Button registerBtn;
-    CheckBox bossCheck, musicianCheck, termsAndCondition, normalCheck;
+    CheckBox bossCheck, musicianCheck, termsAndCondition;
     ProgressBar progressbar;
     ImageView passwordIcon, conPasswordIcon;
     CountryCodePicker countryCodePicker;
-    TextView loginTxt;
+    TextView loginTxt, termsTxt;
     Spinner spinner;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    ScrollView details;
+    RelativeLayout terms;
+    FloatingActionButton fab;
 
     boolean valid = true;
     boolean passwordShowing = false;
@@ -79,7 +85,10 @@ public class registerActivity extends AppCompatActivity {
         loginTxt = findViewById(R.id.loginTxt);
         spinner = findViewById(R.id.spinner_category);
         termsAndCondition = findViewById(R.id.termsCheck);
-        normalCheck = findViewById(R.id.normalCheck);
+        details = findViewById(R.id.detailsScroll);
+        terms = findViewById(R.id.termsScroll);
+        termsTxt = findViewById(R.id.termsAndConditions);
+        fab = findViewById(R.id.cancelTerms);
         registerBtn.setEnabled(false);
         registerBtn.setBackgroundColor(getResources().getColor(R.color.gray));
 
@@ -142,24 +151,11 @@ public class registerActivity extends AppCompatActivity {
 
             }
         });
+
         bossCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (compoundButton.isChecked()) {
-                    musicianCheck.setChecked(false);
-                    spinner.setVisibility(View.GONE);
-                }
-            }
-        });
-        normalCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked()) {
-                    bossCheck.setChecked(false);
-                    musicianCheck.setChecked(false);
-                    spinner.setVisibility(View.GONE);
-                } else {
-                    bossCheck.setChecked(false);
                     musicianCheck.setChecked(false);
                     spinner.setVisibility(View.GONE);
                 }
@@ -183,6 +179,7 @@ public class registerActivity extends AppCompatActivity {
                 password.setSelection(password.getText().length());
             }
         });
+
         conPasswordIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,7 +208,7 @@ public class registerActivity extends AppCompatActivity {
                 checkField(conPassword);
 
                 //checkbox validation
-                if (!(bossCheck.isChecked() || musicianCheck.isChecked() || normalCheck.isChecked())){
+                if (!(bossCheck.isChecked() || musicianCheck.isChecked() )){
                     Toast.makeText(registerActivity.this, "Select User Type", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -244,10 +241,8 @@ public class registerActivity extends AppCompatActivity {
 
                                     // Create UserModel object
                                     String userType;
-                                    if (normalCheck.isChecked()) {
-                                        userType = "Normal";
-                                    } else if (bossCheck.isChecked()) {
-                                        userType = "Organizer";
+                                    if (bossCheck.isChecked()) {
+                                        userType = "Corporate";
                                     } else if(musicianCheck.isChecked()) {
                                         userType = "Musician";
                                     } else {
@@ -255,7 +250,7 @@ public class registerActivity extends AppCompatActivity {
                                         userType = "Null";
                                     }
 
-                                    String category = musicianCheck.isChecked() ? selected : "organizer";
+                                    String category = musicianCheck.isChecked() ? selected : "Corporate";
 
                                     UserModel userModel = new UserModel("", Objects.requireNonNull(user).getUid(),
                                             name.getText().toString(),
@@ -299,6 +294,22 @@ public class registerActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        termsTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                details.setVisibility(View.GONE);
+                terms.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                details.setVisibility(View.VISIBLE);
+                terms.setVisibility(View.GONE);
+                }
         });
 
     }

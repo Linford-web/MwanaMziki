@@ -245,13 +245,6 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:visibility="gone"
-                            android:id="@+id/LocationBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="5dp"
-                            android:src="@drawable/location_icon"/>
-                        <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
@@ -260,8 +253,8 @@
                             android:id="@+id/locationTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/location"
-                            android:layout_margin="5dp"
+                            android:hint="Type location"
+                            android:layout_margin="3dp"
                             android:padding="5dp"
                             android:letterSpacing="0.1"
                             android:background="@drawable/edit_text_bg"
@@ -654,7 +647,8 @@
                         android:layout_margin="5dp">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:text="Musician Details"
                             android:textSize="18sp"
@@ -667,6 +661,109 @@
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:id="@+id/checkMusic"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                            <!-- Genre Input -->
+                            <TextView
+                                android:id="@+id/textViewGenre"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Music Genre"
+                                android:textSize="16sp"
+                                android:layout_marginTop="16dp"/>
+                        <Spinner
+                            android:id="@+id/spinnerGenre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="8dp"
+                            android:entries="@array/music_genres"/>
+
+                            <EditText
+                                android:visibility="gone"
+                                android:id="@+id/editTextGenre"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Enter music genre"
+                                android:inputType="text"
+                                android:padding="10dp"/>
+
+                            <!-- Duration Input -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:id="@+id/textViewDuration"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Performance Duration" />
+
+                            <EditText
+                                android:id="@+id/editTextDuration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter duration"
+                                android:inputType="text"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+
+                            <!-- Equipment Input -->
+                            <TextView
+                                android:id="@+id/textViewEquipment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Equipment Needed"
+                                android:textSize="16sp"
+                                android:layout_marginTop="16dp"/>
+
+                            <EditText
+                                android:id="@+id/editTextEquipment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter equipment (if any)"
+                                android:inputType="text"
+                                android:padding="10dp"/>
+
+                            <!-- Price Range Input -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+                            <TextView
+                                android:id="@+id/textViewPriceRange"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Price Range" />
+
+                            <EditText
+                                android:id="@+id/editTextPriceRange"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter price range"
+                                android:inputType="numberDecimal"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+
                     </LinearLayout>
 
 
@@ -1749,28 +1846,6 @@
 
     </ScrollView>
 
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/location_map"
-        android:layout_width="match_parent"
-        android:padding="5dp"
-        android:background="@drawable/card_view"
-        android:layout_height="match_parent">
-
-        <androidx.appcompat.widget.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:queryHint="Search..."
-            android:background="@drawable/edit_text_bg"
-            android:elevation="3dp"/>
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MapsActivity" />
-    </RelativeLayout>
 
 </RelativeLayout>
 

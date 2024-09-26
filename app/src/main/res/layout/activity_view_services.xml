@@ -56,6 +56,145 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- musician details display -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:id="@+id/musicianCardView"
+                android:elevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="15dp"
+                    android:padding="7dp">
+
+                    <ImageView
+                        android:id="@+id/musicImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:src="@drawable/music_icon"
+                        android:scaleType="centerCrop"
+                        android:padding="16dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Music genre"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/musicGenre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Genre"
+                        android:padding="10dp"
+                        android:textColor="@color/black"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Musician Availability: "
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/musicianStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Status"
+                            android:padding="10dp"
+                            android:textColor="@color/green"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Instrument details"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/instrumentDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Details"
+                        android:padding="10dp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pay Rate per Hour"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/payRates"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Amount"
+                        android:padding="10dp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Music Details"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/musicDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Details"
+                        android:padding="10dp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Musician Policy"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/musicianPolicy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Policy"
+                        android:padding="10dp"
+                        android:textColor="@color/black"/>
+
+
+                </LinearLayout>
+
+
+                <Button
+                    android:visibility="invisible"
+                    android:id="@+id/addMusician"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Add to Cart"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/orange"
+                    android:textColor="@color/white"/>
+
+                <Button
+                    android:visibility="invisible"
+                    android:id="@+id/editMusician"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Edit Product"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/orange"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
             <!-- Car Rental Service Detail Section -->
             <LinearLayout
                 android:layout_width="match_parent"

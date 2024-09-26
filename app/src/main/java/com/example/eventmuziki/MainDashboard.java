@@ -1,15 +1,19 @@
 package com.example.eventmuziki;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowInsets;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +28,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.advertAdapter;
 import com.example.eventmuziki.Adapters.dashAdapter;
+import com.example.eventmuziki.Adapters.eventAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
+import com.example.eventmuziki.Adapters.eventSearchAdapter;
 import com.example.eventmuziki.Models.advertisementModel;
 import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.Models.serviceNameModel;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,6 +42,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -42,17 +50,18 @@ import java.util.Objects;
 
 public class MainDashboard extends AppCompatActivity {
 
-    ImageView profile, addEvents, addAdverts;
+    ImageView profile;
+    ImageButton searchBtn, cancelSearch;
+    EditText searchTxt;
     TextView userNameTv;
-    RecyclerView eventRv, advertsRv, menuRv;
-    ArrayList<eventModel> events;
-    ArrayList<advertisementModel> advert;
-    eventAdapter2 adapter;
-    advertAdapter adapter2;
+    RecyclerView menuRv, searchEventsRv, allEventsRv;
     dashAdapter adapter3;
     FirebaseFirestore fStore;
-    BottomNavigationView bottomNavigationView;
-    LinearLayout eventsTv, advertTv, addEventsTv, addAdvertTv;
+    LinearLayout addEventsTv;
+    ScrollView mainScrollView;
+    eventSearchAdapter eventSearch;
+    ArrayList<eventModel> allEvents;
+    eventAdapter2 adapter;
 
     String name, email, userId;
 
@@ -64,73 +73,28 @@ public class MainDashboard extends AppCompatActivity {
 
         profile = findViewById(R.id.userProfileTv);
         userNameTv = findViewById(R.id.get_name);
-        eventRv = findViewById(R.id.eventsRecyclerView);
         fStore = FirebaseFirestore.getInstance();
-        advertsRv = findViewById(R.id.advertRv);
         menuRv = findViewById(R.id.menuRv);
         userId = FirebaseAuth.getInstance().getUid();
-        eventsTv = findViewById(R.id.eventsTv);
-        advertTv = findViewById(R.id.advertTv);
+        searchBtn = findViewById(R.id.search_icon);
+        searchTxt = findViewById(R.id.searchInput);
+        searchEventsRv = findViewById(R.id.searchEventsRv);
+        mainScrollView = findViewById(R.id.mainScrollView);
+        cancelSearch = findViewById(R.id.cancel_search_icon);
+        allEventsRv = findViewById(R.id.allRecyclerView);
         addEventsTv = findViewById(R.id.addEventsTv);
-        addAdvertTv = findViewById(R.id.addAdvertTv);
-        addEvents = findViewById(R.id.addEventBtn);
-        addAdverts = findViewById(R.id.addAdvertBtn);
-
-        bottomNavigationView = findViewById(R.id.bottomNav);
-        bottomNavigationView.setSelectedItemId(R.id.home);
-
-        ViewCompat.setOnApplyWindowInsetsListener(bottomNavigationView, (view, insets) -> {
-            // Remove the bottom padding
-            view.setPadding(0, 0, 0, 0);
-            return insets;
-        });
-
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-
-                if (itemId == R.id.home) {
-                    return true;
-                } else if (itemId == R.id.profile) {
-                    startActivity(new Intent(getApplicationContext(), profileActivity.class));
-                    return true;
-                } else if (itemId == R.id.services) {
-                    startActivity(new Intent(getApplicationContext(), categoryOptions.class));
-                    return true;
-                }
-                return false;
-            }
-        });
 
         setUpRecyclerView();
-        // Fetch events and advertisements from Firestore
-        fetchEventSs(userId);
-        fetchAdverts(userId);
 
-        // Initialize Event RecyclerView
-        events = new ArrayList<>();
-        adapter = new eventAdapter2(events, getApplicationContext());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        eventRv.setLayoutManager(layoutManager);
-        eventRv.setAdapter(adapter);
+        fetchEvents();
 
-        // Initialize Advertisement RecyclerView
-        advert = new ArrayList<>();
-        adapter2 = new advertAdapter(advert);
-        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        advertsRv.setLayoutManager(layoutManager2);
-        advertsRv.setAdapter(adapter2);
 
-        addEvents.setOnClickListener(view -> {
-            Intent intent = new Intent(MainDashboard.this, eventsActivity.class);
-            startActivity(intent);
-        });
+        allEvents = new ArrayList<>();
+        adapter = new eventAdapter2(allEvents, getApplicationContext());
+        RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        allEventsRv.setLayoutManager(layoutManager3);
+        allEventsRv.setAdapter(adapter);
 
-        addAdverts.setOnClickListener(view -> {
-            Intent intent = new Intent(MainDashboard.this, advertActivity.class);
-            startActivity(intent);
-        });
 
         if (userId != null) {
             // Fetch user details from Firestore "Users" collection
@@ -162,6 +126,58 @@ public class MainDashboard extends AppCompatActivity {
                     });
         }
 
+        searchTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainScrollView.setVisibility(View.GONE);
+                searchEventsRv.setVisibility(View.VISIBLE);
+                searchBtn.setVisibility(View.VISIBLE);
+                menuRv.setVisibility(View.GONE);
+                cancelSearch.setVisibility(View.VISIBLE);
+            }
+        });
+
+        cancelSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainScrollView.setVisibility(View.VISIBLE);
+                searchEventsRv.setVisibility(View.GONE);
+                searchBtn.setVisibility(View.GONE);
+                cancelSearch.setVisibility(View.GONE);
+                menuRv.setVisibility(View.VISIBLE);
+                searchTxt.setText("");
+                adapter.notifyDataSetChanged();
+                // clear the search recyclerview adapter
+                if (eventSearch != null) {
+                    eventSearch.stopListening();
+                }
+                searchEventsRv.setAdapter(null);
+                searchEventsRv.setLayoutManager(null);
+                searchEventsRv.removeAllViews();
+                // hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(searchTxt.getWindowToken(), 0);
+                }
+
+                // Clear focus from the EditText
+                searchTxt.clearFocus();
+
+            }
+        });
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchTerm = searchTxt.getText().toString();
+                if (searchTerm.isEmpty() || searchTerm.length()<3) {
+                    searchTxt.setError("Enter at least 3 characters");
+                    return;
+                }
+                setUpRecyclerViewSearch(searchTerm);
+            }
+        });
+
     }
 
     private void setUpRecyclerView() {
@@ -169,56 +185,46 @@ public class MainDashboard extends AppCompatActivity {
 
         menuItems.add(new serviceNameModel("Events", R.drawable.event_icon, eventsActivity.class));
         menuItems.add(new serviceNameModel("Adverts", R.drawable.advertising, advertActivity.class));
-        menuItems.add(new serviceNameModel("Chats", R.drawable.chat_icon, chatActivity.class));
         menuItems.add(new serviceNameModel("Services", R.drawable.service_icon, categoryOptions.class));
+        menuItems.add(new serviceNameModel("Chats", R.drawable.chat_icon, chatActivity.class));
+        menuItems.add(new serviceNameModel("Profile", R.drawable.profile_icon, profileActivity.class));
 
         adapter3 = new dashAdapter(MainDashboard.this, menuItems);
-        menuRv.setLayoutManager(new GridLayoutManager(this, 4));
+        menuRv.setLayoutManager(new GridLayoutManager(this, 5));
         menuRv.setAdapter(adapter3);
     }
 
-    private void fetchAdverts(String userId) {
-        fStore.collection("Advertisements")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    advert.clear();
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        advertTv.setVisibility(View.VISIBLE);
-                        addAdvertTv.setVisibility(View.GONE);
-                    } else {
-                        advertTv.setVisibility(View.GONE);
-                        addAdvertTv.setVisibility(View.VISIBLE);
-                    }
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        advertisementModel advertItem = documentSnapshot.toObject(advertisementModel.class);
-                        advert.add(advertItem);
-                    }
-                    adapter2.notifyDataSetChanged();
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(MainDashboard.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    private void setUpRecyclerViewSearch(String searchTerm) {
+        Query query = FirebaseFirestore.getInstance().collection("Events")
+                .whereGreaterThanOrEqualTo("eventName", searchTerm);
+        FirestoreRecyclerOptions<eventModel> option = new FirestoreRecyclerOptions.Builder<eventModel>()
+                .setQuery(query, eventModel.class).build();
 
-                });
+        eventSearch = new eventSearchAdapter(option, getApplicationContext());
+        searchEventsRv.setLayoutManager(new LinearLayoutManager(this));
+        searchEventsRv.setAdapter(eventSearch);
+        eventSearch.startListening();
+
     }
 
-    private void fetchEventSs(String userId) {
+    private void fetchEvents() {
+
         fStore.collection("Events")
-                .whereEqualTo("creatorID", userId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        events.clear();
                         if (!queryDocumentSnapshots.isEmpty()) {
-                            eventsTv.setVisibility(View.VISIBLE);
                             addEventsTv.setVisibility(View.GONE);
+                            allEventsRv.setVisibility(View.VISIBLE);
                         } else {
-                            eventsTv.setVisibility(View.GONE);
                             addEventsTv.setVisibility(View.VISIBLE);
+                            allEventsRv.setVisibility(View.GONE);
                         }
+                        allEvents.clear();
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             eventModel event = documentSnapshot.toObject(eventModel.class);
-                            events.add(event);
+                            allEvents.add(event);
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -228,7 +234,6 @@ public class MainDashboard extends AppCompatActivity {
                         Toast.makeText(MainDashboard.this, "Failed to fetch events", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
 }

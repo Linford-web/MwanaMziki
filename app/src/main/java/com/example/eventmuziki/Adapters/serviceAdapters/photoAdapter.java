@@ -62,8 +62,8 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
-                    .placeholder(R.drawable.error_icon)
-                    .error(R.drawable.error_icon)
+                    .placeholder(R.drawable.camera_icon)
+                    .error(R.drawable.camera_icon)
                     .into(holder.posterTv);
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");

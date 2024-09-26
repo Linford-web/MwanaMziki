@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="81dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             app:cardCornerRadius="10dp"
             android:background="@drawable/card_view">
@@ -51,26 +51,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Package"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:id="@+id/cardPackage"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Price"
+                    android:textColor="@color/dark_gray"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:id="@+id/cardPrice"/>
             </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove"
-                android:textSize="11sp"
-                android:padding="2dp"
-                android:textColor="@color/orange"
-                android:layout_gravity="end"
-                android:id="@+id/delete"/>
 
         </LinearLayout>
 

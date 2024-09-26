@@ -93,7 +93,8 @@ public class bookedEventsAdapter extends RecyclerView.Adapter<bookedEventsAdapte
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.itemView.getContext())
                                         .load(eventPoster)
-                                        .centerCrop()
+                                        .placeholder(R.drawable.cover)
+                                        .error(R.drawable.cover)
                                         .into(holder.posterTv);
                             }
                         }

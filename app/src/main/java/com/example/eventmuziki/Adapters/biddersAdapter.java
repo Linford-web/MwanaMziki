@@ -97,6 +97,8 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
                                 // Load profile photo into otherImageView using Glide or any other image loading library
                                 Glide.with(holder.itemView.getContext())
                                         .load(profileImageUrl)
+                                        .placeholder(R.drawable.profile_icon)
+                                        .error(R.drawable.profile_icon)
                                         .into(holder.bidderImage);
 
                             } else {

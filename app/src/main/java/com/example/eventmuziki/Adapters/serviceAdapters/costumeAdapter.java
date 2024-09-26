@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHolder> {
+
     ArrayList<ServicesDetails.costumeModel> costumeList;
     Context context;
 
@@ -77,8 +78,8 @@ public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHold
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(holder.itemView.getContext())
                     .load(imageUrl)
-                    .placeholder(R.drawable.error_icon)
-                    .error(R.drawable.error_icon)
+                    .placeholder(R.drawable.costume_icon)
+                    .error(R.drawable.costume_icon)
                     .into(holder.productImage);
         }
 

@@ -1,4 +1,4 @@
-package com.example.eventmuziki.Adapters;
+package com.example.eventmuziki.Adapters.serviceAdapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.eventBidding;
-import com.example.eventmuziki.profileActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,22 +27,31 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> {
+public class cartEventAdapter extends RecyclerView.Adapter<cartEventAdapter.ViewHolder> {
 
     Context context;
     ArrayList<eventModel> events;
+    cartEventAdapter.OnItemClickListener listener;
 
-    public eventAdapter(ArrayList<eventModel> events, Context context) {
+    public cartEventAdapter(ArrayList<eventModel> events, Context context) {
         this.events = events;
         this.context = context;
     }
 
+    // add click listener to the view holder
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public void setOnItemClickListener(cartEventAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public static class ViewHolder  extends RecyclerView.ViewHolder{
 
         TextView eventName, eventDate, eventLocation;
         LinearLayout container;
         ImageView posterTv;
+        Button bookBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -51,39 +60,27 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> 
             eventLocation = itemView.findViewById(R.id.eventLocation);
             container = itemView.findViewById(R.id.eventContainer);
             posterTv = itemView.findViewById(R.id.cardTv);
+            bookBtn = itemView.findViewById(R.id.bookBtn);
         }
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public cartEventAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_event_view, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.item_cart_book, parent, false);
+        return new cartEventAdapter.ViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull cartEventAdapter.ViewHolder holder, int position) {
         // Get the current event
         eventModel event = events.get(position);
         // Set the event details in the views
         holder.eventName.setText(event.getEventName());
         holder.eventDate.setText(event.getDate());
         holder.eventLocation.setText(event.getLocation());
-
-        // Set the click listener for the book button
-        holder.container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle the click event here
-                Intent intent = new Intent(v.getContext(), eventBidding.class);
-                intent.putExtra("eventModel", event);
-                v.getContext().startActivity(intent);
-                Log.d("eventAdapter", "Book button clicked for event: " + event.getEventName());
-            }
-
-        });
 
         String eventId = event.getEventId();
 
@@ -106,7 +103,7 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> 
                                         .into(holder.posterTv);
 
                             }else {
-                                Log.d("eventAdapter", "Context is null or activity is destroyed");
+                                Log.d("cartEventAdapter", "Context is null or activity is destroyed");
                             }
 
                         }
@@ -118,12 +115,16 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> 
                     }
                 });
 
-
+        holder.bookBtn.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return events.size();
     }
-
+    
 }

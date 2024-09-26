@@ -167,7 +167,7 @@ public class loginActivity extends AppCompatActivity {
                 // Identify User Access Level
                 String userType = documentSnapshot.getString("userType");
                 if (userType != null) {
-                    if (userType.equals("Corporate") || userType.equals("Musician") || userType.equals("Normal")) {
+                    if (userType.equals("Corporate") || userType.equals("Musician") || userType.equals("organizer")) {
                         // User is Corporate or Musician
                         startActivity(new Intent(getApplicationContext(), MainDashboard.class));
                         finish();

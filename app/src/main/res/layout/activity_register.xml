@@ -13,7 +13,7 @@
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/register"
+        android:text="Sign Up"
         android:textSize="40sp"
         android:fontFamily="monospace"
         android:textStyle="bold"
@@ -26,7 +26,10 @@
 
     </TextView>
 
+    <!-- Add details scroll view -->
     <ScrollView
+        android:visibility="visible"
+        android:id="@+id/detailsScroll"
         android:layout_width="match_parent"
         android:layout_below="@id/top"
         android:scrollbars="none"
@@ -205,16 +208,6 @@
                     android:orientation="vertical">
 
                     <CheckBox
-                        android:id="@+id/normalCheck"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:text="Register as Normal user"/>
-
-                    <CheckBox
                         android:id="@+id/bossCheck"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -341,5 +334,52 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- terms and conditions scrollview -->
+    <RelativeLayout
+        android:id="@+id/termsScroll"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/detailsScroll"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewTermsContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/termsandconditions"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="6dp"
+                    android:layout_marginBottom="50dp"
+                    android:padding="8dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cancelTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="Cancel"
+            android:src="@drawable/close_icon"
+            android:layout_alignParentBottom="true"
+            app:tint="@color/white"
+            android:backgroundTint="@color/orange"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="50dp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

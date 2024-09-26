@@ -82,14 +82,16 @@
             android:exported="false" />
         <activity
             android:name=".addEvents"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".eventsActivity"
             android:exported="false"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".MainDashboard"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".registerActivity"
             android:exported="false"
@@ -107,9 +109,6 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/my_Map_API_Key" />
     </application>
 
 </manifest>

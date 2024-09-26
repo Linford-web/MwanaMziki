@@ -64,8 +64,8 @@ public class chatAdapter extends FirestoreRecyclerAdapter<chatRoomModel, chatAda
 
                         Glide.with(holder.profile.getContext())
                                 .load(otherUser.getProfilePicture())
-                                .placeholder(R.drawable.cover)
-                                .error(R.drawable.poster1)
+                                .placeholder(R.drawable.profile_icon)
+                                .error(R.drawable.profile_icon)
                                 .into(holder.profile);
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {

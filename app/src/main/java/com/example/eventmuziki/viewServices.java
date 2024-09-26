@@ -38,7 +38,7 @@ import java.util.Objects;
 
 public class viewServices extends AppCompatActivity {
 
-    ImageView carImage, soundImage, cateringImage, photographerImage, decorationImage, costumeImage, sponsorImage, influencerImage;
+    ImageView musicImage, carImage, soundImage, cateringImage, photographerImage, decorationImage, costumeImage, sponsorImage, influencerImage;
 
     TextView carModel, carType, carColor, carTransmission, carSeats, carStatus, carDriver, carPrice, carExtraPrice, carDetails,
             soundPackage, instrumentName, instrumentType, areaCoverage, soundHirePrice, soundExtraPrice, soundSetup, soundConnectivity, soundDelivery, soundStatus, soundDetails,
@@ -47,13 +47,13 @@ public class viewServices extends AppCompatActivity {
             decoName, decoPackage, decoTheme, decoEvent, decoDetails, decoCustomization, decoContact, decoSetup, decoAmount, decoStatus, decoCancellationPolicy,
             sponsorName, sponsorType, sponsorAge, sponsorIndustry, sponsorInterests, sponsorEvent, sponsorPromotion, sponsorAmount, sponsorAudience, sponsorPreBooking, sponsorGuide, sponsorStatus, sponsorCancellation,
             influencerHandle ,influencerPlatform, influencerSubscribers, influencerAge,influencerGender, location , influencerPackage, influencerContent, influencerPosts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage, status,
-            costumeName, costumeGender, costumeAgeGroup, costumeDetails, costumeSize, productAmount, material, customization, cleaning, duration, buyPrice, hirePrice, lateFee, delivery, policy, costumeStatus;
+            costumeName, costumeGender, costumeAgeGroup, costumeDetails, costumeSize, productAmount, material, customization, cleaning, duration, buyPrice, hirePrice, lateFee, delivery, policy, costumeStatus,
+            musicGenre, musicStatus, instrumentDetails, musicianPrice, musicDetails, musicPolicy;
 
+    LinearLayout musicianCardView, carRentalCardView, soundSystemCardView, cateringCardView, photographerCardView, decorationCardView, costumeCardView, sponsorCardView, influencerCardView;
 
-    LinearLayout carRentalCardView, soundSystemCardView, cateringCardView, photographerCardView, decorationCardView, costumeCardView, sponsorCardView, influencerCardView;
-
-    Button addCar, addSound, addCatering, addPhotography, addDecoration, addCostume, addSponsor, addInfluencer,
-            editCar, editSound, editCatering, editPhotography, editDecoration, editCostume, editSponsor, editInfluencer;
+    Button addMusic, addCar, addSound, addCatering, addPhotography, addDecoration, addCostume, addSponsor, addInfluencer,
+            editMusic, editCar, editSound, editCatering, editPhotography, editDecoration, editCostume, editSponsor, editInfluencer;
 
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -71,6 +71,7 @@ public class viewServices extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         userId = fAuth.getCurrentUser().getUid();
 
+        addMusic = findViewById(R.id.addMusician);
         addCar = findViewById(R.id.addCar);
         addSound = findViewById(R.id.addSound);
         addCatering = findViewById(R.id.addCatering);
@@ -80,6 +81,7 @@ public class viewServices extends AppCompatActivity {
         addSponsor = findViewById(R.id.addSponsor);
         addInfluencer = findViewById(R.id.addInfluencer);
 
+        editMusic = findViewById(R.id.editMusician);
         editCar = findViewById(R.id.editCar);
         editSound = findViewById(R.id.editSound);
         editCatering = findViewById(R.id.editCatering);
@@ -89,6 +91,7 @@ public class viewServices extends AppCompatActivity {
         editSponsor = findViewById(R.id.editSponsor);
         editInfluencer = findViewById(R.id.editInfluencer);
 
+        musicianCardView = findViewById(R.id.musicianCardView);
         carRentalCardView = findViewById(R.id.carRentalCardView);
         soundSystemCardView = findViewById(R.id.soundSystemCardView);
         cateringCardView = findViewById(R.id.cateringCardView);
@@ -218,6 +221,15 @@ public class viewServices extends AppCompatActivity {
         policy = findViewById(R.id.costumePolicy);
         costumeStatus = findViewById(R.id.costumeStatus);
 
+        musicImage = findViewById(R.id.musicImage);
+        musicGenre = findViewById(R.id.musicGenre);
+        musicStatus = findViewById(R.id.musicianStatus);
+        instrumentDetails = findViewById(R.id.instrumentDetails);
+        musicianPrice = findViewById(R.id.payRates);
+        musicDetails = findViewById(R.id.musicDetails);
+        musicPolicy = findViewById(R.id.musicianPolicy);
+
+
         // Get the car details from the intent
         Intent intent = getIntent();
         if (intent != null) {
@@ -227,6 +239,45 @@ public class viewServices extends AppCompatActivity {
 
             fetchDetails(productId, creatorId);
 
+            addMusic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = musicGenre.getText().toString();
+                    String type = musicStatus.getText().toString();
+                    String price = musicianPrice.getText().toString();
+
+                    ServicesDetails.cartModel musicModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Music", "");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(musicModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
+                                                showPopupDialog(view);
+                                                // Delay for 3 seconds before moving to the cartActivity
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+
+                                            }).addOnFailureListener(e ->
+                                                    Toast.makeText(viewServices.this, "Error adding car to cart", Toast.LENGTH_SHORT).show()
+                                            );
+                                }
+                            });
+                }
+            });
             addCar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -234,10 +285,12 @@ public class viewServices extends AppCompatActivity {
                     String type = carType.getText().toString();
                     String price = carPrice.getText().toString();
 
-                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Car Rental");
+                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Car Rental", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
-                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+
                                 if (!queryDocumentSnapshots.isEmpty()) {
                                     Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(viewServices.this, cartActivity.class);
@@ -247,13 +300,16 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(carModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 // Delay for 3 seconds before moving to the cartActivity
                                                 new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }, 3000);
+
                                             }).addOnFailureListener(e ->
                                                     Toast.makeText(viewServices.this, "Error adding car to cart", Toast.LENGTH_SHORT).show()
                                             );
@@ -270,7 +326,7 @@ public class viewServices extends AppCompatActivity {
                     String price = soundHirePrice.getText().toString();
 
 
-                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, userId, "Sound System");
+                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, userId, "Sound System", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -284,9 +340,11 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(soundModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }, 3000);
@@ -306,7 +364,7 @@ public class viewServices extends AppCompatActivity {
                     String packaged = cateringPackaged.getText().toString();
                     String price = cateringPrice.getText().toString();
 
-                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Catering");
+                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Catering", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -319,9 +377,11 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(cateringModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }, 3000);
@@ -339,13 +399,13 @@ public class viewServices extends AppCompatActivity {
                     String numbers = photoStatus.getText().toString();
                     String price = photoPackagePrice.getText().toString();
 
-                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, userId, "Photography");
+                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, userId, "Photography", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
                                 if (!queryDocumentSnapshots.isEmpty()) {
                                     Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                     startActivity(intent);
                                     finish();
 
@@ -353,6 +413,8 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(photographyModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
                                                     Intent intent = new Intent(viewServices.this, cartActivity.class);
@@ -373,19 +435,21 @@ public class viewServices extends AppCompatActivity {
                     String packaged = decoPackage.getText().toString();
                     String price = decoAmount.getText().toString();
 
-                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Decoration");
+                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Decoration", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
                                 if (!queryDocumentSnapshots.isEmpty()) {
                                     Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
                                     fStore.collection("Cart")
                                             .add(decorationModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
                                                     Intent intent = new Intent(viewServices.this, cartActivity.class);
@@ -406,7 +470,7 @@ public class viewServices extends AppCompatActivity {
                     String materials = material.getText().toString();
                     String price = hirePrice.getText().toString();
 
-                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, userId, "Costume");
+                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, userId, "Costume", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -419,9 +483,11 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(costumeModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }, 3000);
@@ -438,7 +504,7 @@ public class viewServices extends AppCompatActivity {
                     String type = sponsorType.getText().toString();
                     String price = sponsorAmount.getText().toString();
 
-                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Sponsor");
+                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Sponsor", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -451,9 +517,11 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(sponsorModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }, 3000);
@@ -471,7 +539,7 @@ public class viewServices extends AppCompatActivity {
                     String platform = influencerPlatform.getText().toString();
                     String price = collaboration.getText().toString();
 
-                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, userId, "Influencer");
+                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, userId, "Influencer", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -485,9 +553,11 @@ public class viewServices extends AppCompatActivity {
                                     fStore.collection("Cart")
                                             .add(influencerModel)
                                             .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
                                                 showPopupDialog(view);
                                                 new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }, 3000);
@@ -501,6 +571,10 @@ public class viewServices extends AppCompatActivity {
             // Display the correct card view based on service type
             if (serviceType != null) {
                 switch (serviceType) {
+                    case "Music":
+                        musicianCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(musicianCardView);
+                        break;
                     case "Car Rental":
                         carRentalCardView.setVisibility(View.VISIBLE);
                         hideOtherCardViews(carRentalCardView);
@@ -549,12 +623,9 @@ public class viewServices extends AppCompatActivity {
                 finish();
             });
 
-
         }
 
-
     }
-
 
     private void hideOtherCardViews(View visibleCardView) {
             // Hide all card views except the one passed as the argument
@@ -566,6 +637,7 @@ public class viewServices extends AppCompatActivity {
             costumeCardView.setVisibility(visibleCardView == costumeCardView ? View.VISIBLE : View.GONE);
             sponsorCardView.setVisibility(visibleCardView == sponsorCardView ? View.VISIBLE : View.GONE);
             influencerCardView.setVisibility(visibleCardView == influencerCardView ? View.VISIBLE : View.GONE);
+            musicianCardView.setVisibility(visibleCardView == musicianCardView ? View.VISIBLE : View.GONE);
         }
 
     private void showPopupDialog(View view) {
@@ -612,6 +684,35 @@ public class viewServices extends AppCompatActivity {
                                     .document(productId)
                                     .get()
                                     .addOnSuccessListener(documentSnapshot -> {
+
+                                        if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Music")){
+                                             musicGenre.setText(documentSnapshot.getString("genre"));
+                                            musicStatus.setText(documentSnapshot.getString("status"));
+                                            instrumentDetails.setText(documentSnapshot.getString("instrumentDetails"));
+                                            musicianPrice.setText(documentSnapshot.getString("payRate"));
+                                            musicDetails.setText(documentSnapshot.getString("musicDetails"));
+                                            musicPolicy.setText(documentSnapshot.getString("policy"));
+
+                                            String imageUrl = documentSnapshot.getString("image");
+                                            if (imageUrl !=null){
+                                                Glide.with(viewServices.this)
+                                                        .load(imageUrl)
+                                                        .placeholder(R.drawable.music_icon)
+                                                        .error(R.drawable.music_icon)
+                                                        .into(musicImage);
+                                            }else {
+                                                Log.e("Image URL", "Image URL is Null");
+                                            }
+                                            String userId = documentSnapshot.getString("creatorId");
+                                            if (userId !=null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())){
+                                                addMusic.setVisibility(View.GONE);
+                                                editMusic.setVisibility(View.VISIBLE);
+                                            }else {
+                                                addMusic.setVisibility(View.VISIBLE);
+                                                editMusic.setVisibility(View.GONE);
+                                            }
+
+                                        }
 
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Costumes")) {
                                             // Fetch and display product details
@@ -910,8 +1011,8 @@ public class viewServices extends AppCompatActivity {
 
                                         }
 
-                                        else {
-                                            Toast.makeText(viewServices.this, "No details found for this item", Toast.LENGTH_SHORT).show();
+                                        if (!documentSnapshot.exists() && serviceCategory == null){
+                                            Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
                                         }
 
                                     })

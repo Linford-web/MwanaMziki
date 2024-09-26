@@ -20,49 +20,50 @@ import com.example.eventmuziki.viewServices;
 
 import java.util.ArrayList;
 
-public class djAdapter extends RecyclerView.Adapter<djAdapter.ViewHolder> {
+public class musicianAdapter extends RecyclerView.Adapter<musicianAdapter.ViewHolder> {
 
-    ArrayList<ServicesDetails.soundModel> soundList;
+    ArrayList<ServicesDetails.Musicians> musicList;
     Context context;
 
-    public djAdapter(ArrayList<ServicesDetails.soundModel> soundList, Context context) {
-        this.soundList = soundList;
+    public musicianAdapter(ArrayList<ServicesDetails.Musicians> musicList, Context context) {
+        this.musicList = musicList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public djAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public musicianAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_added_service, parent, false);
-        return new djAdapter.ViewHolder(view);
+        return new musicianAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull djAdapter.ViewHolder holder, int position) {
-        ServicesDetails.soundModel sound = soundList.get(position);
-        // Set the sound details in the views
-        holder.name.setText(sound.getName());
-        holder.packageName.setText(sound.getArea());
-        holder.status.setText(sound.getStatus());
+    public void onBindViewHolder(@NonNull musicianAdapter.ViewHolder holder, int position) {
+
+        ServicesDetails.Musicians music = musicList.get(position);
+
+        holder.name.setText(music.getGenre());
+        holder.packageName.setText(music.getPayRate());
+        holder.status.setText(music.getStatus());
         // Set the click listener for the book button
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle the click event here
                 Intent intent = new Intent(context, viewServices.class);
-                intent.putExtra("product", sound.getProductId());
-                intent.putExtra("service", "Sound");
-                intent.putExtra("creatorId", sound.getCreatorId());
+                intent.putExtra("product", music.getProductId());
+                intent.putExtra("service", "Music");
+                intent.putExtra("creatorId", music.getCreatorId());
                 context.startActivity(intent);
             }
         });
         // Load the decoration poster using a library like Glide or Picasso
-        String posterUrl = sound.getImage();
+        String posterUrl = music.getImage();
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
-                    .placeholder(R.drawable.dj_icon)
-                    .error(R.drawable.dj_icon)
+                    .placeholder(R.drawable.music_icon)
+                    .error(R.drawable.music_icon)
                     .into(holder.posterTv);
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");
@@ -71,10 +72,10 @@ public class djAdapter extends RecyclerView.Adapter<djAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return soundList.size();
+        return musicList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView posterTv;
         TextView name, packageName ,status;

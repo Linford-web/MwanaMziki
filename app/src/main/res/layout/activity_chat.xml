@@ -6,52 +6,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".chatActivity">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/my_primary"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/top_bar_nav"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/top_toolbar"
             android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:background="@color/orange"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-            <ImageView
-                android:id="@+id/back_arrow"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:src="@drawable/back_arrow"
-                app:tint="@color/red"
-                android:focusable="true" />
-            <TextView
-                android:id="@+id/chat_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:letterSpacing="0.1"
-                android:textColor="@color/white"
-                android:text="Chats"
-                android:padding="5dp"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-            <ImageButton
-                android:id="@+id/searchBtn"
-                android:clickable="true"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/search_icon"
-                app:tint="@color/white"
-                android:focusable="true" />
+            android:background="?attr/colorPrimary"
+            android:layout_marginTop="8dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:titleTextColor="@android:color/white">
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/back_arrow"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start"
+                app:tint="@color/red"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/back_arrow" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/chats"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:letterSpacing="0.1"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:visibility="visible"
+                android:id="@+id/searchEventsBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="3dp"
+                android:layout_margin="8dp"
+                android:layout_gravity="end"
+                android:background="@drawable/card_view"
+                android:backgroundTint="@color/orange"
+                android:src="@drawable/search_icon"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

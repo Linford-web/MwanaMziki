@@ -10,7 +10,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="285dp"
+        android:layout_height="240dp"
         android:background="@drawable/bg_views"
         android:backgroundTint="@color/my_primary">
     </View>
@@ -76,64 +76,64 @@
         android:layout_below="@id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_view"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginBottom="20dp"
         android:padding="8dp"
-        android:backgroundTint="@color/white"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/words_layout3"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:text="Search for Events"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/first2"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/searchInput"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Meet event organizers"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/dark_blue"
-                android:letterSpacing="0.1"/>
+                android:hint="@string/event_name"
+                android:padding="10dp"
+                android:background="@drawable/edit_text_bg"
+                android:elevation="2dp" />
 
-            <TextView
-                android:id="@+id/second3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/first2"
-                android:text="Manage services"
-                android:textStyle="bold"
-                android:layout_margin="7dp"
-                android:textColor="@color/dark_blue"
-                android:textSize="16sp"
-                android:letterSpacing="0.1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/second3"
-                android:text="Create and book events and services"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                android:textColor="@color/dark_blue"
-                android:textSize="11sp"
-                android:letterSpacing="0.1"/>
+            <ImageButton
+                android:visibility="gone"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/search_icon"
+                android:src="@drawable/search_icon"
+                android:background="@drawable/card_view"
+                android:backgroundTint="@color/orange"
+                android:padding="5dp"
+                app:tint="@color/white"
+                android:layout_margin="10dp" />
+            <ImageButton
+                android:visibility="gone"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/cancel_search_icon"
+                android:src="@drawable/close_icon"
+                android:background="@drawable/card_view"
+                android:backgroundTint="@color/orange"
+                android:padding="5dp"
+                app:tint="@color/white"
+                android:layout_margin="10dp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:padding="15dp"
-            android:layout_toEndOf="@id/words_layout3"
-            android:src="@drawable/service" />
 
     </LinearLayout>
 
@@ -142,7 +142,8 @@
         android:layout_below="@id/word"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
         android:id="@+id/menuRv"/>
 
     <ScrollView
@@ -152,7 +153,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -161,119 +161,63 @@
             android:padding="5dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:letterSpacing="0.1"
-                android:text="My Events"/>
-
             <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/addEventsTv"
+                android:id="@+id/allEventsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/edit_text_bg"
-                android:padding="20dp"
-                android:elevation="2dp"
-                android:layout_marginTop="5dp">
-
-                <ImageView
-                    android:id="@+id/addEventBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/events"
-                    android:src="@drawable/add_icon"
-                    app:tint="@color/blue"
-                    android:padding="10dp" />
+                android:layout_marginTop="2dp">
 
                 <TextView
+                    android:id="@+id/allEventTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Manage events and services with us!!"
-                    android:letterSpacing="0.09"
-                    android:textSize="16sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/red"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/eventsTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp"
-                android:elevation="1dp"
-                android:visibility="gone"
-                android:layout_marginTop="5dp">
-
+                    android:text="All Events"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/black"/>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:id="@+id/eventsRecyclerView"/>
+                    android:id="@+id/allRecyclerView"
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"/>
 
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="My Adverts"
-                android:letterSpacing="0.09"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp" />
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/addAdvertTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/edit_text_bg"
-                android:padding="20dp"
-                android:elevation="2dp"
-                android:layout_marginTop="20dp">
-
-                <ImageView
-                    android:id="@+id/addAdvertBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    app:tint="@color/blue"
-                    android:contentDescription="@string/adverts"
-                    android:src="@drawable/add_icon"
-                    android:padding="10dp" />
-
-                <TextView
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/addEventsTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Advertise with Us!!"
-                    android:letterSpacing="0.09"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:textColor="@color/red"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:background="@drawable/edit_text_bg"
+                    android:padding="20dp"
+                    android:elevation="2dp"
+                    android:layout_marginTop="5dp">
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/addEventsBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:contentDescription="@string/events"
+                        android:src="@drawable/empty_icon"
+                        app:tint="@color/blue"
+                        android:padding="10dp" />
 
-            <LinearLayout
-                android:id="@+id/advertTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp"
-                android:elevation="1dp"
-                android:visibility="gone"
-                android:layout_marginTop="5dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Events At the Moment"
+                        android:letterSpacing="0.09"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/red"
+                        android:textStyle="bold" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:id="@+id/advertRv"/>
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -281,21 +225,12 @@
 
     </ScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        app:itemIconTint="@drawable/item_selector"
-        android:background="@drawable/bottom_view_bg"
-        android:elevation="5dp"
-        app:itemIconSize="30dp"
-        android:fitsSystemWindows="true"
-        app:itemRippleColor="@android:color/transparent"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_nav_menu" />
+        android:id="@+id/searchEventsRv"
+        android:visibility="gone"
+        android:layout_below="@id/word"/>
+
 
 </RelativeLayout>

@@ -99,8 +99,8 @@ public class eventAdapter2 extends RecyclerView.Adapter<eventAdapter2.ViewHolder
                                 if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
                                     Glide.with(context)
                                             .load(eventPoster)
-                                            .placeholder(R.drawable.error_icon)
-                                            .error(R.drawable.error_icon)
+                                            .placeholder(R.drawable.cover)
+                                            .error(R.drawable.cover)
                                             .into(holder.posterTv);
                                 }else {
                                     Log.d("eventAdapter2", "Context is null or activity is destroyed");

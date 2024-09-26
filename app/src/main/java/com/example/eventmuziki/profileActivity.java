@@ -48,7 +48,7 @@ public class profileActivity extends AppCompatActivity {
 
     TextView name, phone, email, aboutMe, socials, category, text1, text2, text3;
     ImageView imageView;
-    BottomNavigationView bottomNavigationView;
+    Button logOut, edits;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -75,6 +75,8 @@ public class profileActivity extends AppCompatActivity {
         text1 = findViewById(R.id.text1);
         text2 = findViewById(R.id.text2);
         text3 = findViewById(R.id.text3);
+        logOut = findViewById(R.id.LogOut);
+        edits = findViewById(R.id.editProfile);
 
         // check user access level
         checkUserAccessLevel();
@@ -83,45 +85,26 @@ public class profileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         findViewById(R.id.left_button).setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getApplicationContext(), loginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent = new Intent(getApplicationContext(), MainDashboard.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish();
-        });
-        findViewById(R.id.right_button).setOnClickListener(v -> {
-            // Handle right button click
-            startActivity(new Intent(getApplicationContext(), editProfile.class));
         });
 
-        bottomNavigationView = findViewById(R.id.bottomNav);
-        bottomNavigationView.setSelectedItemId(R.id.profile);
-
-        ViewCompat.setOnApplyWindowInsetsListener(bottomNavigationView, (view, insets) -> {
-            Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            view.setPadding(0, 0, 0, 0);
-            insets.consumeSystemWindowInsets();
-            return insets;
-        });
-
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        logOut.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.home) {
-                    startActivity(new Intent(getApplicationContext(), MainDashboard.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                } else if (itemId == R.id.profile) {
-                    return true;
-                } else if (itemId == R.id.services) {
-                    startActivity(new Intent(getApplicationContext(), categoryOptions.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-                }else if (itemId == R.id.search){
-                    // Handle other menu items if needed
-                }
-                return false;
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+        edits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), editProfile.class);
+                startActivity(intent);
             }
         });
 

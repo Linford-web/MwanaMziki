@@ -64,8 +64,8 @@ public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(viewHolder.itemView.getContext())
                     .load(imageUrl)
-                    .placeholder(R.drawable.error_icon)
-                    .error(R.drawable.error_icon)
+                    .placeholder(R.drawable.car_icon)
+                    .error(R.drawable.car_icon)
                     .into(viewHolder.carImage);
         }
 

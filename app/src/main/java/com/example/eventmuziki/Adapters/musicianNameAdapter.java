@@ -97,8 +97,8 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                                 // Load profile photo into otherImageView using Glide or any other image loading library
                                 Glide.with(holder.itemView.getContext())
                                         .load(profileImageUrl)
-                                        .placeholder(R.drawable.cover)
-                                        .error(R.drawable.poster1)
+                                        .placeholder(R.drawable.profile_icon)
+                                        .error(R.drawable.profile_icon)
                                         .into(holder.profile);
 
                             } else {

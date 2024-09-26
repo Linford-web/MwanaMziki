@@ -61,8 +61,8 @@ public class influencerAdapter extends RecyclerView.Adapter<influencerAdapter.in
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
-                    .placeholder(R.drawable.error_icon)
-                    .error(R.drawable.error_icon)
+                    .placeholder(R.drawable.content_icon)
+                    .error(R.drawable.content_icon)
                     .into(holder.posterTv);
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");

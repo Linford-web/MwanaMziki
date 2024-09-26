@@ -19,8 +19,8 @@
         android:id="@+id/popup_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sucessfully Added"
-        android:textSize="20sp"
+        android:text="Sucessfull"
+        android:textSize="30sp"
         android:textColor="@color/green" />
 
 </LinearLayout>

@@ -70,12 +70,11 @@ public class editProfile extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        findViewById(R.id.back_arrow).setOnClickListener(v -> {
+        back.setOnClickListener(v -> {
             // clear the back stack and start a new activity
             Intent intent = new Intent(editProfile.this, profileActivity.class);
-            // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish();
         });
 
 
@@ -210,26 +209,12 @@ public class editProfile extends AppCompatActivity {
                         if (document != null && document.exists()) {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
-                                // Back Button
-                                back.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
-                                        finish();
-                                    }
-                                });
+
                                 aboutMe.setVisibility(View.GONE);
                                 socials.setVisibility(View.GONE);
 
                             } else if ("Musician".equalsIgnoreCase(userType)) {
-                                // Back Button
-                                back.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        startActivity(new Intent(getApplicationContext(), MainDashboard.class));
-                                        finish();
-                                    }
-                                });
+
                                 aboutMe.setVisibility(View.VISIBLE);
                                 socials.setVisibility(View.VISIBLE);
 

@@ -71,7 +71,8 @@ public class bookedSearchAdapter extends FirestoreRecyclerAdapter<bookedEventsMo
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.itemView.getContext())
                                         .load(eventPoster)
-                                        .centerCrop()
+                                        .placeholder(R.drawable.cover)
+                                        .error(R.drawable.cover)
                                         .into(holder.posterTv);
                             }
                         }

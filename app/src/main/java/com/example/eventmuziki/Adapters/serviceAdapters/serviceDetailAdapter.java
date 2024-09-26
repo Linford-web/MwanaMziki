@@ -51,8 +51,8 @@ public class serviceDetailAdapter extends RecyclerView.Adapter<serviceDetailAdap
                         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
                             Glide.with(context)
                                     .load(imageUrl)
-                                    .placeholder(R.drawable.error_icon)
-                                    .error(R.drawable.error_icon)
+                                    .placeholder(R.drawable.profile_icon)
+                                    .error(R.drawable.profile_icon)
                                     .into(holder.userServiceImage);
 
                         }

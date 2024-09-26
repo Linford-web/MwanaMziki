@@ -1,10 +1,14 @@
 package com.example.eventmuziki;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,9 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.biddersAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.cartAdapter;
 import com.example.eventmuziki.Adapters.serviceNameAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.eventModel;
+import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.Models.serviceNameModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,14 +48,18 @@ public class eventBidding extends AppCompatActivity {
     TextView eventName, eventDate, eventTime, eventLocation, categoryNme, organizerName, eventDetails, amountTv, category, biddersName, categoryTv, viewAll;
     EditText bidAmountTv;
     Button placeBid;
-    ImageView eventPosterTv, backArrow;
-    LinearLayout biddersView, categoryLayout;
+    ImageView eventPosterTv, backArrow, addServices;
+    LinearLayout biddersView, categoryLayout, emptyRv, bookedServices, myEmptyRv;
     FirebaseFirestore fStore;
 
     ArrayList<biddersEventModel> bidEvents, categoryService;
-    RecyclerView recyclerView, requiredServicesRv, recyclerView1;
+    RecyclerView recyclerView, requiredServicesRv, recyclerView1, bookedRv;
     biddersAdapter bidAdapter, categoryAdapter;
 
+    ArrayList<ServicesDetails.cartModel> bookedList;
+    cartAdapter adapter;
+
+    Dialog popupDialog;
     public String eventId, creatorId, userType;
 
     ArrayList<serviceNameModel> requiredServices;
@@ -85,6 +95,17 @@ public class eventBidding extends AppCompatActivity {
         recyclerView1 = findViewById(R.id.allRv);
         categoryLayout = findViewById(R.id.categoryLayout);
         requiredServicesRv = findViewById(R.id.serviceRequiredRv);
+        bookedRv = findViewById(R.id.bookedRv);
+        addServices = findViewById(R.id.addServices);
+        emptyRv = findViewById(R.id.displayEmptyRv);
+        bookedServices = findViewById(R.id.bookedServiceslayout);
+        myEmptyRv = findViewById(R.id.emptyRv);
+
+        bookedList = new ArrayList<>();
+        adapter = new cartAdapter(bookedList, this);
+        RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        bookedRv.setLayoutManager(layoutManager3);
+        bookedRv.setAdapter(adapter);
 
         bidEvents = new ArrayList<>();
         bidAdapter = new biddersAdapter(bidEvents);
@@ -174,6 +195,14 @@ public class eventBidding extends AppCompatActivity {
 
         }
 
+        addServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Intent intent = new Intent(eventBidding.this, categoryOptions.class);
+               startActivity(intent);
+            }
+        });
+
         fetchRequiredServices(Objects.requireNonNull(event).getEventId());
 
         placeBid.setOnClickListener(new View.OnClickListener() {
@@ -215,12 +244,89 @@ public class eventBidding extends AppCompatActivity {
                 recyclerView1.setVisibility(View.VISIBLE);
             }
         });
+
         fetchBidders(eventId);
         // fetch bidders user name
         fetchUserName();
         // check user access level
         checkUserAccessLevel(categoryTv.getText().toString());
 
+        checkUserServiceForEvent(eventId);
+
+        fetchBookedServices(eventId);
+
+    }
+
+    private void checkUserServiceForEvent(String eventId) {
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Step 1: Fetch the services provided by the current user
+        fStore.collection("Users").document(currentUserId).get()
+                .addOnSuccessListener(userSnapshot -> {
+                    if (userSnapshot.exists()) {
+                        // Assuming the user has a 'services' field which is a list or array of services they provide
+                        String userServices = userSnapshot.getString("category");
+
+                        // Step 2: Fetch the event's services
+                        fStore.collection("Events").document(eventId)
+                                .collection("EventServices")
+                                .whereEqualTo("service", userServices)
+                                .get()
+                                .addOnSuccessListener(serviceSnapshots -> {
+                                    if (!serviceSnapshots.isEmpty()) {
+                                        biddersView.setVisibility(View.VISIBLE);
+                                    } else {
+                                        biddersView.setVisibility(View.GONE);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.d("TAG", "Failed to fetch event services: " + e.getMessage());
+                                });
+                    } else {
+                        Log.d("TAG", "User does not exist in Firestore");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("TAG", "Failed to fetch user services: " + e.getMessage());
+                });
+    }
+
+    private void fetchBookedServices(String eventId) {
+        fStore.collection("Events")
+                .document(eventId).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Now query the BookedServices subcollection
+                            fStore.collection("Events")
+                                    .document(eventId)
+                                    .collection("BookedServices")
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (!queryDocumentSnapshots.isEmpty()) {
+                                                emptyRv.setVisibility(View.GONE);
+                                                bookedRv.setVisibility(View.VISIBLE);
+                                            } else {
+                                               emptyRv.setVisibility(View.VISIBLE);
+                                               bookedRv.setVisibility(View.GONE);
+                                            }
+                                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                                ServicesDetails.cartModel bookedService = document.toObject(ServicesDetails.cartModel.class);
+                                                bookedList.add(bookedService);
+                                            }
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.d("TAG", "Error fetching BookedServices: " + e.getMessage()));
+                        } else {
+                            Log.d("TAG", "Event not found");
+                        }
+                    }
+                }).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.getMessage()));
     }
 
     private void fetchRequiredServices(String eventId) {
@@ -232,22 +338,25 @@ public class eventBidding extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                        requiredServices.clear();
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                            // Extract service details
-                            String serviceName = documentSnapshot.getString("service");
-                            if (serviceName != null) {
-                                int serviceIcon = getIconForService(serviceName);
-                                serviceNameModel service = new serviceNameModel(serviceName, serviceIcon, null);
-                                requiredServices.add(service);
-                            }else {
-                                Toast.makeText(eventBidding.this, "Services Error", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        nameAdapter.notifyDataSetChanged();
+                        myEmptyRv.setVisibility(View.GONE);
+                        requiredServicesRv.setVisibility(View.VISIBLE);
                     } else {
-                        Toast.makeText(eventBidding.this, "No services found", Toast.LENGTH_SHORT).show();
+                        myEmptyRv.setVisibility(View.VISIBLE);
+                        requiredServicesRv.setVisibility(View.GONE);
                     }
+                    requiredServices.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                        // Extract service details
+                        String serviceName = documentSnapshot.getString("service");
+                        if (serviceName != null) {
+                            int serviceIcon = getIconForService(serviceName);
+                            serviceNameModel service = new serviceNameModel(serviceName, serviceIcon, null);
+                            requiredServices.add(service);
+                        }else {
+                            Toast.makeText(eventBidding.this, "Services Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    nameAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(eventBidding.this, "Failed to fetch services", Toast.LENGTH_SHORT).show();
@@ -255,6 +364,9 @@ public class eventBidding extends AppCompatActivity {
     }
 
     private int getIconForService(String serviceName) {
+        if (serviceName.equals("Music")) {
+            return R.drawable.music_icon;
+        }
         if (serviceName.equals("Car Rental")) {
             return R.drawable.car_icon;
         }
@@ -299,9 +411,11 @@ public class eventBidding extends AppCompatActivity {
                     if (userType.equalsIgnoreCase("Corporate")){
                         biddersView.setVisibility(View.GONE);
                         viewAll.setVisibility(View.VISIBLE);
+                        bookedServices.setVisibility(View.VISIBLE);
                     } if (userType.equalsIgnoreCase("Musician")) {
                         categoryNme.setText(categories);
                         viewAll.setVisibility(View.GONE);
+                        bookedServices.setVisibility(View.GONE);
 
                         FirebaseFirestore.getInstance().collection("BidEvents")
                                 .whereEqualTo("eventId", eventId)
@@ -420,7 +534,6 @@ public class eventBidding extends AppCompatActivity {
         String time = eventTime.getText().toString().trim();
         String location = eventLocation.getText().toString().trim();
         String details = eventDetails.getText().toString().trim();
-        // String userCategory = categoryTv.getText().toString().trim();
         String bidder = biddersName.getText().toString().trim();
 
         // Validate the bid amount
@@ -451,13 +564,17 @@ public class eventBidding extends AppCompatActivity {
 
                                             Toast.makeText(eventBidding.this, "Bid placed successfully", Toast.LENGTH_SHORT).show();
 
+                                            showPopupDialog();
+
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     startActivity(new Intent(eventBidding.this, bidEvents.class));
                                                     finish();
+                                                    overridePendingTransition(0, 0);
+                                                    if (popupDialog != null) popupDialog.dismiss();
                                                 }
-                                            }, 2000);
+                                            }, 3000);
 
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -477,6 +594,29 @@ public class eventBidding extends AppCompatActivity {
         }
 
 
+    }
+
+    private void showPopupDialog() {
+        if (isFinishing() || isDestroyed()) return; // Prevent showing the dialog if the activity is not in a valid state
+
+        if (popupDialog == null) { // Initialize the dialog only once
+            popupDialog = new Dialog(eventBidding.this);
+            popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            popupDialog.setCancelable(false);
+            popupDialog.setContentView(R.layout.popup_layout);
+
+            if (popupDialog.getWindow() != null) {
+                popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        }
+
+        popupDialog.show();
+
+        new Handler().postDelayed(() -> {
+            if (popupDialog != null && popupDialog.isShowing() && !isFinishing() && !isDestroyed()) {
+                popupDialog.dismiss();
+            }
+        }, 3000);
     }
 
 }

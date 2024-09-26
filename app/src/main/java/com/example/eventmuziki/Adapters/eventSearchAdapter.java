@@ -70,7 +70,8 @@ public class eventSearchAdapter extends FirestoreRecyclerAdapter<eventModel, eve
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.posterTv.getContext())
                                         .load(eventPoster)
-                                        .centerCrop()
+                                        .placeholder(R.drawable.cover)
+                                        .error(R.drawable.cover)
                                         .into(holder.posterTv);
                             }
                         }

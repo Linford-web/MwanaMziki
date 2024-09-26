@@ -3,10 +3,12 @@ package com.example.eventmuziki;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,9 +19,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.Query;
 
+import java.util.Objects;
+
 public class chatActivity extends AppCompatActivity {
 
-    ImageButton searchBtn;
     ImageView back;
     RecyclerView recyclerView;
     chatAdapter adapter;
@@ -33,22 +36,27 @@ public class chatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         recyclerView = findViewById(R.id.chatRecyclerView);
-        searchBtn = findViewById(R.id.searchBtn);
         back = findViewById(R.id.back_arrow);
         FirebaseApp.initializeApp(this);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        // Set up toolbar
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        findViewById(R.id.back_arrow).setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainDashboard.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(chatActivity.this, searchUsersActivity.class));
-            }
+        findViewById(R.id.searchEventsBtn).setOnClickListener(v -> {
+
+            startActivity(new Intent(chatActivity.this, searchUsersActivity.class));
+
         });
+
+
+
 
         setupRecyclerView();
 

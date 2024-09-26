@@ -52,7 +52,7 @@ public class searchAdapter extends FirestoreRecyclerAdapter<UserModel, searchAda
         Glide.with(holder.profile.getContext())
                 .load(model.getProfilePicture())
                 .placeholder(R.drawable.cover)
-                .error(R.drawable.poster1)
+                .error(R.drawable.cover)
                 .into(holder.profile);
 
         /*

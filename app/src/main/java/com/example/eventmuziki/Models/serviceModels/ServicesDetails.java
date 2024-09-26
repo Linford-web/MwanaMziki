@@ -39,6 +39,115 @@ public class ServicesDetails {
         }
     }
 
+    public static class Musicians{
+        String genre, instrument, instrumentDetails, status, payRate, musicDetails, policy, image, productId, creatorId, productType;
+
+        public Musicians() {
+        }
+
+        public Musicians(String genre, String instrument, String instrumentDetails, String status, String payRate, String musicDetails, String policy, String image, String productId, String creatorId, String productType) {
+            this.genre = genre;
+            this.instrument = instrument;
+            this.instrumentDetails = instrumentDetails;
+            this.status = status;
+            this.payRate = payRate;
+            this.musicDetails = musicDetails;
+            this.policy = policy;
+            this.image = image;
+            this.productId = productId;
+            this.creatorId = creatorId;
+            this.productType = productType;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public String getInstrument() {
+            return instrument;
+        }
+
+        public void setInstrument(String instrument) {
+            this.instrument = instrument;
+        }
+
+        public String getInstrumentDetails() {
+            return instrumentDetails;
+        }
+
+        public void setInstrumentDetails(String instrumentDetails) {
+            this.instrumentDetails = instrumentDetails;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getPayRate() {
+            return payRate;
+        }
+
+        public void setPyRate(String pyRate) {
+            this.payRate = pyRate;
+        }
+
+        public String getMusicDetails() {
+            return musicDetails;
+        }
+
+        public void setMusicDetails(String musicDetails) {
+            this.musicDetails = musicDetails;
+        }
+
+        public String getPolicy() {
+            return policy;
+        }
+
+        public void setPolicy(String policy) {
+            this.policy = policy;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
+        }
+    }
+
     public static class carModel {
 
         String car_model, car_details, car_type, car_color, status, transmission, seats, driverProvided, creatorId, price_per_hour, price_per_extra_hour, image, productId, productType;
@@ -1399,12 +1508,12 @@ public class ServicesDetails {
     }
 
     public static class cartModel{
-        String name, packageName, price, creatorId, productId, bookerId, pType;
+        String name, packageName, price, creatorId, productId, bookerId, pType, cartId;
 
         public cartModel() {
         }
 
-        public cartModel(String name, String packageName, String price, String creatorId, String productId, String bookerId, String pType) {
+        public cartModel(String name, String packageName, String price, String creatorId, String productId, String bookerId, String pType, String cartId) {
             this.name = name;
             this.packageName = packageName;
             this.price = price;
@@ -1412,6 +1521,15 @@ public class ServicesDetails {
             this.productId = productId;
             this.bookerId = bookerId;
             this.pType = pType;
+            this.cartId = cartId;
+        }
+
+        public String getCartId() {
+            return cartId;
+        }
+
+        public void setCartId(String cartId) {
+            this.cartId = cartId;
         }
 
         public String getName() {

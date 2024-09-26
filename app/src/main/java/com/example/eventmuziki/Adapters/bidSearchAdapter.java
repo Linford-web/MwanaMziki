@@ -69,7 +69,8 @@ public class bidSearchAdapter extends FirestoreRecyclerAdapter<biddersEventModel
                             if (eventPoster != null && !eventPoster.isEmpty()) {
                                 Glide.with(holder.eventPoster.getContext())
                                         .load(eventPoster)
-                                        .centerCrop()
+                                        .placeholder(R.drawable.cover)
+                                        .error(R.drawable.cover)
                                         .into(holder.eventPoster);
                             }
                         }

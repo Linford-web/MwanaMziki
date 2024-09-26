@@ -61,6 +61,7 @@ public class eventsActivity extends AppCompatActivity {
     eventAdapter adapter, adapter1;
     eventAdapter2 eventAdapters;
     bookedEventsAdapter bookedAdapter;
+
     categoryAdapter categoryAdpt;
     FirebaseFirestore fStore;
 
@@ -70,10 +71,12 @@ public class eventsActivity extends AppCompatActivity {
     ImageView addEvents;
     ImageButton backArrow,searchEventsBtn, cancelBtn, searchBtn, cancelCategory;
     TextView categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt, allBids, allBooked, userCategoryTv;
-    LinearLayout emptyRv, addEventsTv, menu, searchLayout, viewAll, bidEvents, viewBooked, allEvents, allEventsLayout, bookedEvents, viewBid, categoryLayout, menuCategoryLayout, userCategoryLayout;
+    LinearLayout emptyRv, addEventsTv, menu, searchLayout, viewAll, bidEvents,
+            viewBooked, allEvents, allEventsLayout, bookedEvents, viewBid, categoryLayout,
+            menuCategoryLayout, userCategoryLayout, displayEmpty;
     ScrollView scrollView;
     EditText searchTxt;
-    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv;
+    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv, myEventsRv;
     eventSearchAdapter eventSearch;
 
     @Override
@@ -125,6 +128,7 @@ public class eventsActivity extends AppCompatActivity {
         emptyRv = findViewById(R.id.displayEmptyRv);
         addEvents = findViewById(R.id.addEventsBtn);
         addEventsTv = findViewById(R.id.addEventsTv);
+        displayEmpty = findViewById(R.id.displayEmptyRvLayout);
 
         categoryMenuRv = findViewById(R.id.categoriesRv);
         //get user type
@@ -229,6 +233,7 @@ public class eventsActivity extends AppCompatActivity {
                 categoryLayout.setVisibility(View.GONE);
                 cancelCategory.setVisibility(View.GONE);
                 allEvents.setVisibility(View.VISIBLE);
+                allEventsLayout.setVisibility(View.VISIBLE);
                 checkUserAccessLevel();
             }
         });
@@ -375,38 +380,6 @@ public class eventsActivity extends AppCompatActivity {
 
     }
 
-    private void fetchEventsBasedOnCategory(String category) {
-        if (category == null || category.isEmpty()) {
-            Log.e("fetchEventsBasedOnCategory", "User category is null or empty");
-            return;
-        } else {
-            Log.d("fetchEventsBasedOnCategory", "User category: " + category);
-
-        }
-        CollectionReference eventsRef = fStore.collection("Events");
-
-        eventsRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                String eventId = documentSnapshot.getId();
-
-                fStore.collection("Events")
-                        .document(eventId)
-                        .collection("EventServices")
-                        .whereEqualTo("service", category)
-                        .get()
-                        .addOnSuccessListener(serviceSnapshot -> {
-                            if (!serviceSnapshot.isEmpty()) {
-                                eventModel event = documentSnapshot.toObject(eventModel.class);
-                                events4.add(event);
-                            }
-                            adapter1.notifyDataSetChanged();
-                        });
-            }
-        });
-
-
-    }
-
     private void setUpCategoryMenu() {
         menuList = new ArrayList<>();
         menuList.add(new menuModel(R.drawable.sport_icon, "Sports"));
@@ -425,11 +398,11 @@ public class eventsActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        userCategoryRv.setVisibility(View.VISIBLE);
-                        emptyRv.setVisibility(View.GONE);
+                        categoryRecyclerView.setVisibility(View.VISIBLE);
+                        displayEmpty.setVisibility(View.GONE);
                     } else {
-                        userCategoryRv.setVisibility(View.GONE);
-                        emptyRv.setVisibility(View.VISIBLE);
+                        categoryRecyclerView.setVisibility(View.GONE);
+                        displayEmpty.setVisibility(View.VISIBLE);
                     }
                     events3.clear();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -491,9 +464,11 @@ public class eventsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
-                            allEvents.setVisibility(View.VISIBLE);
+                            addEventsTv.setVisibility(View.GONE);
+                            eventRecyclerView.setVisibility(View.VISIBLE);
                         }else {
-                            allEvents.setVisibility(View.GONE);
+                            addEventsTv.setVisibility(View.VISIBLE);
+                            eventRecyclerView.setVisibility(View.GONE);
                         }
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             eventModel event = documentSnapshot.toObject(eventModel.class);
@@ -583,7 +558,7 @@ public class eventsActivity extends AppCompatActivity {
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
         fStore.collection("Users")
-                .document(userId)
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -593,17 +568,27 @@ public class eventsActivity extends AppCompatActivity {
                             if ("Corporate".equals(userType)) {
                                userCategoryLayout.setVisibility(View.GONE);
                                addTask.setVisibility(View.VISIBLE);
+                               allEvents.setVisibility(View.VISIBLE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 userCategoryLayout.setVisibility(View.VISIBLE);
-                                String userCategory = document.getString("category");
-                                userCategoryTv.setText(userCategory);
                                 addTask.setVisibility(View.GONE);
+                                allEvents.setVisibility(View.GONE);
+
                                 // Fetch events based on user category
-                                fetchEventsBasedOnCategory(userCategory);
+                                String userCategory = document.getString("category");
+                                if (userCategory != null) {
+                                    userCategoryTv.setText(userCategory);
+                                    fetchEventsBasedOnCategory(userCategory);
+                                }else {
+                                    Log.d("TAG", "Service provider category is null");
+                                    Toast.makeText(eventsActivity.this, "Service provider category is null", Toast.LENGTH_SHORT).show();
+                                }
+
 
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");
+                                return;
                             }
 
                         }
@@ -612,6 +597,52 @@ public class eventsActivity extends AppCompatActivity {
                     }
                 });
         }
+
+    private void fetchEventsBasedOnCategory(String category) {
+        if (category == null || category.isEmpty()) {
+            Log.e("fetchEventsBasedOnCategory", "User category is null or empty");
+            return;
+        }
+        Log.d("fetchEventsBasedOnCategory", "Fetching events for category: " + category);
+
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+// Fetch all documents in the Events collection
+        fStore.collection("Events")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (DocumentSnapshot eventDocument : queryDocumentSnapshots) {
+                                String eventId = eventDocument.getId(); // Get the event ID
+
+                                // Access the EventServices subcollection for this event
+                                fStore.collection("Events")
+                                        .document(eventId).collection("EventServices")
+                                        .whereEqualTo("service", category) // Match the category
+                                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot serviceSnapshots) {
+
+                                                if (!serviceSnapshots.isEmpty()) {
+                                                    eventModel event = eventDocument.toObject(eventModel.class);
+                                                    events4.add(event);
+
+                                                    adapter1.notifyDataSetChanged();
+                                                } else {
+                                                    Log.d("TAG", "No matching service found for event: " + eventId);
+                                                }
+
+
+                                            }
+                                        }).addOnFailureListener(e -> Log.d("TAG", "Error getting EventServices: ", e));
+                            }
+                        } else {
+                            Log.d("TAG", "No events found");
+                        }
+                    }
+                }).addOnFailureListener(e -> Log.d("TAG", "Error getting events: ", e));
+    }
 
     private void clearDisplay(String itemName) {
         cancelCategory.setVisibility(View.VISIBLE);

@@ -8,42 +8,49 @@
     android:background="@color/off_white"
     tools:context=".searchUsersActivity">
 
-    <LinearLayout
-        android:id="@+id/top_bar_nav"
+    <View
         android:layout_width="match_parent"
-        android:background="@color/orange"
+        android:layout_height="70dp"
+        android:background="@color/my_primary"/>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:background="?attr/colorPrimary"
+        android:layout_marginTop="8dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@android:color/white">
+
         <ImageButton
             android:id="@+id/back_arrow"
-            android:clickable="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="start"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/back_arrow"
             app:tint="@color/red"
-            android:focusable="true" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/back_arrow" />
+
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:letterSpacing="0.1"
+            android:layout_gravity="center"
+            android:text="Searc Users"
             android:textColor="@color/white"
-            android:text="Search Users"
-            android:textAlignment="center"
-            android:textSize="30sp"
+            android:textSize="25sp"
+            android:letterSpacing="0.1"
             android:textStyle="bold" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
     <RelativeLayout
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:padding="5dp"
-        android:layout_below="@+id/top_bar_nav">
+        android:layout_below="@+id/top_toolbar">
 
         <EditText
             android:id="@+id/searchUserInput"
@@ -58,13 +65,14 @@
             />
         <ImageButton
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:id="@+id/search_icon"
             android:src="@drawable/search_icon"
             android:layout_alignParentEnd="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="5dp"
-            app:tint="@color/orange"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
+            android:padding="8dp"
+            app:tint="@color/black"
             android:layout_margin="10dp"
             android:layout_centerVertical="true" />
 

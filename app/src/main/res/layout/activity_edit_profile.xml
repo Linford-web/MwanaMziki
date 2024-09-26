@@ -28,8 +28,7 @@
             android:layout_height="40dp"
             android:layout_gravity="start"
             app:tint="@color/red"
-            android:background="@drawable/edit_text_bg"
-            android:backgroundTint="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/back_arrow" />
 
 
@@ -160,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/orange"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:text="Save Changes"
             android:layout_margin="10dp" />
 

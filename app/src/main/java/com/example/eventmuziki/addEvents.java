@@ -65,17 +65,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
+public class addEvents extends AppCompatActivity {
 
     ImageButton backArrow, cancel_icon, addBtnC, minusBtnC, addBtnE, minusBtnE;
     Button addEvent;
-    ImageView imageView,locationBtn;
-    EditText inputTaskName, eventDetails, otherCategory, tvCarTime, equipmentQuantity, decorationDuration, campaignDuration;
+    ImageView imageView;
+    EditText inputTaskName, eventDetails, otherCategory, tvCarTime, equipmentQuantity, decorationDuration, campaignDuration,
+            musicGenre, musicDuration, musicInstrument, musicPrice;
     TextView datePicker, timePickerFrom, timePickerTo, organizerName;
     EditText amountTxt, location;
     FirebaseFirestore fStore;
     String startTime, endTime;
-    Spinner spinnerCategory,
+    Spinner spinnerCategory, spinnerMusicGenre,
             spinnerCarModel, carType, carColor, carSeats, carModelType,
             photoPackage, photoEquipment, photoDelivery, cateringPackage, cuisineType, cateringService, costumeAge, costumeSize,
             decorationPackage, decorationColor1, decorationColor2, decorationTheme
@@ -83,16 +84,14 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             influencerPackage, influencerTheme, creativityFreedom, sponsorsType, sponsorsIndustry;
     FirebaseStorage fStorage;
 
-    CheckBox carCheck, photoCheck, cateringCheck, costumeCheck, soundCheck, decorationCheck, contentCheck, sponsorsCheck, costumeDelivery, soundDelivery, eventCoverage;
+    CheckBox musicCheck, carCheck, photoCheck, cateringCheck, costumeCheck, soundCheck, decorationCheck, contentCheck, sponsorsCheck, costumeDelivery, soundDelivery, eventCoverage;
     Uri imageUri;
     String eventId;
 
     private Dialog popupDialog;
     int amount = 0;
-    GoogleMap mMap;
-    LatLng selectedLocation;
+
     ScrollView scrollView;
-    RelativeLayout searchMap, locationMap;
     ImageButton editBtn, addPosterBtn, deleteBtn;
 
     LinearLayout music, carRental, photography, catering, costumes, paSystem,decorations, contentCreators, sponsors,
@@ -118,9 +117,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         fStore = FirebaseFirestore.getInstance();
         fStorage = FirebaseStorage.getInstance();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -132,38 +128,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             finish();
         });
 
-        locationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //cancel.setVisibility(View.VISIBLE);
-                backArrow.setVisibility(View.GONE);
-                // titleTxt.setText("Select Location");
-                searchMap.setVisibility(View.GONE);
-                scrollView.setVisibility(View.GONE);
-                locationMap.setVisibility(View.VISIBLE);
-
-                if (selectedLocation != null) {
-                    String locations = getLocationName(selectedLocation);
-                    location.setText(locations);
-                } else {
-                    Toast.makeText(addEvents.this, "Please select a location", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
-        /*
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel.setVisibility(View.GONE);
-                backArrow.setVisibility(View.VISIBLE);
-                titleTxt.setText("Add Events");
-                searchMap.setVisibility(View.VISIBLE);
-                scrollView.setVisibility(View.VISIBLE);
-                locationMap.setVisibility(View.GONE);
-            }
-        });
-         */
 
     // Initialize ArrayAdapter and set it to the Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -188,6 +152,29 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing if nothing is selected
                 Toast.makeText(addEvents.this, "Please select a category", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        ArrayAdapter<CharSequence> genre = ArrayAdapter.createFromResource(this,
+                R.array.music_genres, android.R.layout.simple_spinner_item);
+        genre.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMusicGenre.setAdapter(genre);
+
+        spinnerMusicGenre.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedGenre = adapterView.getItemAtPosition(i).toString();
+                // Do something with the selected genre
+                if (selectedGenre.equalsIgnoreCase("Other")){
+                    musicGenre.setVisibility(View.VISIBLE);
+                }else{
+                    musicGenre.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
@@ -399,13 +386,11 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         datePicker = findViewById(R.id.datePicker);
         timePickerFrom = findViewById(R.id.timePickerFrom);
         timePickerTo = findViewById(R.id.timePickerTo);
-        locationBtn = findViewById(R.id.LocationBtn);
         amountTxt = findViewById(R.id.amountTxt);
         addEvent = findViewById(R.id.add_event);
         organizerName = findViewById(R.id.organizerNameTv);
         spinnerCategory = findViewById(R.id.spinner_category);
         scrollView = findViewById(R.id.scroll_view);
-        locationMap = findViewById(R.id.location_map);
         location = findViewById(R.id.locationTxt);
         otherCategory = findViewById(R.id.other_category);
         decorations = findViewById(R.id.decorations);
@@ -427,6 +412,13 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         decoDetails = findViewById(R.id.decorationDetails);
         contentDetails = findViewById(R.id.contentCreatorsDetails);
         sponsorsDetails = findViewById(R.id.sponsorshipDetails);
+
+        musicCheck = findViewById(R.id.checkMusic);
+        musicGenre = findViewById(R.id.editTextGenre);
+        musicDuration = findViewById(R.id.editTextDuration);
+        musicInstrument = findViewById(R.id.editTextEquipment);
+        musicPrice = findViewById(R.id.editTextPriceRange);
+        spinnerMusicGenre = findViewById(R.id.spinnerGenre);
 
         musicTxt = findViewById(R.id.musicTxt);
         carTxt = findViewById(R.id.carTxt);
@@ -828,6 +820,27 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
     private void addSubCollections(DocumentReference documentReference) {
         CollectionReference servicesCollection = documentReference.collection("EventServices");
 
+        // Add Music subcollection
+        String musicGene= "";
+        String musicTime = musicDuration.getText().toString();
+        String musicEquipment = musicInstrument.getText().toString();
+        String price = musicPrice.getText().toString();
+
+        // check if the spinner has option Other and set the category accordingly
+        if (spinnerMusicGenre.getSelectedItem().toString().equals("Other")) {
+            musicGene = musicGenre.getText().toString();
+        } else {
+            musicGene = spinnerMusicGenre.getSelectedItem().toString();
+        }
+        if (musicCheck.isChecked()) {
+            serviceDetailModel.hireMusician hireMusic = new serviceDetailModel.hireMusician(musicGene, musicTime, musicEquipment, price, "Music");
+            servicesCollection.add(hireMusic).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Music details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add music details");
+            });
+        }
+
         // Add Car Rental subcollection
         String model = spinnerCarModel.getSelectedItem().toString();
         String type = carType.getSelectedItem().toString();
@@ -877,7 +890,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
         } else {
             Log.d("Subcollection", "Catering checkbox not checked");
         }
-
 
         // Add Costumes subcollection
         String costumeAges = costumeAge.getSelectedItem().toString();
@@ -1089,36 +1101,6 @@ public class addEvents extends AppCompatActivity implements OnMapReadyCallback {
             }
         },12, 00,true);
         endTimeDialog.show();
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-
-        LatLng initialLocation = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(initialLocation).title("Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(initialLocation));
-
-        mMap.setOnMapClickListener(latLng -> {
-            mMap.clear();
-            selectedLocation = latLng;
-            mMap.addMarker(new MarkerOptions().position(latLng).title(location.getText().toString()));
-        });
-    }
-
-    private String getLocationName(LatLng latLng) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                location.setText((CharSequence) addresses);
-                Address address = addresses.get(0);
-                return address.getAddressLine(0); // You can format this as needed
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "Unknown Location";
     }
 
     private void showPopupDialog(View view) {

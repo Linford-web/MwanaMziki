@@ -62,8 +62,8 @@ public class decoAdapter extends RecyclerView.Adapter<decoAdapter.ViewHolder> {
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
-                    .placeholder(R.drawable.error_icon)
-                    .error(R.drawable.error_icon)
+                    .placeholder(R.drawable.deco_icon)
+                    .error(R.drawable.deco_icon)
                     .into(holder.posterTv);
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");
