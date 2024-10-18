@@ -1507,21 +1507,158 @@ public class ServicesDetails {
         }
     }
 
+    public static class makeUpModel{
+        String name, specialization, makeUpPackage , price , portfolio, travel, preBooking ,Policy, status, creatorId, image, productId, productType;
+
+        public makeUpModel() {
+        }
+
+        public makeUpModel(String name, String specialization, String makeUpPackage, String price, String portfolio, String travel, String preBooking, String policy, String status, String creatorId, String image, String productId, String productType) {
+            this.name = name;
+            this.specialization = specialization;
+            this.makeUpPackage = makeUpPackage;
+            this.price = price;
+            this.portfolio = portfolio;
+            this.travel = travel;
+            this.preBooking = preBooking;
+            this.Policy = policy;
+            this.status = status;
+            this.creatorId = creatorId;
+            this.image = image;
+            this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSpecialization() {
+            return specialization;
+        }
+
+        public void setSpecialization(String specialization) {
+            this.specialization = specialization;
+        }
+
+        public String getMakeUpPackage() {
+            return makeUpPackage;
+        }
+
+        public void setMakeUpPackage(String makeUpPackage) {
+            this.makeUpPackage = makeUpPackage;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getPortfolio() {
+            return portfolio;
+        }
+
+        public void setPortfolio(String portfolio) {
+            this.portfolio = portfolio;
+        }
+
+        public String getTravel() {
+            return travel;
+        }
+
+        public void setTravel(String travel) {
+            this.travel = travel;
+        }
+
+        public String getPreBooking() {
+            return preBooking;
+        }
+
+        public void setPreBooking(String preBooking) {
+            this.preBooking = preBooking;
+        }
+
+        public String getPolicy() {
+            return Policy;
+        }
+
+        public void setPolicy(String policy) {
+            Policy = policy;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
+        }
+    }
+
     public static class cartModel{
-        String name, packageName, price, creatorId, productId, bookerId, pType, cartId;
+        String name, packageName, price, creatorId, productId, bookerId, bookedServiceId, pType, cartId;
 
         public cartModel() {
         }
 
-        public cartModel(String name, String packageName, String price, String creatorId, String productId, String bookerId, String pType, String cartId) {
+        public cartModel(String name, String packageName, String price, String creatorId,
+                         String productId, String bookerId, String bookedServiceId, String pType, String cartId) {
             this.name = name;
             this.packageName = packageName;
             this.price = price;
             this.creatorId = creatorId;
             this.productId = productId;
             this.bookerId = bookerId;
+            this.bookedServiceId = bookedServiceId;
             this.pType = pType;
             this.cartId = cartId;
+        }
+
+        public String getBookedServiceId() {
+            return bookedServiceId;
+        }
+
+        public void setBookedServiceId(String bookedServiceId) {
+            this.bookedServiceId = bookedServiceId;
         }
 
         public String getCartId() {
@@ -1588,5 +1725,6 @@ public class ServicesDetails {
             this.pType = pType;
         }
     }
+
 
 }

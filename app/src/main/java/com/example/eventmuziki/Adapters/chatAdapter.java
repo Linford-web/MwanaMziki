@@ -72,7 +72,7 @@ public class chatAdapter extends FirestoreRecyclerAdapter<chatRoomModel, chatAda
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(context, chatRoom.class);
-                                intent.putExtra("userId", otherUser.getUserID());
+                                intent.putExtra("userId", otherUser.getUserid());
                                 intent.putExtra("userName", otherUser.getName());
                                 intent.putExtra("userEmail", otherUser.getEmail());
                                 intent.putExtra("userImage", otherUser.getProfilePicture());

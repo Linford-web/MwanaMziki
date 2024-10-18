@@ -24,11 +24,12 @@
 
         <ImageButton
             android:id="@+id/back_arrow"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start"
             app:tint="@color/red"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
             android:src="@drawable/back_arrow" />
 
         <TextView

@@ -51,6 +51,7 @@ public class cateringAdapter extends RecyclerView.Adapter<cateringAdapter.ViewHo
                 intent.putExtra("product", catering.getProductId());
                 intent.putExtra("service", "Catering");
                 intent.putExtra("creatorId", catering.getCreatorId());
+                intent.putExtra("productsId", catering.getProductId());
                 context.startActivity(intent);
             }
         });

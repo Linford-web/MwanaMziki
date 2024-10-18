@@ -4,11 +4,11 @@ import android.os.Parcel;
 
 public class UserModel {
 
-    String  profilePicture, userID, name, email, phone, userType, category;
+    String  profilePicture, userid, name, email, phone, userType, category;
 
-    public UserModel(String profilePicture, String userID, String name, String email, String phone , String userType, String category) {
+    public UserModel(String profilePicture, String userid, String name, String email, String phone , String userType, String category) {
         this.profilePicture = profilePicture;
-        this.userID = userID;
+        this.userid = userid;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -28,12 +28,12 @@ public class UserModel {
         this.profilePicture = profilePicture;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUserid() {
+        return userid;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getName() {

@@ -40,9 +40,6 @@
             android:exported="false"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
-            android:name=".costumeActivity"
-            android:exported="false" />
-        <activity
             android:name=".advertActivity"
             android:exported="false" />
         <activity

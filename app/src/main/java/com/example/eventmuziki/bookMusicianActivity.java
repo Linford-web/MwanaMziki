@@ -1,10 +1,14 @@
 package com.example.eventmuziki;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,7 +45,9 @@ public class bookMusicianActivity extends AppCompatActivity {
     CircleImageView bidderProfile;
     ImageView back, poster;
 
-    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(), userName, userEmail, userPhoneNumber, profilePicture;
+    Dialog popupDialog;
+
+    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +136,6 @@ public class bookMusicianActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
-                            userName = document.getString("name");
-                            userEmail = document.getString("email");
-                            profilePicture = document.getString("profilePicture");
-                            userPhoneNumber = document.getString("number");
 
                             String userType = document.getString("userType");
                             if (userType != null) {
@@ -201,16 +203,11 @@ public class bookMusicianActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
                                                 documentReference.update("bookedEventId", documentReference.getId());
-
-                                                new Handler().postDelayed(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        Intent intent = new Intent(bookMusicianActivity.this, bookedEvents.class);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    }
+                                                showPopupDialog();
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(bookMusicianActivity.this, bookedEvents.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 }, 2000);
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
@@ -227,6 +224,30 @@ public class bookMusicianActivity extends AppCompatActivity {
         }
 
     }
+
+    private void showPopupDialog() {
+        if (isFinishing() || isDestroyed()) return; // Prevent showing the dialog if the activity is not in a valid state
+
+        if (popupDialog == null) { // Initialize the dialog only once
+            popupDialog = new Dialog(bookMusicianActivity.this);
+            popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            popupDialog.setCancelable(false);
+            popupDialog.setContentView(R.layout.popup_layout);
+
+            if (popupDialog.getWindow() != null) {
+                popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        }
+
+        popupDialog.show();
+
+        new Handler().postDelayed(() -> {
+            if (popupDialog != null && popupDialog.isShowing() && !isFinishing() && !isDestroyed()) {
+                popupDialog.dismiss();
+            }
+        }, 3000);
+    }
+
     private void fetchDetails(String biddersId) {
         FirebaseFirestore.getInstance().collection("Users")
                 .whereEqualTo("userid", biddersId)
@@ -252,6 +273,8 @@ public class bookMusicianActivity extends AppCompatActivity {
                                     // Load profile photo into otherImageView using Glide or any other image loading library
                                     Glide.with(bookMusicianActivity.this)
                                             .load(profileImageUrl)
+                                            .placeholder(R.drawable.profile_image)
+                                            .error(R.drawable.profile_image)
                                             .into(bidderProfile);
 
                                 } else {

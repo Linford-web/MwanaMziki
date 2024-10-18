@@ -53,7 +53,7 @@ public class serviceNameAdapter extends  RecyclerView.Adapter<serviceNameAdapter
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_service_name, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_dash, viewGroup, false);
         return new ViewHolder(view);
 
     }

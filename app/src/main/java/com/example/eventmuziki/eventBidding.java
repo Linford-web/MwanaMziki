@@ -41,13 +41,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class eventBidding extends AppCompatActivity {
 
     TextView eventName, eventDate, eventTime, eventLocation, categoryNme, organizerName, eventDetails, amountTv, category, biddersName, categoryTv, viewAll;
     EditText bidAmountTv;
-    Button placeBid;
+    Button placeBid, deleteEventBtn;
     ImageView eventPosterTv, backArrow, addServices;
     LinearLayout biddersView, categoryLayout, emptyRv, bookedServices, myEmptyRv;
     FirebaseFirestore fStore;
@@ -60,7 +62,7 @@ public class eventBidding extends AppCompatActivity {
     cartAdapter adapter;
 
     Dialog popupDialog;
-    public String eventId, creatorId, userType;
+    public String eventId, creatorId, userType, bidderType;
 
     ArrayList<serviceNameModel> requiredServices;
     serviceNameAdapter nameAdapter;
@@ -98,8 +100,9 @@ public class eventBidding extends AppCompatActivity {
         bookedRv = findViewById(R.id.bookedRv);
         addServices = findViewById(R.id.addServices);
         emptyRv = findViewById(R.id.displayEmptyRv);
-        bookedServices = findViewById(R.id.bookedServiceslayout);
+        bookedServices = findViewById(R.id.bookedServicesLayout);
         myEmptyRv = findViewById(R.id.emptyRv);
+        deleteEventBtn = findViewById(R.id.deleteEvent);
 
         bookedList = new ArrayList<>();
         adapter = new cartAdapter(bookedList, this);
@@ -128,45 +131,24 @@ public class eventBidding extends AppCompatActivity {
         nameAdapter.setOnItemClickListener(new serviceNameAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(serviceNameModel service) {
-                categoryTv.setText(service.getServiceName());
-                if (service.getServiceName().equals("Decorations")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Car Rental")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Photographer")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Catering")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Sound")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Costumes")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Influencers")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
-                    recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
-                } else if (service.getServiceName().equals("Sponsors")) {
-                    fetchCategoryBidders(eventId, service.getServiceName());
+
+                String selectedService = service.getServiceName();
+                categoryTv.setText(selectedService);
+
+                // List of services that should trigger the same actions
+                List<String> validServices = Arrays.asList(
+                        "Decorations", "Car Rental", "Photographer", "Catering",
+                        "Sound", "Costumes", "Influencers", "Sponsors",
+                        "MakeUp", "Music"
+                );
+
+                if (validServices.contains(selectedService)) {
+                    fetchCategoryBidders(eventId, selectedService);
                     recyclerView.setVisibility(View.VISIBLE);
                     recyclerView1.setVisibility(View.GONE);
                 } else {
                     Log.d("TAG", "onItemClick: No service selected");
-                    Toast.makeText(eventBidding.this, "No service selected", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
@@ -193,7 +175,33 @@ public class eventBidding extends AppCompatActivity {
             eventId = event.getEventId();
             creatorId = event.getCreatorID();
 
+
         }
+
+        FirebaseFirestore.getInstance().collection("Events")
+                .whereEqualTo("creatorID", FirebaseAuth.getInstance().getUid())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            deleteEventBtn.setVisibility(View.VISIBLE);
+                        }else {
+                            deleteEventBtn.setVisibility(View.GONE);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        deleteEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteEvent();
+            }
+        });
 
         addServices.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +250,7 @@ public class eventBidding extends AppCompatActivity {
             public void onClick(View v) {
                 recyclerView.setVisibility(View.GONE);
                 recyclerView1.setVisibility(View.VISIBLE);
+                categoryTv.setText("All");
             }
         });
 
@@ -255,6 +264,58 @@ public class eventBidding extends AppCompatActivity {
 
         fetchBookedServices(eventId);
 
+    }
+
+    private void deleteEvent() {
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        // Reference to the EventServices subcollection
+        fStore.collection("Events")
+                .document(eventId)
+                .collection("EventServices")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    // Check if the subcollection has documents
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Loop through each document and delete them
+                        for (DocumentSnapshot document : queryDocumentSnapshots) {
+                            String serviceId = document.getId();
+                            fStore.collection("Events")
+                                    .document(eventId)
+                                    .collection("EventServices")
+                                    .document(serviceId)
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Successfully deleted a service document
+                                        Toast.makeText(eventBidding.this, "Event service deleted successfully", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle failure for deleting a service document
+                                        Toast.makeText(eventBidding.this, "Failed to delete event service: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    } else {
+                        // No documents in the subcollection
+                        Log.d("TAG", "No documents in the subcollection");
+                    }
+
+                    // After deleting all documents in EventServices, delete the main event document
+                    fStore.collection("Events")
+                            .document(eventId)
+                            .delete()
+                            .addOnSuccessListener(unused -> {
+                                showPopupDialog();
+                                new Handler().postDelayed(this::finish, 3000);
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle failure of deleting the event document
+                                Toast.makeText(eventBidding.this, "Failed to delete event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure of retrieving the EventServices subcollection
+                    Toast.makeText(eventBidding.this, "Failed to retrieve event services: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void checkUserServiceForEvent(String eventId) {
@@ -283,6 +344,7 @@ public class eventBidding extends AppCompatActivity {
                                 .addOnFailureListener(e -> {
                                     Log.d("TAG", "Failed to fetch event services: " + e.getMessage());
                                 });
+
                     } else {
                         Log.d("TAG", "User does not exist in Firestore");
                     }
@@ -391,6 +453,9 @@ public class eventBidding extends AppCompatActivity {
         if (serviceName.equals("Sponsors")) {
             return R.drawable.sponsorship_icon;
         }
+        if (serviceName.equals("MakeUp")) {
+            return R.drawable.makeup_icon;
+        }
         return R.drawable.service_icon;
 
     }
@@ -412,10 +477,13 @@ public class eventBidding extends AppCompatActivity {
                         biddersView.setVisibility(View.GONE);
                         viewAll.setVisibility(View.VISIBLE);
                         bookedServices.setVisibility(View.VISIBLE);
+                        recyclerView1.setVisibility(View.VISIBLE);
                     } if (userType.equalsIgnoreCase("Musician")) {
                         categoryNme.setText(categories);
                         viewAll.setVisibility(View.GONE);
                         bookedServices.setVisibility(View.GONE);
+                        recyclerView1.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
 
                         FirebaseFirestore.getInstance().collection("BidEvents")
                                 .whereEqualTo("eventId", eventId)
@@ -463,14 +531,24 @@ public class eventBidding extends AppCompatActivity {
                 .whereEqualTo("userCategory", service)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        emptyRv.setVisibility(View.GONE);
+                    }
+                    else {
+                        emptyRv.setVisibility(View.VISIBLE);
+                    }
+
                     categoryService.clear();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Log.d("TAG", "onSuccess: " + documentSnapshot.getData());
                         biddersEventModel bidder = documentSnapshot.toObject(biddersEventModel.class);
                         categoryService.add(bidder);
                     }
                     categoryAdapter.notifyDataSetChanged();
-
-                }).addOnFailureListener(e -> Toast.makeText(eventBidding.this, "Failed to fetch category bidders", Toast.LENGTH_SHORT).show());
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(eventBidding.this, "Failed to fetch category bidders", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void fetchBidders(String eventId) {
@@ -511,6 +589,7 @@ public class eventBidding extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     String name = documentSnapshot.getString("name");
                     biddersName.setText(name);
+                    bidderType = documentSnapshot.getString("userType");
                 } else {
                     Toast.makeText(eventBidding.this, "User not found", Toast.LENGTH_SHORT).show();
                 }
@@ -542,7 +621,7 @@ public class eventBidding extends AppCompatActivity {
         }
         else {
             // Add the bid to Firestore
-            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", userType,currentUserId, "", "");
+            biddersEventModel bookedEvent = new biddersEventModel(name, details, date, time, location, bidAmount, eventId, creatorId, "", bidderType, currentUserId, "", "");
 
             // Check if the current user has already placed a bid for this event
             fStore.collection("BidEvents")
@@ -561,8 +640,6 @@ public class eventBidding extends AppCompatActivity {
                                             documentReference.update("organizerName", o_name);
                                             documentReference.update("biddersName", bidder);
                                             documentReference.update("bidId", documentReference.getId());
-
-                                            Toast.makeText(eventBidding.this, "Bid placed successfully", Toast.LENGTH_SHORT).show();
 
                                             showPopupDialog();
 

@@ -1,13 +1,14 @@
 package com.example.eventmuziki.Models;
 
-public class advertisementModel {
+public class eventAdvertModel {
 
-    String advertId, eventId, eventName, eventLocation, eventDate, eventTime, details,organizerName, advertPlans, userId, posterUrl;
+    String advertId, eventId, eventName, eventLocation, eventDate, eventTime, details,organizerName, creatorId, posterUrl;
 
-    public advertisementModel() {
+    public eventAdvertModel() {
     }
 
-    public advertisementModel(String advertId, String eventId, String eventName, String eventLocation, String eventDate, String eventTime, String details,String organizerName, String advertPlans, String userId, String posterUrl) {
+    public eventAdvertModel(String advertId, String eventId, String eventName, String eventLocation,
+                            String eventDate, String eventTime, String details, String organizerName, String creatorId, String posterUrl) {
         this.advertId = advertId;
         this.eventId = eventId;
         this.eventName = eventName;
@@ -16,10 +17,17 @@ public class advertisementModel {
         this.eventTime = eventTime;
         this.details = details;
         this.organizerName = organizerName;
-        this.advertPlans = advertPlans;
-        this.userId = userId;
+        this.creatorId = creatorId;
         this.posterUrl = posterUrl;
 
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
     public String getAdvertId() {
@@ -76,22 +84,6 @@ public class advertisementModel {
 
     public void setOrganizerName(String organizerName) {
         this.organizerName = organizerName;
-    }
-
-    public String getAdvertPlans() {
-        return advertPlans;
-    }
-
-    public void setAdvertPlans(String advertPlans) {
-        this.advertPlans = advertPlans;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getPosterUrl() {

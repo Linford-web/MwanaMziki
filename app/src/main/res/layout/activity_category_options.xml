@@ -23,11 +23,12 @@
 
         <ImageButton
             android:id="@+id/back_arrow"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start"
             app:tint="@color/red"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
             android:src="@drawable/back_arrow" />
 
         <TextView
@@ -76,16 +77,17 @@
 
         <Button
             android:id="@+id/addServiceBtn"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/orange"
+            android:textColor="@color/black"
             android:text="Add Service"
             android:layout_margin="15dp" />
 
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/addService"
@@ -399,6 +401,32 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/makeUp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/makeUpIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/makeup_icon" />
+                            <TextView
+                                android:id="@+id/makeUpTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Make Up"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:id="@+id/sponsorship"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -442,7 +470,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Musicians"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:layout_marginBottom="10dp" />
@@ -511,7 +539,7 @@
                     android:layout_marginTop="7dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Catering"
                         android:textSize="18sp"
@@ -645,6 +673,30 @@
                         android:id="@+id/sponsorshipRv"/>
 
                 </LinearLayout>
+                <!-- make Up Artist Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/makeUpDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Make Up packages"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/makeUpRv"/>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -657,6 +709,7 @@
                         android:layout_height="wrap_content"
                         android:text="Service"
                         android:padding="5dp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:textColor="@color/black" />
@@ -732,6 +785,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

@@ -39,7 +39,7 @@
                 android:layout_gravity="start"
                 app:tint="@color/red"
                 android:background="@drawable/edit_text_bg"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/orange"
                 android:src="@drawable/back_arrow" />
 
 
@@ -400,7 +400,7 @@
                                 android:layout_height="match_parent"
                                 android:padding="2dp"
                                 app:tint="@color/orange"
-                                android:src="@drawable/car_icon" />
+                                android:src="@drawable/music_icon" />
 
                             <TextView
                                 android:id="@+id/musicTxt"
@@ -591,6 +591,32 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Content Creators"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/makeUp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/makeupIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                android:src="@drawable/makeup_icon" />
+                            <TextView
+                                android:id="@+id/makeupTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Make Up"
                                 android:letterSpacing="0.1"
                                 android:textColor="@color/black"
                                 android:textSize="17sp"
@@ -1785,6 +1811,7 @@
                             android:layout_margin="5dp"
                             android:entries="@array/sponsorship_industry"/>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1815,6 +1842,7 @@
                         android:layout_height="wrap_content"
                         android:text="Current sponsors"
                         android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/sponsor_current"
                         android:layout_width="match_parent"
@@ -1824,8 +1852,100 @@
                         android:background="@drawable/edit_text_bg"
                         android:layout_marginBottom="10dp" />
 
-
                 </LinearLayout>
+
+                <!-- make Up details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/makeUpDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:elevation="3dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Make Up Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkMakeUp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Make Up package"
+                                android:textStyle="bold" />
+
+                            <Spinner
+                                android:id="@+id/spinnerMakeUpPackage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:entries="@array/makeup_packages"
+                                android:padding="10dp" />
+
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/checkBoxAvailability"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Availability to Travel"
+                            android:layout_margin="5dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Duration"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Days"
+                                android:padding="10dp"
+                                android:background="@drawable/edit_text_bg"
+                                android:layout_margin="5dp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -1836,7 +1956,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/orange"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginTop="10dp"
                 android:text="@string/add_event"
                 android:textSize="18sp"

@@ -12,33 +12,24 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
 
 public class viewServices extends AppCompatActivity {
 
-    ImageView musicImage, carImage, soundImage, cateringImage, photographerImage, decorationImage, costumeImage, sponsorImage, influencerImage;
+    ImageView musicImage, carImage, soundImage, cateringImage, photographerImage, decorationImage, costumeImage, sponsorImage, influencerImage, makeUpImage;
 
     TextView carModel, carType, carColor, carTransmission, carSeats, carStatus, carDriver, carPrice, carExtraPrice, carDetails,
             soundPackage, instrumentName, instrumentType, areaCoverage, soundHirePrice, soundExtraPrice, soundSetup, soundConnectivity, soundDelivery, soundStatus, soundDetails,
@@ -48,12 +39,14 @@ public class viewServices extends AppCompatActivity {
             sponsorName, sponsorType, sponsorAge, sponsorIndustry, sponsorInterests, sponsorEvent, sponsorPromotion, sponsorAmount, sponsorAudience, sponsorPreBooking, sponsorGuide, sponsorStatus, sponsorCancellation,
             influencerHandle ,influencerPlatform, influencerSubscribers, influencerAge,influencerGender, location , influencerPackage, influencerContent, influencerPosts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage, status,
             costumeName, costumeGender, costumeAgeGroup, costumeDetails, costumeSize, productAmount, material, customization, cleaning, duration, buyPrice, hirePrice, lateFee, delivery, policy, costumeStatus,
-            musicGenre, musicStatus, instrumentDetails, musicianPrice, musicDetails, musicPolicy;
+            musicGenre, musicStatus, instrumentDetails, musicianPrice, musicDetails, musicPolicy,
+            makeUpName,makeUpSpecialization, makeUpPackage , makeUpPrice , makeUpPortfolio, travel, makeUpBooking ,makeUpPolicy,makeUpStatus;
 
-    LinearLayout musicianCardView, carRentalCardView, soundSystemCardView, cateringCardView, photographerCardView, decorationCardView, costumeCardView, sponsorCardView, influencerCardView;
+    LinearLayout musicianCardView, carRentalCardView, soundSystemCardView, cateringCardView, photographerCardView,
+            decorationCardView, costumeCardView, sponsorCardView, influencerCardView, makeUpCardView;
 
-    Button addMusic, addCar, addSound, addCatering, addPhotography, addDecoration, addCostume, addSponsor, addInfluencer,
-            editMusic, editCar, editSound, editCatering, editPhotography, editDecoration, editCostume, editSponsor, editInfluencer;
+    Button addMusic, addCar, addSound, addCatering, addPhotography, addDecoration, addCostume, addSponsor, addInfluencer, addMakeUp,
+            editMusic, editCar, editSound, editCatering, editPhotography, editDecoration, editCostume, editSponsor, editInfluencer, editMakeUp;
 
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -80,6 +73,7 @@ public class viewServices extends AppCompatActivity {
         addCostume = findViewById(R.id.addCostume);
         addSponsor = findViewById(R.id.addSponsor);
         addInfluencer = findViewById(R.id.addInfluencer);
+        addMakeUp = findViewById(R.id.addMakeUp);
 
         editMusic = findViewById(R.id.editMusician);
         editCar = findViewById(R.id.editCar);
@@ -90,6 +84,7 @@ public class viewServices extends AppCompatActivity {
         editCostume = findViewById(R.id.editCostume);
         editSponsor = findViewById(R.id.editSponsor);
         editInfluencer = findViewById(R.id.editInfluencer);
+        editMakeUp = findViewById(R.id.editMakeUp);
 
         musicianCardView = findViewById(R.id.musicianCardView);
         carRentalCardView = findViewById(R.id.carRentalCardView);
@@ -100,6 +95,18 @@ public class viewServices extends AppCompatActivity {
         costumeCardView = findViewById(R.id.costumeCardView);
         sponsorCardView = findViewById(R.id.sponsorCardView);
         influencerCardView = findViewById(R.id.influencerCardView);
+
+        makeUpImage = findViewById(R.id.makeUpImage);
+        makeUpCardView = findViewById(R.id.makeUpCardView);
+        makeUpName = findViewById(R.id.makeUpName);
+        makeUpSpecialization = findViewById(R.id.artistSpecialization);
+        makeUpPackage = findViewById(R.id.makeUpPackage);
+        makeUpPrice = findViewById(R.id.makeUpPrice);
+        makeUpPortfolio = findViewById(R.id.makeUpPortfolio);
+        travel = findViewById(R.id.makeUpTravel);
+        makeUpBooking = findViewById(R.id.makeUpBooking);
+        makeUpPolicy = findViewById(R.id.makeUpPolicy);
+        makeUpStatus = findViewById(R.id.makeUpStatus);
 
         carImage = findViewById(R.id.carRentalImage);
         carModel = findViewById(R.id.carModel);
@@ -236,6 +243,7 @@ public class viewServices extends AppCompatActivity {
             String serviceType = intent.getStringExtra("service");
             String productId = intent.getStringExtra("product");
             String creatorId = intent.getStringExtra("creatorId");
+            String product = intent.getStringExtra("productsId");
 
             fetchDetails(productId, creatorId);
 
@@ -246,7 +254,7 @@ public class viewServices extends AppCompatActivity {
                     String type = musicStatus.getText().toString();
                     String price = musicianPrice.getText().toString();
 
-                    ServicesDetails.cartModel musicModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Music", "");
+                    ServicesDetails.cartModel musicModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "", "Music", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get()
@@ -285,7 +293,7 @@ public class viewServices extends AppCompatActivity {
                     String type = carType.getText().toString();
                     String price = carPrice.getText().toString();
 
-                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Car Rental", "");
+                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "", "Car Rental", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get()
@@ -326,7 +334,7 @@ public class viewServices extends AppCompatActivity {
                     String price = soundHirePrice.getText().toString();
 
 
-                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, userId, "Sound System", "");
+                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, userId, "", "Sound System", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -364,7 +372,7 @@ public class viewServices extends AppCompatActivity {
                     String packaged = cateringPackaged.getText().toString();
                     String price = cateringPrice.getText().toString();
 
-                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Catering", "");
+                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "", "Catering", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -399,7 +407,7 @@ public class viewServices extends AppCompatActivity {
                     String numbers = photoStatus.getText().toString();
                     String price = photoPackagePrice.getText().toString();
 
-                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, userId, "Photography", "");
+                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, userId, "", "Photography", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -435,7 +443,7 @@ public class viewServices extends AppCompatActivity {
                     String packaged = decoPackage.getText().toString();
                     String price = decoAmount.getText().toString();
 
-                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "Decoration", "");
+                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "", "Decoration", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -470,7 +478,7 @@ public class viewServices extends AppCompatActivity {
                     String materials = material.getText().toString();
                     String price = hirePrice.getText().toString();
 
-                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, userId, "Costume", "");
+                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, userId, "", "Costume", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -504,7 +512,7 @@ public class viewServices extends AppCompatActivity {
                     String type = sponsorType.getText().toString();
                     String price = sponsorAmount.getText().toString();
 
-                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "Sponsor", "");
+                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "", "Sponsor", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -539,7 +547,7 @@ public class viewServices extends AppCompatActivity {
                     String platform = influencerPlatform.getText().toString();
                     String price = collaboration.getText().toString();
 
-                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, userId, "Influencer", "");
+                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, userId, "", "Influencer", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -567,6 +575,102 @@ public class viewServices extends AppCompatActivity {
 
                 }
             });
+            addMakeUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = makeUpName.getText().toString();
+                    String beautyPackage = makeUpPackage.getText().toString();
+                    String price = makeUpPrice.getText().toString();
+
+                    ServicesDetails.cartModel beautyModel = new ServicesDetails.cartModel(name, beautyPackage, price, creatorId, productId, userId, "", "MakeUp", "");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(beautyModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
+                                                showPopupDialog(view);
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                            }).addOnFailureListener(e -> Toast.makeText(viewServices.this, "Error adding influencer to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            });
+                }
+            });
+
+            editMusic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editCar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editSound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editCatering.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editPhotography.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editDecoration.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editCostume.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editSponsor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editInfluencer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            editMakeUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+
 
             // Display the correct card view based on service type
             if (serviceType != null) {
@@ -607,6 +711,10 @@ public class viewServices extends AppCompatActivity {
                         influencerCardView.setVisibility(View.VISIBLE);
                         hideOtherCardViews(influencerCardView);
                         break;
+                    case "MakeUp":
+                        makeUpCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(makeUpCardView);
+                        break;
                     default:
                         Toast.makeText(this, "Unknown service type", Toast.LENGTH_SHORT).show();
                         break;
@@ -627,6 +735,56 @@ public class viewServices extends AppCompatActivity {
 
     }
 
+    private void deleteProduct(String productId, View view) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Step 1: Search for the service document containing the specified product ID
+        db.collection("Services")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+
+                    for (DocumentSnapshot serviceDoc : querySnapshot) {
+                        String serviceId = serviceDoc.getId();
+
+                        // Step 2: Check if the product exists under the 'Products' subcollection of this service
+                        db.collection("Services")
+                                .document(serviceId)
+                                .collection("Products")
+                                .document(productId)
+                                .get()
+                                .addOnSuccessListener(productSnapshot -> {
+                                    if (productSnapshot.exists()) {
+                                        // Step 3: Delete the product from the subcollection
+                                        db.collection("Services")
+                                                .document(serviceId)
+                                                .collection("Products")
+                                                .document(productId)
+                                                .delete()
+                                                .addOnSuccessListener(aVoid -> {
+                                                    // show popup dialog
+                                                    showPopupDialog(view);
+                                                    new Handler().postDelayed(() -> {
+                                                        Intent intent = new Intent(viewServices.this, categoryOptions.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }, 3000);
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Toast.makeText(this, "Failed to delete product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                });
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Error fetching product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
+
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to fetch services: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
     private void hideOtherCardViews(View visibleCardView) {
             // Hide all card views except the one passed as the argument
             carRentalCardView.setVisibility(visibleCardView == carRentalCardView ? View.VISIBLE : View.GONE);
@@ -638,6 +796,7 @@ public class viewServices extends AppCompatActivity {
             sponsorCardView.setVisibility(visibleCardView == sponsorCardView ? View.VISIBLE : View.GONE);
             influencerCardView.setVisibility(visibleCardView == influencerCardView ? View.VISIBLE : View.GONE);
             musicianCardView.setVisibility(visibleCardView == musicianCardView ? View.VISIBLE : View.GONE);
+            makeUpCardView.setVisibility(visibleCardView == makeUpCardView ? View.VISIBLE : View.GONE);
         }
 
     private void showPopupDialog(View view) {
@@ -685,6 +844,8 @@ public class viewServices extends AppCompatActivity {
                                     .get()
                                     .addOnSuccessListener(documentSnapshot -> {
 
+                                        String productsId = documentSnapshot.getId();
+
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Music")){
                                              musicGenre.setText(documentSnapshot.getString("genre"));
                                             musicStatus.setText(documentSnapshot.getString("status"));
@@ -692,6 +853,7 @@ public class viewServices extends AppCompatActivity {
                                             musicianPrice.setText(documentSnapshot.getString("payRate"));
                                             musicDetails.setText(documentSnapshot.getString("musicDetails"));
                                             musicPolicy.setText(documentSnapshot.getString("policy"));
+
 
                                             String imageUrl = documentSnapshot.getString("image");
                                             if (imageUrl !=null){
@@ -1011,6 +1173,37 @@ public class viewServices extends AppCompatActivity {
 
                                         }
 
+                                        if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("MakeUp")) {
+                                            makeUpName.setText(documentSnapshot.getString("name"));
+                                            makeUpPackage.setText(documentSnapshot.getString("makeUpPackage"));
+                                            makeUpPrice.setText(documentSnapshot.getString("price"));
+                                            makeUpSpecialization.setText(documentSnapshot.getString("specialization"));
+                                            makeUpPortfolio.setText(documentSnapshot.getString("portfolio"));
+                                            travel.setText(documentSnapshot.getString("travel"));
+                                            makeUpBooking.setText(documentSnapshot.getString("preBooking"));
+                                            makeUpPolicy.setText(documentSnapshot.getString("policy"));
+                                            makeUpStatus.setText(documentSnapshot.getString("status"));
+
+                                            String imageUrl = documentSnapshot.getString("image");
+                                            if (imageUrl != null) {
+                                                Glide.with(viewServices.this)
+                                                        .load(imageUrl)
+                                                        .placeholder(R.drawable.makeup_icon)
+                                                        .error(R.drawable.makeup_icon)
+                                                        .into(makeUpImage);
+                                            } else {
+                                                Log.e("Image URL", "Image URL is null");
+                                            }
+                                            String userId = documentSnapshot.getString("creatorId");
+                                            if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
+                                                addMakeUp.setVisibility(View.GONE);
+                                                editMakeUp.setVisibility(View.VISIBLE);
+                                            }else {
+                                                addMakeUp.setVisibility(View.VISIBLE);
+                                                editMakeUp.setVisibility(View.GONE);
+                                            }
+                                        }
+
                                         if (!documentSnapshot.exists() && serviceCategory == null){
                                             Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();
                                         }
@@ -1035,5 +1228,6 @@ public class viewServices extends AppCompatActivity {
             popupDialog.dismiss();
         }
     }
+
 
 }

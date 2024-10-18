@@ -8,22 +8,22 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmuziki.Adapters.advertAdapter;
-import com.example.eventmuziki.Models.advertisementModel;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.example.eventmuziki.Adapters.advertAdapter2;
+import com.example.eventmuziki.Models.AdvertisementDetails;
+import com.example.eventmuziki.Models.eventAdvertModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,11 +31,12 @@ import java.util.Objects;
 public class advertActivity extends AppCompatActivity {
 
     ImageButton back;
-    RecyclerView allAdvertsRv;
+    RecyclerView myAdvertsRv;
     FloatingActionButton addAdvertBtn;
-    advertAdapter adapter;
-    ArrayList<advertisementModel> adverts;
+    ArrayList<AdvertisementDetails.advertModel> adverts1;
+    advertAdapter2 adapter1;
     FirebaseFirestore fStore;
+    FirebaseAuth fAuth;
     LinearLayout addAdvertTv, advertRv;
 
     @Override
@@ -45,11 +46,12 @@ public class advertActivity extends AppCompatActivity {
         setContentView(R.layout.activity_advert);
 
         back = findViewById(R.id.back_arrow);
-        allAdvertsRv = findViewById(R.id.allAdvertsRv);
         addAdvertBtn = findViewById(R.id.addAdvertBtn);
         fStore = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
         addAdvertTv = findViewById(R.id.emptyRecyclerviewTv);
         advertRv = findViewById(R.id.advertRv);
+        myAdvertsRv = findViewById(R.id.myAdvertsRv);
 
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
@@ -69,48 +71,42 @@ public class advertActivity extends AppCompatActivity {
             }
         });
 
-        adverts = new ArrayList<>();
-        adapter = new advertAdapter(adverts);
+        adverts1 = new ArrayList<>();
+        adapter1 = new advertAdapter2(adverts1, this);
+        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        myAdvertsRv.setLayoutManager(layoutManager1);
+        myAdvertsRv.setAdapter(adapter1);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        allAdvertsRv.setLayoutManager(layoutManager);
-        allAdvertsRv.setAdapter(adapter);
+        // fetch my adverts
+        fetchMyAdverts();
 
-        // fetch adverts
-        fetchAdverts();
 
     }
 
-    private void fetchAdverts() {
-        String userId = FirebaseAuth.getInstance().getUid();
-
+    private void fetchMyAdverts() {
         fStore.collection("Advertisements")
-                .whereEqualTo("userId", userId)
+                .whereEqualTo("creatorId", FirebaseAuth.getInstance().getUid())
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        // Clear previous data
-                        adverts.clear();
-
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            advertisementModel advert = documentSnapshot.toObject(advertisementModel.class);
-                            adverts.add(advert);
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            myAdvertsRv.setVisibility(View.VISIBLE);
+                            addAdvertTv.setVisibility(View.GONE);
+                        }else {
+                            myAdvertsRv.setVisibility(View.GONE);
+                            addAdvertTv.setVisibility(View.VISIBLE);
                         }
-
-                        // Show the RecyclerView and hide the "Add Advertisement" TextView
-                        advertRv.setVisibility(View.VISIBLE);
-                        addAdvertTv.setVisibility(View.GONE);
-
-                    } else {
-                        // If no documents found, show the "Add Advertisement" TextView
-                        advertRv.setVisibility(View.GONE);
-                        addAdvertTv.setVisibility(View.VISIBLE);
+                        adverts1.clear();
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            AdvertisementDetails.advertModel advert = documentSnapshot.toObject(AdvertisementDetails.advertModel.class);
+                            adverts1.add(advert);
+                        }
+                        adapter1.notifyDataSetChanged();
                     }
-
-                    // Notify adapter to update RecyclerView
-                    adapter.notifyDataSetChanged();
-
-                }).addOnFailureListener(e ->
-                        Toast.makeText(advertActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                }).addOnFailureListener(e -> Toast.makeText(advertActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+
+
+
 }

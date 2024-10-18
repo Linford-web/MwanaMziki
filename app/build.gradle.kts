@@ -12,6 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.example.eventmuziki"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -62,7 +63,6 @@ dependencies {
     implementation(libs.circleimageview)
     implementation (libs.material.v180)
     implementation ("com.hbb20:ccp:2.7.3")
-    implementation(libs.play.services.maps)
     implementation (libs.material.v130)
     implementation(libs.activity)
     implementation(libs.play.services.auth)

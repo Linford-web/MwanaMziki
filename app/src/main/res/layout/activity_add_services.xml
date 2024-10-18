@@ -23,11 +23,12 @@
 
         <ImageButton
             android:id="@+id/back_arrow"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start"
             app:tint="@color/red"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
             android:src="@drawable/back_arrow" />
 
         <TextView
@@ -3130,7 +3131,247 @@
 
             </LinearLayout>
 
+            <!-- Section to Add Makeup Artist Details -->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/addMakeUpDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:background="@drawable/edit_text_bg"
+                android:layout_marginBottom="16dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Add Makeup Artist Details"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp" />
+                    <Button
+                        android:id="@+id/seeAddMakeUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:text="Add Details"
+                        android:textColor="@color/white" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_icon"
+                        android:padding="3dp"
+                        app:tint="@color/red"
+                        android:clickable="true"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        android:id="@+id/closeMakeupArtist" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/makeUpDetailsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Section to add Makeup Artist Photo -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp">
+                        <ImageView
+                            android:id="@+id/makeupArtistPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="5dp"
+                            android:src="@drawable/makeup_icon" />
+
+                        <ImageButton
+                            android:id="@+id/addMakeUpPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_margin="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/camera_icon"
+                            app:tint="@color/blue" />
+                        <ImageButton
+                            android:id="@+id/deleteMakeUpPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="50dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="15dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/delete_icon"
+                            app:tint="@color/blue" />
+                    </RelativeLayout>
+
+                    <!-- Makeup Artist Name -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Makeup Artist Name"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/makeupArtistName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="8dp"
+                        android:hint="Artist Name"
+                        android:inputType="text" />
+
+                    <!-- Makeup Artist Specialization -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Makeup Specialization"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/makeupSpecialization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="8dp"
+                        android:hint="e.g., Bridal Makeup, Editorial Makeup"
+                        android:inputType="text" />
+
+                    <!-- Makeup Packages -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Make Up package"
+                            android:textStyle="bold" />
+                        <Spinner
+                            android:id="@+id/spinnerMakeUpPackage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:entries="@array/makeup_packages"/>
+                    </LinearLayout>
+
+                    <!-- Makeup Package Pricing -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Makeup Package Pricing"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/makeupPackagePrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:hint="Amount"
+                            android:inputType="text" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Portfolio Link"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/makeupPortfolioLink"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="8dp"
+                        android:hint="e.g., www.artistportfolio.com"
+                        android:inputType="textUri" />
+
+                    <CheckBox
+                        android:id="@+id/makeUpTravel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Travel Booking"
+                        android:layout_margin="5dp" />
+
+                    <!-- Makeup Booking Lead Time -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Makeup Booking Lead Time"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/makeupLeadTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="8dp"
+                        android:hint="Specify lead time in days"
+                        android:inputType="number" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Policy"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/makeUpPolicy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"
+                            android:maxLines="8"
+                            android:hint="Policy"/>
+                    </LinearLayout>
+
+                    <!-- Submit Button -->
+                    <Button
+                        android:id="@+id/makeUpSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:text="Submit"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp" />
+
+                </LinearLayout>
+
+                <!-- RecyclerView to Display Added Makeup Packages -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/makeupArtistRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

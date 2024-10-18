@@ -41,7 +41,7 @@ public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull carAdapter.ViewHolder viewHolder, int init) {
         ServicesDetails.carModel service = carList.get(init);
         viewHolder.carModel.setText(service.getCar_model());
-        viewHolder.carSeats.setText(service.getSeats());
+        viewHolder.carSeats.setText(service.getPrice_per_hour());
         viewHolder.carStatus.setText(service.getStatus());
         viewHolder.carCategory.setText(service.getCar_type());
 
@@ -52,6 +52,7 @@ public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
                 intent.putExtra("product", service.getProductId());
                 intent.putExtra("service", "Car Rental");
                 intent.putExtra("creatorId", service.getCreatorId());
+                intent.putExtra("productsId", service.getProductId());
                 context.startActivity(intent);
             }
         });

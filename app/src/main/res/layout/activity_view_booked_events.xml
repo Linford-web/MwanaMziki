@@ -6,72 +6,92 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     tools:context=".viewBookedEvents">
-
-    <LinearLayout
-        android:id="@+id/top_bar_nav"
+    <View
         android:layout_width="match_parent"
-        android:layout_margin="5dp"
+        android:layout_height="70dp"
+        android:background="@color/my_primary" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:background="?attr/colorPrimary"
+        android:layout_marginTop="8dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@android:color/white">
+
         <ImageButton
             android:id="@+id/back_arrow"
-            android:clickable="true"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/back_arrow"
             app:tint="@color/red"
-            android:focusable="true" />
-        <ImageButton
-            android:visibility="gone"
-            android:id="@+id/close_icon"
-            android:clickable="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="start"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/close_icon"
-            app:tint="@color/red"
-            android:focusable="true" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:letterSpacing="0.1"
-            android:textColor="@color/blue"
-            android:text="View Booked Event"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
+            android:src="@drawable/back_arrow" />
 
-    <ScrollView
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Booked Event"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:letterSpacing="0.1"
+            android:textStyle="bold" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/top_bar_nav"
-        android:layout_above="@+id/advertiseBtnLayout"
+        android:layout_below="@id/top_toolbar"
         android:layout_margin="5dp"
+        android:scrollbars="none"
         android:id="@+id/scroll_view">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
+
+            <ImageButton
+                android:visibility="gone"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/close_icon"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="end"
+                android:padding="5dp"
+                app:tint="@color/red"
+                android:id="@+id/close_icon" />
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="200dp"
+                app:cardCornerRadius="10dp">
 
                 <ImageView
                     android:id="@+id/poster"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="200dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/cover" />
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/event_details"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -171,36 +191,60 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+
                     <TextView
                         android:id="@+id/organizerNameTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/organizer_name"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/eventDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Details"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:textStyle="normal" />
+
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/advertiseBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Advertisement Plan"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:backgroundTint="@color/orange"
+                        android:textColor="@color/black"
+                        android:layout_margin="10dp"
+                        android:textStyle="normal"
+                        android:letterSpacing="0.1"/>
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/bookedMusiciansLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/bookedMusiciansLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Expected Musicians"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/bookedMusiciansRv"
-                    android:layout_margin="5dp"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Expected Musicians"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/bookedMusiciansRv"
+                        android:layout_margin="5dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -209,147 +253,401 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Musician Names"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/musicianNamesRv"
-                    android:layout_margin="5dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Other Advertisement Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-
-                <EditText
-                    android:id="@+id/detailsEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="8dp"
-                    android:elevation="2dp"
-                    android:layout_margin="5dp"
-                    android:hint="Add more details..."/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                        android:textStyle="normal"/>
+                        android:padding="5dp"
+                        android:text="Advertisement Title"
+                        android:textStyle="bold"/>
 
-                    <CheckBox
-                        android:id="@+id/check1"
+                    <EditText
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:elevation="2dp"
+                        android:layout_margin="5dp"
+                        android:maxLines="10"
+                        android:hint="Add a Catchy title..."/>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="20dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="2dp"
+                                android:src="@drawable/calender_small_icon"
+                                app:tint="@color/my_primary" />
+
+                            <TextView
+                                android:id="@+id/advertisementDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="2dp"
+                                android:text="Date"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="2dp"
+                                android:src="@drawable/clock_small_icon"
+                                app:tint="@color/orange" />
+
+                            <TextView
+                                android:id="@+id/advertisementTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/time"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Entity Contact"
+
+                        android:textStyle="bold"/>
+
+                    <EditText
+                        android:id="@+id/contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:elevation="2dp"
+                        android:layout_margin="5dp"
+                        android:maxLines="10"
+                        android:hint="Add contact details..."/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Advertisement Details"
+                        android:textStyle="bold"/>
+
+                    <EditText
+                        android:id="@+id/details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp"
+                        android:elevation="2dp"
+                        android:layout_margin="5dp"
+                        android:maxLines="10"
+                        android:hint="Add more details..."/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Advertisement Duration"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="2dp"
+                            android:layout_margin="5dp"
+                            android:inputType="number"
+                            android:maxLines="10"
+                            android:hint="Duration in Days"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="6dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_view"
+                    android:elevation="1dp"
+                    android:backgroundTint="@color/white"
+                    android:padding="12dp"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                        android:textStyle="normal"/>
+                        android:text="Billboard Advertisements"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/cost1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="COST: $100/month"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/content1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Advertise your brand on strategic billboards around the city for maximum visibility."
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:padding="5dp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:id="@+id/reach1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Approximately 10,000+ daily views"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"/>
 
                     <CheckBox
-                        android:id="@+id/check2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:id="@+id/checkBox1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select for Billboard Advertisements"
+                        android:textSize="15sp"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="6dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:background="@color/light_yellow"
+                    android:elevation="1dp"
+                    android:padding="12dp"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                        android:textStyle="normal"/>
+                        android:text="Matatu Advertisements"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/cost2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cost: $100/month"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/content2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Your advertisement will be displayed on popular Matatus (public transport) for wide-ranging coverage."
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:padding="5dp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:id="@+id/reach2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Approximately 15,000+ daily impressions"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"/>
 
                     <CheckBox
-                        android:id="@+id/check3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:id="@+id/checkBox2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select for Matatu Advertisements"
+                        android:textSize="15sp"
+                        android:layout_marginTop="8dp"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="6dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:background="@color/light_blue"
+                    android:elevation="1dp"
+                    android:padding="12dp"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Billboard Advertisments are charged at the rate of $ 100 monthly."
-                        android:textStyle="normal"/>
+                        android:text="Digital Screen Advertisements"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/cost3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cost: $100/month"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/content3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Showcase your brand on high-definition digital screens located in malls and busy areas."
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:id="@+id/reach3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Approximately 8,000+ daily views"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"/>
 
                     <CheckBox
-                        android:id="@+id/check4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:id="@+id/checkBox3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="Select for Digital Screen Advertisements"
+                        android:layout_marginTop="8dp"/>
+
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/light_pink"
+                    android:elevation="1dp"
+                    android:padding="12dp"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Online Advertisements"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/cost4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cost: $100/month"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/content4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Promote your brand across our digital platforms, including social media and websites."
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:id="@+id/reach4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Approximately 20,000+ monthly online impressions"
+                        android:textColor="@color/black"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <CheckBox
+                        android:id="@+id/checkBox4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select for Online Advertisements"
+                        android:layout_marginTop="8dp"/>
+                </LinearLayout>
+
 
             </LinearLayout>
 
+            <Button
+                android:visibility="gone"
+                android:id="@+id/advertiseNow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="30dp"
+                android:text="Advertise"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:backgroundTint="@color/orange"
+                android:textColor="@color/black"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:textStyle="normal"
+                android:letterSpacing="0.1"/>
+
+
         </LinearLayout>
 
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@id/advertiseBtnLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/advertiseBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Advertisement Plan"
-            android:gravity="center"
-            android:layout_marginBottom="10dp"
-            android:textStyle="normal"
-            android:letterSpacing="0.1"/>
-
-        <Button
-            android:visibility="gone"
-            android:id="@+id/advertiseNow"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Advertise"
-            android:gravity="center"
-            android:layout_margin="20dp"
-            android:textStyle="normal"
-            android:letterSpacing="0.1"/>
-    </LinearLayout>
-
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

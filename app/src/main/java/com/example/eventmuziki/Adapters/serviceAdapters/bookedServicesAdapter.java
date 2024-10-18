@@ -3,14 +3,13 @@ package com.example.eventmuziki.Adapters.serviceAdapters;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,24 +20,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
-import com.example.eventmuziki.cartActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
+public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAdapter.ViewHolder> {
 
     ArrayList<ServicesDetails.cartModel> carts;
     Context context;
 
-    public cartAdapter(ArrayList<ServicesDetails.cartModel> carts, Context context) {
+    public bookedServicesAdapter(ArrayList<ServicesDetails.cartModel> carts, Context context) {
         this.carts = carts;
         this.context = context;
     }
+
 
     public interface OnItemDeleteListener {
         void onItemDeleted(double itemPrice);
@@ -50,15 +47,17 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         this.onItemDeleteListener = listener;
     }
 
+
     @NonNull
     @Override
-    public cartAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_cart, null);
+    public bookedServicesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull cartAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull bookedServicesAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
         ServicesDetails.cartModel cart = carts.get(position);
         String productName = cart.getName();
         String productType = cart.getpType();
@@ -86,22 +85,51 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 // Get the product ID for deletion from Firestore
-                String productIdToDelete = cart.getCartId();
+                String productIdToDelete = carts.get(position).getBookedServiceId();
 
-                // Delete the item from Firestore (if applicable)
-                FirebaseFirestore.getInstance().collection("Cart")
+                // Delete the item from the main BookedServices collection
+                FirebaseFirestore.getInstance().collection("BookedServices")
                         .document(productIdToDelete)
                         .delete()
                         .addOnSuccessListener(aVoid -> {
+                            // Now check each event's BookedServices subcollection and delete the corresponding service
+                            FirebaseFirestore.getInstance().collection("Events")
+                                    .get()
+                                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                                        for (DocumentSnapshot eventDoc : queryDocumentSnapshots) {
+                                            String eventId = eventDoc.getId();
+                                            // Access the BookedServices subcollection of each event
+                                            FirebaseFirestore.getInstance().collection("Events")
+                                                    .document(eventId)
+                                                    .collection("BookedServices")
+                                                    .document(productIdToDelete)
+                                                    .delete()
+                                                    .addOnSuccessListener(aVoid1 -> {
+                                                        // Successfully deleted from the event's subcollection,
+                                                        // you may log or handle if needed
+                                                        Toast.makeText(context, "Deleted from event's BookedServices", Toast.LENGTH_SHORT).show();
+
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        // Handle the failure of deletion in subcollection
+                                                        Toast.makeText(context, "Failed to delete from event's BookedServices: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle the failure of fetching events
+                                        Toast.makeText(context, "Failed to fetch events: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
 
                             // Show the popup dialog after deletion
-                            showPopupDialog(holder.itemView);
+                            //showPopupDialog(holder.itemView);
                             // Remove the item from the local list after successful deletion
                             carts.remove(position);
                             // Notify the adapter about the removed item
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, carts.size());
-                            // Parse the price and notify the listener
+
+                            // Parse the price and notify the listener to update the total
                             try {
                                 double itemPrice = Double.parseDouble(cart.getPrice());
                                 if (onItemDeleteListener != null) {
@@ -111,36 +139,18 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
                                 e.printStackTrace();
                             }
 
-                            // Recalculate the total amount based on the remaining items
-                            recalculateTotalAmount();
                         })
                         .addOnFailureListener(e -> {
-                            // Handle the failure of deletion
+                            // Handle the failure of deletion from BookedServices
                             Toast.makeText(context, "Failed to delete item: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
             }
         });
 
+
+
     }
 
-    private void recalculateTotalAmount() {
-        double totalAmount = 0.0;
-
-        for (ServicesDetails.cartModel cart : carts) {
-            String priceString = cart.getPrice();
-            if (priceString != null && !priceString.isEmpty()) {
-                try {
-                    double price = Double.parseDouble(priceString);
-                    totalAmount += price;
-                } catch (NumberFormatException e) {
-                    e.printStackTrace(); // Handle conversion error
-                }
-            }
-        }
-
-        // Update the total in your cart activity
-        ((cartActivity) context).updateTotalAmount(totalAmount);
-    }
     @Override
     public int getItemCount() {
         return carts.size();
@@ -159,7 +169,6 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             price = itemView.findViewById(R.id.cardPrice);
             cover = itemView.findViewById(R.id.cover);
             delete = itemView.findViewById(R.id.delete);
-
         }
     }
     private void showPopupDialog(View view) {

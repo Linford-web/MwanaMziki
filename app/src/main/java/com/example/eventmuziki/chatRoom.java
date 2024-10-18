@@ -71,13 +71,13 @@ public class chatRoom extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         otherUser = AndroidUtil.getUserModelAsIntent(getIntent());
 
-        if (otherUser.getUserID() == null) {
+        if (otherUser.getUserid() == null) {
             Toast.makeText(this, "Missing user Id", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        chatRoomId = FirebaseUtil.getChatRoomId(FirebaseUtil.currentUserId(), otherUser.getUserID());
+        chatRoomId = FirebaseUtil.getChatRoomId(FirebaseUtil.currentUserId(), otherUser.getUserid());
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +164,7 @@ public class chatRoom extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     chatRoom = task.getResult().toObject(chatRoomModel.class);
                     if (chatRoom == null) {
-                        chatRoom = new chatRoomModel(chatRoomId, Arrays.asList(FirebaseUtil.currentUserId(), otherUser.getUserID()), Timestamp.now(), "","");
+                        chatRoom = new chatRoomModel(chatRoomId, Arrays.asList(FirebaseUtil.currentUserId(), otherUser.getUserid()), Timestamp.now(), "","");
                         FirebaseUtil.getChatRoomReference(chatRoomId).set(chatRoom);
                     } else {
                         Log.d("chatRoom", "Chat room already exists");

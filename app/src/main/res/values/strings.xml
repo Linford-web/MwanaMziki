@@ -90,6 +90,7 @@
         <item>Influencers</item>
         <item>Photographer</item>
         <item>Decorations</item>
+        <item>MakeUp</item>
         <item>Sponsors</item>
     </string-array>
     <string-array name="music_genres">
@@ -403,6 +404,12 @@
         <item>Vintage</item>
         <item>Cultural</item>
         <item>Floral</item>
+    </string-array>
+    <string-array name="makeup_packages">
+        <item>Basic Makeup</item>
+        <item>Bridal Makeup</item>
+        <item>Event Makeup</item>
+        <item>Photoshoot Makeup</item>
     </string-array>
 
 </resources>

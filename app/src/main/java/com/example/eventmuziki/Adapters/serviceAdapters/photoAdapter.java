@@ -42,7 +42,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
         ServicesDetails.photoModel photo = photoList.get(position);
         // Set the photo details in the views
         holder.name.setText(photo.getPackageName());
-        holder.packageName.setText(photo.getNoPhotos());
+        holder.packageName.setText(photo.getPhotoPackagePrice());
         holder.status.setText(photo.getStatus());
 
         // Set the click listener for the book button
@@ -54,6 +54,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
                 intent.putExtra("product", photo.getProductId());
                 intent.putExtra("service", "Photographer");
                 intent.putExtra("creatorId", photo.getCreatorId());
+                intent.putExtra("productsId", photo.getProductId());
                 context.startActivity(intent);
             }
         });

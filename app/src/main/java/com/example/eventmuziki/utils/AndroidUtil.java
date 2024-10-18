@@ -8,7 +8,7 @@ public class AndroidUtil {
 
     public static UserModel getUserModelAsIntent(Intent intent){
         UserModel userModel = new UserModel();
-        userModel.setUserID(intent.getStringExtra("userId"));
+        userModel.setUserid(intent.getStringExtra("userid"));
         userModel.setName(intent.getStringExtra("userName"));
         userModel.setEmail(intent.getStringExtra("userEmail"));
         userModel.setProfilePicture(intent.getStringExtra("userImage"));

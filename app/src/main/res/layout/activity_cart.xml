@@ -24,12 +24,13 @@
 
         <ImageButton
             android:id="@+id/back_arrow"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start"
             android:contentDescription="Back"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
             app:tint="@color/red"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/back_arrow" />
 
         <TextView
@@ -46,7 +47,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/top_toolbar"
@@ -232,6 +233,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

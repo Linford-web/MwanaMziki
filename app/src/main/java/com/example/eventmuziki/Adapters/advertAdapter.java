@@ -1,7 +1,5 @@
 package com.example.eventmuziki.Adapters;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Models.advertisementModel;
+import com.example.eventmuziki.Models.eventAdvertModel;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.viewAdvert;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,16 +23,17 @@ import java.util.ArrayList;
 
 public class advertAdapter extends RecyclerView.Adapter<advertAdapter.ViewHolder> {
 
-    ArrayList<advertisementModel> adverts;
+    ArrayList<eventAdvertModel> adverts;
 
-    public advertAdapter(ArrayList<advertisementModel> adverts) {
+    public advertAdapter(ArrayList<eventAdvertModel> adverts) {
         this.adverts = adverts;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView eventName, eventLocation, eventDate, eventTime;
+        TextView eventName, eventLocation, eventDate, eventTime, eventOrganizer, eventDetails;
         ImageView advertPoster;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -44,6 +43,8 @@ public class advertAdapter extends RecyclerView.Adapter<advertAdapter.ViewHolder
             eventDate = itemView.findViewById(R.id.eventDate);
             eventTime = itemView.findViewById(R.id.eventTime);
             advertPoster = itemView.findViewById(R.id.posterTv);
+            eventOrganizer = itemView.findViewById(R.id.eventOrganizer);
+            eventDetails = itemView.findViewById(R.id.eventDetails);
         }
     }
 
@@ -57,11 +58,13 @@ public class advertAdapter extends RecyclerView.Adapter<advertAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull advertAdapter.ViewHolder holder, int position) {
 
-        advertisementModel advert = adverts.get(position);
-    holder.eventName.setText(advert.getEventName());
+        eventAdvertModel advert = adverts.get(position);
+        holder.eventName.setText(advert.getEventName());
         holder.eventLocation.setText(advert.getEventLocation());
         holder.eventDate.setText(advert.getEventDate());
         holder.eventTime.setText(advert.getEventTime());
+        holder.eventOrganizer.setText(advert.getOrganizerName());
+        holder.eventDetails.setText(advert.getDetails());
 
         // Load advert poster image using Glide or any other image loading library
         String eventId = advert.getEventId();
@@ -86,30 +89,8 @@ public class advertAdapter extends RecyclerView.Adapter<advertAdapter.ViewHolder
                             }
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(holder.itemView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }).addOnFailureListener(e -> Toast.makeText(holder.itemView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle item click
-                Intent intent = new Intent(v.getContext(), viewAdvert.class);
-                intent.putExtra("eventName", advert.getEventName());
-                intent.putExtra("eventLocation", advert.getEventLocation());
-                intent.putExtra("eventDate", advert.getEventDate());
-                intent.putExtra("eventTime", advert.getEventTime());
-                intent.putExtra("organizerName", advert.getOrganizerName());
-                intent.putExtra("advertPlans", advert.getAdvertPlans());
-                intent.putExtra("eventId", advert.getEventId());
-                intent.putExtra("eventPoster", advert.getPosterUrl());
-                intent.putExtra("eventDetails", advert.getDetails());
-                v.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override

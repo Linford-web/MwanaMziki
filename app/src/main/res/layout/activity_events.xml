@@ -29,11 +29,12 @@
 
             <ImageButton
                 android:id="@+id/back_arrow"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="start"
+                android:background="@drawable/edit_text_bg"
+                android:backgroundTint="@color/orange"
                 app:tint="@color/red"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/back_arrow" />
 
             <TextView
@@ -158,7 +159,7 @@
 
         </LinearLayout>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:visibility="visible"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
@@ -464,7 +465,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <!-- Bid Events Linear layout -->
         <LinearLayout
@@ -616,7 +617,7 @@
         android:layout_marginBottom="50dp"
         android:elevation="20dp"
         android:backgroundTint="@color/orange"
-        app:tint="@color/white"
+        app:tint="@color/black"
         android:importantForAccessibility="no">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>

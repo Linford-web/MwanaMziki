@@ -32,9 +32,8 @@
             android:layout_gravity="start"
             app:tint="@color/red"
             android:background="@drawable/edit_text_bg"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/orange"
             android:src="@drawable/back_arrow" />
-
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -91,7 +90,7 @@
                     android:layout_height="20dp"
                     android:padding="2dp"
                     android:src="@drawable/location_icon"
-                    app:tint="@color/black" />
+                    app:tint="@color/blue" />
 
                 <TextView
                     android:id="@+id/eventLocation"
@@ -129,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:text="Date"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -150,15 +149,16 @@
                     <TextView
                         android:id="@+id/eventTime"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/time"
-                        android:textColor="@color/red"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/eventDescription"
                 android:layout_width="match_parent"
@@ -311,15 +311,15 @@
                 android:hint="Stage Name"/>
 
             <Button
-
+                android:visibility="gone"
                 android:id="@+id/bookNowBtn"
                 android:backgroundTint="@color/orange"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginTop="20dp"
                 android:layout_width="250dp"
                 android:layout_height="60dp"
                 android:text="@string/book_now"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 

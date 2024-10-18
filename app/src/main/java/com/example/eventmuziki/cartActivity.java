@@ -56,6 +56,7 @@ public class cartActivity extends AppCompatActivity {
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
     Dialog popupDialog;
+    private double totalAmount = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,8 @@ public class cartActivity extends AppCompatActivity {
 
     }
 
+
+
     private void fetchUserEvents(String userId) {
         fStore.collection("Events")
                 .whereEqualTo("creatorID", userId)
@@ -193,11 +196,11 @@ public class cartActivity extends AppCompatActivity {
                         double totalAmount = 0.0;
 
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            ServicesDetails.cartModel car = documentSnapshot.toObject(ServicesDetails.cartModel.class);
-                            cartList.add(car);
+                            ServicesDetails.cartModel cart = documentSnapshot.toObject(ServicesDetails.cartModel.class);
+                            cartList.add(cart);
 
                             // Calculate the total amount
-                            String priceString = car.getPrice();
+                            String priceString = cart.getPrice();
                             if (priceString != null && !priceString.isEmpty()) {
                                 try {
                                     double price = Double.parseDouble(priceString);
@@ -253,6 +256,8 @@ public class cartActivity extends AppCompatActivity {
             // Create a new document in the "Booked Services" collection
             db.collection("BookedServices").add(cartItem)
                     .addOnSuccessListener(documentReference -> {
+                        // update the document id
+                        documentReference.update("bookedServiceId", documentReference.getId());
 
                         // After booking the service, delete it from the Cart collection
                         FirebaseFirestore.getInstance()
@@ -338,8 +343,11 @@ public class cartActivity extends AppCompatActivity {
                                         .collection("Events")  // Assuming events are stored in "Events" collection
                                         .document(eventId)
                                         .collection("BookedServices")
-                                        .add(cartItem)
+                                        .add(Objects.requireNonNull(cartItem))
                                         .addOnSuccessListener(documentReference -> {
+                                            // update the document id
+                                            documentReference.update("bookedServiceId", documentReference.getId());
+
                                             // After booking the service, delete it from the Cart collection
                                             FirebaseFirestore.getInstance()
                                                     .collection("Cart")
@@ -381,5 +389,8 @@ public class cartActivity extends AppCompatActivity {
                 }).addOnFailureListener(Throwable::printStackTrace);
     }
 
+    public void updateTotalAmount(double totalAmount) {
+        total.setText(String.format("%.2f", totalAmount));
+    }
 
 }

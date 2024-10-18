@@ -70,7 +70,7 @@ public class searchAdapter extends FirestoreRecyclerAdapter<UserModel, searchAda
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, chatRoom.class);
-                intent.putExtra("userId", model.getUserID());
+                intent.putExtra("userId", model.getUserid());
                 intent.putExtra("userName", model.getName());
                 intent.putExtra("userEmail", model.getEmail());
                 intent.putExtra("userImage", model.getProfilePicture());

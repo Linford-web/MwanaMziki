@@ -24,11 +24,12 @@
 
         <ImageButton
             android:id="@+id/back_arrow"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start"
+            android:background="@drawable/edit_text_bg"
+            android:backgroundTint="@color/orange"
             app:tint="@color/red"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/back_arrow" />
 
         <TextView
@@ -44,7 +45,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_below="@+id/top_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -54,6 +55,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:orientation="vertical">
 
             <!-- musician details display -->
@@ -61,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/musicianCardView"
                 android:elevation="4dp">
 
@@ -178,7 +180,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:visibility="invisible"
@@ -188,10 +190,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -434,7 +436,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:visibility="invisible"
@@ -444,10 +446,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
             
@@ -598,7 +600,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:visibility="invisible"
@@ -608,10 +610,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
 
             </LinearLayout>
@@ -941,7 +943,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:visibility="invisible"
@@ -951,10 +953,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
 
             </LinearLayout>
@@ -1137,7 +1139,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
                 <Button
                     android:visibility="invisible"
                     android:id="@+id/editPhotography"
@@ -1146,10 +1148,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -1313,7 +1315,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:visibility="invisible"
@@ -1323,10 +1325,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -1540,7 +1542,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
                 <Button
                     android:id="@+id/editCostume"
                     android:layout_width="match_parent"
@@ -1548,10 +1550,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -1735,7 +1737,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:visibility="invisible"
@@ -1745,10 +1747,10 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -1961,7 +1963,7 @@
                     android:text="Add to Cart"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
                 <Button
                     android:visibility="invisible"
                     android:id="@+id/editInfluencer"
@@ -1970,16 +1972,174 @@
                     android:layout_marginBottom="40dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Edit Product"
+                    android:text="Delete Product"
                     android:textStyle="bold"
                     android:backgroundTint="@color/orange"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/black"/>
 
+
+            </LinearLayout>
+
+            <!-- Make Up Service Detail Section -->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/makeUpCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp"
+                android:elevation="4dp"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Make Up Service"
+                        android:textStyle="bold"
+                        android:textColor="@color/blue"
+                        android:textSize="18sp"
+                        android:paddingBottom="8dp"/>
+                    <ImageView
+                        android:id="@+id/makeUpImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:padding="50dp"
+                        android:src="@drawable/makeup_icon"
+                        android:scaleType="centerCrop"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Artist Name"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/makeUpName"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Make Up Package"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Package"
+                        android:id="@+id/makeUpPackage"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Package Price"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Price"
+                        android:id="@+id/makeUpPrice"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Make Up Specialization"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Specialization"
+                        android:id="@+id/artistSpecialization"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Artist Portfolio"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Portfolio"
+                        android:id="@+id/makeUpPortfolio"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Availability to Travel"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Availability"
+                        android:id="@+id/makeUpTravel"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Make Up Pre-Booking"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Days"
+                        android:id="@+id/makeUpBooking"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Artist Availability Status"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Status"
+                        android:textColor="@color/green"
+                        android:id="@+id/makeUpStatus"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Artist Policy"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Policy"
+                        android:id="@+id/makeUpPolicy"/>
+                </LinearLayout>
+
+                <Button
+                    android:visibility="invisible"
+                    android:id="@+id/addMakeUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Add to Cart"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/orange"
+                    android:textColor="@color/black"/>
+                <Button
+                    android:visibility="invisible"
+                    android:id="@+id/editMakeUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Delete Product"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/orange"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

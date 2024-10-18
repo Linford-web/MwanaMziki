@@ -542,4 +542,49 @@ public class serviceDetailModel {
         }
     }
 
+    public static class hireMakeUp{
+        public String makeUpPackage, duration, travel, service;
+        public hireMakeUp() {
+        }
+
+        public hireMakeUp(String makeUpPackage, String duration, String travel, String service) {
+            this.makeUpPackage = makeUpPackage;
+            this.duration = duration;
+            this.travel = travel;
+            this.service = service;
+        }
+
+        public String getMakeUpPackage() {
+            return makeUpPackage;
+        }
+
+        public void setMakeUpPackage(String makeUpPackage) {
+            this.makeUpPackage = makeUpPackage;
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public void setDuration(String duration) {
+            this.duration = duration;
+        }
+
+        public String getTravel() {
+            return travel;
+        }
+
+        public void setTravel(String travel) {
+            this.travel = travel;
+        }
+
+        public String getService() {
+            return service;
+        }
+
+        public void setService(String service) {
+            this.service = service;
+        }
+    }
+
 }

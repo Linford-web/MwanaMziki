@@ -20,63 +20,63 @@ import com.example.eventmuziki.viewServices;
 
 import java.util.ArrayList;
 
-public class decoAdapter extends RecyclerView.Adapter<decoAdapter.ViewHolder> {
+public class makeUpAdapter extends RecyclerView.Adapter<makeUpAdapter.ViewHolder> {
 
-    ArrayList<ServicesDetails.decorationModel> decorationList;
+    ArrayList<ServicesDetails.makeUpModel> makeUpList;
     Context context;
 
-    public decoAdapter(ArrayList<ServicesDetails.decorationModel> decorationList, Context context) {
-        this.decorationList = decorationList;
+    public makeUpAdapter(ArrayList<ServicesDetails.makeUpModel> makeUpList, Context context) {
+        this.makeUpList = makeUpList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public decoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_added_service, parent, false);
-        return new decoAdapter.ViewHolder(view);
+    public makeUpAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_added_service, parent, false);
+        return new makeUpAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull decoAdapter.ViewHolder holder, int position) {
-        ServicesDetails.decorationModel decoration = decorationList.get(position);
-        // Set the decoration details in the views
-        holder.name.setText(decoration.getName());
-        holder.packageName.setText(decoration.getPackage());
-        holder.status.setText(decoration.getStatus());
+    public void onBindViewHolder(@NonNull makeUpAdapter.ViewHolder holder, int position) {
+
+        ServicesDetails.makeUpModel beauty = makeUpList.get(position);
+
+        holder.name.setText(beauty.getName());
+        holder.packageName.setText(beauty.getMakeUpPackage());
+        holder.status.setText(beauty.getStatus());
         // Set the click listener for the book button
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle the click event here
                 Intent intent = new Intent(context, viewServices.class);
-                intent.putExtra("product", decoration.getProductId());
-                intent.putExtra("service", "Decorations");
-                intent.putExtra("creatorId", decoration.getCreatorId());
-                intent.putExtra("productsId", decoration.getProductId());
+                intent.putExtra("product", beauty.getProductId());
+                intent.putExtra("service", "MakeUp");
+                intent.putExtra("creatorId", beauty.getCreatorId());
+                intent.putExtra("productsId", beauty.getProductId());
                 context.startActivity(intent);
             }
         });
         // Load the decoration poster using a library like Glide or Picasso
-        String posterUrl = decoration.getImage();
+        String posterUrl = beauty.getImage();
         if (context != null && context instanceof Activity && !((Activity) context).isDestroyed()) {
             Glide.with(context)
                     .load(posterUrl)
-                    .placeholder(R.drawable.deco_icon)
-                    .error(R.drawable.deco_icon)
+                    .placeholder(R.drawable.makeup_icon)
+                    .error(R.drawable.makeup_icon)
                     .into(holder.posterTv);
         }else {
-            Log.d("eventAdapter", "Context is null or activity is destroyed");
+            Log.d("makeupAdapter", "Context is null or activity is destroyed");
         }
     }
 
     @Override
     public int getItemCount() {
-        return decorationList.size();
+        return makeUpList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView posterTv;
         TextView name, packageName ,status;

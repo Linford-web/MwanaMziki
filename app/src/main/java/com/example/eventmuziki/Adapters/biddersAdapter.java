@@ -72,6 +72,7 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
         biddersEventModel bidder = bidders.get(position);
 
         holder.bidAmount.setText(bidder.getBidAmount());
+        holder.bidderName.setText(bidder.getBiddersName());
 
         String bidderId = bidder.getBiddersId();
 
@@ -85,10 +86,6 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
                         if (!queryDocumentSnapshots.isEmpty()) {
 
                             DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
-
-                            String name = document.getString("name");
-
-                            holder.bidderName.setText(name);
 
                             // Retrieve profile photo URL from FireStore
                             String profileImageUrl = document.getString("profilePicture");
@@ -108,7 +105,7 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
 
 
                         } else {
-                            Toast.makeText(holder.itemView.getContext(), "User document not found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(holder.itemView.getContext(), "User document not found adapter", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -138,23 +135,3 @@ public class biddersAdapter extends RecyclerView.Adapter<biddersAdapter.ViewHold
     }
 }
 
-/*
- fStore.collection("BidEvents")
-                    .whereEqualTo("biddersId", FirebaseAuth.getInstance().getUid())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-
-                            }
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(eventBidding.this, "You have already made a bid on this", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
- */
