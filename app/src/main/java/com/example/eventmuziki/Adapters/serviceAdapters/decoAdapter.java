@@ -55,6 +55,7 @@ public class decoAdapter extends RecyclerView.Adapter<decoAdapter.ViewHolder> {
                 intent.putExtra("service", "Decorations");
                 intent.putExtra("creatorId", decoration.getCreatorId());
                 intent.putExtra("productsId", decoration.getProductId());
+                intent.putExtra("image", decoration.getImage());
                 context.startActivity(intent);
             }
         });

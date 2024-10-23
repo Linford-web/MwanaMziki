@@ -76,8 +76,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String productImage = documentSnapshot.getString("image");
                         Glide.with(context).load(productImage)
-                                .placeholder(R.drawable.cover)
-                                .error(R.drawable.camera_off)
+                                .placeholder(R.drawable.blank_photo)
+                                .error(R.drawable.blank_photo)
                                 .into(holder.cover);
                     }
                 }).addOnFailureListener(Throwable::printStackTrace);

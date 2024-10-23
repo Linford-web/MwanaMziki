@@ -54,6 +54,7 @@ public class influencerAdapter extends RecyclerView.Adapter<influencerAdapter.in
                 intent.putExtra("service", "Influencer");
                 intent.putExtra("creatorId", content.getCreatorId());
                 intent.putExtra("productsId", content.getProductId());
+                intent.putExtra("image", content.getImage());
                 context.startActivity(intent);
             }
         });

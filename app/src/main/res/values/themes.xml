@@ -3,12 +3,16 @@
     <style name="Base.Theme.EventMuziki" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/my_primary</item>
+
         <!-- Primary color -->
         <item name="colorPrimaryDark">@color/my_primary</item>
+
         <item name="colorAccent">@color/light_gray</item>
         <!-- Customize your theme here -->
-    </style>
+        <item name="android:windowBackground">@color/white</item>"
 
-    <style name="Theme.EventMuziki" parent="Base.Theme.EventMuziki" />
+    </style>
+    <!-- Customize your main theme here. -->
+    <style name="Theme.EventMuziki" parent="Base.Theme.EventMuziki"/>
 
 </resources>

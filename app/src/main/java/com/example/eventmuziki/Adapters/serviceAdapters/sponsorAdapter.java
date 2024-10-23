@@ -55,6 +55,7 @@ public class sponsorAdapter extends RecyclerView.Adapter<sponsorAdapter.ViewHold
                 intent.putExtra("service", "Sponsors");
                 intent.putExtra("creatorId", sponsor.getCreatorId());
                 intent.putExtra("productsId", sponsor.getProductId());
+                intent.putExtra("image", sponsor.getImage());
                 context.startActivity(intent);
             }
         });

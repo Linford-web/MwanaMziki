@@ -113,7 +113,7 @@ public class bookMusicianActivity extends AppCompatActivity {
                                     Glide.with(bookMusicianActivity.this)
                                             .load(eventPoster)
                                             .placeholder(R.drawable.cover)
-                                            .error(R.drawable.poster1)
+                                            .error(R.drawable.cover)
                                             .into(poster);
                                 }
                             }

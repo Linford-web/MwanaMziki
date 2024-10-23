@@ -198,6 +198,7 @@ public class registerActivity extends AppCompatActivity {
             }
         });
 
+        // register button logic
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,6 +295,23 @@ public class registerActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        // send otp to user
+        progressbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!countryCodePicker.isValidFullNumber()){
+                    number.setError("Invalid Phone Number");
+                }
+                Intent intent = new Intent(registerActivity.this, OTPVerification.class);
+                intent.putExtra("email", email.getText().toString());
+                intent.putExtra("mobile", countryCodePicker.getFullNumberWithPlus());
+                intent.putExtra("password", password.getText().toString());
+                intent.putExtra("name", name.getText().toString());
+                intent.putExtra("userType", spinner.getSelectedItem().toString());
+                startActivity(intent);
+            }
         });
 
         termsTxt.setOnClickListener(new View.OnClickListener() {

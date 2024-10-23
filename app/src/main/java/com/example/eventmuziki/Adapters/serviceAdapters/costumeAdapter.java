@@ -67,6 +67,7 @@ public class costumeAdapter extends RecyclerView.Adapter<costumeAdapter.ViewHold
                 intent.putExtra("service", "Costumes");
                 intent.putExtra("creatorId", service.getCreatorId());
                 intent.putExtra("productsId", service.getProductId());
+                intent.putExtra("image", service.getImage());
                 context.startActivity(intent);
             }
         });

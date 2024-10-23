@@ -42,7 +42,7 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView profile;
+        ImageView profile, rating, message;
         CardView chat;
         TextView name, category;
         DatabaseReference databaseReference;
@@ -53,6 +53,8 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
             name = itemView.findViewById(R.id.name);
             category = itemView.findViewById(R.id.category);
             chat = itemView.findViewById(R.id.container);
+            rating = itemView.findViewById(R.id.ratingBtn);
+            message = itemView.findViewById(R.id.messageBtn);
             databaseReference = FirebaseDatabase.getInstance().getReference("ChatRooms");
 
         }
@@ -74,7 +76,6 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
         holder.name.setText(bookedEvent.getBiddersName());
 
         String bidderId = bookedEvent.getBiddersId();
-        String bidId = bookedEvent.getBidId();
 
         // Retrieve profile photo URL,email and phone from FireStore for the bidder
         FirebaseFirestore.getInstance()
@@ -129,51 +130,23 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
 
-                                fStore.collection("BookedEvents")
-                                        .whereEqualTo("bidId", bidId)
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    holder.chat.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
+                                holder.message.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
+                                        intent.putExtra("userId", bidderId);
+                                        intent.putExtra("userName", bookedEvent.getBiddersName());
+                                        intent.putExtra("userEmail", bidderEmail);
+                                        intent.putExtra("userImage", profileImageUrl);
+                                        intent.putExtra("userPhone", phone);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        holder.itemView.getContext().startActivity(intent);
 
-                                                            Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
-                                                            intent.putExtra("userId", bookedEvent.getBiddersId());
-                                                            intent.putExtra("userName", bookedEvent.getBiddersName());
-                                                            intent.putExtra("userEmail", bidderEmail);
-                                                            intent.putExtra("userImage", profileImageUrl);
-                                                            intent.putExtra("userPhone", phone);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                            holder.itemView.getContext().startActivity(intent);
-
-                                                        }
-                                                    });
-                                                }else {
-                                                    Toast.makeText(holder.itemView.getContext(), "Failed To create chat room with bidder", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(holder.itemView.getContext(), "Failed To fetch Bid ID", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-
+                                    }
+                                });
 
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 Toast.makeText(holder.itemView.getContext(), "Musicians Cannot Start Chats", Toast.LENGTH_SHORT).show();
-                                // Handle musician user type here
-                                Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
-                                intent.putExtra("userId", bookedEvent.getCreatorID());
-                                intent.putExtra("userName", bookedEvent.getOrganizerName());
-                                intent.putExtra("userEmail", bidderEmail);
-                                intent.putExtra("userImage", profileImageUrl);
-                                intent.putExtra("userPhone", phone);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                holder.itemView.getContext().startActivity(intent);
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");

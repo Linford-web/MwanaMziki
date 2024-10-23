@@ -81,6 +81,7 @@
         14. GOVERNING LAW\nThese terms are governed by and construed in accordance with the laws of [your jurisdiction], without regard to its conflict of law principles.\n
         15. DISPUTE RESOLUTION\n Any disputes arising out of or related to these terms or the app will be resolved through binding arbitration in [your jurisdiction], except where prohibited by law.\n
         16. CONTACT INFORMATION\n For any questions or concerns regarding these terms, please contact us at [your contact information].</string>
+    <string name="todo">TODO</string>
     <string-array name="User_Category">
         <item>Music</item>
         <item>Car Rental</item>

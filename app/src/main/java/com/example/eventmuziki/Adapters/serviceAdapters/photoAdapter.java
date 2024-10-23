@@ -55,6 +55,7 @@ public class photoAdapter extends RecyclerView.Adapter<photoAdapter.ViewHolder> 
                 intent.putExtra("service", "Photographer");
                 intent.putExtra("creatorId", photo.getCreatorId());
                 intent.putExtra("productsId", photo.getProductId());
+                intent.putExtra("image", photo.getImage());
                 context.startActivity(intent);
             }
         });

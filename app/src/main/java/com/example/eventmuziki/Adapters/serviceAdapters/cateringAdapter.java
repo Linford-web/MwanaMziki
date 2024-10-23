@@ -32,15 +32,16 @@ public class cateringAdapter extends RecyclerView.Adapter<cateringAdapter.ViewHo
     @NonNull
     @Override
     public cateringAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_added_service, null);
+        View view = View.inflate(context, R.layout.item_catering, null);
         return new cateringAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull cateringAdapter.ViewHolder holder, int position) {
         ServicesDetails.cateringModel catering = cateringList.get(position);
-        holder.name.setText(catering.getPackaged());
-        holder.packageName.setText(catering.getCuisine());
+        holder.cuisine.setText(catering.getCuisine());
+        holder.packageName.setText(catering.getPackaged());
+        holder.service.setText(catering.getService());
         holder.status.setText(catering.getStatus());
         // Set the click listener for the book button
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +53,7 @@ public class cateringAdapter extends RecyclerView.Adapter<cateringAdapter.ViewHo
                 intent.putExtra("service", "Catering");
                 intent.putExtra("creatorId", catering.getCreatorId());
                 intent.putExtra("productsId", catering.getProductId());
+                intent.putExtra("image", catering.getImage());
                 context.startActivity(intent);
             }
         });
@@ -64,6 +66,7 @@ public class cateringAdapter extends RecyclerView.Adapter<cateringAdapter.ViewHo
                     .into(holder.posterTv);
         }else {
             Log.d("eventAdapter", "Context is null or activity is destroyed");
+            holder.posterTv.setImageResource(R.drawable.fastfood_icon);
         }
 
     }
@@ -76,15 +79,16 @@ public class cateringAdapter extends RecyclerView.Adapter<cateringAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView posterTv;
-        TextView name, packageName ,status;
+        TextView cuisine, packageName ,status, service;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            posterTv = itemView.findViewById(R.id.poster_Tv);
-            name = itemView.findViewById(R.id.event_Name);
-            packageName = itemView.findViewById(R.id.item_package);
+            posterTv = itemView.findViewById(R.id.item_icon);
+            cuisine = itemView.findViewById(R.id.item_cuisine);
+            packageName = itemView.findViewById(R.id.packages);
             status = itemView.findViewById(R.id.item_status);
+            service = itemView.findViewById(R.id.item_service);
 
         }
     }

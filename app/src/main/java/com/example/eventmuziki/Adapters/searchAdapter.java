@@ -2,6 +2,7 @@ package com.example.eventmuziki.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import com.example.eventmuziki.R;
 import com.example.eventmuziki.chatRoom;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,13 +32,13 @@ public class searchAdapter extends FirestoreRecyclerAdapter<UserModel, searchAda
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView profile;
-        TextView name, email;
+        TextView name, phone;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             profile = itemView.findViewById(R.id.profileTv);
             name = itemView.findViewById(R.id.user_name);
-            email = itemView.findViewById(R.id.user_email);
+            phone = itemView.findViewById(R.id.last_message);
 
         }
     }
@@ -47,24 +51,28 @@ public class searchAdapter extends FirestoreRecyclerAdapter<UserModel, searchAda
     protected void onBindViewHolder(@NonNull ViewHolder holder, int i, @NonNull UserModel model) {
 
         holder.name.setText(model.getName());
-        // holder.email.setText(model.getEmail());
+        holder.phone.setText(model.getPhone());
 
-        Glide.with(holder.profile.getContext())
-                .load(model.getProfilePicture())
-                .placeholder(R.drawable.cover)
-                .error(R.drawable.cover)
-                .into(holder.profile);
+        String imageUrl = model.getProfilePicture();
+        if (imageUrl !=null && !imageUrl.isEmpty()){
+            Glide.with(holder.profile.getContext())
+                    .load(model.getProfilePicture())
+                    .placeholder(R.drawable.profile_icon)
+                    .error(R.drawable.profile_icon)
+                    .into(holder.profile);
+        }else {
+            holder.profile.setImageResource(R.drawable.profile_icon);
+        }
 
-        /*
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
-        if (model.getUserID().equals(fAuth.getCurrentUser().getUid())){
-            holder.name.setText(model.getName() + "(Me)");
+        String userId = model.getUserid();
+        if (userId !=null && userId.equalsIgnoreCase(Objects.requireNonNull(fAuth.getCurrentUser()).getUid())){
+            holder.name.setText(String.format("%s (Me)", model.getName()));
             holder.name.setTextColor(context.getResources().getColor(R.color.dark_blue));
         }
         else {
-            Toast.makeText(context, "Not Me", Toast.LENGTH_SHORT).show();
+            Log.d("TAG", "onBindViewHolder: "+model.getUserid());
         }
-        */
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +80,6 @@ public class searchAdapter extends FirestoreRecyclerAdapter<UserModel, searchAda
                 Intent intent = new Intent(context, chatRoom.class);
                 intent.putExtra("userId", model.getUserid());
                 intent.putExtra("userName", model.getName());
-                intent.putExtra("userEmail", model.getEmail());
                 intent.putExtra("userImage", model.getProfilePicture());
                 intent.putExtra("userPhone", model.getPhone());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

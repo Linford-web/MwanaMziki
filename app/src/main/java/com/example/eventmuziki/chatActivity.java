@@ -17,6 +17,8 @@ import com.example.eventmuziki.Models.chatRoomModel;
 import com.example.eventmuziki.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
@@ -26,9 +28,6 @@ public class chatActivity extends AppCompatActivity {
     ImageView back;
     RecyclerView recyclerView;
     chatAdapter adapter;
-
-    String userId, name, email;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +54,14 @@ public class chatActivity extends AppCompatActivity {
 
         });
 
-
-
-
-        setupRecyclerView();
+        setupChatRecyclerView();
 
     }
 
-    private void setupRecyclerView() {
+    private void setupChatRecyclerView() {
 
-        Query query = FirebaseUtil.allChatRoomCollections()
-                .whereArrayContains("userIds", FirebaseUtil.currentUserId())
+        Query query = FirebaseFirestore.getInstance().collection("ChatRooms")
+                .whereArrayContains("userIds", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
                 .orderBy("lastMessageTime", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<chatRoomModel> options = new FirestoreRecyclerOptions.Builder<chatRoomModel>()

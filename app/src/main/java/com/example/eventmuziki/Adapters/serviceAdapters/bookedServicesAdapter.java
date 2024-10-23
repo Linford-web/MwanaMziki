@@ -3,6 +3,7 @@ package com.example.eventmuziki.Adapters.serviceAdapters;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
+import com.example.eventmuziki.chatRoom;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,7 +54,7 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
     @NonNull
     @Override
     public bookedServicesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false);
+       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_booked_service, parent, false);
         return new ViewHolder(view);
     }
 
@@ -62,24 +65,20 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
         String productName = cart.getName();
         String productType = cart.getpType();
         String productPrice = cart.getPrice();
-        String productId = cart.getProductId();
+        String productImage = cart.getImage();
 
         holder.name.setText(productName);
         holder.packageName.setText(productType);
         holder.price.setText(productPrice);
 
-        FirebaseFirestore.getInstance().collection("Products")
-                .document(productId)
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String productImage = documentSnapshot.getString("image");
-                        Glide.with(context).load(productImage)
-                                .placeholder(R.drawable.cover)
-                                .error(R.drawable.camera_off)
-                                .into(holder.cover);
-                    }
-                }).addOnFailureListener(Throwable::printStackTrace);
+        if (productImage != null) {
+            Glide.with(context).load(productImage)
+                    .placeholder(R.drawable.blank_photo)
+                    .error(R.drawable.blank_photo)
+                    .into(holder.cover);
+        }else {
+            holder.cover.setImageResource(R.drawable.blank_photo);
+        }
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +146,44 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
             }
         });
 
+        FirebaseFirestore.getInstance().collection("Users").document(cart.getCreatorId())
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String bidderEmail = documentSnapshot.getString("email");
+                        String phone = documentSnapshot.getString("phone");
+                        String name = documentSnapshot.getString("name");
+                        String profileImageUrl = documentSnapshot.getString("profileImageUrl");
+
+                        if (bidderEmail != null) {
+                            holder.chat.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.chat.setVisibility(View.GONE);
+                        }
+
+                        holder.chat.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
+                                intent.putExtra("userId", cart.getCreatorId());
+                                intent.putExtra("userName", name);
+                                intent.putExtra("userEmail", bidderEmail);
+                                intent.putExtra("userImage", profileImageUrl);
+                                intent.putExtra("userPhone", phone);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Failed to fetch user details: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
 
     }
@@ -161,6 +198,7 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
         TextView name,packageName, price;
         ImageView cover;
         TextView delete;
+        ImageView chat;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,6 +207,7 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
             price = itemView.findViewById(R.id.cardPrice);
             cover = itemView.findViewById(R.id.cover);
             delete = itemView.findViewById(R.id.delete);
+            chat = itemView.findViewById(R.id.chat);
         }
     }
     private void showPopupDialog(View view) {

@@ -31,13 +31,17 @@ import com.example.eventmuziki.Adapters.namesAdapter;
 import com.example.eventmuziki.Models.AdvertisementDetails;
 import com.example.eventmuziki.Models.eventAdvertModel;
 import com.example.eventmuziki.Models.bookedEventsModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +59,6 @@ public class viewBookedEvents extends AppCompatActivity {
     ArrayList<bookedEventsModel> bookedEvents;
     musicianNameAdapter bookedAdapter;
     RecyclerView recyclerView;
-    namesAdapter namesAdapter;
     LinearLayout bookedLyt, namesLyt, detailsLyt;
     CheckBox checkBoxBillboard, checkBoxMatatu, checkBoxScreens, checkBoxSocials;
     String eventId, eventPoster;
@@ -152,7 +155,7 @@ public class viewBookedEvents extends AppCompatActivity {
                                     Glide.with(viewBookedEvents.this)
                                             .load(eventPoster)
                                             .placeholder(R.drawable.cover)
-                                            .error(R.drawable.poster1)
+                                            .error(R.drawable.cover)
                                             .into(profileTv);
                                 }else {
                                     profileTv.setImageResource(R.drawable.cover);
@@ -169,7 +172,6 @@ public class viewBookedEvents extends AppCompatActivity {
 
         bookedEvents = new ArrayList<>();
         bookedAdapter = new musicianNameAdapter(bookedEvents);
-        namesAdapter = new namesAdapter(bookedEvents);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -196,6 +198,15 @@ public class viewBookedEvents extends AppCompatActivity {
                 completeAdvertisement.setVisibility(View.GONE);
                 advertise.setVisibility(View.VISIBLE);
                 detailsLyt.setVisibility(View.VISIBLE);
+                eventDetails.setText("");
+                title.setText("");
+                contact.setText("");
+                duration.setText("");
+                details.setText("");
+                checkBoxBillboard.setChecked(false);
+                checkBoxMatatu.setChecked(false);
+                checkBoxScreens.setChecked(false);
+                checkBoxSocials.setChecked(false);
             }
         });
 
@@ -229,18 +240,64 @@ public class viewBookedEvents extends AppCompatActivity {
 
         AdvertisementDetails.advertModel model = new AdvertisementDetails.advertModel(titleText, contactText, date, time, detailsText, durationText, eventPoster, "", Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
 
-        fStore.collection("Advertisements").add(model)
-                .addOnSuccessListener(documentReference -> {
-                    documentId = documentReference.getId();
-                    documentReference.update("advertId", documentId);
-                    // Add Advertisement subCollection
-                    addAdvertSubCollection(documentReference, documentId);
-                    // Add Event Advertisement subCollection
-                    AddEventSubCollection(eventId);
+        // Reference to the Advertisements collection
+        fStore.collection("Advertisements")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            // Iterate through each document in the Advertisements collection
+                            for (QueryDocumentSnapshot advertisementDoc : queryDocumentSnapshots) {
+                                // Query the Events subcollection for the eventId
+                                advertisementDoc.getReference()
+                                        .collection("EventAdvertisements")
+                                        .whereEqualTo("eventId", eventId)
+                                        .get()
+                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot eventSnapshots) {
+                                                if (eventSnapshots != null && !eventSnapshots.isEmpty()) {
+                                                    // Event found, handle as needed
+                                                    Toast.makeText(viewBookedEvents.this, "Advertisement already exists for this event", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    // If no matching advertisement exists, proceed to add the advertisement using eventId as document ID
+                                                    fStore.collection("Advertisements")
+                                                            .document(eventId)  // Use eventId as the document ID
+                                                            .set(model)  // Use .set() instead of .add() when specifying document ID
+                                                            .addOnSuccessListener(aVoid -> {
+                                                                // Advertisement document added successfully
+                                                                addAdvertSubCollection(fStore.collection("Advertisements").document(eventId), eventId);
+                                                                // Add Event Advertisement subcollection
+                                                                AddEventSubCollection(eventId);
 
-                    Log.d("Success", "Added Advertisement");
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(viewBookedEvents.this, "Error Adding Advertisement", Toast.LENGTH_SHORT).show();
+                                                                Log.d("Success", "Added Advertisement successfully");
+                                                                Toast.makeText(viewBookedEvents.this, "Advertisement Added Successfully", Toast.LENGTH_SHORT).show();
+                                                            })
+                                                            .addOnFailureListener(e -> {
+                                                                // Handle failure for adding advertisement
+                                                                Toast.makeText(viewBookedEvents.this, "Error Adding Advertisement final", Toast.LENGTH_SHORT).show();
+                                                                Log.e("Error", "Error Adding Advertisement: " + e.getMessage());
+                                                            });
+                                                }
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle failure querying the Events subcollection
+                                            Toast.makeText(viewBookedEvents.this, "Error Fetching Event Advertisements", Toast.LENGTH_SHORT).show();
+                                            Log.e("Error", "Error Fetching Event Advertisements: " + e.getMessage());
+                                        });
+                            }
+                        } else {
+                            // No documents in Advertisements collection
+                            Toast.makeText(viewBookedEvents.this, "No Advertisements found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure fetching Advertisements
+                    Toast.makeText(viewBookedEvents.this, "Error Fetching Advertisements", Toast.LENGTH_SHORT).show();
+                    Log.e("Error", "Error Fetching Advertisements: " + e.getMessage());
                 });
     }
 

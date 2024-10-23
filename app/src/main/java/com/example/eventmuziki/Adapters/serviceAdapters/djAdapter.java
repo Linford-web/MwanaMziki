@@ -54,6 +54,7 @@ public class djAdapter extends RecyclerView.Adapter<djAdapter.ViewHolder> {
                 intent.putExtra("service", "Sound");
                 intent.putExtra("creatorId", sound.getCreatorId());
                 intent.putExtra("productsId", sound.getProductId());
+                intent.putExtra("image", sound.getImage());
                 context.startActivity(intent);
             }
         });

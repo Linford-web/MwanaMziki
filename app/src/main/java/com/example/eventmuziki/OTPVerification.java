@@ -38,7 +38,7 @@ public class OTPVerification extends AppCompatActivity {
 
     EditText otpText;
     Button actionBtn;
-    TextView resend, emailTxt, phoneTxt;
+    TextView resend, emailTxt, phoneTxt, cancelBtn;
     ProgressBar progressbar;
 
     FirebaseAuth fAuth;
@@ -65,7 +65,17 @@ public class OTPVerification extends AppCompatActivity {
         phoneTxt = findViewById(R.id.phoneTxt);
         otpText = findViewById(R.id.otpEditTxt);
         progressbar = findViewById(R.id.progressbar);
+        cancelBtn = findViewById(R.id.cancelBtn);
         fAuth = FirebaseAuth.getInstance();
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OTPVerification.this, registerActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
 
         email = getIntent().getStringExtra("email");
         mobile = getIntent().getStringExtra("mobile");
@@ -76,19 +86,22 @@ public class OTPVerification extends AppCompatActivity {
         emailTxt.setText(email);
         phoneTxt.setText(mobile);
 
+        sendOTPToPhone(mobile, false);
+
        resend.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                if (resendEnabled){
                    resendCounter = 60;
                    resendEnabled = false;
-                   sendOTPToPhone(mobile);
+                   sendOTPToPhone(mobile, true);
                    startResendTimer();
+                   otpText.setText("");
                }
            }
        });
 
-        actionBtn.setOnClickListener(new View.OnClickListener() {
+       actionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -100,10 +113,11 @@ public class OTPVerification extends AppCompatActivity {
                     else {
                         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, code);
                         signInWithPhoneAuthCredential(credential);
+                        setInProgress(true);
                     }
                 } else {
                     String mobile = phoneTxt.getText().toString();
-                    sendOTPToPhone(mobile);
+                    sendOTPToPhone(mobile, false);
 
                 }
 
@@ -112,21 +126,19 @@ public class OTPVerification extends AppCompatActivity {
 
     }
 
-    private void sendOTPToPhone(String mobile) {
+    private void sendOTPToPhone(String mobile, boolean isResend) {
         setInProgress(true);
         startResendTimer();
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(fAuth)
+
+        PhoneAuthOptions.Builder builders = PhoneAuthOptions.newBuilder(fAuth)
                 .setPhoneNumber(mobile)
-                .setTimeout(60L, TimeUnit.SECONDS)
+                .setTimeout(60l, TimeUnit.SECONDS)
                 .setActivity(this)
                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                        String code = phoneAuthCredential.getSmsCode();
-                        if (code != null){
-                            otpText.setText(code);
-                            signInWithPhoneAuthCredential(phoneAuthCredential);
-                        }
+                        signInWithPhoneAuthCredential(phoneAuthCredential);
+                        setInProgress(false);
                     }
 
                     @Override
@@ -144,17 +156,23 @@ public class OTPVerification extends AppCompatActivity {
                         setInProgress(false);
                         actionBtn.setText("Verify OTP");
                         startResendTimer();
+                        Toast.makeText(OTPVerification.this, "OTP sent successfully", Toast.LENGTH_SHORT).show();
                     }
-                }).build();
-
-        PhoneAuthProvider.verifyPhoneNumber(options);
+                });
+        if (isResend){
+            PhoneAuthProvider.verifyPhoneNumber(builders.setForceResendingToken(resendingToken).build());
+        }else {
+            PhoneAuthProvider.verifyPhoneNumber(builders.build());
+        }
 
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        setInProgress(true);
         fAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                setInProgress(false);
                 if (task.isSuccessful()){
                     // registerUser();
                     Toast.makeText(OTPVerification.this, "Verified Successfully", Toast.LENGTH_SHORT).show();
@@ -166,11 +184,10 @@ public class OTPVerification extends AppCompatActivity {
         });
     }
 
-
     private  void startResendTimer(){
 
         resendEnabled = true;
-        resend.setTextColor(Color.parseColor("#99000000"));
+        resend.setTextColor(Color.parseColor("#FF0000"));
 
         new CountDownTimer(resendCounter * 1000, 1000) {
 
@@ -183,7 +200,7 @@ public class OTPVerification extends AppCompatActivity {
             public void onFinish() {
                 resendEnabled = true;
                 resend.setText("Resend Code");
-                resend.setTextColor(Color.parseColor("@color/red"));
+                resend.setTextColor(Color.parseColor("#FF0000FF"));
             }
         }.start();
 
@@ -192,7 +209,7 @@ public class OTPVerification extends AppCompatActivity {
     private void setInProgress(boolean inProgress) {
         if (inProgress) {
             progressbar.setVisibility(View.VISIBLE);
-            actionBtn.setVisibility(View.GONE);
+            actionBtn.setVisibility(View.INVISIBLE);
 
         } else {
             progressbar.setVisibility(View.GONE);

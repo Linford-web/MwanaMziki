@@ -55,6 +55,7 @@ public class makeUpAdapter extends RecyclerView.Adapter<makeUpAdapter.ViewHolder
                 intent.putExtra("service", "MakeUp");
                 intent.putExtra("creatorId", beauty.getCreatorId());
                 intent.putExtra("productsId", beauty.getProductId());
+                intent.putExtra("image", beauty.getImage());
                 context.startActivity(intent);
             }
         });

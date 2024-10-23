@@ -29,22 +29,6 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("ChatRooms").document(chatRoomId);
     }
 
-    public static CollectionReference getChatRoomMessageReference(String chatRoomId){
-        return getChatRoomReference(chatRoomId).collection("Chats");
-    }
-    public static String getChatRoomId(String userId1, String userId2) {
-        if (userId1.hashCode()<userId2.hashCode()){
-            return userId1 +"_"+ userId2;
-        }
-        else {
-            return userId2 +"_"+ userId1;
-        }
-    }
-
-    public static CollectionReference allChatRoomCollections(){
-        return FirebaseFirestore.getInstance().collection("ChatRooms");
-
-    }
 
     public  static  DocumentReference getOtherUserFromChats(List<String> userIds){
         if (userIds.get(0).equals(FirebaseUtil.currentUserId())){
@@ -53,6 +37,7 @@ public class FirebaseUtil {
             return  allUsersCollection().document(userIds.get(0));
         }
     }
+
     public static String timeStampToString(Timestamp timeStamp){
         return  new SimpleDateFormat("HH:MM").format(timeStamp.toDate());
     }

@@ -244,6 +244,7 @@ public class viewServices extends AppCompatActivity {
             String productId = intent.getStringExtra("product");
             String creatorId = intent.getStringExtra("creatorId");
             String product = intent.getStringExtra("productsId");
+            String image = intent.getStringExtra("image");
 
             fetchDetails(productId, creatorId);
 
@@ -254,7 +255,7 @@ public class viewServices extends AppCompatActivity {
                     String type = musicStatus.getText().toString();
                     String price = musicianPrice.getText().toString();
 
-                    ServicesDetails.cartModel musicModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "", "Music", "");
+                    ServicesDetails.cartModel musicModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, image, userId, "", "Music", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get()
@@ -293,7 +294,7 @@ public class viewServices extends AppCompatActivity {
                     String type = carType.getText().toString();
                     String price = carPrice.getText().toString();
 
-                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "", "Car Rental", "");
+                    ServicesDetails.cartModel carModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId,image, userId, "", "Car Rental", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get()
@@ -334,7 +335,7 @@ public class viewServices extends AppCompatActivity {
                     String price = soundHirePrice.getText().toString();
 
 
-                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, userId, "", "Sound System", "");
+                    ServicesDetails.cartModel soundModel = new ServicesDetails.cartModel(name, instrument, price, creatorId, productId, image, userId, "", "Sound System", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -372,7 +373,7 @@ public class viewServices extends AppCompatActivity {
                     String packaged = cateringPackaged.getText().toString();
                     String price = cateringPrice.getText().toString();
 
-                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "", "Catering", "");
+                    ServicesDetails.cartModel cateringModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, image, userId, "", "Catering", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -407,7 +408,7 @@ public class viewServices extends AppCompatActivity {
                     String numbers = photoStatus.getText().toString();
                     String price = photoPackagePrice.getText().toString();
 
-                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, userId, "", "Photography", "");
+                    ServicesDetails.cartModel photographyModel = new ServicesDetails.cartModel(name, numbers, price, creatorId, productId, image, userId, "", "Photography", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -443,7 +444,7 @@ public class viewServices extends AppCompatActivity {
                     String packaged = decoPackage.getText().toString();
                     String price = decoAmount.getText().toString();
 
-                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, userId, "", "Decoration", "");
+                    ServicesDetails.cartModel decorationModel = new ServicesDetails.cartModel(name, packaged, price, creatorId, productId, image, userId, "", "Decoration", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -478,7 +479,7 @@ public class viewServices extends AppCompatActivity {
                     String materials = material.getText().toString();
                     String price = hirePrice.getText().toString();
 
-                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, userId, "", "Costume", "");
+                    ServicesDetails.cartModel costumeModel = new ServicesDetails.cartModel(name, materials, price, creatorId, productId, image, userId, "", "Costume", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -512,7 +513,7 @@ public class viewServices extends AppCompatActivity {
                     String type = sponsorType.getText().toString();
                     String price = sponsorAmount.getText().toString();
 
-                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, userId, "", "Sponsor", "");
+                    ServicesDetails.cartModel sponsorModel = new ServicesDetails.cartModel(name, type, price, creatorId, productId, image, userId, "", "Sponsor", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -547,7 +548,7 @@ public class viewServices extends AppCompatActivity {
                     String platform = influencerPlatform.getText().toString();
                     String price = collaboration.getText().toString();
 
-                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, userId, "", "Influencer", "");
+                    ServicesDetails.cartModel influencerModel = new ServicesDetails.cartModel(name, platform, price, creatorId, productId, image, userId, "", "Influencer", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -582,7 +583,7 @@ public class viewServices extends AppCompatActivity {
                     String beautyPackage = makeUpPackage.getText().toString();
                     String price = makeUpPrice.getText().toString();
 
-                    ServicesDetails.cartModel beautyModel = new ServicesDetails.cartModel(name, beautyPackage, price, creatorId, productId, userId, "", "MakeUp", "");
+                    ServicesDetails.cartModel beautyModel = new ServicesDetails.cartModel(name, beautyPackage, price, creatorId, productId, image, userId, "", "MakeUp", "");
                     fStore.collection("Cart")
                             .whereEqualTo("productId", productId)
                             .get().addOnSuccessListener(queryDocumentSnapshots -> {

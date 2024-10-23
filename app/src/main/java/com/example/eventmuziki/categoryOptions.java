@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,8 +90,9 @@ public class categoryOptions extends AppCompatActivity {
     bookedServicesAdapter bookedAdapter;
     ArrayList<ServicesDetails.makeUpModel> makeUpList = new ArrayList<>();
     makeUpAdapter beautyAdapter;
+    HorizontalScrollView scroll;
 
-    TextView musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decoTxt, contentTxt, sponsorshipTxt, serviceTxt, allCategoryTxt, makeUpTxt, bookedCategoryTxt;
+    TextView text1,musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decoTxt, contentTxt, sponsorshipTxt, serviceTxt, allCategoryTxt, makeUpTxt, bookedCategoryTxt;
     ImageView musicIcon, carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decoIcon, contentIcon, sponsorshipIcon, makeUpIcon, addBookedService;
 
     String musician ="Music", car ="Car Rental", photo ="Photographer", food ="Catering", costume ="Costumes", pa ="Sound",
@@ -174,6 +176,8 @@ public class categoryOptions extends AppCompatActivity {
         musicRv = findViewById(R.id.musicRv);
         bookedServiceTv = findViewById(R.id.addServiceTv);
         addBookedService = findViewById(R.id.addBookedService);
+        scroll = findViewById(R.id.scroll);
+        text1 = findViewById(R.id.text1);
 
         makeUpRv = findViewById(R.id.makeUpRv);
 
@@ -182,6 +186,8 @@ public class categoryOptions extends AppCompatActivity {
             public void onClick(View view) {
                 allCategoryLayout.setVisibility(View.VISIBLE);
                 bookedCategoryLayout.setVisibility(View.GONE);
+                text1.setVisibility(View.VISIBLE);
+                scroll.setVisibility(View.VISIBLE);
                 allCategoryTxt.setTextColor(getResources().getColor(R.color.orange));
                 bookedCategoryTxt.setTextColor(getResources().getColor(R.color.black));
             }
@@ -191,6 +197,8 @@ public class categoryOptions extends AppCompatActivity {
             public void onClick(View view) {
                 allCategoryLayout.setVisibility(View.GONE);
                 bookedCategoryLayout.setVisibility(View.VISIBLE);
+                text1.setVisibility(View.GONE);
+                scroll.setVisibility(View.GONE);
                 allCategoryTxt.setTextColor(getResources().getColor(R.color.black));
                 bookedCategoryTxt.setTextColor(getResources().getColor(R.color.orange));
             }

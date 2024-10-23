@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/flat_bg"
-    android:gravity="center"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +20,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:padding="5dp"
-            android:src="@drawable/car_icon"
+            android:src="@drawable/fastfood_icon"
             android:scaleType="centerCrop"/>
 
         <LinearLayout
@@ -33,14 +32,23 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/item_model"
+                android:id="@+id/packages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="Model"
+                android:text="Package"
                 android:textStyle="bold"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/item_cuisine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="Cuisine"
+                android:textStyle="bold"
+                android:textColor="@color/dark_blue" />
 
             <TextView
                 android:id="@+id/item_status"
@@ -50,23 +58,13 @@
                 android:text="Status"
                 android:textSize="13sp"
                 android:textColor="@color/green" />
-
             <TextView
-                android:id="@+id/item_seats"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="Seats"
-                android:textStyle="bold"
-                android:textColor="@color/dark_blue" />
-
-            <TextView
-                android:id="@+id/item_category"
+                android:id="@+id/item_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:layout_marginBottom="3dp"
-                android:text="@string/category"
+                android:text="Service"
                 android:textSize="12sp"
                 android:textColor="@color/dark_blue" />
 

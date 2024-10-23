@@ -31,7 +31,7 @@ public class serviceDetailAdapter extends RecyclerView.Adapter<serviceDetailAdap
     @NonNull
     @Override
     public serviceDetailAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_booked_musician, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_name, parent, false);
         return new serviceDetailAdapter.ViewHolder(view);
     }
 
@@ -58,6 +58,15 @@ public class serviceDetailAdapter extends RecyclerView.Adapter<serviceDetailAdap
                         }
                     }
                 });
+        holder.ratingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle rating button click
+                // You can add your rating logic here
+                // For example, you can show a rating dialog or navigate to a rating page
+
+            }
+        });
 
     }
 
@@ -68,7 +77,7 @@ public class serviceDetailAdapter extends RecyclerView.Adapter<serviceDetailAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView userServiceImage;
+        ImageView userServiceImage, ratingBtn;
         TextView userName, category;
 
         public ViewHolder(@NonNull View itemView) {
@@ -76,6 +85,7 @@ public class serviceDetailAdapter extends RecyclerView.Adapter<serviceDetailAdap
             userServiceImage = itemView.findViewById(R.id.cardTv);
             userName = itemView.findViewById(R.id.name);
             category = itemView.findViewById(R.id.category);
+            ratingBtn = itemView.findViewById(R.id.ratingBtn);
 
         }
     }

@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.play.services.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
+    // firebase ui dependencies
+    implementation(libs.firebase.ui.firestore)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.firebase.ui.firestore)
     implementation (libs.material)

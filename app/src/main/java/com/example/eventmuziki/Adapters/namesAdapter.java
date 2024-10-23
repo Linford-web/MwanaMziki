@@ -46,7 +46,7 @@ public class namesAdapter extends RecyclerView.Adapter<namesAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.displayName);
+            name = itemView.findViewById(R.id.name);
 
         }
     }

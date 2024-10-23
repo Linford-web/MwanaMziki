@@ -55,6 +55,7 @@ public class musicianAdapter extends RecyclerView.Adapter<musicianAdapter.ViewHo
                 intent.putExtra("service", "Music");
                 intent.putExtra("creatorId", music.getCreatorId());
                 intent.putExtra("productsId", music.getProductId());
+                intent.putExtra("image", music.getImage());
                 context.startActivity(intent);
             }
         });

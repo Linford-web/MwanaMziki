@@ -53,6 +53,7 @@ public class carAdapter extends RecyclerView.Adapter<carAdapter.ViewHolder> {
                 intent.putExtra("service", "Car Rental");
                 intent.putExtra("creatorId", service.getCreatorId());
                 intent.putExtra("productsId", service.getProductId());
+                intent.putExtra("image", service.getImage());
                 context.startActivity(intent);
             }
         });

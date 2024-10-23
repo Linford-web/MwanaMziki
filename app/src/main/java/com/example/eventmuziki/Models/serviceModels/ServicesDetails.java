@@ -1635,22 +1635,31 @@ public class ServicesDetails {
     }
 
     public static class cartModel{
-        String name, packageName, price, creatorId, productId, bookerId, bookedServiceId, pType, cartId;
+        String name, packageName, price, creatorId, productId, image, bookerId, bookedServiceId, pType, cartId;
 
         public cartModel() {
         }
 
         public cartModel(String name, String packageName, String price, String creatorId,
-                         String productId, String bookerId, String bookedServiceId, String pType, String cartId) {
+                         String productId, String image, String bookerId, String bookedServiceId, String pType, String cartId) {
             this.name = name;
             this.packageName = packageName;
             this.price = price;
             this.creatorId = creatorId;
+            this.image = image;
             this.productId = productId;
             this.bookerId = bookerId;
             this.bookedServiceId = bookedServiceId;
             this.pType = pType;
             this.cartId = cartId;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
 
         public String getBookedServiceId() {
