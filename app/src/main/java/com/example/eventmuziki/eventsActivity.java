@@ -409,15 +409,11 @@ public class eventsActivity extends AppCompatActivity {
                             fStore.collection("BookedEvents")
                                     .document(bookedEventId)
                                     .collection("BookedBidders")
-                                    .whereEqualTo("biddersId", userId) // Query where biddersId matches current userId
+                                    .whereEqualTo("biddersId", userId)
                                     .get()
                                     .addOnSuccessListener(biddersSnapshots -> {
                                         if (!biddersSnapshots.isEmpty()) {
                                             booked1.clear();
-                                            // Clear any empty message and show the RecyclerView
-                                            emptyBooked.setVisibility(View.GONE);
-                                            myBookedRv.setVisibility(View.VISIBLE);
-                                            // Loop through the fetched bidder documents and add to the list
                                             for (DocumentSnapshot bidderDocument : queryDocumentSnapshots) {
                                                 // Convert each document to your model class
                                                 bookedEventsModel bidder = bidderDocument.toObject(bookedEventsModel.class);
@@ -426,19 +422,16 @@ public class eventsActivity extends AppCompatActivity {
                                             bookedAdapter1.notifyDataSetChanged();
                                         } else {
                                             // No matching bidder found, show the empty message
-                                            emptyBooked.setVisibility(View.VISIBLE);
-                                            myBookedRv.setVisibility(View.GONE);
+                                            Log.d("TAG", "No matching bidder found for event: " + bookedEventId);
                                         }
                                     })
                                     .addOnFailureListener(e -> {
-                                        // Handle error for the subcollection query
                                         Toast.makeText(this, "Error checking BookedBidders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     } else {
                         // No events found, show the empty message
-                        emptyBooked.setVisibility(View.VISIBLE);
-                        myBookedRv.setVisibility(View.GONE);
+                        Log.d("TAG", "No events found in BookedEvents collection");
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -634,7 +627,7 @@ public class eventsActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
                             String userType = document.getString("userType");
-                            if ("Corporate".equals(userType)) {
+                            if ("Corporate".equalsIgnoreCase(userType)) {
                                userCategoryLayout.setVisibility(View.GONE);
                                addTask.setVisibility(View.VISIBLE);
                                allEvents.setVisibility(View.VISIBLE);

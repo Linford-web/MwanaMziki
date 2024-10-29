@@ -1737,20 +1737,47 @@ public class ServicesDetails {
 
     public static class bookedBiddersModel {
 
-        String biddersName, biddersEmail, biddersPhone , profile, biddersId, eventId, docId, bookedEventId;
+        String biddersName, biddersEmail, biddersPhone ,  profile, organizerName, creatorId, bidAmount, biddersId, eventId, docId, bookedEventId;
 
         public bookedBiddersModel() {
         }
 
-        public bookedBiddersModel(String biddersName, String biddersEmail, String biddersPhone, String profile, String biddersId, String eventId, String docId, String bookedEventId) {
+        public bookedBiddersModel(String biddersName, String biddersEmail, String biddersPhone, String organizerName, String creatorId, String profile, String bidAmount, String biddersId, String eventId, String docId, String bookedEventId) {
             this.biddersName = biddersName;
             this.biddersEmail = biddersEmail;
             this.biddersPhone = biddersPhone;
+            this.organizerName = organizerName;
+            this.creatorId = creatorId;
             this.profile = profile;
+            this.bidAmount = bidAmount;
             this.biddersId = biddersId;
             this.eventId = eventId;
             this.docId = docId;
             this.bookedEventId = bookedEventId;
+        }
+
+        public String getOrganizerName() {
+            return organizerName;
+        }
+
+        public void setOrganizerName(String organizerName) {
+            this.organizerName = organizerName;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getBidAmount() {
+            return bidAmount;
+        }
+
+        public void setBidAmount(String bidAmount) {
+            this.bidAmount = bidAmount;
         }
 
         public String getBiddersName() {

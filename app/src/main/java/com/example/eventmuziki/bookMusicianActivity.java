@@ -167,14 +167,15 @@ public class bookMusicianActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Handle the click event here
                 bookMusicians(Objects.requireNonNull(bookEvent).getBidId(),
-                        bookEvent.getBiddersId(), bookEvent.getOrganizerName(), bookEvent.getEventId(), bookEvent.getBiddersName(), bookEvent.getCreatorID());
+                        bookEvent.getBiddersId(), bookEvent.getOrganizerName(), bookEvent.getEventId(),
+                        bookEvent.getBiddersName(), bookEvent.getCreatorID(), bookEvent.getBidAmount());
 
             }
         });
 
     }
 
-    private void bookMusicians(String bidId, String biddersId, String organizerName, String eventId, String biddersName, String creatorId) {
+    private void bookMusicians(String bidId, String biddersId, String organizerName, String eventId, String biddersName, String creatorId, String bidAmount) {
         if (biddersId == null || biddersName == null || organizerName == null || eventId == null || creatorId == null) {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             return;
@@ -216,7 +217,7 @@ public class bookMusicianActivity extends AppCompatActivity {
                                             Toast.makeText(bookMusicianActivity.this, "This bidder is already booked for this event", Toast.LENGTH_SHORT).show();
                                         } else {
                                             // Bidder not added, proceed to add the bidder
-                                            addBiddersSubCollection(biddersName, biddersId, eventId, bookedEventId);
+                                            addBiddersSubCollection(biddersName, biddersId, eventId, bookedEventId, bidAmount, organizerName, creatorId);
                                             showPopupDialog();
                                         }
                                     })
@@ -231,7 +232,7 @@ public class bookMusicianActivity extends AppCompatActivity {
                                     .add(bookEvent)
                                     .addOnSuccessListener(documentReference -> {
                                         documentReference.update("bookedId", documentReference.getId());
-                                        addBiddersSubCollection(biddersName, biddersId, eventId, documentReference.getId());
+                                        addBiddersSubCollection(biddersName, biddersId, eventId, documentReference.getId(), bidAmount, organizerName, creatorId);
 
                                     }).addOnFailureListener(e -> {
                                         Toast.makeText(bookMusicianActivity.this, "Failed to book event", Toast.LENGTH_SHORT).show();
@@ -244,7 +245,7 @@ public class bookMusicianActivity extends AppCompatActivity {
                 });
     }
 
-    private void addBiddersSubCollection(String biddersName, String biddersId, String eventId, String bookedEventId) {
+    private void addBiddersSubCollection(String biddersName, String biddersId, String eventId, String bookedEventId, String bidAmount, String organizerName, String creatorId) {
 
         FirebaseFirestore.getInstance().collection("Users")
                 .whereEqualTo("userid", biddersId)
@@ -259,7 +260,7 @@ public class bookMusicianActivity extends AppCompatActivity {
 
                         // Create the bookedBiddersModel with the fetched details
                         ServicesDetails.bookedBiddersModel bidderData = new ServicesDetails.bookedBiddersModel(
-                                biddersName, email, phone, profile, biddersId, eventId, "", bookedEventId);
+                                biddersName, email, phone, profile, organizerName, creatorId, bidAmount, biddersId, eventId, "", bookedEventId);
 
                         // Add the bidder data to the BookedBidders subcollection under the specific booked event
                         FirebaseFirestore.getInstance()

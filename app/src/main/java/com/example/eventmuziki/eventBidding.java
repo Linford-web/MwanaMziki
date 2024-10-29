@@ -416,6 +416,7 @@ public class eventBidding extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Log.d("TAG", "onSuccess: " + documentSnapshot.getData());
+                String category = documentSnapshot.getString("category");
                 // Identify User Access Level
                 userType = documentSnapshot.getString("userType");
                 if (userType != null) {
@@ -424,7 +425,7 @@ public class eventBidding extends AppCompatActivity {
                         viewAll.setVisibility(View.VISIBLE);
                         allRecyclerview.setVisibility(View.VISIBLE);
                     } if (userType.equalsIgnoreCase("Musician")) {
-                        categoryNme.setText(categories);
+                        categoryNme.setText(category);
                         viewAll.setVisibility(View.GONE);
                         allRecyclerview.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
@@ -516,12 +517,7 @@ public class eventBidding extends AppCompatActivity {
                         }
                     }
 
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }).addOnFailureListener(e -> Toast.makeText(eventBidding.this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
     }
 
@@ -535,17 +531,12 @@ public class eventBidding extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     String name = documentSnapshot.getString("name");
                     biddersName.setText(name);
-                    bidderType = documentSnapshot.getString("userType");
+                    bidderType = documentSnapshot.getString("category");
                 } else {
                     Toast.makeText(eventBidding.this, "User not found", Toast.LENGTH_SHORT).show();
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@androidx.annotation.NonNull Exception e) {
-                Toast.makeText(eventBidding.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(eventBidding.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show());
     }
 
     private void confirmAndPlaceBid(String eventId, String creatorId) {
@@ -608,7 +599,19 @@ public class eventBidding extends AppCompatActivity {
                                     });
                         }
                         else {
-                            Toast.makeText(eventBidding.this, "You have already made a bid on this", Toast.LENGTH_SHORT).show();
+                            // update the bid
+                            fStore.collection("BidEvents")
+                                    .whereEqualTo("eventId", eventId)
+                                    .whereEqualTo("biddersId", currentUserId)
+                                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                documentSnapshot.getReference().update("bidAmount", bidAmount);
+                                            }
+                                            Toast.makeText(eventBidding.this, "Bid updated successfully", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).addOnFailureListener(e -> Toast.makeText(eventBidding.this, "Failed to check bid", Toast.LENGTH_SHORT).show());
                         }
                     }).addOnFailureListener(e -> {
                         Toast.makeText(eventBidding.this, "Failed to check bid", Toast.LENGTH_SHORT).show();

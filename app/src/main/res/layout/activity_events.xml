@@ -320,7 +320,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Events for "
-                            android:textSize="20sp"
+                            android:textSize="17sp"
                             android:layout_marginStart="5dp"
                             android:textStyle="bold"
                             android:letterSpacing="0.1"
@@ -331,7 +331,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Category "
-                            android:textSize="18sp"
+                            android:textSize="17sp"
                             android:layout_marginStart="5dp"
                             android:textStyle="bold"
                             android:letterSpacing="0.1"
@@ -583,7 +583,7 @@
                     android:text="No Booked Event!"
                     android:letterSpacing="0.09"
                     android:textAlignment="center"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 

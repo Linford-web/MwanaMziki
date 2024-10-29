@@ -270,6 +270,12 @@ public class viewBookedEvents extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(viewBookedEvents.this, managePayment.class);
+                intent.putExtra("eventId", eventId);
+                intent.putExtra("eventPoster", eventPoster);
+                intent.putExtra("eventName", eventName.getText().toString());
+                intent.putExtra("organizerName", bookedEvent.getOrganizerName());
+                intent.putExtra("bookedId", bookedId);
+                intent.putExtra("creatorId", bookedEvent.getCreatorID());
                 startActivity(intent);
             }
         });
@@ -301,11 +307,11 @@ public class viewBookedEvents extends AppCompatActivity {
 
                             // Check if the event date is before the current date
                             if (eventDate != null && eventDate.before(currentDate)) {
-                                Toast.makeText(this, "Event passed", Toast.LENGTH_SHORT).show();
-                                confirmBtn.setVisibility(View.VISIBLE);
+                                //Toast.makeText(this, "Event passed", Toast.LENGTH_SHORT).show();
+                                //confirmBtn.setVisibility(View.VISIBLE);
                             } else {
-                                Toast.makeText(this, "Event is upcoming", Toast.LENGTH_SHORT).show();
-                                confirmBtn.setVisibility(View.GONE);
+                                //Toast.makeText(this, "Event is upcoming", Toast.LENGTH_SHORT).show();
+                                //confirmBtn.setVisibility(View.GONE);
                             }
 
                         } catch (ParseException e) {
