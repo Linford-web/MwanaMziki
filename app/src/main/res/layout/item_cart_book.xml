@@ -110,16 +110,17 @@
 
             </LinearLayout>
 
-            <Button
+            <ImageButton
                 android:id="@+id/bookBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="top"
                 android:layout_margin="8dp"
                 android:clickable="true"
+                android:background="@drawable/edit_text_bg"
                 android:backgroundTint="@color/orange"
-                android:text="Link"
-                android:textColor="@color/white" />
+                android:src="@drawable/add_link_icon"
+                app:tint="@color/black" />
 
 
         </LinearLayout>

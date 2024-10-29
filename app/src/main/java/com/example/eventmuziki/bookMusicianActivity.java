@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.bookedEventsModel;
+import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +33,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -47,7 +50,8 @@ public class bookMusicianActivity extends AppCompatActivity {
 
     Dialog popupDialog;
 
-    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    String userId;
+    String email, phone, profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public class bookMusicianActivity extends AppCompatActivity {
         poster = findViewById(R.id.posterTv);
         details = findViewById(R.id.eventDescription);
 
+
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
@@ -168,13 +174,15 @@ public class bookMusicianActivity extends AppCompatActivity {
 
     }
 
-    private void bookMusicians( String bidId, String biddersId, String organizerName, String eventId, String biddersName, String creatorId) {
-        if (biddersId == null || biddersName == null || organizerName == null || eventId == null || creatorId == null){
+    private void bookMusicians(String bidId, String biddersId, String organizerName, String eventId, String biddersName, String creatorId) {
+        if (biddersId == null || biddersName == null || organizerName == null || eventId == null || creatorId == null) {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-        } else {
+            return;
+        }
 
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
+        // Event details
         String name = this.eventName.getText().toString();
         String location = this.eventLocation.getText().toString();
         String date = this.eventDate.getText().toString();
@@ -184,45 +192,106 @@ public class bookMusicianActivity extends AppCompatActivity {
         String socials = this.socialTxt.getText().toString();
         String details = this.details.getText().toString();
 
-        // Create a new event object with the provided data
-        bookedEventsModel bookEvent = new bookedEventsModel(name, details, date, time, location, eventId, creatorId, bidId, category, biddersId, organizerName, biddersName, about, socials);
+        // Create a new event object
+        bookedEventsModel bookEvent = new bookedEventsModel(name, details, date, time, location, eventId, creatorId,
+                bidId, category, biddersId, organizerName, biddersName, about, socials, "");
 
         fStore.collection("BookedEvents")
-                .whereEqualTo("bidId", bidId)
+                .whereEqualTo("eventId", eventId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            if(task.getResult() != null && !task.getResult().isEmpty()){
-                                Toast.makeText(bookMusicianActivity.this, "You have already booked this event", Toast.LENGTH_SHORT).show();
-                            }else {
-                                fStore.collection("BookedEvents")
-                                        .add(bookEvent)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                documentReference.update("bookedEventId", documentReference.getId());
-                                                showPopupDialog();
-                                                new Handler().postDelayed(() -> {
-                                                    Intent intent = new Intent(bookMusicianActivity.this, bookedEvents.class);
-                                                    startActivity(intent);
-                                                    finish();
-                                                }, 2000);
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(bookMusicianActivity.this, "Failed To Book Event", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult() != null && !task.getResult().isEmpty()) {
+                            // Event already booked, now check if the bidder is already added
+                            String bookedEventId = task.getResult().getDocuments().get(0).getId();
+
+                            fStore.collection("BookedEvents")
+                                    .document(bookedEventId)
+                                    .collection("BookedBidders")
+                                    .whereEqualTo("biddersId", biddersId)
+                                    .get()
+                                    .addOnSuccessListener(bidderQuerySnapshot -> {
+                                        if (!bidderQuerySnapshot.isEmpty()) {
+                                            // Bidder is already added
+                                            Toast.makeText(bookMusicianActivity.this, "This bidder is already booked for this event", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            // Bidder not added, proceed to add the bidder
+                                            addBiddersSubCollection(biddersName, biddersId, eventId, bookedEventId);
+                                            showPopupDialog();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(bookMusicianActivity.this, "Failed to check bidder booking", Toast.LENGTH_SHORT).show();
+                                        Log.e("Error", "Error checking bidder booking: " + e.getMessage());
+                                    });
+
+                        } else {
+                            // Event not booked, proceed to book the event
+                            fStore.collection("BookedEvents")
+                                    .add(bookEvent)
+                                    .addOnSuccessListener(documentReference -> {
+                                        documentReference.update("bookedId", documentReference.getId());
+                                        addBiddersSubCollection(biddersName, biddersId, eventId, documentReference.getId());
+
+                                    }).addOnFailureListener(e -> {
+                                        Toast.makeText(bookMusicianActivity.this, "Failed to book event", Toast.LENGTH_SHORT).show();
+                                    });
                         }
+                    } else {
+                        Toast.makeText(bookMusicianActivity.this, "Error checking booking status", Toast.LENGTH_SHORT).show();
+                        Log.e("Error", "Error checking booking status: " + task.getException().getMessage());
                     }
                 });
+    }
 
-        }
+    private void addBiddersSubCollection(String biddersName, String biddersId, String eventId, String bookedEventId) {
 
+        FirebaseFirestore.getInstance().collection("Users")
+                .whereEqualTo("userid", biddersId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Extract email, phone, and profile details from the document
+                        DocumentSnapshot userSnapshot = queryDocumentSnapshots.getDocuments().get(0); // Assuming only one document
+                        String email = userSnapshot.getString("email");
+                        String phone = userSnapshot.getString("phone");
+                        String profile = userSnapshot.getString("profilePicture");
+
+                        // Create the bookedBiddersModel with the fetched details
+                        ServicesDetails.bookedBiddersModel bidderData = new ServicesDetails.bookedBiddersModel(
+                                biddersName, email, phone, profile, biddersId, eventId, "", bookedEventId);
+
+                        // Add the bidder data to the BookedBidders subcollection under the specific booked event
+                        FirebaseFirestore.getInstance()
+                                .collection("BookedEvents")
+                                .document(bookedEventId)
+                                .collection("BookedBidders")
+                                .add(bidderData)
+                                .addOnSuccessListener(documentReference -> {
+                                    if (documentReference != null) {
+                                        // Optionally update the document with its own ID
+                                        documentReference.update("docId", documentReference.getId());
+                                        showPopupDialog();
+                                        new Handler().postDelayed(() -> {
+                                            Intent intent = new Intent(bookMusicianActivity.this, bookedEvents.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }, 2000);
+                                    }
+                                    Log.d("Success", "Bidder added to subcollection successfully");
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("Error", "Error adding bidder to subcollection: " + e.getMessage());
+                                });
+
+                    } else {
+                        // If no user document is found, handle this case
+                        Log.e("Error", "No user found with the given biddersId");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Error", "Error fetching user details: " + e.getMessage());
+                });
     }
 
     private void showPopupDialog() {
@@ -294,4 +363,5 @@ public class bookMusicianActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

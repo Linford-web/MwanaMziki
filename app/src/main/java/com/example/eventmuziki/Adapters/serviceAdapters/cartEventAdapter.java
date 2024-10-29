@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class cartEventAdapter extends RecyclerView.Adapter<cartEventAdapter.View
         TextView eventName, eventDate, eventLocation;
         LinearLayout container;
         ImageView posterTv;
-        Button bookBtn;
+        ImageButton bookBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

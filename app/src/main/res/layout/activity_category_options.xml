@@ -70,7 +70,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Click to Add Service"
+            android:text="Click to Manage Service Products"
             android:textSize="15sp"
             android:textStyle="bold"
             android:padding="6dp" />
@@ -82,7 +82,7 @@
             android:layout_gravity="center"
             android:backgroundTint="@color/orange"
             android:textColor="@color/black"
-            android:text="Add Service"
+            android:text="Manage Service"
             android:layout_margin="15dp" />
 
     </LinearLayout>
@@ -117,7 +117,7 @@
                 android:text="All Services"
                 android:letterSpacing="0.1"
                 android:textColor="@color/orange"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="normal" />
 
         </LinearLayout>
@@ -140,7 +140,7 @@
                 android:text="Booked Services"
                 android:letterSpacing="0.1"
                 android:textColor="@color/black"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="normal" />
 
         </LinearLayout>
@@ -198,7 +198,7 @@
                     android:text="Musicians"
                     android:letterSpacing="0.1"
                     android:textColor="@color/orange"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -226,7 +226,7 @@
                     android:text="Car rental"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -252,7 +252,7 @@
                     android:text="Photography"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -278,7 +278,7 @@
                     android:text="Catering"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -304,7 +304,7 @@
                     android:text="Costumes"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -330,7 +330,7 @@
                     android:text="Sound system"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -356,7 +356,7 @@
                     android:text="Decorations"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -382,7 +382,7 @@
                     android:text="Influencers"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -408,7 +408,7 @@
                     android:text="Make Up"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -434,7 +434,7 @@
                     android:text="Sponsors"
                     android:letterSpacing="0.1"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
 
@@ -477,7 +477,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Musicians"
-                        android:textSize="20sp"
+                        android:textSize="17sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:layout_marginBottom="10dp" />
@@ -716,7 +716,7 @@
                         android:layout_height="wrap_content"
                         android:text="Service"
                         android:padding="5dp"
-                        android:textSize="20sp"
+                        android:textSize="17sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:textColor="@color/black" />

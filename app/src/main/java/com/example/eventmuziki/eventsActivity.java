@@ -29,10 +29,12 @@ import com.example.eventmuziki.Adapters.categoryMenuAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter;
 import com.example.eventmuziki.Adapters.eventAdapter2;
 import com.example.eventmuziki.Adapters.eventSearchAdapter;
+import com.example.eventmuziki.Adapters.musicianNameAdapter;
 import com.example.eventmuziki.Models.biddersEventModel;
 import com.example.eventmuziki.Models.bookedEventsModel;
 import com.example.eventmuziki.Models.eventModel;
 import com.example.eventmuziki.Models.menuModel;
+import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,12 +58,12 @@ public class eventsActivity extends AppCompatActivity {
     String userId;
     FloatingActionButton addTask;
     ArrayList<eventModel> events, events2, events3, events4;
-    ArrayList<bookedEventsModel> booked;
+    ArrayList<bookedEventsModel> booked, booked1;
     ArrayList<biddersEventModel> bidder;
     bidEventsAdapter bidAdapter;
     eventAdapter adapter, adapter1;
     eventAdapter2 eventAdapters;
-    bookedEventsAdapter bookedAdapter;
+    bookedEventsAdapter bookedAdapter, bookedAdapter1;
 
     categoryAdapter categoryAdpt;
     FirebaseFirestore fStore;
@@ -74,10 +76,10 @@ public class eventsActivity extends AppCompatActivity {
     TextView categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt, allBids, allBooked, userCategoryTv;
     LinearLayout emptyRv, addEventsTv, menu, searchLayout, viewAll, bidEvents,
             viewBooked, allEvents, allEventsLayout, bookedEvents, viewBid, categoryLayout,
-            menuCategoryLayout, userCategoryLayout, displayEmpty;
+            menuCategoryLayout, userCategoryLayout, displayEmpty, emptyBooked;
     NestedScrollView scrollView;
     EditText searchTxt;
-    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv, myEventsRv;
+    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv, myBookedRv;
     eventSearchAdapter eventSearch;
 
     @Override
@@ -94,6 +96,7 @@ public class eventsActivity extends AppCompatActivity {
         doneRecyclerView = findViewById(R.id.doneRecyclerView);
         bidRecyclerView = findViewById(R.id.bidRecyclerView);
         categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
+        myBookedRv = findViewById(R.id.bookedSvpRv);
 
         searchEventsBtn = findViewById(R.id.searchEventsBtn);
         menu = findViewById(R.id.menu_layout);
@@ -130,6 +133,7 @@ public class eventsActivity extends AppCompatActivity {
         addEvents = findViewById(R.id.addEventsBtn);
         addEventsTv = findViewById(R.id.addEventsTv);
         displayEmpty = findViewById(R.id.displayEmptyRvLayout);
+        emptyBooked = findViewById(R.id.emptyBookedTv);
 
         categoryMenuRv = findViewById(R.id.categoriesRv);
         //get user type
@@ -182,10 +186,19 @@ public class eventsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager5 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         categoryRecyclerView.setLayoutManager(layoutManager5);
         categoryRecyclerView.setAdapter(categoryAdpt);
+
+        booked1 = new ArrayList<>();
+        bookedAdapter1 = new bookedEventsAdapter(booked1);
+        RecyclerView.LayoutManager layoutManager7 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        myBookedRv.setLayoutManager(layoutManager7);
+        myBookedRv.setAdapter(bookedAdapter1);
+
         // Fetch events from Firestore
         fetchEventsS(userId);
         // Fetch events from Firestore
         fetchEvents();
+
+        fetchBookedUsers(userId);
 
         // Set up toolbar
         Toolbar toolbar = findViewById(R.id.top_toolbar);
@@ -381,6 +394,61 @@ public class eventsActivity extends AppCompatActivity {
 
     }
 
+    private void fetchBookedUsers(String userId) {
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        // First, get all documents from the BookedEvents collection
+        fStore.collection("BookedEvents")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Loop through each event in the BookedEvents collection
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String bookedEventId = document.getId();
+                            // Now access the BookedBidders subcollection for each event
+                            fStore.collection("BookedEvents")
+                                    .document(bookedEventId)
+                                    .collection("BookedBidders")
+                                    .whereEqualTo("biddersId", userId) // Query where biddersId matches current userId
+                                    .get()
+                                    .addOnSuccessListener(biddersSnapshots -> {
+                                        if (!biddersSnapshots.isEmpty()) {
+                                            booked1.clear();
+                                            // Clear any empty message and show the RecyclerView
+                                            emptyBooked.setVisibility(View.GONE);
+                                            myBookedRv.setVisibility(View.VISIBLE);
+                                            // Loop through the fetched bidder documents and add to the list
+                                            for (DocumentSnapshot bidderDocument : queryDocumentSnapshots) {
+                                                // Convert each document to your model class
+                                                bookedEventsModel bidder = bidderDocument.toObject(bookedEventsModel.class);
+                                                booked1.add(bidder);
+                                            }
+                                            bookedAdapter1.notifyDataSetChanged();
+                                        } else {
+                                            // No matching bidder found, show the empty message
+                                            emptyBooked.setVisibility(View.VISIBLE);
+                                            myBookedRv.setVisibility(View.GONE);
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle error for the subcollection query
+                                        Toast.makeText(this, "Error checking BookedBidders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    } else {
+                        // No events found, show the empty message
+                        emptyBooked.setVisibility(View.VISIBLE);
+                        myBookedRv.setVisibility(View.GONE);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error for querying the BookedEvents collection
+                    Toast.makeText(this, "Failed to fetch booked events: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+
+
+    }
+
     private void setUpCategoryMenu() {
         menuList = new ArrayList<>();
         menuList.add(new menuModel(R.drawable.sport_icon, "Sports"));
@@ -570,10 +638,14 @@ public class eventsActivity extends AppCompatActivity {
                                userCategoryLayout.setVisibility(View.GONE);
                                addTask.setVisibility(View.VISIBLE);
                                allEvents.setVisibility(View.VISIBLE);
+                               doneRecyclerView.setVisibility(View.VISIBLE);
+                               myBookedRv.setVisibility(View.GONE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
                                 userCategoryLayout.setVisibility(View.VISIBLE);
                                 addTask.setVisibility(View.GONE);
                                 allEvents.setVisibility(View.GONE);
+                                doneRecyclerView.setVisibility(View.GONE);
+                                myBookedRv.setVisibility(View.VISIBLE);
 
                                 // Fetch events based on user category
                                 String userCategory = document.getString("category");

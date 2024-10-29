@@ -1,8 +1,13 @@
 package com.example.eventmuziki.Adapters;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +36,7 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView eventName, bidderName, bidAmount;
+        TextView eventName, bidderName, bidAmount, delete;
         ImageView eventPoster;
 
         public ViewHolder(@NonNull View itemView) {
@@ -41,6 +46,7 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
             bidderName = itemView.findViewById(R.id.musicianName);
             bidAmount = itemView.findViewById(R.id.bidAmount);
             eventPoster = itemView.findViewById(R.id.cardTv);
+            delete = itemView.findViewById(R.id.delete);
         }
     }
     @NonNull
@@ -82,12 +88,24 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
                             }
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(holder.itemView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }).addOnFailureListener(e -> Toast.makeText(holder.itemView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle delete action here
+                String bidId = bookedEvent.getBidId();
+                FirebaseFirestore.getInstance().collection("BidEvents")
+                        .document(bidId)
+                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                // Show the popup dialog after deletion
+                                showPopupDialog(holder.itemView);
+                            }
+                        }).addOnFailureListener(e -> Toast.makeText(holder.itemView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        });
 
     }
 
@@ -95,4 +113,24 @@ public class bidEventsAdapter extends RecyclerView.Adapter<bidEventsAdapter.View
     public int getItemCount() {
         return bookedEvents.size();
     }
+
+    private void showPopupDialog(View view) {
+        Dialog popupDialog = new Dialog(view.getContext());
+        popupDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        popupDialog.setCancelable(false);
+        popupDialog.setContentView(R.layout.popup_layout);
+
+        if (popupDialog.getWindow() != null) {
+            popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        popupDialog.show();
+
+        new Handler().postDelayed(() -> {
+            if (popupDialog.isShowing()) {
+                popupDialog.dismiss();
+            }
+        }, 3000);
+    }
+
 }

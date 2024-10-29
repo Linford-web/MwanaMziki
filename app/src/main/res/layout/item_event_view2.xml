@@ -65,7 +65,7 @@
                     android:layout_height="17dp"
                     android:padding="1dp"
                     android:src="@drawable/calender_small_icon"
-                    app:tint="@color/black" />
+                    app:tint="@color/my_primary" />
 
                 <TextView
                     android:id="@+id/eventDate"
@@ -89,7 +89,7 @@
                     android:layout_height="17dp"
                     android:padding="1dp"
                     android:src="@drawable/clock_small_icon"
-                    app:tint="@color/black" />
+                    app:tint="@color/orange" />
 
                 <TextView
                     android:id="@+id/eventTime"
@@ -115,7 +115,7 @@
                 android:layout_height="17dp"
                 android:padding="1dp"
                 android:src="@drawable/location_icon"
-                app:tint="@color/black" />
+                app:tint="@color/blue" />
 
             <TextView
                 android:id="@+id/eventLocation"

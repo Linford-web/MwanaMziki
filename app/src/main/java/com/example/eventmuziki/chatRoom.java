@@ -81,8 +81,6 @@ public class chatRoom extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(chatRoom.this, chatActivity.class);
-            startActivity(intent);
             finish();
         });
 

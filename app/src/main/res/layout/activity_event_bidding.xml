@@ -104,7 +104,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:padding="1dp"
-                            app:tint="@color/orange"
+                            app:tint="@color/my_primary"
                             android:src="@drawable/event_small_icon"/>
 
                         <TextView
@@ -129,7 +129,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:padding="1dp"
-                            app:tint="@color/red"
+                            app:tint="@color/orange"
                             android:src="@drawable/clock_small_icon"/>
 
                         <TextView
@@ -154,7 +154,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:padding="1dp"
-                        app:tint="@color/blue"
+                        app:tint="@color/dark_gray"
                         android:src="@drawable/list_icons"/>
 
                     <TextView
@@ -237,8 +237,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_bg"
-                android:elevation="1dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -311,7 +309,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:visibility="gone"
@@ -330,7 +328,7 @@
                         android:layout_height="100dp"
                         android:contentDescription="@string/events"
                         android:src="@drawable/empty_icon"
-                        app:tint="@color/blue"
+                        app:tint="@color/gray"
                         android:padding="10dp" />
 
                     <TextView
@@ -345,68 +343,7 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
-
-            <LinearLayout
-                android:visibility="visible"
-                android:id="@+id/bookedServicesLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Booked Services"
-                    android:textColor="@color/black"
-                    android:layout_margin="5dp"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:id="@+id/bookedRv"/>
-
-                <LinearLayout
-                    android:visibility="gone"
-                    android:id="@+id/displayEmptyRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="20dp"
-                    android:gravity="center"
-                    android:elevation="2dp"
-                    android:layout_marginTop="5dp">
-
-                    <ImageView
-                        android:id="@+id/addServices"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:contentDescription="@string/events"
-                        android:src="@drawable/add_icon"
-                        android:background="@drawable/edit_text_bg"
-                        android:elevation="1dp"
-                        app:tint="@color/blue"
-                        android:padding="10dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Add Services for the Event"
-                        android:letterSpacing="0.09"
-                        android:textSize="16sp"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-        </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/biddersLayout"

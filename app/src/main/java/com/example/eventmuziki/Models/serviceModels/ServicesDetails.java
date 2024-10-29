@@ -1735,5 +1735,87 @@ public class ServicesDetails {
         }
     }
 
+    public static class bookedBiddersModel {
+
+        String biddersName, biddersEmail, biddersPhone , profile, biddersId, eventId, docId, bookedEventId;
+
+        public bookedBiddersModel() {
+        }
+
+        public bookedBiddersModel(String biddersName, String biddersEmail, String biddersPhone, String profile, String biddersId, String eventId, String docId, String bookedEventId) {
+            this.biddersName = biddersName;
+            this.biddersEmail = biddersEmail;
+            this.biddersPhone = biddersPhone;
+            this.profile = profile;
+            this.biddersId = biddersId;
+            this.eventId = eventId;
+            this.docId = docId;
+            this.bookedEventId = bookedEventId;
+        }
+
+        public String getBiddersName() {
+            return biddersName;
+        }
+
+        public void setBiddersName(String biddersName) {
+            this.biddersName = biddersName;
+        }
+
+        public String getBiddersEmail() {
+            return biddersEmail;
+        }
+
+        public void setBiddersEmail(String biddersEmail) {
+            this.biddersEmail = biddersEmail;
+        }
+
+        public String getBiddersPhone() {
+            return biddersPhone;
+        }
+
+        public void setBiddersPhone(String biddersPhone) {
+            this.biddersPhone = biddersPhone;
+        }
+
+        public String getProfile() {
+            return profile;
+        }
+
+        public void setProfile(String profile) {
+            this.profile = profile;
+        }
+
+        public String getBiddersId() {
+            return biddersId;
+        }
+
+        public void setBiddersId(String biddersId) {
+            this.biddersId = biddersId;
+        }
+
+        public String getEventId() {
+            return eventId;
+        }
+
+        public void setEventId(String eventId) {
+            this.eventId = eventId;
+        }
+
+        public String getDocId() {
+            return docId;
+        }
+
+        public void setDocId(String docId) {
+            this.docId = docId;
+        }
+
+        public String getBookedEventId() {
+            return bookedEventId;
+        }
+
+        public void setBookedEventId(String bookedEventId) {
+            this.bookedEventId = bookedEventId;
+        }
+    }
 
 }

@@ -50,16 +50,13 @@ public class eventBidding extends AppCompatActivity {
     TextView eventName, eventDate, eventTime, eventLocation, categoryNme, organizerName, eventDetails, amountTv, category, biddersName, categoryTv, viewAll;
     EditText bidAmountTv;
     Button placeBid, deleteEventBtn;
-    ImageView eventPosterTv, backArrow, addServices;
-    LinearLayout biddersView, categoryLayout, emptyRv, bookedServices, myEmptyRv;
+    ImageView eventPosterTv, backArrow;
+    LinearLayout biddersView, categoryLayout, myEmptyRv;
     FirebaseFirestore fStore;
 
     ArrayList<biddersEventModel> bidEvents, categoryService;
-    RecyclerView recyclerView, requiredServicesRv, recyclerView1, bookedRv;
+    RecyclerView recyclerView, requiredServicesRv, allRecyclerview;
     biddersAdapter bidAdapter, categoryAdapter;
-
-    ArrayList<ServicesDetails.cartModel> bookedList;
-    cartAdapter adapter;
 
     Dialog popupDialog;
     public String eventId, creatorId, userType, bidderType;
@@ -94,27 +91,17 @@ public class eventBidding extends AppCompatActivity {
         categoryTv = findViewById(R.id.category_bidderTv);
         categoryNme = findViewById(R.id.category_Tv);
         recyclerView = findViewById(R.id.biddersRv);
-        recyclerView1 = findViewById(R.id.allRv);
+        allRecyclerview = findViewById(R.id.allRv);
         categoryLayout = findViewById(R.id.categoryLayout);
         requiredServicesRv = findViewById(R.id.serviceRequiredRv);
-        bookedRv = findViewById(R.id.bookedRv);
-        addServices = findViewById(R.id.addServices);
-        emptyRv = findViewById(R.id.displayEmptyRv);
-        bookedServices = findViewById(R.id.bookedServicesLayout);
         myEmptyRv = findViewById(R.id.emptyRv);
         deleteEventBtn = findViewById(R.id.deleteEvent);
-
-        bookedList = new ArrayList<>();
-        adapter = new cartAdapter(bookedList, this);
-        RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        bookedRv.setLayoutManager(layoutManager3);
-        bookedRv.setAdapter(adapter);
 
         bidEvents = new ArrayList<>();
         bidAdapter = new biddersAdapter(bidEvents);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView1.setLayoutManager(layoutManager);
-        recyclerView1.setAdapter(bidAdapter);
+        allRecyclerview.setLayoutManager(layoutManager);
+        allRecyclerview.setAdapter(bidAdapter);
 
         requiredServices = new ArrayList<>();
         nameAdapter = new serviceNameAdapter(this,requiredServices);
@@ -145,10 +132,13 @@ public class eventBidding extends AppCompatActivity {
                 if (validServices.contains(selectedService)) {
                     fetchCategoryBidders(eventId, selectedService);
                     recyclerView.setVisibility(View.VISIBLE);
-                    recyclerView1.setVisibility(View.GONE);
+                    allRecyclerview.setVisibility(View.GONE);
                 } else {
                     Log.d("TAG", "onItemClick: No service selected");
                 }
+
+
+
             }
         });
 
@@ -203,14 +193,6 @@ public class eventBidding extends AppCompatActivity {
             }
         });
 
-        addServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               Intent intent = new Intent(eventBidding.this, categoryOptions.class);
-               startActivity(intent);
-            }
-        });
-
         fetchRequiredServices(Objects.requireNonNull(event).getEventId());
 
         placeBid.setOnClickListener(new View.OnClickListener() {
@@ -249,8 +231,9 @@ public class eventBidding extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 recyclerView.setVisibility(View.GONE);
-                recyclerView1.setVisibility(View.VISIBLE);
+                allRecyclerview.setVisibility(View.VISIBLE);
                 categoryTv.setText("All");
+                myEmptyRv.setVisibility(View.GONE);
             }
         });
 
@@ -262,7 +245,7 @@ public class eventBidding extends AppCompatActivity {
 
         checkUserServiceForEvent(eventId);
 
-        fetchBookedServices(eventId);
+
 
     }
 
@@ -354,43 +337,6 @@ public class eventBidding extends AppCompatActivity {
                 });
     }
 
-    private void fetchBookedServices(String eventId) {
-        fStore.collection("Events")
-                .document(eventId).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            // Now query the BookedServices subcollection
-                            fStore.collection("Events")
-                                    .document(eventId)
-                                    .collection("BookedServices")
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            if (!queryDocumentSnapshots.isEmpty()) {
-                                                emptyRv.setVisibility(View.GONE);
-                                                bookedRv.setVisibility(View.VISIBLE);
-                                            } else {
-                                               emptyRv.setVisibility(View.VISIBLE);
-                                               bookedRv.setVisibility(View.GONE);
-                                            }
-                                            for (DocumentSnapshot document : queryDocumentSnapshots) {
-                                                ServicesDetails.cartModel bookedService = document.toObject(ServicesDetails.cartModel.class);
-                                                bookedList.add(bookedService);
-                                            }
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                    })
-                                    .addOnFailureListener(e -> Log.d("TAG", "Error fetching BookedServices: " + e.getMessage()));
-                        } else {
-                            Log.d("TAG", "Event not found");
-                        }
-                    }
-                }).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.getMessage()));
-    }
-
     private void fetchRequiredServices(String eventId) {
 
         FirebaseFirestore.getInstance()
@@ -476,13 +422,11 @@ public class eventBidding extends AppCompatActivity {
                     if (userType.equalsIgnoreCase("Corporate")){
                         biddersView.setVisibility(View.GONE);
                         viewAll.setVisibility(View.VISIBLE);
-                        bookedServices.setVisibility(View.VISIBLE);
-                        recyclerView1.setVisibility(View.VISIBLE);
+                        allRecyclerview.setVisibility(View.VISIBLE);
                     } if (userType.equalsIgnoreCase("Musician")) {
                         categoryNme.setText(categories);
                         viewAll.setVisibility(View.GONE);
-                        bookedServices.setVisibility(View.GONE);
-                        recyclerView1.setVisibility(View.GONE);
+                        allRecyclerview.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
 
                         FirebaseFirestore.getInstance().collection("BidEvents")
@@ -532,10 +476,12 @@ public class eventBidding extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                        emptyRv.setVisibility(View.GONE);
+                        myEmptyRv.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
                     else {
-                        emptyRv.setVisibility(View.VISIBLE);
+                        myEmptyRv.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                     }
 
                     categoryService.clear();

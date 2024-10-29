@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".managePayment"
+            android:exported="false" />
+        <activity
             android:name=".viewServices"
             android:exported="false" />
         <activity
@@ -38,7 +41,7 @@
         <activity
             android:name=".addAdverts"
             android:exported="false"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".advertActivity"
             android:exported="false" />
@@ -80,7 +83,7 @@
         <activity
             android:name=".addEvents"
             android:exported="false"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".eventsActivity"
             android:exported="false"
@@ -88,7 +91,7 @@
         <activity
             android:name=".MainDashboard"
             android:exported="false"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".registerActivity"
             android:exported="false"
@@ -105,7 +108,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

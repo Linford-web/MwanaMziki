@@ -27,7 +27,7 @@ public class messageAdapter extends FirestoreRecyclerAdapter<messageModel, messa
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout leftChat, rightChat;
-        TextView leftMessage, rightMessage;
+        TextView leftMessage, rightMessage, leftTime, rightTime;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -36,6 +36,8 @@ public class messageAdapter extends FirestoreRecyclerAdapter<messageModel, messa
             rightChat = itemView.findViewById(R.id.rightChatMessage);
             leftMessage = itemView.findViewById(R.id.leftChatText);
             rightMessage = itemView.findViewById(R.id.rightChatText);
+            leftTime = itemView.findViewById(R.id.leftChatTime);
+            rightTime = itemView.findViewById(R.id.rightChatTime);
 
         }
     }
@@ -51,10 +53,12 @@ public class messageAdapter extends FirestoreRecyclerAdapter<messageModel, messa
             holder.leftChat.setVisibility(View.GONE);
             holder.rightChat.setVisibility(View.VISIBLE);
             holder.rightMessage.setText(model.getMessage());
+            holder.rightTime.setText(FirebaseUtil.timeStampToString(model.getTimestamp()));
         }else {
             holder.rightChat.setVisibility(View.GONE);
             holder.leftChat.setVisibility(View.VISIBLE);
             holder.leftMessage.setText(model.getMessage());
+            holder.leftTime.setText(FirebaseUtil.timeStampToString(model.getTimestamp()));
         }
 
     }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,10 @@ import com.example.eventmuziki.R;
 import com.example.eventmuziki.chatRoom;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -155,12 +158,6 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
                         String name = documentSnapshot.getString("name");
                         String profileImageUrl = documentSnapshot.getString("profileImageUrl");
 
-                        if (bidderEmail != null) {
-                            holder.chat.setVisibility(View.VISIBLE);
-                        } else {
-                            holder.chat.setVisibility(View.GONE);
-                        }
-
                         holder.chat.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -173,17 +170,25 @@ public class bookedServicesAdapter extends RecyclerView.Adapter<bookedServicesAd
                                 intent.putExtra("userPhone", phone);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 holder.itemView.getContext().startActivity(intent);
+
                             }
                         });
 
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Failed to fetch user details: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }).addOnFailureListener(e -> Toast.makeText(context, "Failed to fetch user details: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
+        FirebaseFirestore.getInstance().collection("BookedServices")
+                .whereEqualTo("creatorId", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            holder.chat.setVisibility(View.GONE);
+                        }else {
+                            holder.chat.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).addOnFailureListener(e -> Log.d("TAG", "Error fetching booked services: " + e.getMessage()));
 
 
     }

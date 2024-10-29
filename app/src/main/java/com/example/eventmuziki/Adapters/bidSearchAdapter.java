@@ -36,7 +36,7 @@ public class bidSearchAdapter extends FirestoreRecyclerAdapter<biddersEventModel
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView eventName, bidderName, bidAmount;
+        TextView eventName, bidderName, bidAmount, delete;
         ImageView eventPoster;
 
         public ViewHolder(@NonNull View itemView) {
@@ -46,6 +46,7 @@ public class bidSearchAdapter extends FirestoreRecyclerAdapter<biddersEventModel
             bidderName = itemView.findViewById(R.id.musicianName);
             bidAmount = itemView.findViewById(R.id.bidAmount);
             eventPoster = itemView.findViewById(R.id.cardTv);
+            delete = itemView.findViewById(R.id.delete);
         }
     }
 
@@ -55,6 +56,8 @@ public class bidSearchAdapter extends FirestoreRecyclerAdapter<biddersEventModel
         holder.eventName.setText(model.getEventName());
         holder.bidAmount.setText(model.getBidAmount());
         holder.bidderName.setText(model.getBiddersName());
+
+        holder.delete.setVisibility(View.GONE);
 
         String eventId = model.getEventId();
         FirebaseFirestore.getInstance()

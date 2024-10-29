@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Adapters.biddersAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.bookedServicesAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.carAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.cateringAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.costumeAdapter;
@@ -86,8 +87,8 @@ public class addServices extends AppCompatActivity {
             checkBoxDecoSetUp, checkBoxDecoCustomization, checkBoxDecoEmergency, musicInstrument, makeUpTravel;
     Button seeAddMusic, seeAddCar, seeAddPhotography, seeAddCatering, seeAddThrift, seeAddDj, seeAddInfluencers, seeAddSponsor, seeAddDecoration, seeAddMakeUp;
 
-    TextView categoryTxt;
-    RecyclerView musicianRv, carRv, photographyRv, cateringRv, thriftRv, soundRv, decorationRv, influencersRv, sponsorRv, makeUpRv;
+    TextView categoryTxt, addTxt, bookedTxt;
+    RecyclerView musicianRv, carRv, photographyRv, cateringRv, thriftRv, soundRv, decorationRv, influencersRv, sponsorRv, makeUpRv, bookedRv;
     int amount = 0;
     int hour = 6;
     int duration = 1;
@@ -106,7 +107,8 @@ public class addServices extends AppCompatActivity {
     Button carSubmit, photographySubmit, cateringSubmit, thriftSubmit, djSubmit, influencerSubmit, sponsorSubmit, decorationSubmit, musicianSubmit, makeUpSubmit;
 
     LinearLayout addMusicianDetails, addCarDetails, addPhotographyDetails, addCateringDetails, addThriftDetails, addDjDetails, addDecorationDetails, addInfluencersDetails ,addSponsorDetails, addMakeUpDetails,
-            musicDetailsTv, carDetailsTv, photographyDetailsTv, cateringDetailsTv, thriftDetailsTv, djDetailsTv, decorationDetailsTv, influencersDetailsTv, sponsorDetailsTv, makeUpDetailsTv;
+            musicDetailsTv, carDetailsTv, photographyDetailsTv, cateringDetailsTv, thriftDetailsTv, djDetailsTv, decorationDetailsTv, influencersDetailsTv, sponsorDetailsTv, makeUpDetailsTv,
+            addProduct, bookedProducts, add, book, emptyRv, optionView;
 
     String userCategory, userId;
 
@@ -141,6 +143,9 @@ public class addServices extends AppCompatActivity {
     ArrayList<ServicesDetails.makeUpModel> makeUpList = new ArrayList<>();
     makeUpAdapter adapterMakeUp;
 
+    ArrayList<ServicesDetails.cartModel> bookedList = new ArrayList<>();
+    bookedServicesAdapter bookedAdapter;
+
     Dialog popupDialog;
 
     @Override
@@ -154,7 +159,6 @@ public class addServices extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
         back.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), categoryOptions.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -229,6 +233,11 @@ public class addServices extends AppCompatActivity {
         adapterMakeUp = new makeUpAdapter(makeUpList, this);
         makeUpRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         makeUpRv.setAdapter(adapterMakeUp);
+
+        bookedList = new ArrayList<>();
+        bookedAdapter = new bookedServicesAdapter(bookedList, this);
+        bookedRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        bookedRv.setAdapter(bookedAdapter);
 
         // Set click listeners for add and minus image buttons
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -363,7 +372,57 @@ public class addServices extends AppCompatActivity {
             }
         });
 
+        addProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                add.setVisibility(View.VISIBLE);
+                book.setVisibility(View.GONE);
+                // change color to orange
+                addTxt.setTextColor(getResources().getColor(R.color.orange));
+                bookedTxt.setTextColor(getResources().getColor(R.color.black));
 
+            }
+        });
+
+        bookedProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                add.setVisibility(View.GONE);
+                book.setVisibility(View.VISIBLE);
+                // change color to orange
+                addTxt.setTextColor(getResources().getColor(R.color.black));
+                bookedTxt.setTextColor(getResources().getColor(R.color.orange));
+            }
+        });
+
+        fetchBookedProducts();
+
+    }
+
+    private void fetchBookedProducts() {
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        fStore.collection("BookedServices")
+                .whereEqualTo("creatorId", userId)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        bookedList.clear();
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            emptyRv.setVisibility(View.GONE);
+                            bookedRv.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyRv.setVisibility(View.VISIBLE);
+                            bookedRv.setVisibility(View.GONE);
+                        }
+                        bookedList.clear();
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            ServicesDetails.cartModel cartItem = documentSnapshot.toObject(ServicesDetails.cartModel.class);
+                            bookedList.add(cartItem);
+                        }
+                        bookedAdapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(e -> Log.d("TAG", "Error fetching booked services: " + e.getMessage()));
     }
 
     private void setupAddButtons() {
@@ -376,6 +435,7 @@ public class addServices extends AppCompatActivity {
                 seeAddMusic.setVisibility(View.GONE);
                 musicClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddCar.setOnClickListener(new View.OnClickListener() {
@@ -386,6 +446,7 @@ public class addServices extends AppCompatActivity {
                 seeAddCar.setVisibility(View.GONE);
                 carClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddPhotography.setOnClickListener(new View.OnClickListener() {
@@ -396,6 +457,7 @@ public class addServices extends AppCompatActivity {
                 seeAddPhotography.setVisibility(View.GONE);
                 photographyClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddCatering.setOnClickListener(new View.OnClickListener() {
@@ -406,6 +468,7 @@ public class addServices extends AppCompatActivity {
                 seeAddCatering.setVisibility(View.GONE);
                 cateringClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddThrift.setOnClickListener(new View.OnClickListener() {
@@ -416,6 +479,7 @@ public class addServices extends AppCompatActivity {
                 seeAddThrift.setVisibility(View.GONE);
                 thriftClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddDj.setOnClickListener(new View.OnClickListener() {
@@ -426,6 +490,7 @@ public class addServices extends AppCompatActivity {
                 seeAddDj.setVisibility(View.GONE);
                 djClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddInfluencers.setOnClickListener(new View.OnClickListener() {
@@ -436,6 +501,7 @@ public class addServices extends AppCompatActivity {
                 seeAddInfluencers.setVisibility(View.GONE);
                 influencersClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddSponsor.setOnClickListener(new View.OnClickListener() {
@@ -446,6 +512,7 @@ public class addServices extends AppCompatActivity {
                 seeAddSponsor.setVisibility(View.GONE);
                 sponsorClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddDecoration.setOnClickListener(new View.OnClickListener() {
@@ -456,6 +523,7 @@ public class addServices extends AppCompatActivity {
                 seeAddDecoration.setVisibility(View.GONE);
                 decorationClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
         seeAddMakeUp.setOnClickListener(new View.OnClickListener() {
@@ -466,6 +534,7 @@ public class addServices extends AppCompatActivity {
                 seeAddMakeUp.setVisibility(View.GONE);
                 makeUpClose.setVisibility(View.VISIBLE);
                 back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
             }
         });
 
@@ -488,6 +557,7 @@ public class addServices extends AppCompatActivity {
                 payRate.setText("");
                 musicDetails.setText("");
                 musicianPolicy.setText("");
+                optionView.setVisibility(View.VISIBLE);
 
             }
         });
@@ -509,6 +579,7 @@ public class addServices extends AppCompatActivity {
             carCheckbox.setChecked(false);
             amount = 0;
             hour = 6;
+            optionView.setVisibility(View.VISIBLE);
         });
         photographyClose.setOnClickListener(v -> {
             photographyDetailsTv.setVisibility(View.GONE);
@@ -530,6 +601,7 @@ public class addServices extends AppCompatActivity {
             spinner_format.setSelection(0);
             delivery_method.setSelection(0);
             special_equipment.setSelection(0);
+            optionView.setVisibility(View.VISIBLE);
         });
         cateringClose.setOnClickListener(v -> {
             cateringDetailsTv.setVisibility(View.GONE);
@@ -551,6 +623,7 @@ public class addServices extends AppCompatActivity {
             spinner_cuisine_type.setSelection(0);
             spinner_cateringServiceType.setSelection(0);
             tv_catering.setText("");
+            optionView.setVisibility(View.VISIBLE);
 
         });
         thriftClose.setOnClickListener(v -> {
@@ -575,6 +648,7 @@ public class addServices extends AppCompatActivity {
             spinner_ageGroup.setSelection(0);
             spinner_size.setSelection(0);
             spinner_material.setSelection(0);
+            optionView.setVisibility(View.VISIBLE);
         });
         djClose.setOnClickListener(v -> {
             djDetailsTv.setVisibility(View.GONE);
@@ -593,6 +667,7 @@ public class addServices extends AppCompatActivity {
             checkBoxWireless.setChecked(false);
             spinner_soundEquipment.setSelection(0);
             spinner_djServices.setSelection(0);
+            optionView.setVisibility(View.VISIBLE);
         });
         influencersClose.setOnClickListener(v -> {
             influencersDetailsTv.setVisibility(View.GONE);
@@ -615,6 +690,7 @@ public class addServices extends AppCompatActivity {
             spinnerContentTheme.setSelection(0);
             spinnerContentFreedom.setSelection(0);
             no_of_posts.setText("");
+            optionView.setVisibility(View.VISIBLE);
 
         });
         sponsorClose.setOnClickListener(v -> {
@@ -635,6 +711,7 @@ public class addServices extends AppCompatActivity {
             sponsorIndustry.setSelection(0);
             sponsorInterests.setSelection(0);
             sponsorAmount.setText("");
+            optionView.setVisibility(View.VISIBLE);
 
         });
         decorationClose.setOnClickListener(v -> {
@@ -653,7 +730,7 @@ public class addServices extends AppCompatActivity {
             spinnerDecoPackage.setSelection(0);
             spinnerDecoTheme.setSelection(0);
             spinnerDecoEvent.setSelection(0);
-
+            optionView.setVisibility(View.VISIBLE);
 
         });
         makeUpClose.setOnClickListener(v -> {
@@ -670,7 +747,9 @@ public class addServices extends AppCompatActivity {
             makeUpPolicy.setText("");
             spinnerMakeUpType.setSelection(0);
             makeUpTravel.setChecked(false);
+            optionView.setVisibility(View.VISIBLE);
         });
+
     }
 
     private void initializeViews() {
@@ -681,6 +760,15 @@ public class addServices extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         carCheckbox = findViewById(R.id.driverProvided);
+        addProduct = findViewById(R.id.addProduct);
+        bookedProducts = findViewById(R.id.bookedProducts);
+        add = findViewById(R.id.add);
+        book = findViewById(R.id.booked);
+        addTxt = findViewById(R.id.addProductTxt);
+        bookedTxt = findViewById(R.id.bookedProductTxt);
+        bookedRv = findViewById(R.id.bookedRv);
+        emptyRv = findViewById(R.id.displayEmptyRv);
+        optionView = findViewById(R.id.afterView);
 
         addMakeUpPhoto = findViewById(R.id.addMakeUpPhoto);
         deleteMakeUpPhoto = findViewById(R.id.deleteMakeUpPhoto);

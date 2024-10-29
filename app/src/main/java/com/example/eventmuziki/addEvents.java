@@ -273,6 +273,7 @@ public class addEvents extends AppCompatActivity {
                         .start();
             }
         });
+
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventmuziki.Models.bookedEventsModel;
+import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.example.eventmuziki.R;
 import com.example.eventmuziki.chatRoom;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,10 +34,9 @@ import java.util.Objects;
 
 public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapter.ViewHolder> {
 
-    ArrayList<bookedEventsModel> bookedEvents;
-    String bidderEmail, profileImageUrl, phone;
+    ArrayList<ServicesDetails.bookedBiddersModel> bookedEvents;
 
-    public musicianNameAdapter(ArrayList<bookedEventsModel> bookedEvents) {
+    public musicianNameAdapter(ArrayList<ServicesDetails.bookedBiddersModel> bookedEvents) {
         this.bookedEvents = bookedEvents;
     }
 
@@ -53,7 +53,7 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
             name = itemView.findViewById(R.id.name);
             category = itemView.findViewById(R.id.category);
             chat = itemView.findViewById(R.id.container);
-            rating = itemView.findViewById(R.id.ratingBtn);
+            // rating = itemView.findViewById(R.id.ratingBtn);
             message = itemView.findViewById(R.id.messageBtn);
             databaseReference = FirebaseDatabase.getInstance().getReference("ChatRooms");
 
@@ -71,52 +71,30 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
     @Override
     public void onBindViewHolder(@NonNull musicianNameAdapter.ViewHolder holder, int position) {
 
-        bookedEventsModel bookedEvent = bookedEvents.get(position);
+        ServicesDetails.bookedBiddersModel bookedBidders = bookedEvents.get(position);
 
-        holder.name.setText(bookedEvent.getBiddersName());
+        holder.name.setText(bookedBidders.getBiddersName());
+        holder.category.setText(bookedBidders.getBiddersEmail());
 
-        String bidderId = bookedEvent.getBiddersId();
+        String bidderId = bookedBidders.getBiddersId();
+        String bidderEmail = bookedBidders.getBiddersEmail();
+        String phone = bookedBidders.getBiddersPhone();
 
-        // Retrieve profile photo URL,email and phone from FireStore for the bidder
-        FirebaseFirestore.getInstance()
-                .collection("Users")
-                .whereEqualTo("userid", bidderId)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
-                            // Retrieve profile photo URL from FireStore
-                            profileImageUrl = document.getString("profilePicture");
-                            bidderEmail = document.getString("email");
-                            phone = document.getString("number");
+        String profileImageUrl = bookedBidders.getProfile();
 
-                            holder.category.setText(bidderEmail);
+        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+            // Load profile photo into otherImageView using Glide or any other image loading library
+            Glide.with(holder.itemView.getContext())
+                    .load(profileImageUrl)
+                    .placeholder(R.drawable.profile_icon)
+                    .error(R.drawable.profile_icon)
+                    .into(holder.profile);
 
-                            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                                // Load profile photo into otherImageView using Glide or any other image loading library
-                                Glide.with(holder.itemView.getContext())
-                                        .load(profileImageUrl)
-                                        .placeholder(R.drawable.profile_icon)
-                                        .error(R.drawable.profile_icon)
-                                        .into(holder.profile);
+        } else {
+            // Handle the case when no profile photo is available
+            Log.e("musicianNameAdapter", "Profile Photo Not Uploaded");
+        }
 
-                            } else {
-                                // Handle the case when no profile photo is available
-                                Log.e("musicianNameAdapter", "Profile Photo Not Uploaded");
-                            }
-                        } else {
-                            Toast.makeText(holder.itemView.getContext(), "User document not found", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(holder.itemView.getContext(), "Failed To fetch Students", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
@@ -129,13 +107,14 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                         if (document != null && document.exists()) {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
+                                holder.message.setVisibility(View.VISIBLE);
 
                                 holder.message.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         Intent intent = new Intent(holder.itemView.getContext(), chatRoom.class);
                                         intent.putExtra("userId", bidderId);
-                                        intent.putExtra("userName", bookedEvent.getBiddersName());
+                                        intent.putExtra("userName", bookedBidders.getBiddersName());
                                         intent.putExtra("userEmail", bidderEmail);
                                         intent.putExtra("userImage", profileImageUrl);
                                         intent.putExtra("userPhone", phone);
@@ -146,7 +125,7 @@ public class musicianNameAdapter extends RecyclerView.Adapter<musicianNameAdapte
                                 });
 
                             } else if ("Musician".equalsIgnoreCase(userType)) {
-                                Toast.makeText(holder.itemView.getContext(), "Musicians Cannot Start Chats", Toast.LENGTH_SHORT).show();
+                                holder.message.setVisibility(View.GONE);
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");

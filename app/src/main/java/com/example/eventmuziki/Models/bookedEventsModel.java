@@ -5,9 +5,11 @@ import android.os.Parcelable;
 
 public class bookedEventsModel implements Parcelable {
 
-    String eventName, eventDetails, date, time, location, eventId, creatorID, bidId, category, biddersId, organizerName, biddersName, about, socials;
+    String eventName, eventDetails, date, time, location, eventId, creatorID, bidId, category, biddersId, organizerName, biddersName, about, socials, bookedId;
 
-    public bookedEventsModel(String eventName, String eventDetails, String date, String time, String location, String eventId, String creatorID, String bidId, String category, String biddersId, String organizerName, String biddersName, String about, String socials ) {
+    public bookedEventsModel(String eventName, String eventDetails, String date, String time, String location, String eventId,
+                             String creatorID, String bidId, String category, String biddersId, String organizerName,
+                             String biddersName, String about, String socials, String bookedId) {
         this.eventName = eventName;
         this.eventDetails = eventDetails;
         this.date = date;
@@ -22,6 +24,15 @@ public class bookedEventsModel implements Parcelable {
         this.biddersName = biddersName;
         this.about = about;
         this.socials = socials;
+        this.bookedId = bookedId;
+    }
+
+    public String getBookedId() {
+        return bookedId;
+    }
+
+    public void setBookedId(String bookedId) {
+        this.bookedId = bookedId;
     }
 
     public bookedEventsModel() {
