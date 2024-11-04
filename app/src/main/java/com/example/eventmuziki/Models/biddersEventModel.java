@@ -10,10 +10,11 @@ public class biddersEventModel implements Parcelable {
     String eventName, eventDetails, date, time, location, bidAmount, eventId, creatorID, bidId, userCategory, biddersId, organizerName, biddersName;
 
     public biddersEventModel() {
-        // Default constructor required for Firestore
     }
 
-    public biddersEventModel(String eventName, String eventDetails, String date, String time, String location, String bidAmount, String eventId, String creatorID, String bidId, String userCategory, String biddersId, String organizerName, String biddersName) {
+    public biddersEventModel(String eventName, String eventDetails, String date, String time, String location,
+                             String bidAmount, String eventId, String creatorID, String bidId, String userCategory,
+                             String biddersId, String organizerName, String biddersName) {
         this.eventName = eventName;
         this.eventDetails = eventDetails;
         this.date = date;

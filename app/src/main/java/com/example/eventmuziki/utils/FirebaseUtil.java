@@ -42,5 +42,12 @@ public class FirebaseUtil {
         return  new SimpleDateFormat("HH:MM").format(timeStamp.toDate());
     }
 
+    public static String timeStampToDate(Timestamp timeStamp){
+        return  new SimpleDateFormat("dd/MM/yyyy").format(timeStamp.toDate());
+    }
+
+    public static DocumentReference getBookedEvent(String eventId){
+        return FirebaseFirestore.getInstance().collection("BookedEvents").document(eventId);
+    }
 
 }

@@ -248,7 +248,7 @@ public class eventsActivity extends AppCompatActivity {
                 cancelCategory.setVisibility(View.GONE);
                 allEvents.setVisibility(View.VISIBLE);
                 allEventsLayout.setVisibility(View.VISIBLE);
-                checkUserAccessLevel();
+
             }
         });
 
@@ -258,7 +258,6 @@ public class eventsActivity extends AppCompatActivity {
 
                 bidEvents.setVisibility(View.GONE);
                 bookedEvents.setVisibility(View.GONE);
-                allEvents.setVisibility(View.VISIBLE);
                 cancelCategory.setVisibility(View.GONE);
                 addTask.setVisibility(View.VISIBLE);
                 menuCategoryLayout.setVisibility(View.VISIBLE);

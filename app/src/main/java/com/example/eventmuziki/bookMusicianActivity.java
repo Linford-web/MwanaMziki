@@ -124,12 +124,7 @@ public class bookMusicianActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(bookMusicianActivity.this, "Failed To get Event Poster", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    }).addOnFailureListener(e -> Toast.makeText(bookMusicianActivity.this, "Failed To get Event Poster", Toast.LENGTH_SHORT).show());
 
         }
 
@@ -176,7 +171,7 @@ public class bookMusicianActivity extends AppCompatActivity {
     }
 
     private void bookMusicians(String bidId, String biddersId, String organizerName, String eventId, String biddersName, String creatorId, String bidAmount) {
-        if (biddersId == null || biddersName == null || organizerName == null || eventId == null || creatorId == null) {
+        if (biddersId == null || biddersName == null || organizerName == null || eventId == null || creatorId == null || bidAmount == null) {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -193,9 +188,8 @@ public class bookMusicianActivity extends AppCompatActivity {
         String socials = this.socialTxt.getText().toString();
         String details = this.details.getText().toString();
 
-        // Create a new event object
-        bookedEventsModel bookEvent = new bookedEventsModel(name, details, date, time, location, eventId, creatorId,
-                bidId, category, biddersId, organizerName, biddersName, about, socials, "");
+        bookedEventsModel bookEvent = new bookedEventsModel(name, details, date, time, location, eventId, creatorId, bidId, category,
+                biddersId, organizerName, biddersName, about, socials, "");
 
         fStore.collection("BookedEvents")
                 .whereEqualTo("eventId", eventId)
@@ -258,9 +252,8 @@ public class bookMusicianActivity extends AppCompatActivity {
                         String phone = userSnapshot.getString("phone");
                         String profile = userSnapshot.getString("profilePicture");
 
-                        // Create the bookedBiddersModel with the fetched details
-                        ServicesDetails.bookedBiddersModel bidderData = new ServicesDetails.bookedBiddersModel(
-                                biddersName, email, phone, profile, organizerName, creatorId, bidAmount, biddersId, eventId, "", bookedEventId);
+                        ServicesDetails.bookedBiddersModel bidderData = new ServicesDetails.bookedBiddersModel(biddersName,email, phone, organizerName,
+                                creatorId, profile, bidAmount, biddersId, eventId, "", bookedEventId);
 
                         // Add the bidder data to the BookedBidders subcollection under the specific booked event
                         FirebaseFirestore.getInstance()

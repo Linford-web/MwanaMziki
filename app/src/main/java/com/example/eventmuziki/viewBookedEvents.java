@@ -150,7 +150,6 @@ public class viewBookedEvents extends AppCompatActivity {
             eventId = bookedEvent.getEventId();
             bookedId = bookedEvent.getBookedId();
 
-
             // fetch booked Users
             fetchBookedUsers(eventId);
 
