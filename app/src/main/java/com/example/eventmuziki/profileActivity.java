@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,9 +47,11 @@ import java.util.UUID;
 
 public class profileActivity extends AppCompatActivity {
 
-    TextView name, phone, email, aboutMe, socials, category, text1, text2, text3;
-    ImageView imageView;
-    Button logOut, edits;
+    TextView name, phone, email, aboutMe, socials, category;
+    ImageView imageView, closeReview, closeContact;
+    LinearLayout bidderDetails, editBtn, walletBtn, eventsBtn, servicesBtn,
+            advertsBtn, aboutBtn, contactBtn, reviewBtn, logoutBtn, contactDetails, reviewDetails;
+    Button submitReview, messageAdmin;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -72,11 +75,22 @@ public class profileActivity extends AppCompatActivity {
         aboutMe = findViewById(R.id.about);
         socials = findViewById(R.id.socials);
         category = findViewById(R.id.category);
-        text1 = findViewById(R.id.text1);
-        text2 = findViewById(R.id.text2);
-        text3 = findViewById(R.id.text3);
-        logOut = findViewById(R.id.LogOut);
-        edits = findViewById(R.id.editProfile);
+        editBtn = findViewById(R.id.editProfileBtn);
+        logoutBtn = findViewById(R.id.logOutBtn);
+        walletBtn = findViewById(R.id.walletBtn);
+        eventsBtn = findViewById(R.id.eventsBtn);
+        servicesBtn = findViewById(R.id.servicesBtn);
+        advertsBtn = findViewById(R.id.advertsBtn);
+        aboutBtn = findViewById(R.id.aboutBtn);
+        contactBtn = findViewById(R.id.contactBtn);
+        reviewBtn = findViewById(R.id.reviewBtn);
+        bidderDetails = findViewById(R.id.bidderDetailsLayout);
+        contactDetails = findViewById(R.id.contactDetail);
+        reviewDetails = findViewById(R.id.reviewDetails);
+        submitReview = findViewById(R.id.reviewSubmit);
+        closeReview = findViewById(R.id.closeBtn);
+        closeContact = findViewById(R.id.closeContactBtn);
+        messageAdmin = findViewById(R.id.messageAdmin);
 
         // check user access level
         checkUserAccessLevel();
@@ -90,7 +104,7 @@ public class profileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        logOut.setOnClickListener(new View.OnClickListener() {
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
@@ -100,13 +114,66 @@ public class profileActivity extends AppCompatActivity {
                 finish();
             }
         });
-        edits.setOnClickListener(new View.OnClickListener() {
+        editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), editProfile.class);
                 startActivity(intent);
             }
         });
+        walletBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), walletActivity.class);
+                startActivity(intent);
+            }
+        });
+        eventsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), eventsActivity.class);
+                startActivity(intent);
+            }
+        });
+        servicesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), categoryOptions.class);
+                startActivity(intent);
+            }
+        });
+        advertsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), advertActivity.class);
+                startActivity(intent);
+            }
+        });
+        contactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                contactDetails.setVisibility(View.VISIBLE);
+            }
+        });
+        closeContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                contactDetails.setVisibility(View.GONE);
+            }
+        });
+        reviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewDetails.setVisibility(View.VISIBLE);
+            }
+        });
+        closeReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewDetails.setVisibility(View.GONE);
+            }
+        });
+
 
         // Get the current user ID from Firebase Authentication
         String userId = FirebaseAuth.getInstance().getUid();
@@ -175,19 +242,9 @@ public class profileActivity extends AppCompatActivity {
                         if (document != null && document.exists()) {
                             String userType = document.getString("userType");
                             if ("Corporate".equals(userType)) {
-                                category.setVisibility(View.GONE);
-                                aboutMe.setVisibility(View.GONE);
-                                socials.setVisibility(View.GONE);
-                                text1.setVisibility(View.GONE);
-                                text2.setVisibility(View.GONE);
-                                text3.setVisibility(View.GONE);
+                                bidderDetails.setVisibility(View.GONE);
                             } else if ("Musician".equalsIgnoreCase(userType)) {
-                                category.setVisibility(View.VISIBLE);
-                                aboutMe.setVisibility(View.VISIBLE);
-                                socials.setVisibility(View.VISIBLE);
-                                text1.setVisibility(View.VISIBLE);
-                                text2.setVisibility(View.VISIBLE);
-                                text3.setVisibility(View.VISIBLE);
+                                bidderDetails.setVisibility(View.VISIBLE);
                             } else {
                                 // Handle other user types if needed
                                 Log.d("TAG", "User is neither Corporate nor Musician");

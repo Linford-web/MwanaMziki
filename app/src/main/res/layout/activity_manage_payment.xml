@@ -51,7 +51,7 @@
             android:padding="3dp"
             android:layout_margin="8dp"
             android:layout_gravity="end"
-            android:background="@drawable/card_view"
+            android:background="@drawable/edit_text_bg"
             android:backgroundTint="@color/orange"
             android:src="@drawable/wallet_icon"/>
 
@@ -103,55 +103,160 @@
                     android:letterSpacing="0.1"/>
 
                 <LinearLayout
-                    android:id="@+id/displayBiddersBalance"
                     android:visibility="gone"
+                    android:id="@+id/displayBidderBalances"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/displayBiddersBalance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ksh. "
-                        android:textColor="@color/black"/>
-                    <TextView
-                        android:id="@+id/bidderBalance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="00.00"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:letterSpacing="0.1"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ksh. "
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/bidderBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="00.00"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:letterSpacing="0.1"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/displayCorporateBalance"
                     android:visibility="gone"
+                    android:id="@+id/displayOrganizerBalances"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ksh. "
-                        android:textColor="@color/black"/>
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/userBalance"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="User Cost:"
+                            android:textColor="@color/blue"/>
+
+                        <LinearLayout
+                            android:id="@+id/displayCorporateBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ksh. "
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/userBalance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="3dp"
+                                android:text=" 00.00"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:letterSpacing="0.1"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text=" 00.00"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:letterSpacing="0.1"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Services Cost"
+                            android:textColor="@color/orange"/>
+
+                        <LinearLayout
+                            android:id="@+id/displayServicesBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ksh. "
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/serviceBalance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="3dp"
+                                android:text="00.00"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:letterSpacing="0.1"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Adverts Cost:"
+                            android:textColor="@color/my_primary"/>
+
+                        <LinearLayout
+                            android:id="@+id/displayAdvertBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ksh. "
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:id="@+id/advertBalance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="3dp"
+                                android:text="00.00"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"
+                                android:letterSpacing="0.1"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
+                <!-- See confirmation -->
                 <LinearLayout
                     android:visibility="gone"
                     android:layout_width="match_parent"
@@ -686,7 +791,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Empty Confirmed Events!"
+                                android:text="Empty Confirmed Events"
                                 android:letterSpacing="0.09"
                                 android:textSize="16sp"
                                 android:textAlignment="center"

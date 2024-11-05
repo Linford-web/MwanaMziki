@@ -238,7 +238,8 @@ public class confirmAdapter extends RecyclerView.Adapter<confirmAdapter.ViewHold
                                                                                     holder.check.setChecked(false);
                                                                                     holder.status.setText("Waiting");
                                                                                     holder.status.setTextColor(context.getResources().getColor(R.color.light_orange));
-                                                                                    Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                                                    //Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                                                    Log.d("confirmAdapter", "Updated");
 
                                                                                 }
                                                                             }).addOnFailureListener(e -> Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show());

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,20 +14,18 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventmuziki.Adapters.categoryMenuAdapter;
+import com.example.eventmuziki.Adapters.advertPosterAdapter;
 import com.example.eventmuziki.Adapters.confirmAdapter;
 import com.example.eventmuziki.Adapters.confirmEventAdapter;
 import com.example.eventmuziki.Adapters.confirmedAdapter;
-import com.example.eventmuziki.Adapters.musicianNameAdapter;
-import com.example.eventmuziki.Models.bookedEventsModel;
+import com.example.eventmuziki.Adapters.serviceAdapters.cartAdapter;
+import com.example.eventmuziki.Models.AdvertisementDetails;
 import com.example.eventmuziki.Models.confirmPaymentModel;
+import com.example.eventmuziki.Models.eventAdvertModel;
 import com.example.eventmuziki.Models.serviceModels.ServicesDetails;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,17 +44,20 @@ public class managePayment extends AppCompatActivity {
     ImageButton back, wallet;
     LinearLayout pendingBtn, confirmedBtn, pendingEvent, userBtn, productsBtn, advertsBtn, biddersLayout, serviceLayout,
             advertsLayout, corporate, musician, userBidBalance, userOrganizerBalance,
-            confirmedUsersLayout, confirmedEventsLayout, emptyConfirmed, emptyConfirmed2,  emptyConfirmedUsers, emptyConfirmedEvents,
-            confirmedLayout;
-    TextView pendingBtnTxt, confirmedBtnTxt, userBalance, bidderBalance, eventsTxt, productTxt, advertTxt, eventName;
-    RecyclerView pendingRv, confirmedUsersRv, confirmedEventsRv, pendingEventRv;
+            confirmedUsersLayout, confirmedEventsLayout, emptyConfirmed, emptyConfirmed2,  emptyConfirmedUsers, emptyConfirmedEvents, emptyServices, emptyAdvert,
+            confirmedLayout, organizerBalanceTv, bidderBalanceTv;
+    TextView pendingBtnTxt, confirmedBtnTxt, userBalance, bidderBalance, eventsTxt, productTxt, advertTxt, eventName,servicesBalance, advertBalance;
+    RecyclerView pendingRv, confirmedUsersRv, confirmedEventsRv, pendingEventRv, servicesRv, advertRv;
     ArrayList<ServicesDetails.bookedBiddersModel> bookedBidders, bookedEvents;
     confirmAdapter confirm;
     confirmEventAdapter adapter;
     ImageView poster, addAdvertisement, addService;
-    ArrayList<confirmPaymentModel> confirmedModel, confirmedModel2;
-    confirmedAdapter adapterConfirmed, adapterConfirmed2;
-
+    ArrayList<confirmPaymentModel> userModel, eventModel;
+    confirmedAdapter eventAdapter, userAdapter;
+    ArrayList<ServicesDetails.cartModel> bookedList;
+    cartAdapter cartServices;
+    ArrayList<AdvertisementDetails.posterModel> advertList;
+    advertPosterAdapter posterAdapter;
 
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -112,8 +112,18 @@ public class managePayment extends AppCompatActivity {
         addService = findViewById(R.id.addServices);
         confirmedUsersLayout = findViewById(R.id.confirmedUsersLayout);
         confirmedEventsLayout = findViewById(R.id.confirmedEventsLayout);
+        servicesRv = findViewById(R.id.servicesRv);
+        emptyServices = findViewById(R.id.emptyServices);
+        emptyAdvert = findViewById(R.id.emptyAdverts);
+        advertRv = findViewById(R.id.advertsRv);
+        organizerBalanceTv = findViewById(R.id.displayOrganizerBalances);
+        bidderBalanceTv = findViewById(R.id.displayBidderBalances);
+        servicesBalance = findViewById(R.id.serviceBalance);
+        advertBalance = findViewById(R.id.advertBalance);
 
-        
+
+
+
 
         Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
@@ -122,7 +132,8 @@ public class managePayment extends AppCompatActivity {
             finish();
         });
         wallet.setOnClickListener(v -> {
-            finish();
+            Intent intent = new Intent(managePayment.this, walletActivity.class);
+            startActivity(intent);
         });
 
         checkUserAccessLevel();
@@ -162,17 +173,29 @@ public class managePayment extends AppCompatActivity {
         pendingEventRv.setLayoutManager(layoutManager1);
         pendingEventRv.setAdapter(adapter);
 
-        confirmedModel = new ArrayList<>();
-        adapterConfirmed = new confirmedAdapter(confirmedModel, this);
+        userModel = new ArrayList<>();
+        eventAdapter = new confirmedAdapter(userModel, this);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         confirmedUsersRv.setLayoutManager(layoutManager2);
-        confirmedUsersRv.setAdapter(adapterConfirmed);
+        confirmedUsersRv.setAdapter(eventAdapter);
 
-        confirmedModel2 = new ArrayList<>();
-        adapterConfirmed2 = new confirmedAdapter(confirmedModel2, this);
+        eventModel = new ArrayList<>();
+        userAdapter = new confirmedAdapter(eventModel, this);
         RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         confirmedEventsRv.setLayoutManager(layoutManager3);
-        confirmedEventsRv.setAdapter(adapterConfirmed2);
+        confirmedEventsRv.setAdapter(userAdapter);
+
+        bookedList = new ArrayList<>();
+        cartServices = new cartAdapter(bookedList, this);
+        RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        servicesRv.setLayoutManager(layoutManager4);
+        servicesRv.setAdapter(cartServices);
+
+        advertList = new ArrayList<>();
+        posterAdapter = new advertPosterAdapter(advertList, this);
+        RecyclerView.LayoutManager layoutManager5 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        advertRv.setLayoutManager(layoutManager5);
+        advertRv.setAdapter(posterAdapter);
 
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         fStore.collection("BookedEvents")
@@ -208,6 +231,9 @@ public class managePayment extends AppCompatActivity {
                 pendingBtnTxt.setTextColor(getResources().getColor(R.color.black));
                 confirmedBtnTxt.setTextColor(getResources().getColor(R.color.orange));
 
+                fetchConfirmedUsers(userId, eventId);
+
+                fetchConfirmedEvents(userId, eventId);
 
             }
         });
@@ -272,10 +298,149 @@ public class managePayment extends AppCompatActivity {
 
         fetchBookedEvents(userId, eventId);
 
-        fetchConfirmedUsers(userId, eventId);
+        fetchBookedServices(eventId);
 
-        fetchConfirmedEvents(userId, eventId);
+        fetchAdverts(eventId, userId);
 
+    }
+
+    private void fetchAdverts(String eventId, String userId) {
+        fStore.collection("Advertisements")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshot) {
+                        if (!queryDocumentSnapshot.isEmpty()) {
+
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshot) {
+                                documentSnapshot.getReference()
+                                        .collection("EventAdvertisements")
+                                        .whereEqualTo("eventId", eventId)
+                                        .whereEqualTo("creatorId", userId)
+                                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                               if (!queryDocumentSnapshots.isEmpty()) {
+                                                   emptyAdvert.setVisibility(View.GONE);
+                                                   advertRv.setVisibility(View.VISIBLE);
+                                                   for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                                       String advertId = document.getString("advertId");
+                                                       fetchAdvertPlatforms(advertId);
+                                                       Log.d("managePayment", "Success");
+                                                   }
+                                               }else{
+                                                   Log.d("managePayment", "No adverts found");
+                                                   emptyAdvert.setVisibility(View.VISIBLE);
+                                                   advertRv.setVisibility(View.GONE);
+                                               }
+                                            }
+                                        }).addOnFailureListener(e -> Toast.makeText(managePayment.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                            }
+                        }else {
+                            Log.d("TAG", "No adverts found");
+
+                        }
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(managePayment.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void fetchAdvertPlatforms(String advertId) {
+        fStore.collection("Advertisements")
+                .document(advertId).collection("AdvertPlatforms")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            emptyAdvert.setVisibility(View.GONE);
+                            advertRv.setVisibility(View.VISIBLE);
+
+                            double totalAmountss = 0.0;
+                            advertList.clear();
+                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                AdvertisementDetails.posterModel posterModel = document.toObject(AdvertisementDetails.posterModel.class);
+                                advertList.add(posterModel);
+                                // Toast.makeText(managePayment.this, "Success", Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", "Success");
+                                // Calculate the total amount
+                                String priceString = posterModel.getCost();
+                                if (priceString != null && !priceString.isEmpty()) {
+                                    try {
+                                        double price = Double.parseDouble(priceString);
+                                        totalAmountss += price;
+                                    } catch (NumberFormatException e) {
+                                        e.printStackTrace(); // Handle conversion error
+                                    }
+                                }else {
+                                    totalAmountss = 0.0;
+                                    Toast.makeText(managePayment.this, "Error getting Bid Amount", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            posterAdapter.notifyDataSetChanged();
+                            advertBalance.setText(String.format("%.2f", totalAmountss));
+
+                        }else{
+                            emptyAdvert.setVisibility(View.VISIBLE);
+                            advertRv.setVisibility(View.GONE);
+                            Log.d("TAG", "No adverts found");
+                        }
+
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(managePayment.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void fetchBookedServices(String eventId) {
+        fStore.collection("Events")
+                .document(eventId).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Now query the BookedServices subcollection
+                            fStore.collection("Events")
+                                    .document(eventId)
+                                    .collection("BookedServices")
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (!queryDocumentSnapshots.isEmpty()) {
+                                                emptyServices.setVisibility(View.GONE);
+                                                servicesRv.setVisibility(View.VISIBLE);
+                                            } else {
+                                                emptyServices.setVisibility(View.VISIBLE);
+                                                servicesRv.setVisibility(View.GONE);
+                                            }
+
+                                            double totalAmounts = 0.0;
+                                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                                ServicesDetails.cartModel bookedService = document.toObject(ServicesDetails.cartModel.class);
+                                                bookedList.add(bookedService);
+
+                                                // Calculate the total amount
+                                                String priceString = bookedService.getPrice();
+                                                if (priceString != null && !priceString.isEmpty()) {
+                                                    try {
+                                                        double price = Double.parseDouble(priceString);
+                                                        totalAmounts += price;
+                                                    } catch (NumberFormatException e) {
+                                                        e.printStackTrace(); // Handle conversion error
+                                                    }
+                                                }else {
+                                                    totalAmounts = 0.0;
+                                                    Toast.makeText(managePayment.this, "Error getting Bid Amount", Toast.LENGTH_SHORT).show();
+                                                }
+
+                                            }
+                                            cartServices.notifyDataSetChanged();
+                                            servicesBalance.setText(String.format("%.2f", totalAmounts));
+
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.d("TAG", "Error fetching BookedServices: " + e.getMessage()));
+                        } else {
+                            Log.d("TAG", "Event not found");
+                        }
+                    }
+                }).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.getMessage()));
     }
 
     private void fetchConfirmedEvents(String userId, String eventId) {
@@ -300,19 +465,19 @@ public class managePayment extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(QuerySnapshot paymentConfirmationSnapshot) {
                                             if (!paymentConfirmationSnapshot.isEmpty()) {
-                                                Toast.makeText(managePayment.this, "Confirmed Events", Toast.LENGTH_SHORT).show();
+                                                Log.d("managePayment", "Success");
                                                 emptyConfirmed2.setVisibility(View.GONE);
                                                 confirmedEventsRv.setVisibility(View.VISIBLE);
 
-                                                confirmedModel.clear();
+                                                eventModel.clear();
                                                 for (DocumentSnapshot paymentConfirmationDoc : paymentConfirmationSnapshot.getDocuments()) {
                                                     confirmPaymentModel model = paymentConfirmationDoc.toObject(confirmPaymentModel.class);
-                                                    confirmedModel.add(model);
+                                                    eventModel.add(model);
                                                 }
-                                                adapterConfirmed.notifyDataSetChanged();
+                                                eventAdapter.notifyDataSetChanged();
 
                                             }else {
-                                                Toast.makeText(managePayment.this, "No Confirmed Events", Toast.LENGTH_SHORT).show();
+                                                Log.d("managePayment", "No Confirmed Events");
                                                 emptyConfirmed2.setVisibility(View.VISIBLE);
                                                 confirmedEventsRv.setVisibility(View.GONE);
                                             }
@@ -352,20 +517,21 @@ public class managePayment extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot paymentConfirmationSnapshot) {
+                                    // Check if there are any matching documents
                                     if (!paymentConfirmationSnapshot.isEmpty()) {
-                                        Toast.makeText(managePayment.this, "Confirmed Users", Toast.LENGTH_SHORT).show();
                                         emptyConfirmed.setVisibility(View.GONE);
                                         confirmedUsersRv.setVisibility(View.VISIBLE);
 
-                                        confirmedModel2.clear();
-                                        for (DocumentSnapshot paymentConfirmationDoc : paymentConfirmationSnapshot.getDocuments()) {
+                                        userModel.clear();
+                                        for (DocumentSnapshot paymentConfirmationDoc : paymentConfirmationSnapshot) {
                                             confirmPaymentModel model = paymentConfirmationDoc.toObject(confirmPaymentModel.class);
-                                            confirmedModel2.add(model);
+                                            userModel.add(model);
+                                            Log.d("managePayment", "Success");
                                         }
-                                        adapterConfirmed2.notifyDataSetChanged();
+                                        userAdapter.notifyDataSetChanged();
 
                                     }else {
-                                        Toast.makeText(managePayment.this, "No Confirmed Users", Toast.LENGTH_SHORT).show();
+                                        Log.d("managePayment", "No Confirmed Users");
                                         emptyConfirmed.setVisibility(View.VISIBLE);
                                         confirmedUsersRv.setVisibility(View.GONE);
                                     }
@@ -423,6 +589,7 @@ public class managePayment extends AppCompatActivity {
                                                         totalAmount1 = 0.0;
                                                         Toast.makeText(managePayment.this, "Error getting Bid Amount", Toast.LENGTH_SHORT).show();
                                                     }
+
                                                 }
                                                 adapter.notifyDataSetChanged();
                                                 bidderBalance.setText(String.format("%.2f", totalAmount1));
@@ -448,38 +615,6 @@ public class managePayment extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    private void checkUserAccessLevel() {
-        String userId = fAuth.getCurrentUser().getUid();
-        fStore.collection("Users")
-                .document(userId)
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String usertype = documentSnapshot.getString("userType");
-                            if (Objects.requireNonNull(usertype).equalsIgnoreCase("Musician")) {
-                                corporate.setVisibility(View.GONE);
-                                musician.setVisibility(View.VISIBLE);
-                                userOrganizerBalance.setVisibility(View.GONE);
-                                userBidBalance.setVisibility(View.VISIBLE);
-                                confirmedEventsLayout.setVisibility(View.VISIBLE);
-                                confirmedUsersLayout.setVisibility(View.GONE);
-
-                            }
-                            if (usertype.equalsIgnoreCase("Corporate")) {
-                                corporate.setVisibility(View.VISIBLE);
-                                musician.setVisibility(View.GONE);
-                                userOrganizerBalance.setVisibility(View.VISIBLE);
-                                userBidBalance.setVisibility(View.GONE);
-                                confirmedUsersLayout.setVisibility(View.VISIBLE);
-                                confirmedEventsLayout.setVisibility(View.GONE);
-
-                            }
-                        }
-                    }
-                }).addOnFailureListener(e -> Toast.makeText(managePayment.this, "Error getting user", Toast.LENGTH_SHORT).show());
     }
 
     private void fetchBookedUsers(String eventId) {
@@ -529,8 +664,8 @@ public class managePayment extends AppCompatActivity {
                                             emptyConfirmedUsers.setVisibility(View.VISIBLE);
                                             pendingRv.setVisibility(View.GONE);
                                         }
-                                        
-                                        
+
+
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.e("Error", "Failed to retrieve BookedBidders subcollection: " + e.getMessage());
@@ -544,6 +679,39 @@ public class managePayment extends AppCompatActivity {
                     Log.e("Error", "Failed to retrieve BookedEvents: " + e.getMessage());
                 });
     }
+
+    private void checkUserAccessLevel() {
+        String userId = fAuth.getCurrentUser().getUid();
+        fStore.collection("Users")
+                .document(userId)
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            String usertype = documentSnapshot.getString("userType");
+                            if (Objects.requireNonNull(usertype).equalsIgnoreCase("Musician")) {
+                                corporate.setVisibility(View.GONE);
+                                musician.setVisibility(View.VISIBLE);
+                                organizerBalanceTv.setVisibility(View.GONE);
+                                bidderBalanceTv.setVisibility(View.VISIBLE);
+                                confirmedEventsLayout.setVisibility(View.VISIBLE);
+                                confirmedUsersLayout.setVisibility(View.GONE);
+
+                            }
+                            if (usertype.equalsIgnoreCase("Corporate")) {
+                                corporate.setVisibility(View.VISIBLE);
+                                musician.setVisibility(View.GONE);
+                                organizerBalanceTv.setVisibility(View.VISIBLE);
+                                bidderBalanceTv.setVisibility(View.GONE);
+                                confirmedUsersLayout.setVisibility(View.VISIBLE);
+                                confirmedEventsLayout.setVisibility(View.GONE);
+
+                            }
+                        }
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(managePayment.this, "Error getting user", Toast.LENGTH_SHORT).show());
+    }
+
 
 
 

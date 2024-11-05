@@ -426,7 +426,6 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:text="Entity Contact"
-
                         android:textStyle="bold"/>
 
                     <EditText
@@ -509,7 +508,7 @@
                         android:id="@+id/cost1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="COST: $100/month"
+                        android:text="300"
                         android:textColor="@color/black"
                         android:padding="5dp"
                         android:layout_marginTop="4dp"/>
@@ -564,7 +563,7 @@
                         android:id="@+id/cost2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cost: $100/month"
+                        android:text="200"
                         android:textColor="@color/black"
                         android:padding="5dp"
                         android:layout_marginTop="4dp"/>
@@ -619,7 +618,7 @@
                         android:id="@+id/cost3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cost: $100/month"
+                        android:text="150"
                         android:textColor="@color/black"
                         android:padding="5dp"
                         android:layout_marginTop="4dp"/>
@@ -675,7 +674,7 @@
                         android:id="@+id/cost4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cost: $100/month"
+                        android:text="180"
                         android:padding="5dp"
                         android:textColor="@color/black"
                         android:layout_marginTop="4dp"/>
@@ -707,7 +706,6 @@
                         android:text="Select for Online Advertisements"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
-
 
             </LinearLayout>
 

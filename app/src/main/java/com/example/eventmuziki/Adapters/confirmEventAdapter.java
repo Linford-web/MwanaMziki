@@ -196,7 +196,8 @@ public class confirmEventAdapter extends RecyclerView.Adapter<confirmEventAdapte
                                                                                     holder.status.setTextColor(context.getResources().getColor(R.color.blue));
                                                                                     // check if both users have confirmed
                                                                                     checkIfBothUsersHaveConfirmed(holder, eventId, paymentId);
-                                                                                    Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                                                    //Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                                                    Log.d("confirmEventAdapter", "Updated");
 
 
                                                                                 } else {
@@ -247,10 +248,13 @@ public class confirmEventAdapter extends RecyclerView.Adapter<confirmEventAdapte
                                                                             holder.check.setChecked(false);
                                                                             holder.status.setText("Waiting");
                                                                             holder.status.setTextColor(context.getResources().getColor(R.color.light_orange));
-                                                                            Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                                            //Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                                            Log.d("confirmEventAdapter", "Updated");
+
                                                                         })
                                                                         .addOnFailureListener(e -> {
-                                                                            Toast.makeText(context, "Error updating bidder confirmation", Toast.LENGTH_SHORT).show();
+                                                                            Log.d("confirmEventAdapter", "Error updating bidder confirmation");
+                                                                            //Toast.makeText(context, "Error updating bidder confirmation", Toast.LENGTH_SHORT).show();
                                                                         });
                                                             }
                                                         }else {
@@ -269,10 +273,11 @@ public class confirmEventAdapter extends RecyclerView.Adapter<confirmEventAdapte
                                                                                             holder.check.setChecked(false);
                                                                                             holder.status.setText("Pending");
                                                                                             holder.status.setTextColor(context.getResources().getColor(R.color.light_orange));
-                                                                                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                                                                                            //Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                                                                                            Log.d("confirmEventAdapter", "Deleted");
                                                                                         })
                                                                                         .addOnFailureListener(e -> {
-                                                                                            Toast.makeText(context, "Error deleting event confirmation", Toast.LENGTH_SHORT).show();
+                                                                                            //Toast.makeText(context, "Error deleting event confirmation", Toast.LENGTH_SHORT).show();
                                                                                             Log.d("confirmEventAdapter", "Error deleting event confirmation");
                                                                                         });
 
