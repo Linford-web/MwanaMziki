@@ -1634,6 +1634,134 @@ public class ServicesDetails {
         }
     }
 
+    public static class mcModel{
+        String specialization, eventRole, duration, audience, price, equipment, bookingTime, policy, status, creatorId, image, productId, productType;
+
+        public mcModel() {
+        }
+
+        public mcModel(String specialization, String eventRole, String duration, String audience, String price, String equipment,
+                       String bookingTime, String policy, String status, String creatorId, String image, String productId, String productType) {
+            this.specialization = specialization;
+            this.eventRole = eventRole;
+            this.duration = duration;
+            this.audience = audience;
+            this.price = price;
+            this.equipment = equipment;
+            this.bookingTime = bookingTime;
+            this.policy = policy;
+            this.status = status;
+            this.creatorId = creatorId;
+            this.image = image;
+            this.productId = productId;
+            this.productType = productType;
+        }
+
+        public String getSpecialization() {
+            return specialization;
+        }
+
+        public void setSpecialization(String specialization) {
+            this.specialization = specialization;
+        }
+
+        public String getEventRole() {
+            return eventRole;
+        }
+
+        public void setEventRole(String eventRole) {
+            this.eventRole = eventRole;
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public void setDuration(String duration) {
+            this.duration = duration;
+        }
+
+        public String getAudience() {
+            return audience;
+        }
+
+        public void setAudience(String audience) {
+            this.audience = audience;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getEquipment() {
+            return equipment;
+        }
+
+        public void setEquipment(String equipment) {
+            this.equipment = equipment;
+        }
+
+        public String getBookingTime() {
+            return bookingTime;
+        }
+
+        public void setBookingTime(String bookingTime) {
+            this.bookingTime = bookingTime;
+        }
+
+        public String getPolicy() {
+            return policy;
+        }
+
+        public void setPolicy(String policy) {
+            this.policy = policy;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
+        public String getProductType() {
+            return productType;
+        }
+
+        public void setProductType(String productType) {
+            this.productType = productType;
+        }
+    }
+
     public static class cartModel{
         String name, packageName, price, creatorId, productId, image, bookerId, bookedServiceId, pType, cartId;
 

@@ -211,6 +211,7 @@ public class viewBookedEvents extends AppCompatActivity {
                 bookedLyt.setVisibility(View.GONE);
                 namesLyt.setVisibility(View.VISIBLE);
                 cancel.setVisibility(View.VISIBLE);
+                confirmBtn.setVisibility(View.GONE);
                 completeAdvertisement.setVisibility(View.VISIBLE);
                 advertise.setVisibility(View.GONE);
                 detailsLyt.setVisibility(View.GONE);
@@ -223,6 +224,7 @@ public class viewBookedEvents extends AppCompatActivity {
                 bookedLyt.setVisibility(View.VISIBLE);
                 namesLyt.setVisibility(View.GONE);
                 cancel.setVisibility(View.GONE);
+                confirmBtn.setVisibility(View.VISIBLE);
                 completeAdvertisement.setVisibility(View.GONE);
                 advertise.setVisibility(View.VISIBLE);
                 detailsLyt.setVisibility(View.VISIBLE);

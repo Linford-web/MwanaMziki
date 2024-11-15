@@ -23,7 +23,6 @@
         android:textAlignment="center"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="15dp">
-
     </TextView>
 
     <!-- Add details scroll view -->
@@ -195,7 +194,6 @@
                         android:layout_marginEnd="10dp"
                         android:layout_alignParentEnd="true"/>
 
-
                 </RelativeLayout>
 
                 <LinearLayout
@@ -214,7 +212,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
                         android:textColor="@color/orange"
-                        android:text="Register as an Organizer"/>
+                        android:text="Register as an Organizer (Create and manage Events: Services and Advertisement)"/>
 
                     <CheckBox
                         android:id="@+id/musicianCheck"
@@ -224,7 +222,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginBottom="10dp"
                         android:textColor="@color/blue"
-                        android:text="Register as a service provider"/>
+                        android:text="Register as a Service Provider (Create and manage Services: Products and Packages)"/>
 
                     <Spinner
                         android:visibility="gone"

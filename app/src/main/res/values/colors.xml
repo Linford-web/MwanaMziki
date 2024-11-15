@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="my_primary">#00BF63</color>
+    <!-- <color name="my_primary">#00BF63</color>  -->
     <color name="my_secondary">#FFA500</color>
     <color name="blue">#FF0000FF</color>
     <color name="red">#FFFF0000</color>

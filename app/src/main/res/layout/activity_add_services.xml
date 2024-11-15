@@ -353,6 +353,282 @@
 
                 </LinearLayout>
 
+                <!-- Section for Emcee Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/addMcDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Add Emcee Details"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:letterSpacing="0.1"
+                            android:layout_marginBottom="8dp"/>
+                        <Button
+                            android:id="@+id/seeAddMc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:text="Add Details"
+                            android:textColor="@color/white"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/close_icon"
+                            android:padding="3dp"
+                            app:tint="@color/red"
+                            android:clickable="true"
+                            android:layout_margin="5dp"
+                            android:visibility="gone"
+                            android:id="@+id/closeMc"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/mcDetailsTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Mc Photo Section -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:padding="5dp">
+
+                            <ImageView
+                                android:id="@+id/mcPhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="5dp"
+                                android:src="@drawable/mc_icon" />
+
+                            <ImageButton
+                                android:id="@+id/addMcPhoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_margin="15dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/camera_icon"
+                                app:tint="@color/blue" />
+
+                            <ImageButton
+                                android:id="@+id/deleteMcPhoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginEnd="50dp"
+                                android:layout_marginBottom="15dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/delete_icon"
+                                app:tint="@color/blue" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Event Specialization"
+                                android:textStyle="bold" />
+                            <Spinner
+                                android:id="@+id/spinnerMcEvents"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="7dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/event_Category"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mc Event Roles"
+                                android:textStyle="bold" />
+                            <Spinner
+                                android:id="@+id/spinnerMcRoles"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="7dp"
+                                android:layout_margin="5dp"
+                                android:entries="@array/mc_roles"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Performance Duration" />
+
+                            <EditText
+                                android:id="@+id/mcDuration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter duration"
+                                android:inputType="number"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Audience Size" />
+
+                            <EditText
+                                android:id="@+id/mcAudience"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="No. of people"
+                                android:inputType="number"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Hire Price" />
+
+                            <EditText
+                                android:id="@+id/mcAmount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter amount"
+                                android:inputType="text"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/equipmentPref"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="User Equipment Prefrences"
+                            android:layout_marginTop="5dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Pre-Booking duration" />
+
+                            <EditText
+                                android:id="@+id/mcBooking"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter duration"
+                                android:inputType="text"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Emcee booking policy" />
+
+                            <EditText
+                                android:id="@+id/mcPolicy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter policy details"
+                                android:inputType="text"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <!-- Submit Button -->
+                        <Button
+                            android:id="@+id/mcSubmit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="30dp"
+                            android:backgroundTint="@color/orange"
+                            android:layout_marginTop="10dp"
+                            android:text="Submit" />
+
+                    </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mcRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:layout_marginBottom="16dp"/>
+
+                </LinearLayout>
+
                 <!-- Section for Car Details -->
                 <LinearLayout
                     android:id="@+id/addCarDetails"
@@ -3445,6 +3721,7 @@
 
             </LinearLayout>
 
+            <!-- Section to View Booked Products -->
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/booked"
@@ -3503,7 +3780,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
 
 
         </LinearLayout>

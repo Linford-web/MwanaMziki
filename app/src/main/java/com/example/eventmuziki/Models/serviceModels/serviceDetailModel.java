@@ -587,4 +587,68 @@ public class serviceDetailModel {
         }
     }
 
+    public static class hireMc{
+        String audienceSize, specificRole, duration, setUp, travel, service;
+
+        public hireMc() {
+        }
+
+        public hireMc(String audienceSize, String specificRole, String duration, String setUp, String travel, String service) {
+            this.audienceSize = audienceSize;
+            this.specificRole = specificRole;
+            this.duration = duration;
+            this.setUp = setUp;
+            this.travel = travel;
+            this.service = service;
+        }
+
+        public String getAudienceSize() {
+            return audienceSize;
+        }
+
+        public void setAudienceSize(String audienceSize) {
+            this.audienceSize = audienceSize;
+        }
+
+        public String getSpecificRole() {
+            return specificRole;
+        }
+
+        public void setSpecificRole(String specificRole) {
+            this.specificRole = specificRole;
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public void setDuration(String duration) {
+            this.duration = duration;
+        }
+
+        public String getSetUp() {
+            return setUp;
+        }
+
+        public void setSetUp(String setUp) {
+            this.setUp = setUp;
+        }
+
+        public String getTravel() {
+            return travel;
+        }
+
+        public void setTravel(String travel) {
+            this.travel = travel;
+        }
+
+        public String getService() {
+            return service;
+        }
+
+        public void setService(String service) {
+            this.service = service;
+        }
+    }
+
 }

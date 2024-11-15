@@ -37,9 +37,8 @@ import java.util.Objects;
 public class viewAdvert extends AppCompatActivity {
 
     ImageView poster;
-    ImageButton back;
+    ImageButton back, deleteBtn;
     TextView advertTitle, advertDuration, dateTv, timeTv, detailsTv;
-    Button deleteBtn;
     RecyclerView advertWalls, eventAdvertised;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;

@@ -6,27 +6,31 @@
     android:orientation="vertical"
     android:backgroundTint="@color/white"
     android:layout_margin="3dp"
+    android:paddingEnd="9dp"
+    android:paddingStart="9dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
     android:gravity="center"
-    android:elevation="1dp"
-    android:padding="2dp">
+    android:elevation="1dp">
 
     <ImageView
-        android:id="@+id/service_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="9dp"
-        android:elevation="3dp"
-        android:background="@drawable/edit_text_bg"
-        android:backgroundTint="@color/orange"
-        android:src="@drawable/service_icon"/>
+            android:id="@+id/service_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:elevation="3dp"
+            android:background="@drawable/card_view"
+            android:backgroundTint="@color/orange"
+            android:src="@drawable/service_icon"/>
+
     <TextView
         android:id="@+id/service_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="11sp"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="@string/name"
+        android:text="Photographer"
         android:layout_gravity="center" />
 
 </LinearLayout>

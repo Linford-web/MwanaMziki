@@ -414,6 +414,34 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/Emcee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="10dp"
+                            android:elevation="3dp"
+                            android:layout_marginEnd="10dp">
+                            <ImageView
+                                android:id="@+id/mcIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:padding="2dp"
+                                app:tint="@color/black"
+                                android:src="@drawable/mc_icon" />
+
+                            <TextView
+                                android:id="@+id/mcTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Emcee"
+                                android:letterSpacing="0.1"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:id="@+id/carRental"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -694,14 +722,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                            <!-- Genre Input -->
-                            <TextView
-                                android:id="@+id/textViewGenre"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Music Genre"
-                                android:textSize="16sp"
-                                android:layout_marginTop="16dp"/>
+                        <!-- Genre Input -->
+                        <TextView
+                            android:id="@+id/textViewGenre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Music Genre"
+                            android:textSize="16sp"
+                            android:layout_marginTop="16dp"/>
+
                         <Spinner
                             android:id="@+id/spinnerGenre"
                             android:layout_width="match_parent"
@@ -710,7 +739,7 @@
                             android:padding="8dp"
                             android:entries="@array/music_genres"/>
 
-                            <EditText
+                        <EditText
                                 android:visibility="gone"
                                 android:id="@+id/editTextGenre"
                                 android:layout_width="match_parent"
@@ -745,9 +774,8 @@
 
                         </LinearLayout>
 
-
                             <!-- Equipment Input -->
-                            <TextView
+                        <TextView
                                 android:id="@+id/textViewEquipment"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -755,7 +783,7 @@
                                 android:textSize="16sp"
                                 android:layout_marginTop="16dp"/>
 
-                            <EditText
+                        <EditText
                                 android:id="@+id/editTextEquipment"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -792,6 +820,133 @@
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+                <!-- Emcee Service Details -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/emceeDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_bg"
+                    android:elevation="3dp"
+                    android:layout_marginTop="10dp">
+
+                    <!-- add necessary data for a Mcs -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Emcee Details"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="10dp" />
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:id="@+id/checkMc"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Audience Size" />
+
+                            <EditText
+                                android:id="@+id/mcAmount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="No. of People"
+                                android:inputType="number"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Emcee Role" />
+
+                            <Spinner
+                                android:id="@+id/spinnerMcRole"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="8dp"
+                                android:entries="@array/mc_roles"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="Performance Duration" />
+
+                            <EditText
+                                android:id="@+id/mcDuration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="Enter duration"
+                                android:inputType="number"
+                                android:padding="10dp"/>
+
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/mcSetUp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Provide SetUp and Equipment"/>
+
+                        <CheckBox
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Provide transport to event"
+                            android:id="@+id/travelMc"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -1942,24 +2097,25 @@
                                 android:layout_margin="5dp" />
                         </LinearLayout>
 
-
                     </LinearLayout>
-                </LinearLayout>
 
+                </LinearLayout>
 
             </LinearLayout>
 
             <Button
                 android:id="@+id/add_event"
-                android:layout_width="260dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/orange"
-                android:textColor="@color/black"
-                android:layout_marginTop="10dp"
                 android:text="@string/add_event"
-                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

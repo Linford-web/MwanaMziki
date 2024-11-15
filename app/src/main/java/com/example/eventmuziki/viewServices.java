@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class viewServices extends AppCompatActivity {
 
-    ImageView musicImage, carImage, soundImage, cateringImage, photographerImage, decorationImage, costumeImage, sponsorImage, influencerImage, makeUpImage;
+    ImageView musicImage, carImage, soundImage, cateringImage, photographerImage, decorationImage, costumeImage, sponsorImage, influencerImage, makeUpImage, mcImage;
 
     TextView carModel, carType, carColor, carTransmission, carSeats, carStatus, carDriver, carPrice, carExtraPrice, carDetails,
             soundPackage, instrumentName, instrumentType, areaCoverage, soundHirePrice, soundExtraPrice, soundSetup, soundConnectivity, soundDelivery, soundStatus, soundDetails,
@@ -40,13 +40,14 @@ public class viewServices extends AppCompatActivity {
             influencerHandle ,influencerPlatform, influencerSubscribers, influencerAge,influencerGender, location , influencerPackage, influencerContent, influencerPosts,schedule ,theme ,freedom ,collaboration ,cancellation, coverage, status,
             costumeName, costumeGender, costumeAgeGroup, costumeDetails, costumeSize, productAmount, material, customization, cleaning, duration, buyPrice, hirePrice, lateFee, delivery, policy, costumeStatus,
             musicGenre, musicStatus, instrumentDetails, musicianPrice, musicDetails, musicPolicy,
-            makeUpName,makeUpSpecialization, makeUpPackage , makeUpPrice , makeUpPortfolio, travel, makeUpBooking ,makeUpPolicy,makeUpStatus;
+            makeUpName,makeUpSpecialization, makeUpPackage , makeUpPrice , makeUpPortfolio, travel, makeUpBooking ,makeUpPolicy,makeUpStatus,
+            mcSpecialization, mcStatus, mcRole, mcDuration, mcAudience, mcBooking, mcPayRate, equipment, mcPolicy;
 
     LinearLayout musicianCardView, carRentalCardView, soundSystemCardView, cateringCardView, photographerCardView,
-            decorationCardView, costumeCardView, sponsorCardView, influencerCardView, makeUpCardView;
+            decorationCardView, costumeCardView, sponsorCardView, influencerCardView, makeUpCardView, mcCardView;
 
-    Button addMusic, addCar, addSound, addCatering, addPhotography, addDecoration, addCostume, addSponsor, addInfluencer, addMakeUp,
-            editMusic, editCar, editSound, editCatering, editPhotography, editDecoration, editCostume, editSponsor, editInfluencer, editMakeUp;
+    Button addMusic, addCar, addSound, addCatering, addPhotography, addDecoration, addCostume, addSponsor, addInfluencer, addMakeUp, addMc,
+            deleteMusic, deleteCar, deleteSound, deleteCatering, deletePhotography, deleteDecoration, deleteCostume, deleteSponsor, deleteInfluencer, deleteMakeUp, deleteMc;
 
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -75,16 +76,16 @@ public class viewServices extends AppCompatActivity {
         addInfluencer = findViewById(R.id.addInfluencer);
         addMakeUp = findViewById(R.id.addMakeUp);
 
-        editMusic = findViewById(R.id.editMusician);
-        editCar = findViewById(R.id.editCar);
-        editSound = findViewById(R.id.editSound);
-        editCatering = findViewById(R.id.editCatering);
-        editPhotography = findViewById(R.id.editPhotography);
-        editDecoration = findViewById(R.id.editDecoration);
-        editCostume = findViewById(R.id.editCostume);
-        editSponsor = findViewById(R.id.editSponsor);
-        editInfluencer = findViewById(R.id.editInfluencer);
-        editMakeUp = findViewById(R.id.editMakeUp);
+        deleteMusic = findViewById(R.id.editMusician);
+        deleteCar = findViewById(R.id.editCar);
+        deleteSound = findViewById(R.id.editSound);
+        deleteCatering = findViewById(R.id.editCatering);
+        deletePhotography = findViewById(R.id.editPhotography);
+        deleteDecoration = findViewById(R.id.editDecoration);
+        deleteCostume = findViewById(R.id.editCostume);
+        deleteSponsor = findViewById(R.id.editSponsor);
+        deleteInfluencer = findViewById(R.id.editInfluencer);
+        deleteMakeUp = findViewById(R.id.editMakeUp);
 
         musicianCardView = findViewById(R.id.musicianCardView);
         carRentalCardView = findViewById(R.id.carRentalCardView);
@@ -236,6 +237,19 @@ public class viewServices extends AppCompatActivity {
         musicDetails = findViewById(R.id.musicDetails);
         musicPolicy = findViewById(R.id.musicianPolicy);
 
+        addMc = findViewById(R.id.addMc);
+        deleteMc = findViewById(R.id.editMc);
+        mcSpecialization = findViewById(R.id.mcSpecialization);
+        mcStatus = findViewById(R.id.mcStatus);
+        mcRole = findViewById(R.id.mcRole);
+        mcDuration = findViewById(R.id.mcDuration);
+        mcAudience = findViewById(R.id.mcAudience);
+        mcBooking = findViewById(R.id.mcBooking);
+        mcPayRate = findViewById(R.id.mcPayRate);
+        equipment = findViewById(R.id.mcEquipment);
+        mcPolicy = findViewById(R.id.mcPolicy);
+        mcCardView = findViewById(R.id.mcCardView);
+        mcImage = findViewById(R.id.mcImage);
 
         // Get the car details from the intent
         Intent intent = getIntent();
@@ -248,6 +262,56 @@ public class viewServices extends AppCompatActivity {
 
             fetchDetails(productId, creatorId);
 
+            findViewById(R.id.deletProduct).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+
+            addMc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String name = mcSpecialization.getText().toString();
+                    String role = mcRole.getText().toString();
+                    String duration = mcDuration.getText().toString();
+                    String audience = mcAudience.getText().toString();
+                    String booking = mcBooking.getText().toString();
+                    String policy = mcPolicy.getText().toString();
+                    String status = mcStatus.getText().toString();
+                    String price = mcPayRate.getText().toString();
+                    String equipments = equipment.getText().toString();
+
+                    ServicesDetails.cartModel mcModel = new ServicesDetails.cartModel(name, role, price, creatorId, productId, image, userId, "", "Emcee", "");
+                    fStore.collection("Cart")
+                            .whereEqualTo("productId", productId)
+                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Toast.makeText(viewServices.this, "Product already in cart", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(viewServices.this, cartActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    fStore.collection("Cart")
+                                            .add(mcModel)
+                                            .addOnSuccessListener(documentReference -> {
+                                                String cartId = documentReference.getId();
+                                                documentReference.update("cartId", cartId);
+                                                showPopupDialog(view);
+
+                                                new Handler().postDelayed(() -> {
+                                                    Intent intent = new Intent(viewServices.this, categoryOptions.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }, 3000);
+                                                
+                                            }).addOnFailureListener(e ->
+                                                    Toast.makeText(viewServices.this, "Error adding car to cart", Toast.LENGTH_SHORT).show()
+                                            );
+                                }
+                            });
+                }
+            });
             addMusic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -611,61 +675,67 @@ public class viewServices extends AppCompatActivity {
                 }
             });
 
-            editMusic.setOnClickListener(new View.OnClickListener() {
+            deleteMc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editCar.setOnClickListener(new View.OnClickListener() {
+            deleteMusic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editSound.setOnClickListener(new View.OnClickListener() {
+            deleteCar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editCatering.setOnClickListener(new View.OnClickListener() {
+            deleteSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editPhotography.setOnClickListener(new View.OnClickListener() {
+            deleteCatering.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editDecoration.setOnClickListener(new View.OnClickListener() {
+            deletePhotography.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editCostume.setOnClickListener(new View.OnClickListener() {
+            deleteDecoration.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editSponsor.setOnClickListener(new View.OnClickListener() {
+            deleteCostume.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editInfluencer.setOnClickListener(new View.OnClickListener() {
+            deleteSponsor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
                 }
             });
-            editMakeUp.setOnClickListener(new View.OnClickListener() {
+            deleteInfluencer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteProduct(product, view);
+                }
+            });
+            deleteMakeUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     deleteProduct(product, view);
@@ -715,6 +785,10 @@ public class viewServices extends AppCompatActivity {
                     case "MakeUp":
                         makeUpCardView.setVisibility(View.VISIBLE);
                         hideOtherCardViews(makeUpCardView);
+                        break;
+                    case "Emcee":
+                        mcCardView.setVisibility(View.VISIBLE);
+                        hideOtherCardViews(mcCardView);
                         break;
                     default:
                         Toast.makeText(this, "Unknown service type", Toast.LENGTH_SHORT).show();
@@ -798,6 +872,7 @@ public class viewServices extends AppCompatActivity {
             influencerCardView.setVisibility(visibleCardView == influencerCardView ? View.VISIBLE : View.GONE);
             musicianCardView.setVisibility(visibleCardView == musicianCardView ? View.VISIBLE : View.GONE);
             makeUpCardView.setVisibility(visibleCardView == makeUpCardView ? View.VISIBLE : View.GONE);
+            mcCardView.setVisibility(visibleCardView == mcCardView ? View.VISIBLE : View.GONE);
         }
 
     private void showPopupDialog(View view) {
@@ -845,8 +920,38 @@ public class viewServices extends AppCompatActivity {
                                     .get()
                                     .addOnSuccessListener(documentSnapshot -> {
 
-                                        String productsId = documentSnapshot.getId();
+                                        if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Emcee")) {
+                                            // Fetch and display product details
+                                            mcSpecialization.setText(documentSnapshot.getString("specialization"));
+                                            mcRole.setText(documentSnapshot.getString("eventRole"));
+                                            mcDuration.setText(documentSnapshot.getString("duration"));
+                                            mcStatus.setText(documentSnapshot.getString("status"));
+                                            mcAudience.setText(documentSnapshot.getString("audience"));
+                                            mcBooking.setText(documentSnapshot.getString("bookingTime"));
+                                            mcPayRate.setText(documentSnapshot.getString("price"));
+                                            mcPolicy.setText(documentSnapshot.getString("policy"));
+                                            equipment.setText(documentSnapshot.getString("equipment"));
 
+                                            String imageUrl = documentSnapshot.getString("image");
+                                            if (imageUrl != null) {
+                                                Glide.with(viewServices.this)
+                                                        .load(imageUrl)
+                                                        .placeholder(R.drawable.mc_icon)
+                                                        .error(R.drawable.mc_icon)
+                                                        .into(mcImage);
+                                            } else {
+                                                Log.e("Image URL", "Image URL is null");
+                                            }
+                                            String userId = documentSnapshot.getString("creatorId");
+                                            if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
+                                                addMc.setVisibility(View.GONE);
+                                                deleteMc.setVisibility(View.VISIBLE);
+                                            }
+                                            else {
+                                                addMc.setVisibility(View.VISIBLE);
+                                                deleteMc.setVisibility(View.GONE);
+                                            }
+                                        }
                                         if (documentSnapshot.exists() && serviceCategory != null && serviceCategory.equalsIgnoreCase("Music")){
                                              musicGenre.setText(documentSnapshot.getString("genre"));
                                             musicStatus.setText(documentSnapshot.getString("status"));
@@ -869,10 +974,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId !=null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())){
                                                 addMusic.setVisibility(View.GONE);
-                                                editMusic.setVisibility(View.VISIBLE);
+                                                deleteMusic.setVisibility(View.VISIBLE);
                                             }else {
                                                 addMusic.setVisibility(View.VISIBLE);
-                                                editMusic.setVisibility(View.GONE);
+                                                deleteMusic.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -909,10 +1014,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addCostume.setVisibility(View.GONE);
-                                                editCostume.setVisibility(View.VISIBLE);
+                                                deleteCostume.setVisibility(View.VISIBLE);
                                             }else {
                                                 addCostume.setVisibility(View.VISIBLE);
-                                                editCostume.setVisibility(View.GONE);
+                                                deleteCostume.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -949,10 +1054,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addInfluencer.setVisibility(View.GONE);
-                                                editInfluencer.setVisibility(View.VISIBLE);
+                                                deleteInfluencer.setVisibility(View.VISIBLE);
                                             }else {
                                                 addInfluencer.setVisibility(View.VISIBLE);
-                                                editInfluencer.setVisibility(View.GONE);
+                                                deleteInfluencer.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -986,10 +1091,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addSponsor.setVisibility(View.GONE);
-                                                editSponsor.setVisibility(View.VISIBLE);
+                                                deleteSponsor.setVisibility(View.VISIBLE);
                                             }else {
                                                 addSponsor.setVisibility(View.VISIBLE);
-                                                editSponsor.setVisibility(View.GONE);
+                                                deleteSponsor.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -1021,10 +1126,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addDecoration.setVisibility(View.GONE);
-                                                editDecoration.setVisibility(View.VISIBLE);
+                                                deleteDecoration.setVisibility(View.VISIBLE);
                                             }else {
                                                 addDecoration.setVisibility(View.VISIBLE);
-                                                editDecoration.setVisibility(View.GONE);
+                                                deleteDecoration.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -1057,10 +1162,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addPhotography.setVisibility(View.GONE);
-                                                editPhotography.setVisibility(View.VISIBLE);
+                                                deletePhotography.setVisibility(View.VISIBLE);
                                             }else {
                                                 addPhotography.setVisibility(View.VISIBLE);
-                                                editPhotography.setVisibility(View.GONE);
+                                                deletePhotography.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -1096,10 +1201,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addCatering.setVisibility(View.GONE);
-                                                editCatering.setVisibility(View.VISIBLE);
+                                                deleteCatering.setVisibility(View.VISIBLE);
                                             }else {
                                                 addCatering.setVisibility(View.VISIBLE);
-                                                editCatering.setVisibility(View.GONE);
+                                                deleteCatering.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -1131,10 +1236,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addSound.setVisibility(View.GONE);
-                                                editSound.setVisibility(View.VISIBLE);
+                                                deleteSound.setVisibility(View.VISIBLE);
                                             }else {
                                                 addSound.setVisibility(View.VISIBLE);
-                                                editSound.setVisibility(View.GONE);
+                                                deleteSound.setVisibility(View.GONE);
                                             }
 
                                         }
@@ -1165,10 +1270,10 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addCar.setVisibility(View.GONE);
-                                                editCar.setVisibility(View.VISIBLE);
+                                                deleteCar.setVisibility(View.VISIBLE);
                                             }else {
                                                 addCar.setVisibility(View.VISIBLE);
-                                                editCar.setVisibility(View.GONE);
+                                                deleteCar.setVisibility(View.GONE);
                                             }
 
 
@@ -1198,12 +1303,13 @@ public class viewServices extends AppCompatActivity {
                                             String userId = documentSnapshot.getString("creatorId");
                                             if (userId != null && userId.equalsIgnoreCase(fAuth.getCurrentUser().getUid())) {
                                                 addMakeUp.setVisibility(View.GONE);
-                                                editMakeUp.setVisibility(View.VISIBLE);
+                                                deleteMakeUp.setVisibility(View.VISIBLE);
                                             }else {
                                                 addMakeUp.setVisibility(View.VISIBLE);
-                                                editMakeUp.setVisibility(View.GONE);
+                                                deleteMakeUp.setVisibility(View.GONE);
                                             }
                                         }
+
 
                                         if (!documentSnapshot.exists() && serviceCategory == null){
                                             Toast.makeText(viewServices.this, "No service found for this category", Toast.LENGTH_SHORT).show();

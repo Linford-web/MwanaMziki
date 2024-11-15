@@ -34,7 +34,7 @@
                 android:layout_gravity="start"
                 android:background="@drawable/edit_text_bg"
                 android:backgroundTint="@color/orange"
-                app:tint="@color/red"
+                app:tint="@color/black"
                 android:src="@drawable/back_arrow" />
 
             <TextView
@@ -544,50 +544,121 @@
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/doneRecyclerView"
-                android:layout_marginTop="10dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:id="@+id/bookedSvpRv"/>
-
             <LinearLayout
+                android:id="@+id/bookedCorporate"
                 android:visibility="gone"
-                android:id="@+id/emptyBookedTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp"
-                android:gravity="center"
-                android:elevation="2dp"
-                android:layout_marginTop="20dp">
-
-                <ImageView
-                    android:id="@+id/addBookedService"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:tint="@color/gray"
-                    android:contentDescription="@string/adverts"
-                    android:src="@drawable/empty_icon"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="10dp" />
+                android:orientation="vertical">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Corporate Events"
+                    android:textSize="17sp"
+                    android:layout_marginStart="5dp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/doneRecyclerView"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/emptyBookedTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No Booked Event!"
-                    android:letterSpacing="0.09"
-                    android:textAlignment="center"
-                    android:textSize="17sp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:gravity="center"
+                    android:elevation="2dp"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/addBookedService"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:tint="@color/gray"
+                        android:contentDescription="@string/adverts"
+                        android:src="@drawable/empty_icon"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Booked Event1"
+                        android:letterSpacing="0.09"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bookedMusician"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bidders Events"
+                    android:textSize="17sp"
+                    android:layout_marginStart="5dp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/bookedSvpRv"/>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/emptyBookTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:gravity="center"
+                    android:elevation="2dp"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:tint="@color/gray"
+                        android:contentDescription="@string/adverts"
+                        android:src="@drawable/empty_icon"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Booked Event2"
+                        android:letterSpacing="0.09"
+                        android:textAlignment="center"
+                        android:textSize="17sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

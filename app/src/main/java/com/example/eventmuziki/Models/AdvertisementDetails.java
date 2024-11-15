@@ -156,4 +156,41 @@ public class AdvertisementDetails {
         }
     }
 
+    public static class reviewModel{
+        String reviewMessage, userId, timestamp;
+
+        public reviewModel() {
+        }
+
+        public reviewModel(String reviewMessage, String userId, String timestamp) {
+            this.reviewMessage = reviewMessage;
+            this.userId = userId;
+            this.timestamp = timestamp;
+        }
+
+        public String getReviewMessage() {
+            return reviewMessage;
+        }
+
+        public void setReviewMessage(String reviewMessage) {
+            this.reviewMessage = reviewMessage;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(String timestamp) {
+            this.timestamp = timestamp;
+        }
+    }
+
 }

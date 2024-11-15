@@ -27,12 +27,13 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
-            android:background="@drawable/edit_text_bg"
+            android:background="@drawable/card_view"
             android:backgroundTint="@color/orange"
             app:tint="@color/red"
             android:src="@drawable/back_arrow" />
 
         <ImageButton
+            android:visibility="gone"
             android:id="@+id/notificationBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -45,22 +46,25 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
-        android:layout_below="@id/top_toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_toolbar"
+        android:padding="8dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/card_view"
+            android:padding="2dp"
+            android:backgroundTint="@color/light_gray"
             android:orientation="vertical">
-
             <!-- Balance Display Section -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@drawable/edit_text_bg"
+                android:layout_height="120dp"
+                android:background="@drawable/card_view"
                 android:backgroundTint="@color/light_yellow"
                 android:padding="15dp"
                 android:layout_marginBottom="15dp">
@@ -72,88 +76,400 @@
                     android:text="Balance"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/blue" />
 
-                <TextView
-                    android:id="@+id/tvBalance"
+                <LinearLayout
+                    android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/first"
-                    android:text="$1,190.60"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ksh: "
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
 
-                <!-- Withdraw and Deposit Buttons -->
-                <LinearLayout
+                    <TextView
+                        android:id="@+id/tvBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00.00"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white" />
+
+                </LinearLayout>
+
+                <TextView
                     android:id="@+id/action_buttons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvBalance"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btnWithdraw"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Withdraw"
-                        android:backgroundTint="@android:color/white"
-                        android:textColor="@color/green"
-                        android:layout_marginEnd="8dp"/>
-
-                    <Button
-                        android:id="@+id/btnDeposit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Deposit"
-                        android:backgroundTint="@android:color/white"
-                        android:textColor="@color/blue" />
-                </LinearLayout>
+                    android:layout_below="@id/balance"
+                    android:layout_marginTop="10dp"
+                    android:text="Main account balance"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
 
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:id="@+id/walletMenu">
             </androidx.recyclerview.widget.RecyclerView>
 
-            <!-- Transactions Section -->
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="10dp">
+                android:orientation="vertical">
 
-                <View
+                <!-- Transactions Section -->
+                <LinearLayout
+                    android:visibility="visible"
+                    android:id="@+id/transactionsSection"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/gray"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="6dp"/>
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
 
-                <TextView
-                    android:id="@+id/tvTransactionsTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Transactions"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:id="@+id/tvTransactionsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transactions"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/transactionsRv">
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <!-- Deposit Money Section -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/depositMoneySection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/transactionsRv">
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose Deposit Method"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="17sp"
+                        android:padding="2dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/depositMenuRv"
+                        android:padding="5dp"/>
+
+                    <LinearLayout
+                        android:visibility="visible"
+                        android:id="@+id/mPesaSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Deposit money using M-pesa"
+                            android:textStyle="normal"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="14sp"
+                            android:padding="2dp"/>
+
+
+                        <EditText
+                            android:id="@+id/mPesaAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:elevation="1dp"
+                            android:hint="Enter amount to deposit"
+                            android:inputType="numberDecimal"
+                            android:layout_marginBottom="16dp"/>
+
+                        <Button
+                            android:id="@+id/mPesaBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:textColor="@color/black"
+                            android:text="Deposit"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/visaSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Deposit money using Mastecard or Visa"
+                            android:textStyle="normal"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="14sp"
+                            android:padding="2dp"/>
+
+                        <EditText
+                            android:id="@+id/visaAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:elevation="1dp"
+                            android:hint="Enter amount to deposit"
+                            android:inputType="numberDecimal"
+                            android:layout_marginBottom="16dp"/>
+
+                        <Button
+                            android:id="@+id/visaBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:textColor="@color/black"
+                            android:text="Deposit"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/payPalSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Deposit money using PayPal"
+                            android:textStyle="normal"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="14sp"
+                            android:padding="2dp"/>
+
+                        <EditText
+                            android:id="@+id/payPalAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:elevation="1dp"
+                            android:hint="Enter amount to deposit"
+                            android:inputType="numberDecimal"
+                            android:layout_marginBottom="16dp"/>
+
+                        <Button
+                            android:id="@+id/payPalBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:textColor="@color/black"
+                            android:text="Deposit"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Withdraw Money Section -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/withdrawMoneySection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Withdrawals"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="17sp"
+                        android:padding="2dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/withdrawMenuRv"
+                        android:padding="5dp"/>
+
+                    <LinearLayout
+                        android:visibility="visible"
+                        android:id="@+id/withdrawMpesaSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Withdraw money to M-pesa"
+                            android:textStyle="normal"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="14sp"
+                            android:padding="2dp"/>
+
+                        <EditText
+                            android:id="@+id/withdrawMpesaAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:elevation="1dp"
+                            android:hint="Enter amount to withdraw"
+                            android:inputType="numberDecimal"
+                            android:layout_marginBottom="16dp"/>
+
+                        <Button
+                            android:id="@+id/withdrawMpesaBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:textColor="@color/black"
+                            android:text="Withdraw"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/withdrawVisaSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Withdraw money to Mastecard or Visa"
+                            android:textStyle="normal"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="14sp"
+                            android:padding="2dp"/>
+
+                        <EditText
+                            android:id="@+id/withdrawVisaAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:elevation="1dp"
+                            android:hint="Enter amount to withdraw"
+                            android:inputType="numberDecimal"
+                            android:layout_marginBottom="16dp"/>
+
+                        <Button
+                            android:id="@+id/visaWithdrawBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:textColor="@color/black"
+                            android:text="Cooming Soon"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/payPalWithdrawSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Withdraw money to PayPal account"
+                            android:textStyle="normal"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="14sp"
+                            android:padding="2dp"/>
+
+                        <EditText
+                            android:id="@+id/withdrawPayPalAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:padding="8dp"
+                            android:elevation="1dp"
+                            android:hint="Enter amount to withdraw"
+                            android:inputType="numberDecimal"
+                            android:layout_marginBottom="16dp"/>
+
+                        <Button
+                            android:id="@+id/payPalWithdrawBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/orange"
+                            android:textColor="@color/black"
+                            android:text="Withdraw"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Receipts Layout -->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/receiptsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Receipts"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="17sp"
+                        android:padding="2dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+        </ScrollView>
 
-        </LinearLayout>
 
-    </ScrollView>
-
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -76,10 +76,11 @@ public class eventsActivity extends AppCompatActivity {
     TextView categoryTxt, allEventsTxt, allBidsTxt, allBookedTxt, allBids, allBooked, userCategoryTv;
     LinearLayout emptyRv, addEventsTv, menu, searchLayout, viewAll, bidEvents,
             viewBooked, allEvents, allEventsLayout, bookedEvents, viewBid, categoryLayout,
-            menuCategoryLayout, userCategoryLayout, displayEmpty, emptyBooked;
+            menuCategoryLayout, userCategoryLayout, displayEmpty, emptyBooked, emptyBookTv, bookedCorporate, bookedMusician;
     NestedScrollView scrollView;
     EditText searchTxt;
-    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView, categoryRecyclerView, categoryMenuRv, userCategoryRv, myBookedRv;
+    RecyclerView searchEventsRv, bidRecyclerView, recyclerView, eventRecyclerView, doneRecyclerView,
+            categoryRecyclerView, categoryMenuRv, userCategoryRv, myBookedRv;
     eventSearchAdapter eventSearch;
 
     @Override
@@ -134,6 +135,9 @@ public class eventsActivity extends AppCompatActivity {
         addEventsTv = findViewById(R.id.addEventsTv);
         displayEmpty = findViewById(R.id.displayEmptyRvLayout);
         emptyBooked = findViewById(R.id.emptyBookedTv);
+        emptyBookTv = findViewById(R.id.emptyBookTv);
+        bookedCorporate = findViewById(R.id.bookedCorporate);
+        bookedMusician = findViewById(R.id.bookedMusician);
 
         categoryMenuRv = findViewById(R.id.categoriesRv);
         //get user type
@@ -192,13 +196,6 @@ public class eventsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager7 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         myBookedRv.setLayoutManager(layoutManager7);
         myBookedRv.setAdapter(bookedAdapter1);
-
-        // Fetch events from Firestore
-        fetchEventsS(userId);
-        // Fetch events from Firestore
-        fetchEvents();
-
-        fetchBookedUsers(userId);
 
         // Set up toolbar
         Toolbar toolbar = findViewById(R.id.top_toolbar);
@@ -311,8 +308,7 @@ public class eventsActivity extends AppCompatActivity {
                 allEventsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBidsTxt.setTextColor(getResources().getColor(R.color.black));
                 allBookedTxt.setTextColor(getResources().getColor(R.color.orange));
-                // fetch booked events from Firestore
-                fetchBookedEvents();
+
             }
         });
 
@@ -391,10 +387,20 @@ public class eventsActivity extends AppCompatActivity {
             }
         });
 
+        // Fetch events from Firestore
+        fetchEventsS(userId);
+        // Fetch events from Firestore
+        fetchEvents();
+        // fetch booked events from Firestore
+        fetchBookedEvents();
+
+        fetchBookedUsers(userId);
+
     }
 
     private void fetchBookedUsers(String userId) {
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        String userIds = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         // First, get all documents from the BookedEvents collection
         fStore.collection("BookedEvents")
@@ -408,12 +414,17 @@ public class eventsActivity extends AppCompatActivity {
                             fStore.collection("BookedEvents")
                                     .document(bookedEventId)
                                     .collection("BookedBidders")
-                                    .whereEqualTo("biddersId", userId)
+                                    .whereEqualTo("biddersId", userIds)
                                     .get()
                                     .addOnSuccessListener(biddersSnapshots -> {
                                         if (!biddersSnapshots.isEmpty()) {
+                                            Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
+                                            myBookedRv.setVisibility(View.VISIBLE);
+                                            emptyBookTv.setVisibility(View.GONE);
+
+                                            // Convert each bidder document to your model class
                                             booked1.clear();
-                                            for (DocumentSnapshot bidderDocument : queryDocumentSnapshots) {
+                                            for (DocumentSnapshot bidderDocument : biddersSnapshots) {
                                                 // Convert each document to your model class
                                                 bookedEventsModel bidder = bidderDocument.toObject(bookedEventsModel.class);
                                                 booked1.add(bidder);
@@ -422,6 +433,10 @@ public class eventsActivity extends AppCompatActivity {
                                         } else {
                                             // No matching bidder found, show the empty message
                                             Log.d("TAG", "No matching bidder found for event: " + bookedEventId);
+                                            Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
+                                            myBookedRv.setVisibility(View.GONE);
+                                            emptyBookTv.setVisibility(View.VISIBLE);
+
                                         }
                                     })
                                     .addOnFailureListener(e -> {
@@ -461,16 +476,19 @@ public class eventsActivity extends AppCompatActivity {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         categoryRecyclerView.setVisibility(View.VISIBLE);
                         displayEmpty.setVisibility(View.GONE);
+
+                        events3.clear();
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            eventModel event = documentSnapshot.toObject(eventModel.class);
+                            events3.add(event);
+                        }
+                        categoryAdpt.notifyDataSetChanged();
+
                     } else {
                         categoryRecyclerView.setVisibility(View.GONE);
                         displayEmpty.setVisibility(View.VISIBLE);
                     }
-                    events3.clear();
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        eventModel event = documentSnapshot.toObject(eventModel.class);
-                        events3.add(event);
-                    }
-                    categoryAdpt.notifyDataSetChanged();
+
                 }).addOnFailureListener(e -> Toast.makeText(eventsActivity.this, "Failed to fetch category events", Toast.LENGTH_SHORT).show());
 
     }
@@ -555,29 +573,22 @@ public class eventsActivity extends AppCompatActivity {
                 .whereEqualTo("creatorID", userId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    booked.clear();
-                    HashSet<String> events = new HashSet<>();
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
-                        if (!events.contains(event.getEventId())) {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        emptyBooked.setVisibility(View.GONE);
+                        doneRecyclerView.setVisibility(View.VISIBLE);
+                        booked.clear();
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
                             booked.add(event);
-                            events.add(event.getEventId());
+                            Log.d("TAG", "Event: " + event.getEventName());
                         }
-
+                        bookedAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.d("TAG", "No events found");
+                        emptyBooked.setVisibility(View.VISIBLE);
+                        doneRecyclerView.setVisibility(View.GONE);
                     }
-                    bookedAdapter.notifyDataSetChanged();
                 });
-
-        fStore.collection("BookedEvents")
-                .whereEqualTo("biddersId", userId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        bookedEventsModel event = documentSnapshot.toObject(bookedEventsModel.class);
-                        booked.add(event);
-                    }
-                    bookedAdapter.notifyDataSetChanged();
-                }).addOnFailureListener(e -> Toast.makeText(eventsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
     }
 
@@ -630,15 +641,15 @@ public class eventsActivity extends AppCompatActivity {
                                userCategoryLayout.setVisibility(View.GONE);
                                addTask.setVisibility(View.VISIBLE);
                                allEvents.setVisibility(View.VISIBLE);
-                               doneRecyclerView.setVisibility(View.VISIBLE);
-                               myBookedRv.setVisibility(View.GONE);
-                            } else if ("Musician".equalsIgnoreCase(userType)) {
+                               bookedCorporate.setVisibility(View.VISIBLE);
+                               bookedMusician.setVisibility(View.GONE);
+                            }
+                            if ("Musician".equalsIgnoreCase(userType)) {
                                 userCategoryLayout.setVisibility(View.VISIBLE);
                                 addTask.setVisibility(View.GONE);
                                 allEvents.setVisibility(View.GONE);
-                                doneRecyclerView.setVisibility(View.GONE);
-                                myBookedRv.setVisibility(View.VISIBLE);
-
+                                bookedCorporate.setVisibility(View.GONE);
+                                bookedMusician.setVisibility(View.VISIBLE);
                                 // Fetch events based on user category
                                 String userCategory = document.getString("category");
                                 if (userCategory != null) {
@@ -646,9 +657,8 @@ public class eventsActivity extends AppCompatActivity {
                                     fetchEventsBasedOnCategory(userCategory);
                                 }else {
                                     Log.d("TAG", "Service provider category is null");
-                                    Toast.makeText(eventsActivity.this, "Service provider category is null", Toast.LENGTH_SHORT).show();
+                                    // Toast.makeText(eventsActivity.this, "Service provider category is null", Toast.LENGTH_SHORT).show();
                                 }
-
 
                             } else {
                                 // Handle other user types if needed

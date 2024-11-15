@@ -49,6 +49,7 @@
         <item>Wedding</item>
         <item>Graduation</item>
         <item>Cinematography</item>
+        <item>Clubbing</item>
         <item>Other</item>
     </string-array>
     <string name="title_activity_main_dash">MainActivityDash</string>
@@ -84,6 +85,7 @@
     <string name="todo">TODO</string>
     <string-array name="User_Category">
         <item>Music</item>
+        <item>Emcee</item>
         <item>Car Rental</item>
         <item>Sound</item>
         <item>Catering</item>
@@ -119,6 +121,14 @@
         <item>Teenager</item>
         <item>Adult</item>
         <item>Old</item>
+    </string-array>
+    <string-array name="mc_roles">
+        <item>All</item>
+        <item>Introductions</item>
+        <item>Announcements</item>
+        <item>Entertainment</item>
+        <item>Crowd Hype</item>
+        <item>Thanks Giving</item>
     </string-array>
     <string-array name="material">
         <item>Leather</item>

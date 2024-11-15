@@ -38,6 +38,7 @@ import com.example.eventmuziki.Adapters.serviceAdapters.decoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.djAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.influencerAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.makeUpAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.mcAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.musicianAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.photoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.sponsorAdapter;
@@ -65,11 +66,11 @@ public class addServices extends AppCompatActivity {
     FirebaseStorage fStorage;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
-    ImageButton back, addMusicianPhoto,addCarPhoto, addPaparaziPhoto, addCateringPhoto, addThriftPhoto, addDjPhoto, addInfluencersPhoto, addSponsorPhoto, addDecorationPhoto, addMakeUpPhoto,
-            deleteCar, deleteThrift, deletePaparazi, deleteSound, deleteCatering, deleteContent, deleteSponsor, deleteDecoration, deleteMusician, deleteMakeUpPhoto,
+    ImageButton back, addMusicianPhoto,addCarPhoto, addPaparaziPhoto, addCateringPhoto, addThriftPhoto, addDjPhoto, addInfluencersPhoto, addSponsorPhoto, addDecorationPhoto, addMakeUpPhoto, addMcPhoto,
+            deleteCar, deleteThrift, deletePaparazi, deleteSound, deleteCatering, deleteContent, deleteSponsor, deleteDecoration, deleteMusician, deleteMakeUpPhoto, deleteMcPhoto,
             btnMinus, btnAdd, btnAddD, btnMinusD, btnAddE, btnMinusE, btnAddZ, btnMinusZ, btnAddM, btnMinusM, btnAddP, btnMinusP;
-    ImageView musicianPhoto, carPhoto, paparazi, cateringPhoto, thriftPhoto, djPhoto, influencerPhoto, sponsorPhoto, decorationPhoto, makeUpPhoto,
-            musicClose, carClose, photographyClose, cateringClose, thriftClose, djClose, decorationClose, influencersClose, sponsorClose, makeUpClose;
+    ImageView musicianPhoto, carPhoto, paparazi, cateringPhoto, thriftPhoto, djPhoto, influencerPhoto, sponsorPhoto, decorationPhoto, makeUpPhoto, mcPhoto,
+            musicClose, carClose, photographyClose, cateringClose, thriftClose, djClose, decorationClose, influencersClose, sponsorClose, makeUpClose, mcClose;
     EditText carDetailsTxt, carPriceTxt, carExtraPriceTxt,
             photographerNumbers, no_photos, delivery_time, portfolio_link, photo_package_price,price_per_hour, photo_extra_price, photo_advanced_booking,
             catering_company_name, no_of_people, cateringPackagePrice, catering_details,catering_transport, catering_cancel, tv_catering, no_staff,
@@ -78,17 +79,18 @@ public class addServices extends AppCompatActivity {
             influencerHandle, subscriber_count, collaborationFee, influencerCancellationPolicy, no_of_posts,
             sponsorName, brandingGuidelines, sponsorPreBooking, expectedAudience, sponsorCancellationPolicy, sponsorAmount,
             decoName, decoDetails, decoCancellationPolicy, tvDecoBooking, decoAmount, instrumentDetails, payRate, musicDetails, musicianPolicy,
-            makeUpName, makeUpSpecialization, makeUpPrice, makeUpLink, makeUpBooking, makeUpPolicy;
+            makeUpName, makeUpSpecialization, makeUpPrice, makeUpLink, makeUpBooking, makeUpPolicy,
+            mcDuration, mcAudience, mcAmount, mcBooking, mcPolicy, mcExtraPrice;
 
     CheckBox carCheckbox, checkBoxCustomization, checkBoxCleaning, checkBoxDelivery, checkBoxPhotoTravel, checkBoxPreShoot,
                 checkBoxSetUp, checkBoxSoundDelivery, checkBoxWireless,
             checkBoxCateringSetUp, checkBoxCateringStaff, checkBoxCateringTheme, checkBoxCateringEventManagement,
             eventCoverage, checkBoxDigitalPromotion,
-            checkBoxDecoSetUp, checkBoxDecoCustomization, checkBoxDecoEmergency, musicInstrument, makeUpTravel;
-    Button seeAddMusic, seeAddCar, seeAddPhotography, seeAddCatering, seeAddThrift, seeAddDj, seeAddInfluencers, seeAddSponsor, seeAddDecoration, seeAddMakeUp;
+            checkBoxDecoSetUp, checkBoxDecoCustomization, checkBoxDecoEmergency, musicInstrument, makeUpTravel, mcEquipments;
+    Button seeAddMusic, seeAddCar, seeAddPhotography, seeAddCatering, seeAddThrift, seeAddDj, seeAddInfluencers, seeAddSponsor, seeAddDecoration, seeAddMakeUp, seeAddMc;
 
     TextView categoryTxt, addTxt, bookedTxt;
-    RecyclerView musicianRv, carRv, photographyRv, cateringRv, thriftRv, soundRv, decorationRv, influencersRv, sponsorRv, makeUpRv, bookedRv;
+    RecyclerView musicianRv, carRv, photographyRv, cateringRv, thriftRv, soundRv, decorationRv, influencersRv, sponsorRv, makeUpRv, mcRv, bookedRv;
     int amount = 0;
     int hour = 6;
     int duration = 1;
@@ -102,12 +104,12 @@ public class addServices extends AppCompatActivity {
             ,spinner_soundEquipment,spinner_djServices,
             spinnerSocialMedia, spinnerAudienceAge, spinnerAudienceGender, spinnerAudienceLocation, spinnerSocialMediaPackage, spinnerContentType, spinnerPostingSchedule, spinnerContentTheme, spinnerContentFreedom,
             spinnerSponsorshipType, spinnerSponsorEventType, sponsorAge, sponsorIndustry, sponsorInterests,
-            spinnerDecoPackage, spinnerDecoTheme, spinnerDecoEvent, spinnerMusicGenre, spinnerMakeUpType;
+            spinnerDecoPackage, spinnerDecoTheme, spinnerDecoEvent, spinnerMusicGenre, spinnerMakeUpType, spinnerMcSpecialization, spinnerMcRole;
 
-    Button carSubmit, photographySubmit, cateringSubmit, thriftSubmit, djSubmit, influencerSubmit, sponsorSubmit, decorationSubmit, musicianSubmit, makeUpSubmit;
+    Button carSubmit, photographySubmit, cateringSubmit, thriftSubmit, djSubmit, influencerSubmit, sponsorSubmit, decorationSubmit, musicianSubmit, makeUpSubmit, mcSubmit;
 
-    LinearLayout addMusicianDetails, addCarDetails, addPhotographyDetails, addCateringDetails, addThriftDetails, addDjDetails, addDecorationDetails, addInfluencersDetails ,addSponsorDetails, addMakeUpDetails,
-            musicDetailsTv, carDetailsTv, photographyDetailsTv, cateringDetailsTv, thriftDetailsTv, djDetailsTv, decorationDetailsTv, influencersDetailsTv, sponsorDetailsTv, makeUpDetailsTv,
+    LinearLayout addMusicianDetails, addCarDetails, addPhotographyDetails, addCateringDetails, addThriftDetails, addDjDetails, addDecorationDetails, addInfluencersDetails ,addSponsorDetails, addMakeUpDetails, addMcDetails,
+            musicDetailsTv, carDetailsTv, photographyDetailsTv, cateringDetailsTv, thriftDetailsTv, djDetailsTv, decorationDetailsTv, influencersDetailsTv, sponsorDetailsTv, makeUpDetailsTv, mcDetailsTv,
             addProduct, bookedProducts, add, book, emptyRv, optionView;
 
     String userCategory, userId;
@@ -145,6 +147,10 @@ public class addServices extends AppCompatActivity {
 
     ArrayList<ServicesDetails.cartModel> bookedList = new ArrayList<>();
     bookedServicesAdapter bookedAdapter;
+
+    ArrayList<ServicesDetails.mcModel> mcList = new ArrayList<>();
+    mcAdapter adapterMc;
+
 
     Dialog popupDialog;
 
@@ -238,6 +244,11 @@ public class addServices extends AppCompatActivity {
         bookedAdapter = new bookedServicesAdapter(bookedList, this);
         bookedRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         bookedRv.setAdapter(bookedAdapter);
+
+        mcList = new ArrayList<>();
+        adapterMc = new mcAdapter(mcList, this);
+        mcRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mcRv.setAdapter(adapterMc);
 
         // Set click listeners for add and minus image buttons
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -427,6 +438,17 @@ public class addServices extends AppCompatActivity {
 
     private void setupAddButtons() {
 
+        seeAddMc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mcDetailsTv.setVisibility(View.VISIBLE);
+                mcRv.setVisibility(View.GONE);
+                seeAddMc.setVisibility(View.GONE);
+                mcClose.setVisibility(View.VISIBLE);
+                back.setVisibility(View.GONE);
+                optionView.setVisibility(View.GONE);
+            }
+        });
         seeAddMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -542,6 +564,25 @@ public class addServices extends AppCompatActivity {
 
     private void setupCloseButton() {
 
+        mcClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mcDetailsTv.setVisibility(View.GONE);
+                mcRv.setVisibility(View.VISIBLE);
+                seeAddMc.setVisibility(View.VISIBLE);
+                mcClose.setVisibility(View.GONE);
+                back.setVisibility(View.VISIBLE);
+                spinnerMcSpecialization.setSelection(0);
+                spinnerMcRole.setSelection(0);
+                mcDuration.setText("");
+                mcAudience.setText("");
+                mcAmount.setText("");
+                mcBooking.setText("");
+                mcPolicy.setText("");
+                mcEquipments.setChecked(false);
+
+            }
+        });
         musicClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -759,6 +800,21 @@ public class addServices extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
 
+        mcRv = findViewById(R.id.mcRv);
+        mcPhoto = findViewById(R.id.mcPhoto);
+        addMcPhoto = findViewById(R.id.addMcPhoto);
+        deleteMcPhoto = findViewById(R.id.deleteMcPhoto);
+        mcDetailsTv = findViewById(R.id.mcDetailsTv);
+        mcSubmit = findViewById(R.id.mcSubmit);
+        spinnerMcSpecialization = findViewById(R.id.spinnerMcEvents);
+        spinnerMcRole = findViewById(R.id.spinnerMcRoles);
+        mcDuration = findViewById(R.id.mcDuration);
+        mcAudience = findViewById(R.id.mcAudience);
+        mcAmount = findViewById(R.id.mcAmount);
+        mcEquipments = findViewById(R.id.equipmentPref);
+        mcBooking = findViewById(R.id.mcBooking);
+        mcPolicy = findViewById(R.id.mcPolicy);
+
         carCheckbox = findViewById(R.id.driverProvided);
         addProduct = findViewById(R.id.addProduct);
         bookedProducts = findViewById(R.id.bookedProducts);
@@ -795,6 +851,7 @@ public class addServices extends AppCompatActivity {
         decorationClose = findViewById(R.id.closeDecoration);
         influencersClose = findViewById(R.id.closeInfluencer);
         sponsorClose = findViewById(R.id.closeSponsor);
+        mcClose = findViewById(R.id.closeMc);
 
         seeAddMusic = findViewById(R.id.seeAddMusic);
         seeAddCar = findViewById(R.id.seeAddCar);
@@ -805,6 +862,7 @@ public class addServices extends AppCompatActivity {
         seeAddInfluencers = findViewById(R.id.seeAddInfluencer);
         seeAddSponsor = findViewById(R.id.seeAddSponsor);
         seeAddDecoration = findViewById(R.id.seeAddDecoration);
+        seeAddMc = findViewById(R.id.seeAddMc);
 
         addMusicianDetails = findViewById(R.id.addMusicianDetails);
         addCarDetails = findViewById(R.id.addCarDetails);
@@ -816,6 +874,7 @@ public class addServices extends AppCompatActivity {
         addInfluencersDetails = findViewById(R.id.addContentCreatorDetails);
         addSponsorDetails = findViewById(R.id.addSponsorDetails);
         addMakeUpDetails = findViewById(R.id.addMakeUpDetails);
+        addMcDetails = findViewById(R.id.addMcDetails);
 
         addMusicianPhoto = findViewById(R.id.addMusicianPhoto);
         addCarPhoto = findViewById(R.id.addCarPhoto);
@@ -1080,7 +1139,6 @@ public class addServices extends AppCompatActivity {
                                                         }
                                                         adapterSound.notifyDataSetChanged();
                                                     }
-
                                                     if (serviceCategory.equalsIgnoreCase("Catering")) {
                                                         cateringList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
@@ -1099,7 +1157,6 @@ public class addServices extends AppCompatActivity {
                                                         }
                                                         adapterContent.notifyDataSetChanged();
                                                     }
-
                                                     if (serviceCategory.equalsIgnoreCase("Decorations")) {
                                                         decorationList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
@@ -1109,7 +1166,6 @@ public class addServices extends AppCompatActivity {
                                                         }
                                                         adapterDecoration.notifyDataSetChanged();
                                                     }
-
                                                     if (serviceCategory.equalsIgnoreCase("Sponsors")) {
                                                         sponsorList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
@@ -1119,7 +1175,6 @@ public class addServices extends AppCompatActivity {
                                                             }
                                                         adapterSponsor.notifyDataSetChanged();
                                                     }
-
                                                     if (serviceCategory.equalsIgnoreCase("MakeUp")) {
                                                         makeUpList.clear();
                                                         for (DocumentSnapshot productDoc : productsSnapshot) {
@@ -1129,30 +1184,50 @@ public class addServices extends AppCompatActivity {
                                                             }
                                                         adapterMakeUp.notifyDataSetChanged();
                                                     }
+                                                    if (serviceCategory.equalsIgnoreCase("Emcee")) {
+                                                        mcList.clear();
+                                                        for (DocumentSnapshot productDoc : productsSnapshot) {
+                                                            // Process each product document
+                                                            ServicesDetails.mcModel product = productDoc.toObject(ServicesDetails.mcModel.class);
+                                                            mcList.add(product);
+                                                        }
+                                                        adapterMc.notifyDataSetChanged();
+                                                    }
 
                                                 }
                                             }
                                         })
                                         .addOnFailureListener(e -> {
                                             // Handle errors here
-                                            Toast.makeText(addServices.this, "Failed to fetch products", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(addServices.this, "Failed to fetch products", Toast.LENGTH_SHORT).show();
+                                            Log.e("fetchServicesCategory", "Error fetching products: " + e.getMessage());
                                         });
                             }
                         } else {
                             // No document with the given category found
-                            Toast.makeText(addServices.this, "No documents found for the given category", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(addServices.this, "No documents found for the given category", Toast.LENGTH_SHORT).show();
+                            Log.d("fetchServicesCategory", "No documents found for the given category");
                         }
                     }
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors here
                     Toast.makeText(addServices.this, "Failed to fetch documents", Toast.LENGTH_SHORT).show();
+                    Log.e("fetchServicesCategory", "Error fetching documents: " + e.getMessage());
                 });
 
 
     }
 
     private void setupAddPhotoListeners() {
+
+        addMcPhoto.setOnClickListener(v -> {
+            ImagePicker.with(addServices.this)
+                    .crop()
+                    .compress(1024)
+                    .maxResultSize(1080, 1080)
+                    .start();
+        });
 
         addMusicianPhoto.setOnClickListener(v -> {
             ImagePicker.with(addServices.this)
@@ -1229,12 +1304,19 @@ public class addServices extends AppCompatActivity {
 
     private void deleteServiceButtons() {
 
+        deleteMcPhoto.setOnClickListener(v -> {
+            if (imageUri != null) {
+                deletePoster();
+            } else {
+                Log.d("add Service Musician", "No image selected");
+            }
+        });
         deleteMusician.setOnClickListener(v -> {
-                    if (imageUri != null) {
-                        deletePoster();
-                    } else {
-                        Log.d("add Service Musician", "No image selected");
-                    }
+            if (imageUri != null) {
+                deletePoster();
+            } else {
+                Log.d("add Service Musician", "No image selected");
+            }
 
         });
         deleteCar.setOnClickListener(v -> {
@@ -1365,6 +1447,19 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
+                        } else if (userCategory.equalsIgnoreCase("Emcee")) {
+                            addMusicianDetails.setVisibility(View.GONE);
+                            addCarDetails.setVisibility(View.GONE);
+                            addPhotographyDetails.setVisibility(View.GONE);
+                            addCateringDetails.setVisibility(View.GONE);
+                            addThriftDetails.setVisibility(View.GONE);
+                            addDjDetails.setVisibility(View.GONE);
+                            addDecorationDetails.setVisibility(View.GONE);
+                            addInfluencersDetails.setVisibility(View.GONE);
+                            addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.VISIBLE);
 
                         } else if (userCategory.equalsIgnoreCase("Music")) {
                             addMusicianDetails.setVisibility(View.VISIBLE);
@@ -1376,6 +1471,7 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
 
                         } else if (userCategory.equalsIgnoreCase("Photographer")) {
                             addMusicianDetails.setVisibility(View.GONE);
@@ -1387,6 +1483,8 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Catering")){
                             addMusicianDetails.setVisibility(View.GONE);
                             addCateringDetails.setVisibility(View.VISIBLE);
@@ -1397,6 +1495,8 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Costumes")){
                             addMusicianDetails.setVisibility(View.GONE);
                             addThriftDetails.setVisibility(View.VISIBLE);
@@ -1407,6 +1507,8 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Sound")){
                             addMusicianDetails.setVisibility(View.GONE);
                             addDjDetails.setVisibility(View.VISIBLE);
@@ -1417,6 +1519,8 @@ public class addServices extends AppCompatActivity {
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Influencers")) {
                             addMusicianDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.VISIBLE);
@@ -1427,6 +1531,8 @@ public class addServices extends AppCompatActivity {
                             addThriftDetails.setVisibility(View.GONE);
                             addDecorationDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Decorations")) {
                             addMusicianDetails.setVisibility(View.GONE);
                             addDecorationDetails.setVisibility(View.VISIBLE);
@@ -1437,6 +1543,8 @@ public class addServices extends AppCompatActivity {
                             addThriftDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                         } else if (userCategory.equalsIgnoreCase("Sponsors")) {
                             addMusicianDetails.setVisibility(View.GONE);
                             addSponsorDetails.setVisibility(View.VISIBLE);
@@ -1447,6 +1555,7 @@ public class addServices extends AppCompatActivity {
                             addThriftDetails.setVisibility(View.GONE);
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
 
                         } else if (userCategory.equalsIgnoreCase("MakeUp")) {
                             addMusicianDetails.setVisibility(View.GONE);
@@ -1458,6 +1567,9 @@ public class addServices extends AppCompatActivity {
                             addThriftDetails.setVisibility(View.GONE);
                             addDecorationDetails.setVisibility(View.GONE);
                             addInfluencersDetails.setVisibility(View.GONE);
+                            addSponsorDetails.setVisibility(View.GONE);
+                            addMcDetails.setVisibility(View.GONE);
+
                     } else {
                             // Method to hide all layouts
                             hideAllLayouts();
@@ -1479,6 +1591,7 @@ public class addServices extends AppCompatActivity {
         addSponsorDetails.setVisibility(View.GONE);
         addMusicianDetails.setVisibility(View.GONE);
         addMakeUpDetails.setVisibility(View.GONE);
+        addMcDetails.setVisibility(View.GONE);
     }
 
     private void setupSubmitButtons() {
@@ -1492,6 +1605,7 @@ public class addServices extends AppCompatActivity {
         influencerSubmit.setOnClickListener(v -> uploadInfluencersDetails());
         sponsorSubmit.setOnClickListener(v -> uploadSponsorDetails());
         makeUpSubmit.setOnClickListener(v -> uploadMakeUpDetails());
+        mcSubmit.setOnClickListener(v -> uploadMcDetails());
     }
 
     @Override
@@ -1510,7 +1624,7 @@ public class addServices extends AppCompatActivity {
             influencerPhoto.setImageURI(imageUri);
             sponsorPhoto.setImageURI(imageUri);
             decorationPhoto.setImageURI(imageUri);
-            // Set the selected image URI to the relevant ImageView (if applicable)
+            mcPhoto.setImageURI(imageUri);
             carPhoto.setImageURI(imageUri);
             makeUpPhoto.setImageURI(imageUri);
 
@@ -1551,19 +1665,74 @@ public class addServices extends AppCompatActivity {
 
     }
 
+    private void uploadMcDetails() {
+        String specialization = spinnerMcSpecialization.getSelectedItem().toString();
+        String role = spinnerMcRole.getSelectedItem().toString();
+        String duration = mcDuration.getText().toString();
+        String audience = mcAudience.getText().toString();
+        String amount = mcAmount.getText().toString();
+        String equipment = mcEquipments.isChecked() ? "Yes" : "No";
+        String booking = mcBooking.getText().toString();
+        String policy = mcPolicy.getText().toString();
+
+        ServicesDetails.mcModel mc = new ServicesDetails.mcModel(specialization, role, duration, audience, amount, equipment, booking, policy,
+                "Available", FirebaseAuth.getInstance().getCurrentUser().getUid(), "", "", "Emcee");
+
+        fStore.collection("Services")
+                .whereEqualTo("creatorId", userId)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        DocumentSnapshot existingDocument = task.getResult().getDocuments().get(0);
+                        existingDocument.getReference().collection("Products")
+                                .add(mc)
+                                .addOnSuccessListener(documentReference -> {
+                                    String documentId = documentReference.getId();
+                                    documentReference.update("productId", documentId);
+
+                                    uploadPhotos(documentReference.getId(), categoryTxt.getText().toString());
+                                    clearInputFieldsMc();
+                                    Toast.makeText(addServices.this, "Emcee added successfully", Toast.LENGTH_SHORT).show();
+
+                                }).addOnFailureListener(e -> {
+                                    Toast.makeText(addServices.this, "Error adding product", Toast.LENGTH_SHORT).show();
+                                });
+                    }else {
+                        ServicesDetails.serviceDetail mcs = new ServicesDetails.serviceDetail(userId, categoryTxt.getText().toString(), "");
+
+                        fStore.collection("Services")
+                                .add(mcs).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        String documentId = documentReference.getId();
+                                        documentReference.update("serviceId", documentId);
+
+                                        documentReference.collection("Products")
+                                                .add(mc).addOnSuccessListener(documentReference1 -> {
+                                                    String docId = documentReference1.getId();
+                                                    documentReference1.update("productId", docId);
+
+                                                    showPopupDialog();
+                                                    uploadPhotos(documentReference1.getId(), categoryTxt.getText().toString());
+                                                    clearInputFieldsMc();
+                                                    Log.d("TAG", "Emcee added successfully");
+                                                }).addOnFailureListener(e -> {
+                                                    Toast.makeText(addServices.this, "Error creating product", Toast.LENGTH_SHORT).show();
+                                                });
+
+                                    }
+                                }).addOnFailureListener(e -> Toast.makeText(addServices.this, "Error creating service", Toast.LENGTH_SHORT).show());
+
+                    }
+                });
+    }
+
     private void uploadMusicianDetails() {
         String genre = spinnerMusicGenre.getSelectedItem().toString();
-        String instrument;
+        String instrument = musicInstrument.isChecked() ? "Artist to provide their Instrument" : "Organizer to provide Instrument";
         String InstrumentDetail = instrumentDetails.getText().toString();
         String musicPayRate = payRate.getText().toString();
         String musicDetail = musicDetails.getText().toString();
         String policy = musicianPolicy.getText().toString();
-
-       if (musicInstrument.isChecked()){
-           instrument = "Artist to provide their Instrument";
-       } else {
-           instrument = "Organizer to provide Instrument";
-       }
 
        ServicesDetails.Musicians music = new ServicesDetails.Musicians(genre, instrument, InstrumentDetail,
                "Available", musicPayRate,musicDetail,policy,"","", FirebaseAuth.getInstance().getCurrentUser().getUid(),"Music");
@@ -2313,34 +2482,41 @@ public class addServices extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     if (userCategory.equalsIgnoreCase("Music")){
-                                                        Glide.with(addServices.this).load(imageUrl).into(musicianPhoto);
+                                                        Glide.with(addServices.this)
+                                                                .load(imageUrl)
+                                                                .placeholder(R.drawable.music_icon)
+                                                                .error(R.drawable.music_icon)
+                                                                .into(musicianPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Car Rental")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(carPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.car_icon).error(R.drawable.car_icon).into(carPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Photographer")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(paparazi);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.camera_icon).error(R.drawable.camera_icon).into(paparazi);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Catering")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(cateringPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.fastfood_icon).error(R.drawable.fastfood_icon).into(cateringPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Costumes")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(thriftPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.costume_icon).error(R.drawable.costume_icon).into(thriftPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Sound")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(djPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.dj_icon).error(R.drawable.dj_icon).into(djPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Influencers")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(influencerPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.content_icon).error(R.drawable.content_icon).into(influencerPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Sponsors")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(sponsorPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.sponsorship_icon).error(R.drawable.sponsorship_icon).into(sponsorPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("Decorations")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(decorationPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.deco_icon).error(R.drawable.deco_icon).into(decorationPhoto);
                                                     }
                                                     if (userCategory.equalsIgnoreCase("MakeUp")) {
-                                                        Glide.with(addServices.this).load(imageUrl).into(makeUpPhoto);
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.makeup_icon).error(R.drawable.makeup_icon).into(makeUpPhoto);
+                                                    }
+                                                    if (userCategory.equalsIgnoreCase("Emcee")) {
+                                                        Glide.with(addServices.this).load(imageUrl).placeholder(R.drawable.mc_icon).error(R.drawable.mc_icon).into(mcPhoto);
                                                     }
                                                     Log.d("EventPoster", "Event poster updated successfully");
 
@@ -2571,6 +2747,22 @@ public class addServices extends AppCompatActivity {
         makeUpPolicy.setText("");
         makeUpTravel.setChecked(false);
         makeUpPhoto.setImageResource(R.drawable.makeup_icon);
+    }
+    private void clearInputFieldsMc() {
+        mcDetailsTv.setVisibility(View.GONE);
+        mcRv.setVisibility(View.VISIBLE);
+        seeAddMc.setVisibility(View.VISIBLE);
+        mcClose.setVisibility(View.GONE);
+        back.setVisibility(View.VISIBLE);
+        spinnerMcSpecialization.setSelection(0);
+        spinnerMcRole.setSelection(0);
+        mcDuration.setText("");
+        mcAudience.setText("");
+        mcAmount.setText("");
+        mcBooking.setText("");
+        mcPolicy.setText("");
+        mcEquipments.setChecked(false);
+
     }
 
     private void showPopupDialog() {

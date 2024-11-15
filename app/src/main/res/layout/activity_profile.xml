@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text=""
+            android:text="Profile"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -73,6 +73,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
                 android:elevation="2dp"
+                android:layout_margin="5dp"
+                android:padding="8dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -207,7 +209,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
 
             <TextView
                 android:layout_width="wrap_content"

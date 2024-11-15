@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class categoryMenuAdapter extends RecyclerView.Adapter<categoryMenuAdapter.ViewHolder> {
 
     Context context;
-    private ArrayList<menuModel> menuList;
+    ArrayList<menuModel> menuList;
     OnItemClickListener listener;
 
     public interface OnItemClickListener {

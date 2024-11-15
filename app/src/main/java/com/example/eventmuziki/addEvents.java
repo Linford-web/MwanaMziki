@@ -73,14 +73,14 @@ public class addEvents extends AppCompatActivity {
     Spinner spinnerCategory, spinnerMusicGenre,
             spinnerCarModel, carType, carColor, carSeats, carModelType,
             photoPackage, photoEquipment, photoDelivery, cateringPackage, cuisineType, cateringService, costumeAge, costumeSize,
-            decorationPackage, decorationColor1, decorationColor2, decorationTheme
-            ,soundPackage, equipmentType, makeUpPackage,
-            influencerPackage, influencerTheme, creativityFreedom, sponsorsType, sponsorsIndustry;
+            decorationPackage, decorationColor1, decorationColor2, decorationTheme,
+            soundPackage, equipmentType, makeUpPackage,
+            influencerPackage, influencerTheme, creativityFreedom, sponsorsType, sponsorsIndustry, spinnerMcRole;
     FirebaseStorage fStorage;
 
     CheckBox musicCheck, carCheck, photoCheck, cateringCheck, costumeCheck,
-            soundCheck, decorationCheck, contentCheck, sponsorsCheck, costumeDelivery,
-            soundDelivery, makeUpCheck, eventCoverage, travelCheck;
+            soundCheck, decorationCheck, contentCheck, sponsorsCheck, mcCheck,
+            costumeDelivery, soundDelivery, makeUpCheck, eventCoverage, travelCheck, mcTravel, mcSetUp;
     Uri imageUri;
     String eventId;
 
@@ -90,15 +90,15 @@ public class addEvents extends AppCompatActivity {
     ScrollView scrollView;
     ImageButton editBtn, addPosterBtn, deleteBtn;
 
-    LinearLayout music, carRental, photography, catering, costumes, paSystem,decorations, contentCreators, sponsors, makeUp,
+    LinearLayout music, carRental, photography, catering, costumes, paSystem,decorations, contentCreators, sponsors, makeUp, emcee,
             musicDetails, carRentalDetails, photographyDetails, cateringDetails, costumesDetails, paSystemDetails, decoDetails,
-            contentDetails, sponsorsDetails, makeUpDetails;
+            contentDetails, sponsorsDetails, makeUpDetails, mcDetails;
 
-    TextView musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decorTxt, contentTxt, sponsorsTxt, makeUpTxt;
-    ImageView musicIcon, carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon, makeUpIcon;
+    TextView musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decorTxt, contentTxt, sponsorsTxt, makeUpTxt, mcTxt;
+    ImageView musicIcon, carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decorIcon, contentIcon, sponsorsIcon, makeUpIcon, mcIcon;
 
     EditText costumeQuantity, costumeDuration,guestNumber, photoDuration,
-            currentSponsor, sponsorsPrice, makeUpDuration;
+            currentSponsor, sponsorsPrice, makeUpDuration, mcDuration, mcAudience;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -508,6 +508,17 @@ public class addEvents extends AppCompatActivity {
         makeUpIcon = findViewById(R.id.makeupIcon);
         makeUpDetails = findViewById(R.id.makeUpDetails);
 
+        mcCheck = findViewById(R.id.checkMc);
+        emcee = findViewById(R.id.Emcee);
+        mcTxt = findViewById(R.id.mcTxt);
+        mcIcon = findViewById(R.id.mcIcon);
+        mcDetails = findViewById(R.id.emceeDetails);
+        mcDuration = findViewById(R.id.mcDuration);
+        spinnerMcRole = findViewById(R.id.spinnerMcRole);
+        mcTravel = findViewById(R.id.travelMc);
+        mcSetUp = findViewById(R.id.mcSetUp);
+
+
     }
 
     private void setupCategoryClicks() {
@@ -524,6 +535,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.orange));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -535,6 +547,7 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.VISIBLE);
                 cateringDetails.setVisibility(View.GONE);
@@ -546,6 +559,48 @@ public class addEvents extends AppCompatActivity {
                 contentDetails.setVisibility(View.GONE);
                 sponsorsDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
+
+            }
+        });
+        emcee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decorTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
+                makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.orange));
+
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decorIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
+                makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.orange));
+
+                musicDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                carRentalDetails.setVisibility(View.GONE);
+                decoDetails.setVisibility(View.GONE);
+                contentDetails.setVisibility(View.GONE);
+                sponsorsDetails.setVisibility(View.GONE);
+                makeUpDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.VISIBLE);
 
             }
         });
@@ -563,6 +618,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.orange));
@@ -574,6 +630,7 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
@@ -585,6 +642,7 @@ public class addEvents extends AppCompatActivity {
                 contentDetails.setVisibility(View.GONE);
                 sponsorsDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
 
             }
         });
@@ -601,6 +659,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -612,11 +671,13 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.VISIBLE);
                 decoDetails.setVisibility(View.GONE);
@@ -638,6 +699,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -649,11 +711,13 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.VISIBLE);
                 decoDetails.setVisibility(View.GONE);
@@ -675,6 +739,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -686,10 +751,12 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.VISIBLE);
@@ -712,6 +779,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.orange));
@@ -723,12 +791,14 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.VISIBLE);
                 decoDetails.setVisibility(View.GONE);
                 contentDetails.setVisibility(View.GONE);
@@ -749,6 +819,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -760,11 +831,13 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 decoDetails.setVisibility(View.VISIBLE);
@@ -787,6 +860,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.orange));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -798,12 +872,14 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.orange));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 decoDetails.setVisibility(View.GONE);
                 contentDetails.setVisibility(View.VISIBLE);
@@ -824,6 +900,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.orange));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -835,12 +912,14 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.orange));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 decoDetails.setVisibility(View.GONE);
                 contentDetails.setVisibility(View.GONE);
@@ -862,6 +941,7 @@ public class addEvents extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorsTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.orange));
+                mcTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -873,12 +953,14 @@ public class addEvents extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorsIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.orange));
+                mcIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
                 cateringDetails.setVisibility(View.GONE);
                 costumesDetails.setVisibility(View.GONE);
+                mcDetails.setVisibility(View.GONE);
                 paSystemDetails.setVisibility(View.GONE);
                 decoDetails.setVisibility(View.GONE);
                 contentDetails.setVisibility(View.GONE);
@@ -910,6 +992,23 @@ public class addEvents extends AppCompatActivity {
             }).addOnFailureListener(e -> {
                 Log.d("Subcollection", "Failed to add music details");
             });
+        }
+
+        // Add Mc subcollection
+        String audience = mcAudience.getText().toString();
+        String mcRoles = spinnerMcRole.getSelectedItem().toString();
+        String mcDurations = mcDuration.getText().toString();
+        String mcSetUps = mcSetUp.isChecked() ? "Yes" : "No";
+        String travel = mcTravel.isChecked() ? "Yes" : "No";
+
+        if (mcCheck.isChecked()) {
+            serviceDetailModel.hireMc mc = new serviceDetailModel.hireMc(audience, mcRoles, mcDurations, mcSetUps, travel, "Emcee");
+            servicesCollection.add(mc).addOnSuccessListener(documentReference1 -> {
+                Log.d("Subcollection", "Mc details added");
+            }).addOnFailureListener(e -> {
+                Log.d("Subcollection", "Failed to add mc details");
+            });
+
         }
 
         // Add Car Rental subcollection

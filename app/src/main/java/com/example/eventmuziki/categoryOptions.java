@@ -31,6 +31,7 @@ import com.example.eventmuziki.Adapters.serviceAdapters.decoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.djAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.influencerAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.makeUpAdapter;
+import com.example.eventmuziki.Adapters.serviceAdapters.mcAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.musicianAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.photoAdapter;
 import com.example.eventmuziki.Adapters.serviceAdapters.serviceDetailAdapter;
@@ -55,12 +56,13 @@ public class categoryOptions extends AppCompatActivity {
     ImageButton backArrow;
     Button addServiceBtn;
 
-    LinearLayout musicians, carRental, photography, catering, costumes, paSystem, decoration, contentCreators, sponsorship, makeUp,
+    LinearLayout musicians, carRental, photography, catering, costumes, paSystem, decoration, contentCreators, sponsorship, makeUp, Emcee,
             musicDetails, carRentalDetails, photographyDetails, cateringDetails, makeUpDetails,
-            costumesDetails, paSystemDetails, decorationDetails, contentCreatorsDetails, sponsorshipDetails,addService,
+            costumesDetails, paSystemDetails, decorationDetails, contentCreatorsDetails, sponsorshipDetails, McDetails, addService,
             allCategory, bookedCategory, allCategoryLayout, bookedCategoryLayout, bookedServiceTv;
 
-    RecyclerView carRentalRv, photographyRentalRv, cateringRv, costumesRv, DjRv, decorationRv, contentCreatorsRv, sponsorshipRv, serviceRv, bookedCategoryRecyclerview, musicRv, makeUpRv;
+    RecyclerView carRentalRv, photographyRentalRv, cateringRv, costumesRv, DjRv, decorationRv, contentCreatorsRv, sponsorshipRv, McRv,
+            serviceRv, bookedCategoryRecyclerview, musicRv, makeUpRv;
 
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -90,13 +92,15 @@ public class categoryOptions extends AppCompatActivity {
     bookedServicesAdapter bookedAdapter;
     ArrayList<ServicesDetails.makeUpModel> makeUpList = new ArrayList<>();
     makeUpAdapter beautyAdapter;
+    ArrayList<ServicesDetails.mcModel> mcList = new ArrayList<>();
+    mcAdapter EmceeAdapter;
     HorizontalScrollView scroll;
 
-    TextView text1,musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decoTxt, contentTxt, sponsorshipTxt, serviceTxt, allCategoryTxt, makeUpTxt, bookedCategoryTxt;
-    ImageView musicIcon, carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decoIcon, contentIcon, sponsorshipIcon, makeUpIcon, addBookedService;
+    TextView text1,musicTxt, carTxt, photographyTxt, cateringTxt, costumesTxt, paSystemTxt, decoTxt, contentTxt, sponsorshipTxt, McTxt, serviceTxt, allCategoryTxt, makeUpTxt, bookedCategoryTxt;
+    ImageView musicIcon, carIcon, photographyIcon, cateringIcon, costumesIcon, paSystemIcon, decoIcon, contentIcon, sponsorshipIcon, makeUpIcon, McIcon, addBookedService;
 
     String musician ="Music", car ="Car Rental", photo ="Photographer", food ="Catering", costume ="Costumes", pa ="Sound",
-            decorations ="Decorations", content ="Influencers", sponsorships ="Sponsors", makeUps = "MakeUp";
+            decorations ="Decorations", content ="Influencers", sponsorships ="Sponsors", makeUps = "MakeUp", Mc = "Emcee";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +122,7 @@ public class categoryOptions extends AppCompatActivity {
         contentCreators = findViewById(R.id.contentCreator);
         sponsorship = findViewById(R.id.sponsorship);
         makeUp = findViewById(R.id.makeUp);
+        Emcee = findViewById(R.id.Emcee);
 
         musicDetails = findViewById(R.id.musicDetails);
         carRentalDetails = findViewById(R.id.carRentalDetails);
@@ -129,6 +134,7 @@ public class categoryOptions extends AppCompatActivity {
         contentCreatorsDetails = findViewById(R.id.contentCreatorsDetails);
         sponsorshipDetails = findViewById(R.id.sponsorshipDetails);
         makeUpDetails = findViewById(R.id.makeUpDetails);
+        McDetails = findViewById(R.id.McDetails);
 
         musicTxt = findViewById(R.id.musicTxt);
         carTxt = findViewById(R.id.carTxt);
@@ -141,6 +147,7 @@ public class categoryOptions extends AppCompatActivity {
         sponsorshipTxt = findViewById(R.id.sponsorshipTxt);
         serviceTxt = findViewById(R.id.serviceTxt);
         makeUpTxt = findViewById(R.id.makeUpTxt);
+        McTxt = findViewById(R.id.McTxt);
 
         musicIcon = findViewById(R.id.musicIcon);
         carIcon = findViewById(R.id.carIcon);
@@ -152,6 +159,7 @@ public class categoryOptions extends AppCompatActivity {
         contentIcon = findViewById(R.id.contentIcon);
         sponsorshipIcon = findViewById(R.id.sponsorshipIcon);
         makeUpIcon = findViewById(R.id.makeUpIcon);
+        McIcon = findViewById(R.id.McIcon);
 
         addService = findViewById(R.id.addService);
         addServiceBtn = findViewById(R.id.addServiceBtn);
@@ -165,6 +173,7 @@ public class categoryOptions extends AppCompatActivity {
         decorationRv = findViewById(R.id.decoRv);
         contentCreatorsRv = findViewById(R.id.contentCreatorsRv);
         sponsorshipRv = findViewById(R.id.sponsorshipRv);
+        McRv = findViewById(R.id.McRv);
 
         allCategory = findViewById(R.id.allCategories);
         bookedCategory = findViewById(R.id.bookedCategories);
@@ -289,6 +298,12 @@ public class categoryOptions extends AppCompatActivity {
         costumesRv.setLayoutManager(layoutManager8);
         costumesRv.setAdapter(costumeAdapters);
 
+        mcList = new ArrayList<>();
+        EmceeAdapter = new mcAdapter(mcList, this);
+        RecyclerView.LayoutManager layoutManager10 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        McRv.setLayoutManager(layoutManager10);
+        McRv.setAdapter(EmceeAdapter);
+
         musicians.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,6 +317,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.orange));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -313,6 +329,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.VISIBLE);
                 photographyDetails.setVisibility(View.GONE);
@@ -324,11 +341,54 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 serviceTxt.setText(musician);
                 fetchServices(musician);
 
             }
 
+        });
+        Emcee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                musicTxt.setTextColor(getResources().getColor(R.color.black));
+                carTxt.setTextColor(getResources().getColor(R.color.black));
+                photographyTxt.setTextColor(getResources().getColor(R.color.black));
+                cateringTxt.setTextColor(getResources().getColor(R.color.black));
+                costumesTxt.setTextColor(getResources().getColor(R.color.black));
+                paSystemTxt.setTextColor(getResources().getColor(R.color.black));
+                decoTxt.setTextColor(getResources().getColor(R.color.black));
+                contentTxt.setTextColor(getResources().getColor(R.color.black));
+                sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
+                makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.orange));
+
+                musicIcon.setColorFilter(getResources().getColor(R.color.black));
+                carIcon.setColorFilter(getResources().getColor(R.color.black));
+                photographyIcon.setColorFilter(getResources().getColor(R.color.black));
+                cateringIcon.setColorFilter(getResources().getColor(R.color.black));
+                costumesIcon.setColorFilter(getResources().getColor(R.color.black));
+                paSystemIcon.setColorFilter(getResources().getColor(R.color.black));
+                decoIcon.setColorFilter(getResources().getColor(R.color.black));
+                contentIcon.setColorFilter(getResources().getColor(R.color.black));
+                sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
+                makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.orange));
+
+                musicDetails.setVisibility(View.GONE);
+                photographyDetails.setVisibility(View.GONE);
+                cateringDetails.setVisibility(View.GONE);
+                costumesDetails.setVisibility(View.GONE);
+                paSystemDetails.setVisibility(View.GONE);
+                carRentalDetails.setVisibility(View.GONE);
+                decorationDetails.setVisibility(View.GONE);
+                contentCreatorsDetails.setVisibility(View.GONE);
+                sponsorshipDetails.setVisibility(View.GONE);
+                makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.VISIBLE);
+                serviceTxt.setText(Mc);
+                fetchServices(Mc);
+            }
         });
         carRental.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -344,6 +404,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.orange));
@@ -355,6 +416,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 photographyDetails.setVisibility(View.GONE);
@@ -366,6 +428,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 serviceTxt.setText(car);
                 fetchServices(car);
 
@@ -384,6 +447,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -395,6 +459,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -405,6 +470,7 @@ public class categoryOptions extends AppCompatActivity {
                 decorationDetails.setVisibility(View.GONE);
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
                 serviceTxt.setText(photo);
                 fetchServices(photo);
@@ -424,6 +490,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -435,6 +502,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -445,6 +513,7 @@ public class categoryOptions extends AppCompatActivity {
                 decorationDetails.setVisibility(View.GONE);
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
                 serviceTxt.setText(food);
                 fetchServices(food);
@@ -463,6 +532,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -474,6 +544,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -485,6 +556,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 serviceTxt.setText(costume);
                 fetchServices(costume);
 
@@ -503,6 +575,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 paSystemIcon.setColorFilter(getResources().getColor(R.color.orange));
@@ -514,6 +587,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -525,6 +599,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 serviceTxt.setText(pa);
                 fetchServices(pa);
 
@@ -543,6 +618,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -554,6 +630,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -565,6 +642,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 serviceTxt.setText(decorations);
                 fetchServices(decorations);
 
@@ -583,6 +661,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.orange));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -594,6 +673,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.orange));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -604,6 +684,7 @@ public class categoryOptions extends AppCompatActivity {
                 decorationDetails.setVisibility(View.GONE);
                 contentCreatorsDetails.setVisibility(View.VISIBLE);
                 sponsorshipDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 makeUpDetails.setVisibility(View.GONE);
                 serviceTxt.setText(content);
                 fetchServices(content);
@@ -624,6 +705,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.orange));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.black));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -635,6 +717,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.orange));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.black));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -646,6 +729,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.VISIBLE);
                 makeUpDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.GONE);
                 serviceTxt.setText(sponsorships);
                 fetchServices(sponsorships);
 
@@ -664,6 +748,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentTxt.setTextColor(getResources().getColor(R.color.black));
                 sponsorshipTxt.setTextColor(getResources().getColor(R.color.black));
                 makeUpTxt.setTextColor(getResources().getColor(R.color.orange));
+                McTxt.setTextColor(getResources().getColor(R.color.black));
 
                 musicIcon.setColorFilter(getResources().getColor(R.color.black));
                 carIcon.setColorFilter(getResources().getColor(R.color.black));
@@ -675,6 +760,7 @@ public class categoryOptions extends AppCompatActivity {
                 contentIcon.setColorFilter(getResources().getColor(R.color.black));
                 sponsorshipIcon.setColorFilter(getResources().getColor(R.color.black));
                 makeUpIcon.setColorFilter(getResources().getColor(R.color.orange));
+                McIcon.setColorFilter(getResources().getColor(R.color.black));
 
                 musicDetails.setVisibility(View.GONE);
                 carRentalDetails.setVisibility(View.GONE);
@@ -685,6 +771,7 @@ public class categoryOptions extends AppCompatActivity {
                 decorationDetails.setVisibility(View.GONE);
                 contentCreatorsDetails.setVisibility(View.GONE);
                 sponsorshipDetails.setVisibility(View.GONE);
+                McDetails.setVisibility(View.VISIBLE);
                 makeUpDetails.setVisibility(View.VISIBLE);
                 serviceTxt.setText(makeUps);
                 fetchServices(makeUps);
@@ -718,6 +805,7 @@ public class categoryOptions extends AppCompatActivity {
         fetchProducts(content);
         fetchProducts(sponsorships);
         fetchProducts(makeUps);
+        fetchProducts(Mc);
         fetchServices(musician);
 
         fetchBookedServices();
@@ -821,6 +909,11 @@ public class categoryOptions extends AppCompatActivity {
                                                         ServicesDetails.makeUpModel makeUpProduct = productDoc.toObject(ServicesDetails.makeUpModel.class);
                                                         makeUpList.add(makeUpProduct);
                                                         break;
+
+                                                    case "Emcee":
+                                                        ServicesDetails.mcModel emceeProduct = productDoc.toObject(ServicesDetails.mcModel.class);
+                                                        mcList.add(emceeProduct);
+                                                        break;
                                                     default:
                                                         // Handle any unexpected category
                                                         break;
@@ -836,15 +929,18 @@ public class categoryOptions extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(e -> {
                                         // Handle errors in product fetching
-                                        Toast.makeText(categoryOptions.this, "Error fetching products", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(categoryOptions.this, "Error fetching products", Toast.LENGTH_SHORT).show();
+                                        Log.d("TAG", "Error fetching products: " + e.getMessage());
                                     });
                         }
                     } else {
-                        Toast.makeText(categoryOptions.this, "No products found for this category", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(categoryOptions.this, "No products found for this category", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "No products found for this category");
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(categoryOptions.this, "Error fetching services", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(categoryOptions.this, "Error fetching services", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG", "Error fetching services: " + e.getMessage());
                 });
     }
     // Notify all adapters method
@@ -859,6 +955,7 @@ public class categoryOptions extends AppCompatActivity {
         adapterSponsorship.notifyDataSetChanged();
         musicAdapter.notifyDataSetChanged();
         beautyAdapter.notifyDataSetChanged();
+        EmceeAdapter.notifyDataSetChanged();
     }
 
     private void checkUserAccessLevel() {
